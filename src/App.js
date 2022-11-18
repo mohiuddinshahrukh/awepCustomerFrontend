@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from "./logo.svg";
+import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
+
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 
 function App() {
+  const [colorScheme, setColorScheme] = useState("light");
+  const toggleColorScheme = (value) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
+      <MantineProvider
+        theme={{ colorScheme }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        <Paper className="App">
+          <TopNavbar />
+          <Routes>
+            <Route></Route>
+          </Routes>
+        </Paper>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 

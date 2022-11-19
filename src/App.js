@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
+import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -24,7 +25,7 @@ function App() {
         <Paper className="App">
           <TopNavbar />
           <Routes>
-            <Route></Route>
+            <Route path="/specificVenue" element={<SpecificVenueDetails />} />
           </Routes>
         </Paper>
       </MantineProvider>

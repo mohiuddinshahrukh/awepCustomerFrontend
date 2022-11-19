@@ -12,7 +12,7 @@ import OtherFilterCards from "./OtherFilterCards";
 
 const FilterCards = () => {
   return (
-    <Container size={"xl"}>
+    <Container size={"xl"} mt={"xl"}>
       <Group position="center">
         <EasilyPlanYourWeddingCard
           cardData={[

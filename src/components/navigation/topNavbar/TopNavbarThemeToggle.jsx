@@ -9,6 +9,7 @@ const TopNavbarThemeToggle = () => {
   return (
     <ActionIcon
       variant="outline"
+      size={"lg"}
       color={dark ? "yellow" : "blue"}
       onClick={() => toggleColorScheme()}
       title="Toggle color scheme"

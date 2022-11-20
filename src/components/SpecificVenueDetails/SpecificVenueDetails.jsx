@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Anchor,
   Container,
   Divider,
   Grid,
   Group,
+  Paper,
   Text,
   Title,
 } from "@mantine/core";
-// import axios from "axios";
+import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
 import RatingStars from "../RatingStars/RatingStars";
@@ -21,32 +22,33 @@ import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import MenusOfSpecificVenue from "../MenusOfSpecifcVenue/MenusOfSpecificVenue";
 import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
 import ReviewsOfSpecificVenue from "../ReviewsOfSpecificVenue/ReviewsOfSpecificVenue";
-// import MapComponentView from "../MapComponent/MapComponentView";
+import MapComponentView from "../MapViewComponent/MapComponentView";
+import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 
 const SpecificVenueDetails = () => {
-  // const [refresh, setRefresh] = useState(true);
-  // const [venueDetails, setVenueDetails] = useState();
+  const [refresh, setRefresh] = useState(true);
+  const [venueDetails, setVenueDetails] = useState();
   const [open, setOpen] = useState(false);
-  // let venueId = "";
-  // const url =
-  //   "https://a-wep.herokuapp.com/customer/getSpecificVenueDetails" + venueId;
-  // useEffect(() => {
-  //   if (refresh) {
-  //     // setVisible(true);
-  //     axios.get(url).then((res) => {
-  //       console.log(res.data);
-  //       if (res.data.status === "success") {
-  //         console.log("Retrieved Data Is", res.data.data);
-  //         setVenueDetails(res.data.data);
+  let venueId = "636e0f1d33f20a14eef7c8e3";
+  const url =
+    "https://a-wep.herokuapp.com/auth/user/getSpecificVenueDetails/" + venueId;
+  useEffect(() => {
+    if (refresh) {
+      // setVisible(true);
+      axios.get(url).then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          console.log("Retrieved Data Is", res.data.data);
+          setVenueDetails(res.data.data);
 
-  //         setRefresh(false);
-  //       } else {
-  //         console.log("Errored Data Is", res.data);
-  //         setRefresh(false);
-  //       }
-  //     });
-  //   }
-  // }, [refresh]);
+          setRefresh(false);
+        } else {
+          console.log("Errored Data Is", res.data);
+          setRefresh(false);
+        }
+      });
+    }
+  }, [refresh]);
 
   return (
     <Container size="xl">
@@ -105,10 +107,14 @@ const SpecificVenueDetails = () => {
           <MenusOfSpecificVenue />
           <CarouselOfThemes />
           <ReviewsOfSpecificVenue rating={5} />
-          {/* <MapComponentView
+
+          <MapComponentView
             pinLocation={{ lat: 33.6844, lng: 73.0479 }}
             pinGeoLocation={"null"}
-          /> */}
+          />
+        </Grid.Col>
+        <Grid.Col lg={3} pl="xl">
+          <BookVenueSideColums />
         </Grid.Col>
       </Grid>
     </Container>

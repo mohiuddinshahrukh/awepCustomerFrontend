@@ -72,6 +72,10 @@ function MapComponent({ pinLocation, pinGeoLocation, pinAddress }) {
   );
   return (
     <div style={{ position: "relative" }}>
+      <Text weight="bold" size="lg" pb="md" pt="lg">
+        Map
+      </Text>
+      <Text py="md">Castle Street GU9 0AG Farnham (Surrey)</Text>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}

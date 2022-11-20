@@ -8,6 +8,9 @@ import img4 from "../../assets/searchBackgroundCarouselImages/4.jpg";
 
 import FilterCards from "../filterCards/FilterCards";
 import FeaturedVenuesSection from "../featuredVenuesSection/FeaturedVenuesSection";
+import FeaturedVendorsSection from "../featuredVendorsSection/FeaturedVendorsSection";
+import RealWeddingsSection from "../realWeddingsSection/RealWeddingsSection";
+import CustomerTestimonials from "../customerTestimonials/CustomerTestimonials";
 const LandingPageMain = () => {
   return (
     <Paper>
@@ -22,6 +25,9 @@ const LandingPageMain = () => {
 
       <FilterCards />
       <FeaturedVenuesSection />
+      <FeaturedVendorsSection />
+      <RealWeddingsSection />
+      <CustomerTestimonials />
     </Paper>
   );
 };

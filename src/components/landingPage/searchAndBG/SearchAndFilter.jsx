@@ -1,9 +1,7 @@
 import {
   Button,
-  Group,
   SegmentedControl,
   Select,
-  TextInput,
   useMantineTheme,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";

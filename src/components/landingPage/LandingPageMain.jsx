@@ -11,6 +11,8 @@ import FeaturedVenuesSection from "../featuredVenuesSection/FeaturedVenuesSectio
 import FeaturedVendorsSection from "../featuredVendorsSection/FeaturedVendorsSection";
 import RealWeddingsSection from "../realWeddingsSection/RealWeddingsSection";
 import CustomerTestimonials from "../customerTestimonials/CustomerTestimonials";
+import WeddingCards from "../weddingCards/WeddingCards";
+import RegisteredCities from "../registeredCities/RegisteredCities";
 const LandingPageMain = () => {
   return (
     <Paper>
@@ -28,6 +30,8 @@ const LandingPageMain = () => {
       <FeaturedVendorsSection />
       <RealWeddingsSection />
       <CustomerTestimonials />
+      <WeddingCards />
+      <RegisteredCities />
     </Paper>
   );
 };

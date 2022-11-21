@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   Anchor,
   Container,
+  createStyles,
   Divider,
   Grid,
   Group,
-  Paper,
   Text,
   Title,
 } from "@mantine/core";
@@ -21,13 +21,20 @@ import AboutVenue from "../AboutVenue/AboutVenue";
 import VenueServices from "../VenueServices/VenueServices";
 import CarouselOfSubVenues from "../SubVenuesOfSpecifcVenue/CarouselOfSubVenues";
 import MenusOfSpecificVenue from "../MenusOfSpecifcVenue/MenusOfSpecificVenue";
-import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
 import ReviewsOfSpecificVenue from "../ReviewsOfSpecificVenue/ReviewsOfSpecificVenue";
 import MapComponentView from "../MapViewComponent/MapComponentView";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
-
+const useStyles = createStyles(() => ({
+  stickySThings: {
+    position: "-webkit-sticky",
+    position: "sticky",
+    top: 0,
+  },
+}));
 const SpecificVenueDetails = () => {
+  const { classes } = useStyles();
+
   const scrollRef = useScrollIntoView({});
   const scrollRef1 = useScrollIntoView({});
   const scrollRef2 = useScrollIntoView({});
@@ -38,6 +45,11 @@ const SpecificVenueDetails = () => {
   console.log("scrollRef", scrollRef);
   const [refresh, setRefresh] = useState(true);
   const [venueDetails, setVenueDetails] = useState({});
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [guests, setGuests] = useState();
   console.log("venueDetails are", venueDetails);
   const [open, setOpen] = useState(false);
   let venueId = "63491bd8c5ba3ae82a86432d";
@@ -64,7 +76,7 @@ const SpecificVenueDetails = () => {
     <Container size="xl">
       <BreadCrumbs />
       <Title pt="md" order={3}>
-        Venue Name
+        {venueDetails?.venueName}
       </Title>
       <Group
         pt="sm"
@@ -73,12 +85,18 @@ const SpecificVenueDetails = () => {
           alignItems: "center",
         }}
       >
-        <Text color="dimmed">Islamabad, Pakistan</Text>
+        <Text color="dimmed">{venueDetails?.venueCity}, Pakistan</Text>
         <Text onClick={() => scrollRef.scrollIntoView()} underline>
           View Map
         </Text>
         <Text underline>Phone Number</Text>
-        <Anchor href="" color="dark" underline>
+        <Anchor
+          // component={Link}
+
+          href={venueDetails?.websiteHandle}
+          color="dark"
+          underline
+        >
           Visit Website
         </Anchor>
       </Group>
@@ -99,7 +117,11 @@ const SpecificVenueDetails = () => {
             }
           />
         </Group>
-        <Text color="dimmed" underline>
+        <Text
+          color="dimmed"
+          underline
+          onClick={() => scrollRef6.scrollIntoView()}
+        >
           {venueDetails?.ratingCount ? venueDetails?.ratingCount : 0}{" "}
           {venueDetails?.ratingCount === 1 ? "Review" : "Reviews"}
         </Text>
@@ -178,6 +200,16 @@ const SpecificVenueDetails = () => {
             subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
           />
           <ModalOfSubVenues
+            contactPhone={contactPhone}
+            setContactPhone={setContactPhone}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            date={date}
+            setDate={setDate}
+            time={time}
+            setTime={setTime}
+            guests={guests}
+            setGuests={setGuests}
             open={open}
             setOpen={setOpen}
             subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
@@ -230,7 +262,18 @@ const SpecificVenueDetails = () => {
           />
         </Grid.Col>
         <Grid.Col lg={3} pl="xl">
-          <BookVenueSideColums />
+          <BookVenueSideColums
+            contactPhone={contactPhone}
+            setContactPhone={setContactPhone}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            date={date}
+            setDate={setDate}
+            time={time}
+            setTime={setTime}
+            guests={guests}
+            setGuests={setGuests}
+          />
         </Grid.Col>
       </Grid>
       {/* <Text ref={scrollRef.targetRef}>asdsadsa</Text> */}

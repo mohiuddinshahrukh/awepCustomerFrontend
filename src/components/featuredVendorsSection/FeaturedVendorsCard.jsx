@@ -2,6 +2,7 @@ import { Card, Group, Image, Paper, Text } from "@mantine/core";
 import {
   IconBuildingStore,
   IconCash,
+  IconClock,
   IconStar,
   IconUsers,
 } from "@tabler/icons";
@@ -70,55 +71,53 @@ const FeaturedVendorsCard = ({ vendor }) => {
                   : vendor?.vendorServicePackages?.length + " Packages"}
               </Text>
             </Group>
-            <Group noWrap spacing={3} align={"center"}>
+            {/*            <Group noWrap spacing={3} align={"center"}>
               {" "}
-              <IconUsers size={18} stroke={1.5} />
-              <Text>
-                {Math.min
-                  .apply(
-                    Math,
-                    vendor?.subVenues?.map((subvenue) => {
-                      return subvenue?.subVenueMinCapacity;
-                    })
-                  )
-                  .toLocaleString()}
-              </Text>
-              to
-              <Text>
-                {Math.max
-                  .apply(
-                    Math,
-                    vendor?.subVenues?.map((subvenue) => {
-                      return subvenue?.subVenueCapacity;
-                    })
-                  )
-                  .toLocaleString()}
-              </Text>
-            </Group>
+              <IconClock size={18} stroke={1.5} />
+              <Text>{vendor?.vendorServicePackages.packageDuration}</Text>
+            </Group>*/}
           </Group>
 
           <Group noWrap align={"center"} spacing={3}>
             <IconCash stroke={1.5} size={20} />
-            <Text>
-              from Rs.{" "}
-              {vendor?.menus?.length !== 0
-                ? Math.max
+            from Rs.{" "}
+            {vendor?.vendorServicePackages?.length > 1 ? (
+              <>
+                {" "}
+                <Text>
+                  {Math.min
                     .apply(
                       Math,
-                      vendor?.menus?.map((menu) => {
-                        return menu.price;
+                      vendor?.vendorServicePackages?.map((service) => {
+                        return service?.price;
                       })
                     )
-                    .toLocaleString() + " (Per Head)"
-                : Math.max
+                    .toLocaleString()}
+                </Text>
+                to
+                <Text>
+                  {Math.max
                     .apply(
                       Math,
-                      vendor?.subVenues?.map((subvenue) => {
-                        return subvenue?.subVenueBookingCharges;
+                      vendor?.vendorServicePackages?.map((service) => {
+                        return service?.price;
                       })
                     )
-                    .toLocaleString() + " (Per Event)"}
-            </Text>
+                    .toLocaleString()}
+                </Text>
+              </>
+            ) : (
+              <Text>
+                {Math.max
+                  .apply(
+                    Math,
+                    vendor?.vendorServicePackages?.map((service) => {
+                      return service?.price;
+                    })
+                  )
+                  .toLocaleString()}
+              </Text>
+            )}
           </Group>
         </Paper>
       </Card.Section>

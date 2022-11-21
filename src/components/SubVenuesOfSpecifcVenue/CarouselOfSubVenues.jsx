@@ -3,7 +3,13 @@ import { Text } from "@mantine/core";
 import React from "react";
 import SpecificSubVenue from "./SpecificSubVenue";
 
-const CarouselOfSubVenues = ({ open, setOpen }) => {
+const CarouselOfSubVenues = ({ open, setOpen, subVenues }) => {
+  let subVenuesArray = subVenues ? subVenues : [{}];
+  const slides = subVenuesArray.map((subVenue, index) => (
+    <Carousel.Slide key={index}>
+      <SpecificSubVenue open={open} setOpen={setOpen} subVenue={subVenue} />
+    </Carousel.Slide>
+  ));
   return (
     <div>
       <Text weight="bold" py="md" size="lg">
@@ -21,23 +27,7 @@ const CarouselOfSubVenues = ({ open, setOpen }) => {
         loop
         align="start"
       >
-        <Carousel.Slide>
-          <SpecificSubVenue open={open} setOpen={setOpen} />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <SpecificSubVenue open={open} setOpen={setOpen} />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <SpecificSubVenue open={open} setOpen={setOpen} />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <SpecificSubVenue open={open} setOpen={setOpen} />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <SpecificSubVenue open={open} setOpen={setOpen} />
-        </Carousel.Slide>
-
-        {/* ...other slides */}
+        {slides}
       </Carousel>
     </div>
   );

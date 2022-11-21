@@ -24,7 +24,13 @@ const containerStyle = {
 const libraries = ["places"];
 
 // COMPONENT
-function MapComponent({ pinLocation, pinGeoLocation, pinAddress }) {
+function MapComponent({
+  targetRef,
+  pinLocation,
+  pinGeoLocation,
+  pinAddress,
+  address,
+}) {
   // HOOKS
   const [marker, setMarker] = useState(pinLocation ? [pinLocation] : []);
   const [selected, setSelected] = useState(pinLocation ? pinLocation : null);
@@ -72,10 +78,10 @@ function MapComponent({ pinLocation, pinGeoLocation, pinAddress }) {
   );
   return (
     <div style={{ position: "relative" }}>
-      <Text weight="bold" size="lg" pb="md" pt="lg">
+      <Text weight="bold" size="lg" pb="md" pt="lg" ref={targetRef}>
         Map
       </Text>
-      <Text py="md">Castle Street GU9 0AG Farnham (Surrey)</Text>
+      <Text py="md">{address}</Text>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}

@@ -9,6 +9,8 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { useScrollIntoView } from "@mantine/hooks";
+
 import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
@@ -26,12 +28,15 @@ import MapComponentView from "../MapViewComponent/MapComponentView";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 
 const SpecificVenueDetails = () => {
+  const { scrollIntoView, targetRef } = useScrollIntoView({});
+  const { scrollIntoView2, targetRef2 } = useScrollIntoView({});
+
   const [refresh, setRefresh] = useState(true);
-  const [venueDetails, setVenueDetails] = useState();
+  const [venueDetails, setVenueDetails] = useState({});
+  console.log("venueDetails are", venueDetails);
   const [open, setOpen] = useState(false);
-  let venueId = "636e0f1d33f20a14eef7c8e3";
-  const url =
-    "https://a-wep.herokuapp.com/auth/user/getSpecificVenueDetails/" + venueId;
+  let venueId = "63491bd8c5ba3ae82a86432d";
+  const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${venueId}`;
   useEffect(() => {
     if (refresh) {
       // setVisible(true);
@@ -64,12 +69,12 @@ const SpecificVenueDetails = () => {
         }}
       >
         <Text color="dimmed">Islamabad, Pakistan</Text>
-        <Anchor href="" color="dark" underline>
+        <Text onClick={() => scrollIntoView()} underline>
           View Map
-        </Anchor>
-        <Anchor href="" color="dark" underline>
+        </Text>
+        <Text onClick={() => scrollIntoView2()} underline>
           Phone Number
-        </Anchor>
+        </Text>
         <Anchor href="" color="dark" underline>
           Visit Website
         </Anchor>
@@ -96,20 +101,82 @@ const SpecificVenueDetails = () => {
       </Group>
       <Grid pt="md">
         <Grid.Col lg={9}>
-          <Carousal />
+          <Carousal
+            images={venueDetails?.images ? venueDetails?.images : ["", ""]}
+          />
           <InPageNavigation />
           <Divider mt="xl" />
-          <AboutVenue />
-          <VenueServices />
+          <AboutVenue
+            details={
+              venueDetails?.venueDescription
+                ? venueDetails?.venueDescription
+                : ""
+            }
+            venueName={venueDetails?.venueName ? venueDetails?.venueName : ""}
+            facebook={
+              venueDetails?.facebookHandle ? venueDetails?.facebookHandle : ""
+            }
+            instagram={
+              venueDetails?.instagramHandle ? venueDetails?.instagramHandle : ""
+            }
+            website={
+              venueDetails?.websiteHandle ? venueDetails?.websiteHandle : ""
+            }
+          />
+          <VenueServices
+            services={
+              venueDetails?.providedVenueServices
+                ? venueDetails?.providedVenueServices
+                : []
+            }
+          />
           <Divider mt="xl" />
-          <CarouselOfSubVenues setOpen={setOpen} />
+          <CarouselOfSubVenues
+            setOpen={setOpen}
+            subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
+          />
           <ModalOfSubVenues setOpen={setOpen} open={open} />
-          <MenusOfSpecificVenue />
+          <MenusOfSpecificVenue
+            menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
+          />
           <CarouselOfThemes />
-          <ReviewsOfSpecificVenue rating={5} />
+          <ReviewsOfSpecificVenue
+            rating={venueDetails?.rating ? venueDetails?.rating : 5}
+            flexibility={
+              venueDetails?.flexibility ? venueDetails?.flexibility : 5
+            }
+            responseTime={
+              venueDetails?.responseTime ? venueDetails?.responseTime : 5
+            }
+            valueForMoney={
+              venueDetails?.valueForMoney ? venueDetails?.valueForMoney : 5
+            }
+            qualityOfService={
+              venueDetails?.qualityOfService
+                ? venueDetails?.qualityOfService
+                : 5
+            }
+            professionalism={
+              venueDetails?.professionalism ? venueDetails?.professionalism : 5
+            }
+            ratingCount={
+              venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
+            }
+          />
 
           <MapComponentView
-            pinLocation={{ lat: 33.6844, lng: 73.0479 }}
+            targetRef={targetRef}
+            pinLocation={
+              venueDetails?.pinLocation
+                ? venueDetails?.pinLocation
+                : {
+                    lat: 30,
+                    lng: 70,
+                  }
+            }
+            address={
+              venueDetails?.venueAddress ? venueDetails?.venueAddress : ""
+            }
             pinGeoLocation={"null"}
           />
         </Grid.Col>
@@ -117,6 +184,7 @@ const SpecificVenueDetails = () => {
           <BookVenueSideColums />
         </Grid.Col>
       </Grid>
+      <Text ref={targetRef2}>asdsadsa</Text>
     </Container>
   );
 };

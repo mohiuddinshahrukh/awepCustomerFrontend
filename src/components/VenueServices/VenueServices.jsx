@@ -2,10 +2,11 @@ import { Group, SimpleGrid, Text } from "@mantine/core";
 import { IconCheck } from "@tabler/icons";
 import React from "react";
 
-const VenueServices = () => {
+const VenueServices = ({ services, targetRef }) => {
+  let venueServices = services ? services : [];
   return (
     <div>
-      <Text weight="bold" size="lg">
+      <Text weight="bold" size="lg" pt="xl" ref={targetRef}>
         Venue Services
       </Text>
       <SimpleGrid
@@ -16,42 +17,18 @@ const VenueServices = () => {
         ]}
         pt="sm"
       >
-        <Group
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <IconCheck color="green" stroke={1} />
-          <Text>Lighting</Text>
-        </Group>
-        <Group
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <IconCheck color="green" stroke={1} />
-          <Text>asdasdasdasdasd</Text>
-        </Group>
-        <Group
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <IconCheck color="green" stroke={1} />
-          <Text>asdasdsadascqwewe qwewq</Text>
-        </Group>
-        <Group
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <IconCheck color="green" stroke={1} />
-          <Text>Lighting</Text>
-        </Group>
+        {venueServices.map((service, index) => (
+          <Group
+            key={index}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <IconCheck color="green" stroke={1} />
+            <Text>{service?.serviceTitle}</Text>
+          </Group>
+        ))}
       </SimpleGrid>
     </div>
   );

@@ -12,17 +12,27 @@ import CustomButtonUnFilled from "../CustomButton/CustomButtonUnFilled";
 import RatingStars from "../RatingStars/RatingStars";
 import Comments from "./Comments";
 
-const ReviewsOfSpecificVenue = ({ rating }) => {
+const ReviewsOfSpecificVenue = ({
+  targetRef,
+  rating,
+  flexibility,
+  responseTime,
+  valueForMoney,
+  qualityOfService,
+  professionalism,
+  ratingCount,
+}) => {
   const reviews = [1, 2, 3];
   return (
     <div
+      ref={targetRef}
       style={{
         paddingTop: 40,
       }}
     >
-      <Group position="apart">
+      <Group position="apart" pb="xl">
         <Text weight="bold" size="lg">
-          33 Reviews
+          {ratingCount} Reviews
         </Text>
         <CustomButtonUnFilled title="Write A Review" />
       </Group>
@@ -48,7 +58,7 @@ const ReviewsOfSpecificVenue = ({ rating }) => {
           </div>
         </div>
         <div>
-          <Text>Recommended By 100% of Users</Text>
+          <Text>Recommended By {(rating / 5) * 100} of Users</Text>
           <SimpleGrid
             cols={3}
             breakpoints={[
@@ -62,11 +72,11 @@ const ReviewsOfSpecificVenue = ({ rating }) => {
                   Quality Of Service
                 </Text>
                 <Text size="sm" color="dimmed">
-                  62%
+                  {qualityOfService ? qualityOfService : 5}
                 </Text>
               </Group>
 
-              <Progress value={62} mt={5} />
+              <Progress value={(qualityOfService * 100) / 5} mt={5} />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -74,11 +84,11 @@ const ReviewsOfSpecificVenue = ({ rating }) => {
                   Response Time
                 </Text>
                 <Text size="sm" color="dimmed">
-                  62%
+                  {responseTime ? responseTime : 5}
                 </Text>
               </Group>
 
-              <Progress value={62} mt={5} />
+              <Progress value={(responseTime * 100) / 5} mt={5} />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -86,11 +96,11 @@ const ReviewsOfSpecificVenue = ({ rating }) => {
                   Value For Money
                 </Text>
                 <Text size="sm" color="dimmed">
-                  62%
+                  {valueForMoney ? valueForMoney : 5}
                 </Text>
               </Group>
 
-              <Progress value={62} mt={5} />
+              <Progress value={(valueForMoney * 100) / 5} mt={5} />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -98,11 +108,11 @@ const ReviewsOfSpecificVenue = ({ rating }) => {
                   Flexibility
                 </Text>
                 <Text size="sm" color="dimmed">
-                  62%
+                  {flexibility ? flexibility : 5}
                 </Text>
               </Group>
 
-              <Progress value={62} mt={5} />
+              <Progress value={(flexibility * 100) / 5} mt={5} />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -110,17 +120,17 @@ const ReviewsOfSpecificVenue = ({ rating }) => {
                   Professionalism
                 </Text>
                 <Text size="sm" color="dimmed">
-                  62%
+                  {professionalism ? professionalism : 5}
                 </Text>
               </Group>
 
-              <Progress value={62} mt={5} />
+              <Progress value={(professionalism * 100) / 5} mt={5} />
             </div>
           </SimpleGrid>
         </div>
       </Group>
-      {reviews.map((e) => (
-        <Comments />
+      {reviews.map((e, index) => (
+        <Comments key={index} />
       ))}
     </div>
   );

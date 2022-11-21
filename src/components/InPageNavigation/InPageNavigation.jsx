@@ -11,17 +11,58 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-const InPageNavigation = () => {
+const InPageNavigation = ({
+  scrollRef,
+  scrollRef1,
+  scrollRef2,
+  scrollRef3,
+  scrollRef4,
+  scrollRef5,
+  scrollRef6,
+}) => {
   const { classes } = useStyles();
 
   return (
     <Group spacing="xl" pt="xl">
-      <Text className={classes.text}>About</Text>
-      <Text className={classes.text}>Services</Text>
-      <Text className={classes.text}>Sub Venues</Text>
-      <Text className={classes.text}>Menus</Text>
-      <Text className={classes.text}>Themes</Text>
-      <Text className={classes.text}>Reviews</Text>
+      <Text
+        className={classes.text}
+        onClick={() => scrollRef1.scrollIntoView()}
+      >
+        About
+      </Text>
+      <Text
+        className={classes.text}
+        onClick={() => scrollRef2.scrollIntoView()}
+      >
+        Services
+      </Text>
+      <Text
+        className={classes.text}
+        onClick={() => scrollRef3.scrollIntoView()}
+      >
+        Sub Venues
+      </Text>
+      <Text
+        className={classes.text}
+        onClick={() => scrollRef4.scrollIntoView()}
+      >
+        Menus
+      </Text>
+      {/* <Text
+        className={classes.text}
+        onClick={() => scrollRef5.scrollIntoView()}
+      >
+        Themes
+      </Text> */}
+      <Text
+        className={classes.text}
+        onClick={() => scrollRef6.scrollIntoView()}
+      >
+        Reviews
+      </Text>
+      <Text className={classes.text} onClick={() => scrollRef.scrollIntoView()}>
+        Map
+      </Text>
     </Group>
   );
 };

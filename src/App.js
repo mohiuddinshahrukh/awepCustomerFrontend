@@ -4,6 +4,7 @@ import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
@@ -34,7 +35,7 @@ function App() {
               element={<SpecificVendorBusinessDetails />}
             />
             <Route path="/" element={<LandingPageMain />} />
-            <Route path="/allVenues" element={<></>} />
+            <Route path="/allVenues" element={<AllVenuesPage />} />
           </Routes>
         </Paper>
         <BottomNavbar />

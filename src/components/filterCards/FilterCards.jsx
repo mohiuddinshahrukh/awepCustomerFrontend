@@ -1,4 +1,4 @@
-import { Container, Group } from "@mantine/core";
+import { Container, Group, SimpleGrid } from "@mantine/core";
 import {
   IconBuildingSkyscraper,
   IconChevronRight,
@@ -15,7 +15,7 @@ import OtherFilterCards from "./OtherFilterCards";
 const FilterCards = () => {
   return (
     <Container size={"xl"} my={"xl"}>
-      <Group position="apart" spacing={"xs"}>
+      <Group position="center" spacing={"xs"}>
         <EasilyPlanYourWeddingCard
           cardData={[
             {

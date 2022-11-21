@@ -27,7 +27,7 @@ const TopNavbar = () => {
           linksData={[
             {
               title: "Venues",
-              path: "#",
+              path: "/allVenues",
               list: [
                 { listItem: "Featured Venues", listItemPath: "#" },
                 { listItem: "Top Viewed Venues", listItemPath: "#" },
@@ -62,7 +62,7 @@ const TopNavbar = () => {
         {matches1027 ? (
           <TopNavbarLinks
             linksData={[
-              { title: "Venues", path: "#" },
+              { title: "Venues", path: "/allVenues" },
               { title: "Vendors", path: "#" },
               { title: "Card Editor", path: "#" },
               { title: "Contact Us", path: "#" },

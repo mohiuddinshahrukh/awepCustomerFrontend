@@ -34,7 +34,7 @@ const OtherFilterCards = ({ cardsData }) => {
       </Paper>
     );
   });
-  return <Group>{cards}</Group>;
+  return <Group position="center">{cards}</Group>;
 };
 
 export default OtherFilterCards;

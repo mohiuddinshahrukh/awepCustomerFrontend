@@ -29,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/specificVenue" element={<SpecificVenueDetails />} />
             <Route path="/" element={<LandingPageMain />} />
+            <Route path="/allVenues" element={<></>} />
           </Routes>
         </Paper>
         <BottomNavbar />

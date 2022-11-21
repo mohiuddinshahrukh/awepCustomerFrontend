@@ -1,9 +1,9 @@
 import { Carousel } from "@mantine/carousel";
 import { Text } from "@mantine/core";
 import React from "react";
-import SpecificSubVenue from "./SpecificSubVenue";
+import SpecificSubVenue from "./SpecificSubVenueCard";
 
-const CarouselOfSubVenues = ({ open, setOpen, subVenues }) => {
+const CarouselOfSubVenues = ({ open, setOpen, subVenues, targetRef }) => {
   let subVenuesArray = subVenues ? subVenues : [{}];
   const slides = subVenuesArray.map((subVenue, index) => (
     <Carousel.Slide key={index}>
@@ -12,7 +12,7 @@ const CarouselOfSubVenues = ({ open, setOpen, subVenues }) => {
   ));
   return (
     <div>
-      <Text weight="bold" py="md" size="lg">
+      <Text weight="bold" py="md" size="lg" ref={targetRef}>
         Sub Venues
       </Text>
       <Carousel

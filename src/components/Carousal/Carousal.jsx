@@ -6,20 +6,25 @@ const Carousal = ({ images }) => {
   let venueImages = images ? images : ["", ""];
   return (
     <Carousel
+      styles={{
+        viewport: {
+          borderRadius: "10px",
+        },
+      }}
       withIndicators
-      // height={800}
+      height="501px"
       slideSize="80%"
       slideGap={2}
       breakpoints={[
         { maxWidth: "md", slideSize: "50%" },
-        { maxWidth: "sm", slideSize: "100%", slideGap: 0 },
+        { maxWidth: "sm", slideSize: "100%", slideGap: 1 },
       ]}
       loop
       align="start"
     >
       {venueImages.map((image, index) => (
         <Carousel.Slide key={index}>
-          <Image height="100%" width="100%" src={image} />
+          <Image height="500px" width="100%" src={image} />
         </Carousel.Slide>
       ))}
       {/* <Carousel.Slide>

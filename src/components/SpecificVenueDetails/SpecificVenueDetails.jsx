@@ -20,17 +20,22 @@ import InPageNavigation from "../InPageNavigation/InPageNavigation";
 import AboutVenue from "../AboutVenue/AboutVenue";
 import VenueServices from "../VenueServices/VenueServices";
 import CarouselOfSubVenues from "../SubVenuesOfSpecifcVenue/CarouselOfSubVenues";
-import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import MenusOfSpecificVenue from "../MenusOfSpecifcVenue/MenusOfSpecificVenue";
 import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
 import ReviewsOfSpecificVenue from "../ReviewsOfSpecificVenue/ReviewsOfSpecificVenue";
 import MapComponentView from "../MapViewComponent/MapComponentView";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
+import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 
 const SpecificVenueDetails = () => {
-  const { scrollIntoView, targetRef } = useScrollIntoView({});
-  const { scrollIntoView2, targetRef2 } = useScrollIntoView({});
-
+  const scrollRef = useScrollIntoView({});
+  const scrollRef1 = useScrollIntoView({});
+  const scrollRef2 = useScrollIntoView({});
+  const scrollRef3 = useScrollIntoView({});
+  const scrollRef4 = useScrollIntoView({});
+  const scrollRef5 = useScrollIntoView({});
+  const scrollRef6 = useScrollIntoView({});
+  console.log("scrollRef", scrollRef);
   const [refresh, setRefresh] = useState(true);
   const [venueDetails, setVenueDetails] = useState({});
   console.log("venueDetails are", venueDetails);
@@ -69,12 +74,10 @@ const SpecificVenueDetails = () => {
         }}
       >
         <Text color="dimmed">Islamabad, Pakistan</Text>
-        <Text onClick={() => scrollIntoView()} underline>
+        <Text onClick={() => scrollRef.scrollIntoView()} underline>
           View Map
         </Text>
-        <Text onClick={() => scrollIntoView2()} underline>
-          Phone Number
-        </Text>
+        <Text underline>Phone Number</Text>
         <Anchor href="" color="dark" underline>
           Visit Website
         </Anchor>
@@ -88,15 +91,43 @@ const SpecificVenueDetails = () => {
         }}
       >
         <CustomButton title="Book Now" />
-        <RatingStars rating={4} />
+        <Group spacing={0}>
+          <RatingStars
+            rating={venueDetails?.rating ? venueDetails?.rating : 5}
+            ratingCount={
+              venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
+            }
+          />
+        </Group>
         <Text color="dimmed" underline>
-          33 Reviews
+          {venueDetails?.ratingCount ? venueDetails?.ratingCount : 0}{" "}
+          {venueDetails?.ratingCount === 1 ? "Review" : "Reviews"}
         </Text>
         <Text>
-          Menus From <b>Rs. 1600</b>
+          Menus From{" "}
+          <b>
+            Rs.{" "}
+            {Math.min.apply(
+              Math,
+              venueDetails?.menus?.map((e) => e.price)
+            )}
+          </b>
         </Text>
         <Text>
-          Guests <b>250 to 600</b>
+          Guests {""}
+          <b>
+            {Math.min.apply(
+              Math,
+              venueDetails?.subVenues?.map((e) => e.subVenueMinCapacity)
+            )}
+          </b>{" "}
+          to{" "}
+          <b>
+            {Math.max.apply(
+              Math,
+              venueDetails?.subVenues?.map((e) => e.subVenueCapacity)
+            )}
+          </b>
         </Text>
       </Group>
       <Grid pt="md">
@@ -104,9 +135,18 @@ const SpecificVenueDetails = () => {
           <Carousal
             images={venueDetails?.images ? venueDetails?.images : ["", ""]}
           />
-          <InPageNavigation />
+          <InPageNavigation
+            scrollRef={scrollRef}
+            scrollRef1={scrollRef1}
+            scrollRef2={scrollRef2}
+            scrollRef3={scrollRef3}
+            scrollRef4={scrollRef4}
+            scrollRef5={scrollRef5}
+            scrollRef6={scrollRef6}
+          />
           <Divider mt="xl" />
           <AboutVenue
+            targetRef={scrollRef1.targetRef}
             details={
               venueDetails?.venueDescription
                 ? venueDetails?.venueDescription
@@ -124,6 +164,7 @@ const SpecificVenueDetails = () => {
             }
           />
           <VenueServices
+            targetRef={scrollRef2.targetRef}
             services={
               venueDetails?.providedVenueServices
                 ? venueDetails?.providedVenueServices
@@ -132,16 +173,23 @@ const SpecificVenueDetails = () => {
           />
           <Divider mt="xl" />
           <CarouselOfSubVenues
+            targetRef={scrollRef3.targetRef}
             setOpen={setOpen}
             subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
           />
-          <ModalOfSubVenues setOpen={setOpen} open={open} />
+          <ModalOfSubVenues
+            open={open}
+            setOpen={setOpen}
+            subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
+          />
+
           <MenusOfSpecificVenue
+            targetRef={scrollRef4.targetRef}
             menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
           />
-          <CarouselOfThemes />
+          {/* <CarouselOfThemes /> */}
           <ReviewsOfSpecificVenue
-            rating={venueDetails?.rating ? venueDetails?.rating : 5}
+            targetRef={scrollRef6.targetRef}
             flexibility={
               venueDetails?.flexibility ? venueDetails?.flexibility : 5
             }
@@ -159,13 +207,14 @@ const SpecificVenueDetails = () => {
             professionalism={
               venueDetails?.professionalism ? venueDetails?.professionalism : 5
             }
+            rating={venueDetails?.rating ? venueDetails?.rating : 5}
             ratingCount={
               venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
             }
           />
 
           <MapComponentView
-            targetRef={targetRef}
+            targetRef={scrollRef.targetRef}
             pinLocation={
               venueDetails?.pinLocation
                 ? venueDetails?.pinLocation
@@ -184,7 +233,7 @@ const SpecificVenueDetails = () => {
           <BookVenueSideColums />
         </Grid.Col>
       </Grid>
-      <Text ref={targetRef2}>asdsadsa</Text>
+      {/* <Text ref={scrollRef.targetRef}>asdsadsa</Text> */}
     </Container>
   );
 };

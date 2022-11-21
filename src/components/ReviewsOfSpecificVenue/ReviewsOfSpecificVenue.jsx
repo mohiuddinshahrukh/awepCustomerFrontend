@@ -13,6 +13,7 @@ import RatingStars from "../RatingStars/RatingStars";
 import Comments from "./Comments";
 
 const ReviewsOfSpecificVenue = ({
+  targetRef,
   rating,
   flexibility,
   responseTime,
@@ -24,6 +25,7 @@ const ReviewsOfSpecificVenue = ({
   const reviews = [1, 2, 3];
   return (
     <div
+      ref={targetRef}
       style={{
         paddingTop: 40,
       }}

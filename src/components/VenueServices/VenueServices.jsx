@@ -2,11 +2,11 @@ import { Group, SimpleGrid, Text } from "@mantine/core";
 import { IconCheck } from "@tabler/icons";
 import React from "react";
 
-const VenueServices = ({ services }) => {
+const VenueServices = ({ services, targetRef }) => {
   let venueServices = services ? services : [];
   return (
     <div>
-      <Text weight="bold" size="lg">
+      <Text weight="bold" size="lg" pt="xl" ref={targetRef}>
         Venue Services
       </Text>
       <SimpleGrid

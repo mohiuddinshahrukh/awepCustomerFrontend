@@ -1,52 +1,30 @@
-import { Modal, Group, Grid, Divider, Text } from "@mantine/core";
-import Carousal from "../Carousal/Carousal";
-import InPageNavigation from "../InPageNavigation/InPageNavigation";
-import AboutVenue from "../AboutVenue/AboutVenue";
-import VenueServices from "../VenueServices/VenueServices";
-import BookingCharges from "./BookingCharges";
+import { Grid, Group, Modal, Text } from "@mantine/core";
+import React from "react";
+import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
+import CarouselForModalOfSubVenues from "./CarouselForModalOfSubVenues";
+import SpecificSubVenueDetails from "./SpecificSubVenueDetails";
 
-const ModalOfSubVenues = ({ open, setOpen }) => {
-  //   const [opened, setOpened] = useState(false);
+const ModalOfSubVenues = ({ open, setOpen, subVenues }) => {
+  const [subVenueDetails, setSubVenueDetails] = React.useState({});
 
+  let subVenuesArray = subVenues ? subVenues : [{}];
   return (
     <>
       <Modal
         padding="2%"
         opened={open}
         onClose={() => setOpen(false)}
-        title={
-          <Text size="xl" weight="bold">
-            Sub Venues
-          </Text>
-        }
         fullScreen
       >
-        <Text color="dimmed">Islamabad, Pakistan</Text>
-
-        <Group
-          spacing="md"
-          //   pt="sm"
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Text>
-            Venue Type: <b>Marquee</b>
-          </Text>
-          <Text>
-            Guests <b>250 to 600</b>
-          </Text>
-        </Group>
-        <Grid pt="md">
-          <Grid.Col lg={9}>
-            <Carousal />
-            <InPageNavigation />
-            <Divider mt="xl" />
-            <AboutVenue />
-            <VenueServices />
-            <Divider mt="xl" />
-            <BookingCharges />
+        <Grid>
+          <Grid.Col lg={9} pl="xl">
+            <CarouselForModalOfSubVenues
+              subVenuesArray={subVenuesArray}
+              setSubVenueDetails={setSubVenueDetails}
+            />
+          </Grid.Col>
+          <Grid.Col lg={3} pl="xl">
+            <BookVenueSideColums />
           </Grid.Col>
         </Grid>
       </Modal>

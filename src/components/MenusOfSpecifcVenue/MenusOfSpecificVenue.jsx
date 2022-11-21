@@ -3,7 +3,7 @@ import { Carousel } from "@mantine/carousel";
 import { Text } from "@mantine/core";
 import SpecificMenu from "./SpecificMenu";
 
-const MenusOfSpecificVenue = ({ menus }) => {
+const MenusOfSpecificVenue = ({ menus, targetRef }) => {
   let venueMenu = menus ? menus : [{}];
   const slides = venueMenu.map((menu, index) => (
     <Carousel.Slide key={index}>
@@ -13,7 +13,7 @@ const MenusOfSpecificVenue = ({ menus }) => {
 
   return (
     <div>
-      <Text weight="bold" py="md" size="lg">
+      <Text weight="bold" py="md" size="lg" ref={targetRef}>
         Menus
       </Text>
       <Carousel

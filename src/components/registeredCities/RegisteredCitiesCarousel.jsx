@@ -51,6 +51,11 @@ const RegisteredCitiesCarousel = () => {
       align={"start"}
       slidesToScroll={4}
       withControls={false}
+      breakpoints={[
+        { maxWidth: "md", slideSize: "33.33333333%" },
+        { maxWidth: "sm", slideSize: "50%" },
+        { maxWidth: "xs", slideSize: "100%", slidesToScroll: 1 },
+      ]}
     >
       {carouselSlides}
     </Carousel>

@@ -8,8 +8,19 @@ const EasilyPlanYourWeddingCard = ({ cardData }) => {
     return (
       <Paper
         sx={{
-          ":hover": { boxShadow: "1px 1px 3px rgba(0, 0, 0, .25)" },
-          transition: "0.3s",
+          borderRadius: "0.5rem",
+          ":hover": {
+            boxShadow: "0 5px 12px #0003",
+
+            // transform: "scale(1.005)",
+          },
+          boxShadow: "0 2px 8px #00000026",
+
+          transition: "box-shadow .2s",
+          transitionDuration: "0.2s",
+          transitionTimingFunction: "ease",
+          transitionDelay: "0s",
+          transitionProperty: "box-shadow",
         }}
         shadow={"sm"}
         p={"xl"}

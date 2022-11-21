@@ -22,7 +22,9 @@ const RegisteredCitiesCard = ({ citiesCard }) => {
         <Image height={"350px"} src={citiesCard.img} />
 
         <div
+          spacing={0}
           style={{
+            whiteSpace: "nowrap",
             padding: "5px 10px",
             boxSizing: "border-box",
             position: "absolute",
@@ -38,7 +40,7 @@ const RegisteredCitiesCard = ({ citiesCard }) => {
             </Text>
           </Group>
           <Group noWrap spacing={"md"}>
-            <Group spacing={3}>
+            <Group spacing={3} noWrap>
               <IconBuildingFortress color="white" />
               <Text size={"lg"} color={"white"}>
                 {citiesCard.venues} Venues

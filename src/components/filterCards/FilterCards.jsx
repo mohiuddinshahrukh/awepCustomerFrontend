@@ -1,7 +1,9 @@
 import { Container, Group } from "@mantine/core";
 import {
+  IconBuildingSkyscraper,
   IconChevronRight,
   IconEye,
+  IconLayoutCards,
   IconSearch,
   IconStars,
   IconUsers,
@@ -12,8 +14,8 @@ import OtherFilterCards from "./OtherFilterCards";
 
 const FilterCards = () => {
   return (
-    <Container size={"xl"} mt={"xl"}>
-      <Group position="center">
+    <Container size={"xl"} my={"xl"}>
+      <Group position="apart" spacing={"xs"}>
         <EasilyPlanYourWeddingCard
           cardData={[
             {
@@ -45,6 +47,18 @@ const FilterCards = () => {
               cardTitle: "Top Viewed",
               cardLinkPath: "/",
               cardLinkIcon: <IconEye size={50} color="#775A97" />,
+            },
+            {
+              cardTitle: "Cards",
+              cardLinkPath: "/",
+              cardLinkIcon: <IconLayoutCards size={50} color="#775A97" />,
+            },
+            {
+              cardTitle: "Cities",
+              cardLinkPath: "/",
+              cardLinkIcon: (
+                <IconBuildingSkyscraper size={50} color="#775A97" />
+              ),
             },
           ]}
         />

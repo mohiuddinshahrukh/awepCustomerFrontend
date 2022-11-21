@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
+import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/" element={<LandingPageMain />} />
           </Routes>
         </Paper>
+        <BottomNavbar />
       </MantineProvider>
     </ColorSchemeProvider>
   );

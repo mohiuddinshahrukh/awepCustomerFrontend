@@ -1,6 +1,6 @@
 import { Card, Group, Image, Paper, Text } from "@mantine/core";
 import {
-  IconBuildingFortress,
+  IconBuildingStore,
   IconCash,
   IconStar,
   IconUsers,
@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 
-const FeaturedVenuesCard = ({ venue }) => {
+const FeaturedVendorsCard = ({ vendor }) => {
   const card = (
     <Card
       radius={"md"}
@@ -36,13 +36,13 @@ const FeaturedVenuesCard = ({ venue }) => {
           height={"201px"}
           width={"100%"}
           fit={"cover"}
-          src={venue?.coverImage}
+          src={vendor?.coverImage}
         />
       </Card.Section>
-      <Card.Section style={{ height: "154px" }}>
+      <Card.Section>
         <Paper p={"lg"}>
           <Text lineClamp={1} weight={500} size={"lg"}>
-            {venue?.venueName}
+            {vendor?.vendorBusinessTitle}
           </Text>
 
           <Group spacing={3} noWrap>
@@ -53,21 +53,21 @@ const FeaturedVenuesCard = ({ venue }) => {
               fill={"#EDB100"}
             />
             <Text weight={500} size={"sm"}>
-              {venue?.rating.toFixed(1)}
+              {vendor?.rating.toFixed(1)}
             </Text>
             <Text color={"dimmed"} size={"sm"}>
-              ({venue?.ratingCount})
+              ({vendor?.ratingCount})
             </Text>
-            <Text lineClamp={1}>{venue?.venueAddress}</Text>
+            <Text lineClamp={1}>{vendor?.address}</Text>
           </Group>
 
           <Group noWrap spacing={"lg"} align={"center"}>
             <Group spacing={3} noWrap align={"center"}>
-              <IconBuildingFortress size={20} stroke={1.5} />
+              <IconBuildingStore size={20} stroke={1.5} />
               <Text>
-                {venue?.subVenues.length === 1
-                  ? venue?.subVenues.length + " Subvenue"
-                  : venue?.subVenues.length + " Subvenues"}
+                {vendor?.vendorServicePackages?.length === 1
+                  ? vendor?.vendorServicePackages?.length + " Package"
+                  : vendor?.vendorServicePackages?.length + " Packages"}
               </Text>
             </Group>
             <Group noWrap spacing={3} align={"center"}>
@@ -77,7 +77,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 {Math.min
                   .apply(
                     Math,
-                    venue?.subVenues.map((subvenue) => {
+                    vendor?.subVenues?.map((subvenue) => {
                       return subvenue?.subVenueMinCapacity;
                     })
                   )
@@ -88,7 +88,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 {Math.max
                   .apply(
                     Math,
-                    venue?.subVenues.map((subvenue) => {
+                    vendor?.subVenues?.map((subvenue) => {
                       return subvenue?.subVenueCapacity;
                     })
                   )
@@ -101,11 +101,11 @@ const FeaturedVenuesCard = ({ venue }) => {
             <IconCash stroke={1.5} size={20} />
             <Text>
               from Rs.{" "}
-              {venue?.menus.length !== 0
+              {vendor?.menus?.length !== 0
                 ? Math.max
                     .apply(
                       Math,
-                      venue?.menus.map((menu) => {
+                      vendor?.menus?.map((menu) => {
                         return menu.price;
                       })
                     )
@@ -113,7 +113,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 : Math.max
                     .apply(
                       Math,
-                      venue?.subVenues.map((subvenue) => {
+                      vendor?.subVenues?.map((subvenue) => {
                         return subvenue?.subVenueBookingCharges;
                       })
                     )
@@ -128,4 +128,4 @@ const FeaturedVenuesCard = ({ venue }) => {
   return <div>{card}</div>;
 };
 
-export default FeaturedVenuesCard;
+export default FeaturedVendorsCard;

@@ -2,25 +2,25 @@ import { Anchor, Button, Container, Group } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
-import FeaturedVenuesCarousel from "./FeaturedVenuesCarousel";
+import RegisteredCitiesCarousel from "./RegisteredCitiesCarousel";
 
-const FeaturedVenuesSection = () => {
+const RegisteredCities = () => {
   return (
     <Container size={"xl"} my="xl">
       <Group position="center">
         <Anchor component={Link} to="#" variant="text" size={"1.5rem"}>
-          Wedding Venues
+          Our Cities
         </Anchor>
       </Group>
       <Group position="right" mb={"lg"}>
         <Button variant="outline" rightIcon={<IconArrowRight />}>
-          View All Venues
+          View All Cities
         </Button>
       </Group>
 
-      <FeaturedVenuesCarousel />
+      <RegisteredCitiesCarousel />
     </Container>
   );
 };
 
-export default FeaturedVenuesSection;
+export default RegisteredCities;

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel } from "@mantine/carousel";
-import FeaturedVenuesCard from "./FeaturedVenuesCard";
-const fetchVenuesMethod = async () => {
+import CustomerTestimonialsCard from "./CustomerTestimonialsCard";
+
+const fetchTestimonialsMehtod = async () => {
   try {
     const apiResponse = await axios.get(
       "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
@@ -19,22 +20,19 @@ const fetchVenuesMethod = async () => {
     console.log("fetchVenuesMethod API CALLING ERROR:", error);
   }
 };
-
-const FeaturedVenuesCarousel = () => {
-  const [landingPageVenues, setLandingPageVenues] = useState([]);
+const CustomerTestimonialsCarousel = () => {
+  const [landingPageTestimonials, setLandingPageTestimonials] = useState([]);
   useEffect(() => {
-    fetchVenuesMethod().then(setLandingPageVenues);
+    fetchTestimonialsMehtod().then(setLandingPageTestimonials);
     return () => {};
   }, []);
-
-  const carouselSlides = landingPageVenues.map((venue, index) => {
+  const carouselSlides = landingPageTestimonials.map((testimonial, index) => {
     return (
       <Carousel.Slide key={index}>
-        <FeaturedVenuesCard venue={venue} />
+        <CustomerTestimonialsCard testimonial={testimonial} />
       </Carousel.Slide>
     );
   });
-
   return (
     <Carousel
       styles={{ viewport: { padding: "20px 5px" } }}
@@ -49,4 +47,4 @@ const FeaturedVenuesCarousel = () => {
   );
 };
 
-export default FeaturedVenuesCarousel;
+export default CustomerTestimonialsCarousel;

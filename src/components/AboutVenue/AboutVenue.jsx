@@ -2,18 +2,17 @@ import { Anchor, Group, Text } from "@mantine/core";
 import { IconBrandFacebook, IconBrandInstagram } from "@tabler/icons";
 import React from "react";
 
-const AboutVenue = ({ targetRef, details, facebook, instagram, website }) => {
-  let venueDetails = details ? details : "";
+const AboutVenue = ({ targetRef, details, facebook, instagram }) => {
+  let description = details ? details : "";
   let facebookLink = facebook ? facebook : "";
   let instagramLink = instagram ? instagram : "";
-  let websiteLink = website ? website : "";
   return (
     <div>
-      <Text py="xl" weight="bold" size="lg" ref={targetRef}>
+      <Text py="lg" weight="bold" size="lg" ref={targetRef}>
         About
       </Text>
-      <Text align="justify">{venueDetails}</Text>
-      {(facebookLink || instagramLink || websiteLink) && (
+      <Text align="justify">{description}</Text>
+      {(facebookLink || instagramLink) && (
         <Group py="xl">
           <Text color="dimmed">Follow This Venue On</Text>
           {facebookLink && (

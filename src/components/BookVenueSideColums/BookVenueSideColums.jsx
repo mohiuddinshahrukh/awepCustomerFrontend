@@ -1,6 +1,7 @@
 import {
   Button,
   createStyles,
+  NativeSelect,
   NumberInput,
   Paper,
   Select,
@@ -11,7 +12,7 @@ import React, { useState } from "react";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
-// import InputMask from "react-input-mask";
+import InputMask from "react-input-mask";
 import {
   IconCalendar,
   IconClock,
@@ -28,24 +29,40 @@ const useStyles = createStyles(() => ({
       backgroundColor: "#56416D",
     },
   },
+  stickySThings: {
+    position: "-webkit-sticky",
+    position: "sticky",
+    top: 20,
+  },
 }));
 
-const BookVenueSideColums = () => {
+const BookVenueSideColums = ({
+  subVenue,
+
+  contactPhone,
+  setContactPhone,
+  contactEmail,
+  setContactEmail,
+  date,
+  setDate,
+  time,
+  setTime,
+  guests,
+  setGuests,
+}) => {
+  console.log("time", time);
+  console.log("proped email", contactEmail);
+  console.log("subVenue in booking", subVenue);
   const { classes } = useStyles();
 
-  const [contactPhone, setContactPhone] = useState("");
-  const [contactEmail, setContactEmail] = useState();
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [guests, setGuests] = useState();
   const form = useForm({
     // validateInputOnChange: true,
     initialValues: {
-      email: "",
-      phone: "",
-      date: "",
-      time: "",
-      guests: "",
+      email: contactEmail,
+      phone: contactPhone,
+      date: date,
+      time: time,
+      guests: guests,
     },
 
     validate: {
@@ -60,19 +77,20 @@ const BookVenueSideColums = () => {
           ? null
           : "Please enter a valid phone number",
       guests: (value) =>
-        value > 50 && value < 10000 ? null : "Estimated guest count",
+        value > 50 && value <= 10000 ? null : "Estimated guest count",
       time: (value) => (value !== "" ? null : "Please select a time"),
       date: (value) => (value !== "" ? null : "Please select a date"),
     },
   });
+
   const handleSubmit = async (event) => {
-    var { email, name, phone } = event;
+    var { email, phone } = event;
     const body = {
       email,
-      name,
       phone,
     };
 
+    console.log("VALUES", event);
     const headers = {
       "Content-Type": "application/json",
     };
@@ -105,9 +123,16 @@ const BookVenueSideColums = () => {
       console.log(err);
     }
   };
+  const [error, setError] = useState("");
 
   return (
-    <Paper withBorder radius="md" shadow="md" p="md">
+    <Paper
+      withBorder
+      radius="md"
+      shadow="md"
+      p="md"
+      className={classes.stickySThings}
+    >
       <Text align="center" weight="bold" size="xl">
         Booking
       </Text>
@@ -129,6 +154,7 @@ const BookVenueSideColums = () => {
           label="Phone"
           placeholder="Phone"
           radius="md"
+          component={InputMask}
           mask="03999999999"
           pt="md"
           size="md"
@@ -137,7 +163,8 @@ const BookVenueSideColums = () => {
           onInput={(event) => setContactPhone(event.currentTarget.value)}
           {...form.getInputProps("phone")}
         />
-        <NumberInput
+        <TextInput
+          type="number"
           label="Guests"
           placeholder="Guests"
           radius="md"
@@ -164,6 +191,8 @@ const BookVenueSideColums = () => {
           maxDate={dayjs(new Date()).add(365, "days").toDate()}
           placeholder="Pick date"
           label="Event Date"
+          onChange={setDate}
+          onInput={setDate}
           rightSection={<IconCalendar color="gray" size={20} stroke={1} />}
           value={date}
           // onChange={onChange}
@@ -176,14 +205,21 @@ const BookVenueSideColums = () => {
           radius="md"
           py="md"
           size="md"
+          error={error}
           rightSection={<IconClock color="gray" size={20} stroke={1} />}
           value={time}
-          onChange={setTime}
+          defaultValue={undefined}
+          // onChange={setTime}
+          onChange={(event) => {
+            console.log("SELECT", event);
+            setTime(event);
+            // form.setFieldValue("time", event);
+          }}
           data={[
             { label: "Lunch", value: "LUNCH" },
             { label: "Dinner", value: "DINNER" },
           ]}
-          {...form.getInputProps("time")}
+          // {...form.getInputProps("time")}
         />
         <Button
           className={classes.button}

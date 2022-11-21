@@ -24,39 +24,13 @@ const Carousal = ({ images }) => {
     >
       {venueImages.map((image, index) => (
         <Carousel.Slide key={index}>
-          <Image height="500px" width="100%" src={image} />
+          <Image
+            height="500px"
+            width={index == venueImages.length - 1 ? "120%" : "100%"}
+            src={image}
+          />
         </Carousel.Slide>
       ))}
-      {/* <Carousel.Slide>
-        <Image
-          height="100%"
-          width="100%"
-          src="https://cdn0.hitched.co.uk/vendor/5553/original/960/jpg/farnham-cast-20170607052509930.webp"
-        />
-      </Carousel.Slide> */}
-      {/* <Carousel.Slide>
-        <Image
-          height="100%"
-          width="100%"
-          src="https://cdn0.hitched.co.uk/vendor/5553/original/960/jpg/farnham-cast-20200529092040519.webp"
-        />
-      </Carousel.Slide>
-      <Carousel.Slide>
-        <Image
-          height="100%"
-          width="100%"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTmYPvgisuCMqQYS23f8wTZjq112qFLvODVSlpph9H8Q&s"
-        />
-      </Carousel.Slide>
-      <Carousel.Slide>
-        <Image
-          height="100%"
-          width="100%"
-          src="https://cdn0.hitched.co.uk/vendor/5553/original/960/jpg/farnham-cast-20200529092040519.webp"
-        />
-      </Carousel.Slide> */}
-
-      {/* ...other slides */}
     </Carousel>
   );
 };

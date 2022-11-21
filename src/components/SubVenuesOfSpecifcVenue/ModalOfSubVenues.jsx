@@ -1,13 +1,28 @@
-import { Grid, Group, Modal, Text } from "@mantine/core";
+import { Grid, Group, Modal, Text, Title } from "@mantine/core";
 import React from "react";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import CarouselForModalOfSubVenues from "./CarouselForModalOfSubVenues";
 import SpecificSubVenueDetails from "./SpecificSubVenueDetails";
 
-const ModalOfSubVenues = ({ open, setOpen, subVenues }) => {
+const ModalOfSubVenues = ({
+  open,
+  setOpen,
+  subVenues,
+  contactPhone,
+  setContactPhone,
+  contactEmail,
+  setContactEmail,
+  date,
+  setDate,
+  time,
+  setTime,
+  guests,
+  setGuests,
+}) => {
   const [subVenueDetails, setSubVenueDetails] = React.useState({});
 
   let subVenuesArray = subVenues ? subVenues : [{}];
+
   return (
     <>
       <Modal
@@ -15,18 +30,63 @@ const ModalOfSubVenues = ({ open, setOpen, subVenues }) => {
         opened={open}
         onClose={() => setOpen(false)}
         fullScreen
+        title={<Title order={2}>{subVenueDetails?.subVenueName}</Title>}
+        styles={{
+          close: {
+            color: "black",
+            backgroundColor: "#EAEAEA",
+            borderRadius: "50%",
+            "&:hover": {
+              transition: "50ms",
+              color: "white",
+              backgroundColor: "red",
+            },
+          },
+        }}
       >
-        <Grid>
-          <Grid.Col lg={9} pl="xl">
-            <CarouselForModalOfSubVenues
-              subVenuesArray={subVenuesArray}
-              setSubVenueDetails={setSubVenueDetails}
-            />
-          </Grid.Col>
-          <Grid.Col lg={3} pl="xl">
-            <BookVenueSideColums />
-          </Grid.Col>
-        </Grid>
+        <Text color="dimmed" pt="md">
+          Islamabad, Pakistan
+        </Text>
+
+        <Group
+          mb="xl"
+          spacing="md"
+          //   pt="sm"
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Text>
+            Venue Type: <b> {subVenueDetails?.subVenueType}</b>
+          </Text>
+          <Text>
+            Guests{" "}
+            <b>
+              {" "}
+              {subVenueDetails?.subVenueMinCapacity} to{" "}
+              {subVenueDetails?.subVenueCapacity}
+            </b>
+          </Text>
+        </Group>
+        <CarouselForModalOfSubVenues
+          contactPhone={contactPhone}
+          setContactPhone={setContactPhone}
+          contactEmail={contactEmail}
+          setContactEmail={setContactEmail}
+          date={date}
+          setDate={setDate}
+          time={time}
+          setTime={setTime}
+          guests={guests}
+          setGuests={setGuests}
+          subVenuesArray={subVenuesArray}
+          setSubVenueDetails={setSubVenueDetails}
+          subVenueDetails={subVenueDetails}
+        />
+        {/* </Grid.Col>
+         
+        </Grid> */}
       </Modal>
     </>
   );

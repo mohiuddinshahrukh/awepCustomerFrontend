@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
+import SpecificVendorBusinessDetails from "./components/SpecificVendorBusinessDetails/SpecificVendorBusinessDetails";
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
 
 function App() {
@@ -27,6 +28,10 @@ function App() {
           <TopNavbar />
           <Routes>
             <Route path="/specificVenue" element={<SpecificVenueDetails />} />
+            <Route
+              path="/specificVendor"
+              element={<SpecificVendorBusinessDetails />}
+            />
             <Route path="/" element={<LandingPageMain />} />
           </Routes>
         </Paper>

@@ -34,31 +34,14 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   },
 }));
 
-const SpecificSubVenue = ({ open, setOpen, subVenue }) => {
-  let subVenueData = subVenue ? subVenue : {};
-  const images = subVenueData?.images ? subVenueData?.images : [""];
+const SpecificVendorPackageCard = ({ open, setOpen, vendorPackage }) => {
+  let vendorPackageData = vendorPackage ? vendorPackage : {};
   const { classes } = useStyles();
-
-  const slides = images.map((image) => (
-    <Carousel.Slide key={image}>
-      <Image src={image} height={220} />
-    </Carousel.Slide>
-  ));
 
   return (
     <Card radius="md" withBorder p="xl">
       <Card.Section>
-        <Carousel
-          withIndicators
-          loop
-          classNames={{
-            root: classes.carousel,
-            controls: classes.carouselControls,
-            indicator: classes.carouselIndicator,
-          }}
-        >
-          {slides}
-        </Carousel>
+        <Image src={vendorPackageData?.coverImage} height={220} />
       </Card.Section>
       <div
         onClick={() => setOpen(true)}
@@ -68,24 +51,24 @@ const SpecificSubVenue = ({ open, setOpen, subVenue }) => {
       >
         <Group position="apart" mt="lg">
           <Text weight={500} size="lg">
-            {subVenueData?.subVenueName}
+            {vendorPackageData?.vendorPackageTitle}
           </Text>
 
           <Group spacing={5}>
             <IconStar size={16} fill={"#FFB300"} stroke="0" />
             <Text size="xs" weight={500}>
-              {subVenueData?.rating ? subVenueData.rating.toFixed(1) : "5.0"}
+              {vendorPackageData?.rating
+                ? vendorPackageData.rating.toFixed(1)
+                : "5.0"}
             </Text>
           </Group>
         </Group>
-        <Text span size="sm" color="dimmed">
-          {subVenueData?.subVenueType}
-        </Text>
+
         <Text size="sm" color="dimmed" mt="sm">
-          {subVenueData?.subVenueDescription
-            ? subVenueData?.subVenueDescription.length > 100
-              ? subVenueData?.subVenueDescription.substring(0, 100) + "..."
-              : subVenueData?.subVenueDescription
+          {vendorPackageData?.packageDescription
+            ? vendorPackageData?.packageDescription.length > 100
+              ? vendorPackageData?.packageDescription.substring(0, 100) + "..."
+              : vendorPackageData?.packageDescription
             : "No description"}
         </Text>
       </div>
@@ -93,17 +76,11 @@ const SpecificSubVenue = ({ open, setOpen, subVenue }) => {
       <Group position="apart" mt="md">
         <div>
           <Text size="xl" span weight={500} className={classes.price}>
-            {subVenueData?.subVenueMinCapacity
-              ? subVenueData?.subVenueMinCapacity
-              : "0"}{" "}
-            to{" "}
-            {subVenueData?.subVenueCapacity
-              ? subVenueData?.subVenueCapacity
-              : "0"}
+            Rs. {vendorPackageData?.price}
           </Text>
           <Text span size="sm" color="dimmed">
             {" "}
-            Guests
+            /package
           </Text>
         </div>
 
@@ -113,4 +90,4 @@ const SpecificSubVenue = ({ open, setOpen, subVenue }) => {
   );
 };
 
-export default SpecificSubVenue;
+export default SpecificVendorPackageCard;

@@ -1,5 +1,6 @@
 import { Breadcrumbs, Anchor, Group, Text } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons";
+import { Link } from "react-router-dom";
 const BreadCrumbs = () => {
   const items = [
     { title: "Home", href: "/" },
@@ -7,7 +8,13 @@ const BreadCrumbs = () => {
     { title: "Islamabad", href: "#" },
     { title: "Marquees", href: "#" },
   ].map((item, index) => (
-    <Anchor href={item.href} key={index} variant="text" color="dimmed">
+    <Anchor
+      component={Link}
+      to={item.href}
+      key={index}
+      variant="text"
+      color="dimmed"
+    >
       {item.title}
     </Anchor>
   ));

@@ -11,6 +11,8 @@ import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import SpecificVendorBusinessDetails from "./components/SpecificVendorBusinessDetails/SpecificVendorBusinessDetails";
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
+import NewBookingFile from "./components/VenueBooking/NewBookingFile";
+import VenueBooking from "./components/VenueBooking/VenueBooking";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
@@ -40,6 +42,10 @@ function App() {
             <Route
               path="/specificVenue:id"
               element={<SpecificVenueDetails />}
+            />
+            <Route
+              path="/venueBooking/:date/:time/:guests/:venueId"
+              element={<NewBookingFile />}
             />
           </Routes>
         </Paper>

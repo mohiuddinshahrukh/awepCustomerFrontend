@@ -238,6 +238,7 @@ const SpecificVenueDetails = () => {
             open={open}
             setOpen={setOpen}
             subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
+            venueId={params.id}
           />
           {venueDetails?.menus?.length !== 0 && (
             <MenusOfSpecificVenue
@@ -294,6 +295,10 @@ const SpecificVenueDetails = () => {
         </Grid.Col>
         <Grid.Col lg={3} pl="xl">
           <BookVenueSideColums
+            onClickFunction={() => {
+              console.log("onClickFunction111");
+              setOpen(true);
+            }}
             contactPhone={contactPhone}
             setContactPhone={setContactPhone}
             contactEmail={contactEmail}
@@ -304,6 +309,7 @@ const SpecificVenueDetails = () => {
             setTime={setTime}
             guests={guests}
             setGuests={setGuests}
+            venueId={params.id}
           />
         </Grid.Col>
       </Grid>

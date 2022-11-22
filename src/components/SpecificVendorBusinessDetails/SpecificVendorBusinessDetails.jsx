@@ -28,6 +28,7 @@ import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import CarouselOfPackages from "../SpecificVendorPackages/CarouselOfPackages";
 import ModalOfPackages from "../SpecificVendorPackages/ModalOfPackages";
+import { useParams } from "react-router-dom";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -36,6 +37,7 @@ const useStyles = createStyles(() => ({
   },
 }));
 const SpecificVendorBusinessDetails = () => {
+  const params = useParams();
   const { classes } = useStyles();
 
   const scrollRef = useScrollIntoView({});
@@ -50,8 +52,8 @@ const SpecificVendorBusinessDetails = () => {
   const [vendorDetails, setVendorDetails] = useState({});
   console.log("vendorDetails are", vendorDetails);
   const [open, setOpen] = useState(false);
-  let vendorId = "63491702c5ba3ae82a8641f3";
-  const url = `https://a-wep.herokuapp.com/customer/getSpecificVendorBusinessDetails/${vendorId}`;
+
+  const url = `https://a-wep.herokuapp.com/customer/getSpecificVendorBusinessDetails/${params.id}`;
   useEffect(() => {
     if (refresh) {
       // setVisible(true);

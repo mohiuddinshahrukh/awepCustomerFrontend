@@ -78,10 +78,10 @@ function MapComponent({
   );
   return (
     <div style={{ position: "relative" }}>
-      <Text weight="bold" size="lg" pb="md" pt="lg" ref={targetRef}>
+      <Text weight="bold" size="lg" pt="lg" ref={targetRef}>
         Map
       </Text>
-      <Text py="md">{address}</Text>
+      <Text py="sm">{address}</Text>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}

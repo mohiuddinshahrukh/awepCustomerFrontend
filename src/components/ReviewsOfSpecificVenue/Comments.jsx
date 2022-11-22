@@ -9,23 +9,31 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Comments = () => {
+const Comments = ({ review }) => {
   const { classes } = useStyles();
 
   return (
     <div>
       <Group pt="xl">
-        <Avatar src="{author.image}" alt="asdasd" radius="50%" size="xl" />
+        <Avatar
+          src={review?.customerId ? review?.customerId?.profileImage : ""}
+          alt="asdasd"
+          radius="50%"
+          size="xl"
+        />
         <div>
-          <Text size="sm">sdsadasdsa</Text>
+          <Text size="sm">{review?.customerId?.name}</Text>
           <Text size="xs" color="dimmed">
-            "sadsadasd"
+            {review?.createdAt ? review?.createdAt?.split("T")[0] : ""}
           </Text>
-          <RatingStars dontShow={true} />
+          <RatingStars
+            dontShow={true}
+            rating={review.rating ? review.rating : 5}
+          />
         </div>
       </Group>
       <Text className={classes.body} size="sm">
-        asdsadsadas
+        {review?.customerReview ? review?.customerReview : ""}
       </Text>
     </div>
   );

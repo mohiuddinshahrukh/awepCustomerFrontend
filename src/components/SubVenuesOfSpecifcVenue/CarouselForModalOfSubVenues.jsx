@@ -17,6 +17,7 @@ const CarouselForModalOfSubVenues = ({
   setGuests,
   subVenuesArray,
   setSubVenueDetails,
+  venueId,
 }) => {
   const [subVenueData, setSubVenueData] = React.useState({});
   const [index, setIndex] = React.useState(0);
@@ -71,6 +72,7 @@ const CarouselForModalOfSubVenues = ({
           guests={guests}
           setGuests={setGuests}
           subVenue={subVenuesArray2[index]}
+          venueId={venueId}
         />
       </Grid.Col>
     </Grid>

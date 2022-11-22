@@ -2,6 +2,13 @@ import { Container, Grid } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import AdvanceFilterHallCharges from "./AdvanceFilterHallCharges";
+import AdvanceFilterMenuCharges from "./AdvanceFilterMenuCharges";
+import AdvanceFilterVenueCapacity from "./AdvanceFilterVenueCapacity";
+import AdvanceFilterVenueCities from "./AdvanceFilterVenueCities";
+import AdvanceFilterVenuePrice from "./AdvanceFilterVenuePrice";
+import AdvanceFilterVenueServices from "./AdvanceFilterVenueServices";
+import AdvanceSearchAndFilters from "./AdvanceFilterVenueType";
 import AllVenuesGrid from "./AllVenuesGrid";
 
 const fetchAllVenues = async () => {
@@ -23,7 +30,9 @@ const fetchAllVenues = async () => {
   }
 };
 const AllVenuesPage = () => {
+  const [venueType, setVenueType] = useState([]);
   const [allVenues, setAllVenues] = useState([]);
+  console.log("Venue Type", venueType);
   useEffect(() => {
     console.count();
     fetchAllVenues().then(setAllVenues);
@@ -34,7 +43,26 @@ const AllVenuesPage = () => {
     <Container size={"xl"}>
       <Grid>
         <Grid.Col hidden={matches1026 ? true : false} span={3}>
-          Advance Search and Filters
+          <AdvanceFilterVenueCities />
+          <AdvanceSearchAndFilters
+            setVenueType={setVenueType}
+            accordionsData={[
+              {
+                value: "venueType",
+                title: "Venue Type",
+                venueTypes: [
+                  { value: "halls", label: "Halls" },
+                  { value: "marquees", label: "Marquees" },
+                  { value: "outdoors", label: "Outdoors" },
+                ],
+              },
+            ]}
+          />
+          <AdvanceFilterVenueServices />
+          <AdvanceFilterVenuePrice />
+          <AdvanceFilterVenueCapacity />
+          <AdvanceFilterHallCharges />
+          <AdvanceFilterMenuCharges />
         </Grid.Col>
         <Grid.Col span={matches1026 ? 12 : 9}>
           <AllVenuesGrid allVenues={allVenues} />

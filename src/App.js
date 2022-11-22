@@ -29,11 +29,11 @@ function App() {
         <Paper className="App">
           <TopNavbar />
           <Routes>
-            <Route path="/specificVenue" element={<SpecificVenueDetails />} />
             <Route
               path="/specificVendor"
               element={<SpecificVendorBusinessDetails />}
             />
+            <Route path="/allVendors" element={<></>} />
             <Route path="/" element={<LandingPageMain />} />
             <Route path="/allVenues" element={<AllVenuesPage />} />
             <Route

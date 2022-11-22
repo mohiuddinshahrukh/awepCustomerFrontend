@@ -35,7 +35,7 @@ const TopNavbar = () => {
                   { listItem: "Top Viewed Venues", listItemPath: "#" },
                 ],
               },
-              { title: "Vendors", path: "#" },
+              { title: "Vendors", path: "/allVendors" },
               { title: "Card Editor", path: "#" },
               { title: "Contact Us", path: "#" },
               { title: "About Us", path: "#" },
@@ -65,7 +65,7 @@ const TopNavbar = () => {
             <TopNavbarLinks
               linksData={[
                 { title: "Venues", path: "/allVenues" },
-                { title: "Vendors", path: "#" },
+                { title: "Vendors", path: "/allVendors" },
                 { title: "Card Editor", path: "#" },
                 { title: "Contact Us", path: "#" },
                 { title: "About Us", path: "#" },

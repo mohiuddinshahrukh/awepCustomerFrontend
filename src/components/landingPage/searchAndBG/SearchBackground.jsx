@@ -6,7 +6,7 @@ import SearchBackgroundOpacityDiv from "./SearchBackgroundOpacityDiv";
 import SearchAndFilter from "./SearchAndFilter";
 
 const SearchBackground = ({ carouselImages }) => {
-  const autoplay = useRef(Autoplay({ delay: 5000 }));
+  const autoplay = useRef(Autoplay({ delay: 10000 }));
   const searchBackgroundCarousel = (
     <Carousel
       loop

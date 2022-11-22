@@ -59,7 +59,9 @@ const ReviewsOfSpecificVenue = ({
           </div>
         </div>
         <div>
-          <Text>Recommended By {(rating / 5) * 100} of Users</Text>
+          <Text>
+            Recommended By {((rating / 5) * 100)?.toFixed(1)} % of Users
+          </Text>
           <SimpleGrid
             cols={3}
             breakpoints={[
@@ -77,7 +79,11 @@ const ReviewsOfSpecificVenue = ({
                 </Text>
               </Group>
 
-              <Progress value={(qualityOfService * 100) / 5} mt={5} />
+              <Progress
+                value={(qualityOfService * 100) / 5}
+                mt={5}
+                color={(qualityOfService * 100) / 5 > 80 ? "green" : "yellow"}
+              />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -89,7 +95,11 @@ const ReviewsOfSpecificVenue = ({
                 </Text>
               </Group>
 
-              <Progress value={(responseTime * 100) / 5} mt={5} />
+              <Progress
+                value={(responseTime * 100) / 5}
+                mt={5}
+                color={(responseTime * 100) / 5 > 80 ? "green" : "yellow"}
+              />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -101,7 +111,11 @@ const ReviewsOfSpecificVenue = ({
                 </Text>
               </Group>
 
-              <Progress value={(valueForMoney * 100) / 5} mt={5} />
+              <Progress
+                value={(valueForMoney * 100) / 5}
+                mt={5}
+                color={(valueForMoney * 100) / 5 > 80 ? "green" : "yellow"}
+              />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -113,7 +127,11 @@ const ReviewsOfSpecificVenue = ({
                 </Text>
               </Group>
 
-              <Progress value={(flexibility * 100) / 5} mt={5} />
+              <Progress
+                value={(flexibility * 100) / 5}
+                mt={5}
+                color={(flexibility * 100) / 5 > 80 ? "green" : "yellow"}
+              />
             </div>
             <div>
               <Group position="apart" mt="xs">
@@ -125,13 +143,17 @@ const ReviewsOfSpecificVenue = ({
                 </Text>
               </Group>
 
-              <Progress value={(professionalism * 100) / 5} mt={5} />
+              <Progress
+                value={(professionalism * 100) / 5}
+                mt={5}
+                color={(professionalism * 100) / 5 > 80 ? "green" : "yellow"}
+              />
             </div>
           </SimpleGrid>
         </div>
       </Group>
-      {reviews?.map((e, index) => (
-        <Comments key={index} />
+      {reviews.map((review, index) => (
+        <Comments key={index} review={review} />
       ))}
     </div>
   );

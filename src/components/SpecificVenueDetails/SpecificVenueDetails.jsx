@@ -77,7 +77,8 @@ const SpecificVenueDetails = () => {
     }
   }, [refresh]);
 
-  const url1 = `https://a-wep.herokuapp.com/customer/getVenueFeedbacks/63492169c5ba3ae82a864418`;
+  const url1 = `https://a-wep.herokuapp.com/customer/getVenueFeedbacks/${params.id}`;
+
   useEffect(() => {
     if (refresh) {
       // setVisible(true);
@@ -97,7 +98,7 @@ const SpecificVenueDetails = () => {
   }, [refresh]);
 
   return (
-    <Container size="xl">
+    <Container size="xl" my="lg">
       <BreadCrumbs />
       <Title pt="md" order={3}>
         {venueDetails?.venueName}
@@ -238,14 +239,18 @@ const SpecificVenueDetails = () => {
             setOpen={setOpen}
             subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
           />
+          {venueDetails?.menus?.length !== 0 && (
+            <MenusOfSpecificVenue
+              targetRef={scrollRef4.targetRef}
+              menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
+            />
+          )}
 
-          <MenusOfSpecificVenue
-            targetRef={scrollRef4.targetRef}
-            menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
-          />
-          <CarouselOfThemes
-            themes={venueDetails?.themes ? venueDetails?.themes : [{}]}
-          />
+          {venueDetails?.themes?.length !== 0 && (
+            <CarouselOfThemes
+              themes={venueDetails?.themes ? venueDetails?.themes : [{}]}
+            />
+          )}
           <ReviewsOfSpecificVenue
             targetRef={scrollRef6.targetRef}
             flexibility={
@@ -271,7 +276,6 @@ const SpecificVenueDetails = () => {
             }
             reviews={venueFeedbacks ? venueFeedbacks : [{}]}
           />
-
           <MapComponentView
             targetRef={scrollRef.targetRef}
             pinLocation={

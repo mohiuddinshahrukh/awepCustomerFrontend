@@ -30,14 +30,17 @@ const AllVenuesVenueCard = ({ allVenues }) => {
           transitionDelay: "0s",
           transitionProperty: "box-shadow",
         }}
-        component={Link}
-        to={`/specificVenue${venue._id}`}
         style={{ width: "302px" }}
       >
         <Card.Section style={{ height: "201px" }}>
           <AllVenuesVenueCardCarousel venueImages={venue.images} />
         </Card.Section>
-        <Card.Section style={{ height: "154px" }}>
+        <Card.Section
+          style={{ height: "154px" }}
+          component={Link}
+          to={`/specificVenue${venue._id}`}
+          
+        >
           <Paper p={"lg"}>
             <Text lineClamp={1} weight={500} size={"lg"}>
               {venue?.venueName}

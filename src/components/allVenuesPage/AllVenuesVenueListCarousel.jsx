@@ -43,7 +43,7 @@ const AllVenuesVenueListCarousel = ({ venueImages }) => {
   });
   return (
     <Carousel
-      withIndicators
+      // withIndicators
       controlsOffset={0}
       speed={10}
       nextControlIcon={<IconChevronRight size={52} stroke={1.5} />}
@@ -73,6 +73,10 @@ const AllVenuesVenueListCarousel = ({ venueImages }) => {
           ":hover": {
             transform: "scale(1.15)",
             transition: "0.3s",
+          },
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
           },
         },
       }}

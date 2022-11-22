@@ -59,7 +59,9 @@ const ReviewsOfSpecificVenue = ({
           </div>
         </div>
         <div>
-          <Text>Recommended By {(rating / 5) * 100} of Users</Text>
+          <Text>
+            Recommended By {((rating / 5) * 100)?.toFixed(1)} % of Users
+          </Text>
           <SimpleGrid
             cols={3}
             breakpoints={[

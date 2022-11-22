@@ -10,14 +10,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import AdvanceFilterHallCharges from "./AdvanceFilterHallCharges";
-import AdvanceFilterMenuCharges from "./AdvanceFilterMenuCharges";
-import AdvanceFilterVenueCapacity from "./AdvanceFilterVenueCapacity";
-import AdvanceFilterVenueCities from "./AdvanceFilterVenueCities";
-import AdvanceFilterVenuePrice from "./AdvanceFilterVenuePrice";
-import AdvanceFilterVenueServices from "./AdvanceFilterVenueServices";
-import AdvanceSearchAndFilters from "./AdvanceFilterVenueType";
-import AllVenuesGrid from "./AllVenuesGrid";
+
 import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg";
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
@@ -41,7 +34,7 @@ const fetchAllVenues = async () => {
     console.log("ERROR in fetching all venues:", e);
   }
 };
-const AllVenuesPage = () => {
+const AllVendorsPage = () => {
   const [venueType, setVenueType] = useState([]);
   const [allVenues, setAllVenues] = useState([]);
   console.log("Venue Type", venueType);
@@ -84,16 +77,16 @@ const AllVenuesPage = () => {
             <Group align={"flex-end"}>
               {" "}
               {/*              <Select
-                size={"lg"}
-                styles={{ label: { color: "white" } }}
-                label="Supplier"
-                placeholder="Select A Supplier"
-                // onChange={setSearchSupplier}
-                data={[
-                  { value: "venue", label: "Venue" },
-                  { value: "vendor", label: "Vendor" },
-                ]}
-              />*/}
+                  size={"lg"}
+                  styles={{ label: { color: "white" } }}
+                  label="Supplier"
+                  placeholder="Select A Supplier"
+                  // onChange={setSearchSupplier}
+                  data={[
+                    { value: "venue", label: "Venue" },
+                    { value: "vendor", label: "Vendor" },
+                  ]}
+                />*/}
               <Select
                 size={"lg"}
                 styles={{ label: { color: "white" } }}
@@ -144,35 +137,12 @@ const AllVenuesPage = () => {
       </Paper>
       <Container size={"xl"} my={"md"}>
         <Grid>
-          <Grid.Col hidden={matches1026 ? true : false} span={3}>
-            <AdvanceFilterVenueCities />
-            <AdvanceSearchAndFilters
-              setVenueType={setVenueType}
-              accordionsData={[
-                {
-                  value: "venueType",
-                  title: "Venue Type",
-                  venueTypes: [
-                    { value: "halls", label: "Halls" },
-                    { value: "marquees", label: "Marquees" },
-                    { value: "outdoors", label: "Outdoors" },
-                  ],
-                },
-              ]}
-            />
-            <AdvanceFilterVenueServices />
-            <AdvanceFilterVenuePrice />
-            <AdvanceFilterVenueCapacity />
-            <AdvanceFilterHallCharges />
-            <AdvanceFilterMenuCharges />
-          </Grid.Col>
-          <Grid.Col span={matches1026 ? 12 : 9}>
-            <AllVenuesGrid allVenues={allVenues} />
-          </Grid.Col>
+          <Grid.Col hidden={matches1026 ? true : false} span={3}></Grid.Col>
+          <Grid.Col span={matches1026 ? 12 : 9}></Grid.Col>
         </Grid>
       </Container>
     </Paper>
   );
 };
 
-export default AllVenuesPage;
+export default AllVendorsPage;

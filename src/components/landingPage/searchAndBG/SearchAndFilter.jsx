@@ -1,5 +1,6 @@
 import {
   Button,
+  Group,
   SegmentedControl,
   Select,
   useMantineTheme,
@@ -16,8 +17,8 @@ const SearchAndFilter = () => {
       style={{
         padding: "10px",
         borderRadius: "5px",
-        height: "20vh",
-        width: "40%",
+        height: "fitContent",
+        width: "fitContent",
         border:
           currentTheme.colorScheme === "light"
             ? "2px solid white "
@@ -30,14 +31,25 @@ const SearchAndFilter = () => {
       }}
     >
       <SegmentedControl
-        style={{ position: "absolute", top: -20, left: 10 }}
+        styles={{}}
+        size={"lg"}
+        style={{ position: "absolute", top: "-15%", left: 10 }}
         data={[
           { label: "Venues", value: "venues" },
           { label: "Vendors", value: "vendors" },
         ]}
       />
-      <div style={{ display: "flex", marginTop: "5%", alignItems: "flex-end" }}>
+      <Group
+        noWrap
+        style={{
+          flexShrink: 0,
+          marginTop: "5%",
+          alignItems: "flex-end",
+        }}
+      >
         <Select
+          size={"lg"}
+          style={{ minWidth: "25%" }}
           styles={{ label: { color: "white" } }}
           label="City"
           placeholder="Select A City"
@@ -49,6 +61,8 @@ const SearchAndFilter = () => {
           ]}
         />
         <DatePicker
+          size={"lg"}
+          style={{ minWidth: "25%" }}
           styles={{ label: { color: "white" } }}
           placeholder="Pick date"
           label="Event date"
@@ -59,6 +73,8 @@ const SearchAndFilter = () => {
             .toDate()}
         />
         <Select
+          style={{ minWidth: "25%" }}
+          size={"lg"}
           styles={{ label: { color: "white" } }}
           label="Time"
           placeholder="Select A Time"
@@ -67,10 +83,15 @@ const SearchAndFilter = () => {
             { value: "DINNER", label: "Dinner" },
           ]}
         />
-        <Button component={Link} to="#" style={{ backgroundColor: "#775A97" }}>
+        <Button
+          size={"lg"}
+          component={Link}
+          to="#"
+          style={{ backgroundColor: "#775A97" }}
+        >
           Search
         </Button>
-      </div>
+      </Group>
     </div>
   );
 };

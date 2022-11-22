@@ -14,7 +14,17 @@ const TopNavbar = () => {
   const [drawerState, setDrawerState] = useState(false);
   const matches1027 = useMediaQuery("(min-width: 1027px)");
   return (
-    <Paper p={0} m={0} style={{ borderBottom: "1px solid #eaeaea" }}>
+    <Paper
+      p={0}
+      m={0}
+      style={{
+        borderBottom: "1px solid #eaeaea",
+        // position: "sticky",
+        // top: 0,
+        // zIndex: 2,
+        // width: "100%",
+      }}
+    >
       {" "}
       <Container py={"2rem"} size={"xl"}>
         <Drawer

@@ -1,12 +1,25 @@
 import Autoplay from "embla-carousel-autoplay";
 import { Carousel } from "@mantine/carousel";
-import { Image, Paper, Text } from "@mantine/core";
-import React, { useRef } from "react";
+import {
+  Button,
+  Container,
+  Group,
+  Image,
+  Paper,
+  Select,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import React, { useRef, useState } from "react";
 import SearchBackgroundOpacityDiv from "./SearchBackgroundOpacityDiv";
 import SearchAndFilter from "./SearchAndFilter";
+import { Link } from "react-router-dom";
+import { DatePicker } from "@mantine/dates";
+import dayjs from "dayjs";
 
 const SearchBackground = ({ carouselImages }) => {
   const autoplay = useRef(Autoplay({ delay: 10000 }));
+  const [searchSupplier, setSearchSupplier] = useState("venue");
   const searchBackgroundCarousel = (
     <Carousel
       loop
@@ -37,7 +50,7 @@ const SearchBackground = ({ carouselImages }) => {
         style={{ position: "absolute", zIndex: 10, width: "100%", top: "25%" }}
       >
         <Text
-          size={"2.5rem"}
+          size={"4.5vw"}
           weight="bold"
           align="center"
           color="white"
@@ -47,7 +60,75 @@ const SearchBackground = ({ carouselImages }) => {
         </Text>
       </div>
       <SearchBackgroundOpacityDiv />
-      <SearchAndFilter />
+
+      <Group
+        noWrap
+        position="center"
+        align={"flex-end"}
+        style={{
+          width: "100%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          // border: "1px solid red",
+          position: "absolute",
+          bottom: "20%",
+          zIndex: 10,
+        }}
+      >
+        <Select
+          size={"lg"}
+          styles={{ label: { color: "white" } }}
+          label="Supplier"
+          placeholder="Select A Supplier"
+          onChange={setSearchSupplier}
+          data={[
+            { value: "venue", label: "Venue" },
+            { value: "vendor", label: "Vendor" },
+          ]}
+        />
+        <Select
+          size={"lg"}
+          styles={{ label: { color: "white" } }}
+          label="City"
+          placeholder="Select A City"
+          data={[
+            { value: "islamabad", label: "Islamabad" },
+            { value: "rawalpindi", label: "Rawalpindi" },
+            { value: "lahore", label: "Lahore" },
+            { value: "karachi", label: "Karachi" },
+          ]}
+        />
+        <DatePicker
+          size={"lg"}
+          styles={{ label: { color: "white" } }}
+          placeholder="Pick date"
+          label="Event date"
+          minDate={dayjs(new Date()).startOf("month").add(5, "days").toDate()}
+          maxDate={dayjs(new Date())
+            .endOf("month")
+            .subtract(5, "days")
+            .toDate()}
+        />
+        <Select
+          size={"lg"}
+          styles={{ label: { color: "white" } }}
+          label="Time"
+          placeholder="Select A Time"
+          data={[
+            { value: "LUNCH", label: "Lunch" },
+            { value: "DINNER", label: "Dinner" },
+          ]}
+        />
+        <Button
+          size={"lg"}
+          component={Link}
+          to={searchSupplier === "venue" ? "/allVenues" : "/allVendors"}
+          style={{ backgroundColor: "#775A97" }}
+        >
+          Search
+        </Button>
+      </Group>
+      {/*<Container><SearchAndFilter /></Container>*/}
       {searchBackgroundCarousel}
     </Paper>
   );

@@ -31,7 +31,7 @@ const AllVenuesVenueCard = ({ allVenues }) => {
           transitionProperty: "box-shadow",
         }}
         component={Link}
-        to={"#"}
+        to={`/specificVenue${venue._id}`}
         style={{ width: "302px" }}
       >
         <Card.Section style={{ height: "201px" }}>

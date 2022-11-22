@@ -25,6 +25,7 @@ import ReviewsOfSpecificVenue from "../ReviewsOfSpecificVenue/ReviewsOfSpecificV
 import MapComponentView from "../MapViewComponent/MapComponentView";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
+import { useParams } from "react-router-dom";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -33,6 +34,8 @@ const useStyles = createStyles(() => ({
   },
 }));
 const SpecificVenueDetails = () => {
+  let params = useParams();
+  console.log("Route Params: ", params);
   const { classes } = useStyles();
 
   const scrollRef = useScrollIntoView({});
@@ -52,8 +55,7 @@ const SpecificVenueDetails = () => {
   const [guests, setGuests] = useState();
   console.log("venueDetails are", venueDetails);
   const [open, setOpen] = useState(false);
-  let venueId = "63491bd8c5ba3ae82a86432d";
-  const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${venueId}`;
+  const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.id}`;
   useEffect(() => {
     if (refresh) {
       // setVisible(true);

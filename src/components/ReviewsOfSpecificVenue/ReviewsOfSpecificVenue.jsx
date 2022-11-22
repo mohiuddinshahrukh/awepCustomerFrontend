@@ -152,7 +152,7 @@ const ReviewsOfSpecificVenue = ({
           </SimpleGrid>
         </div>
       </Group>
-      {reviews.map((review, index) => (
+      {reviews?.map((review, index) => (
         <Comments key={index} review={review} />
       ))}
     </div>

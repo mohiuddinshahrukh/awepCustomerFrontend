@@ -10,7 +10,7 @@ const FeaturedVenuesSection = () => {
       <Group position="apart">
         <Anchor
           component={Link}
-          to="#"
+          to="/allVenues"
           variant="text"
           size={"1.5rem"}
           weight={500}

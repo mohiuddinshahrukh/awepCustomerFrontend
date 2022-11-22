@@ -1,5 +1,5 @@
 import { Carousel } from "@mantine/carousel";
-import { createStyles, Image } from "@mantine/core";
+import { createStyles, Image, useContextStylesApi } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import React from "react";
 
@@ -26,9 +26,9 @@ const useStyles = createStyles((theme, _params, getRef) => ({
     paddingRight: theme.spacing.md,
   },
 }));
-const AllVenuesVenueListCarousel = ({ venueImages }) => {
+const AllVendorsVendorListCarousel = ({ vendorImages }) => {
   const { classes } = useStyles();
-  const slides = venueImages.map((image, index) => {
+  const slides = vendorImages?.map((image, index) => {
     return (
       <Carousel.Slide key={index}>
         <Image
@@ -86,4 +86,4 @@ const AllVenuesVenueListCarousel = ({ venueImages }) => {
   );
 };
 
-export default AllVenuesVenueListCarousel;
+export default AllVendorsVendorListCarousel;

@@ -40,6 +40,10 @@ function App() {
             <Route path="/" element={<LandingPageMain />} />
             <Route path="/allVenues" element={<AllVenuesPage />} />
             <Route
+              path="/specificVendor:id"
+              element={<SpecificVendorBusinessDetails />}
+            />
+            <Route
               path="/specificVenue:id"
               element={<SpecificVenueDetails />}
             />

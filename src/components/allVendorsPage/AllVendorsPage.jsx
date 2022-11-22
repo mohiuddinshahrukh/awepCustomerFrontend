@@ -15,11 +15,15 @@ import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg"
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import AllVendorsGrid from "./AllVendorsGrid";
+import AllVendorCategories from "./AllVendorCategories";
+import AllVendorCities from "./AllVendorCities";
+import AllVendorDuration from "./AllVendorDuration";
 
-const fetchAllVenues = async () => {
+const fetchAllVendors = async () => {
   try {
     const apiResponse = await axios.get(
-      "https://a-wep.herokuapp.com/customer/getVenues"
+      "https://a-wep.herokuapp.com/customer/getVendorBusinesses"
     );
 
     if (apiResponse.data.status === "success") {
@@ -36,11 +40,11 @@ const fetchAllVenues = async () => {
 };
 const AllVendorsPage = () => {
   const [venueType, setVenueType] = useState([]);
-  const [allVenues, setAllVenues] = useState([]);
+  const [allVendors, setAllVendors] = useState([]);
   console.log("Venue Type", venueType);
   useEffect(() => {
     console.count();
-    fetchAllVenues().then(setAllVenues);
+    fetchAllVendors().then(setAllVendors);
   }, []);
 
   const matches1026 = useMediaQuery("(max-width: 1026px)");
@@ -57,36 +61,13 @@ const AllVendorsPage = () => {
           position: "relative",
         }}
       >
-        {" "}
         <Center style={{ width: "100%", height: "100%" }}>
           <Group
             style={{ width: "100%", height: "100%" }}
             noWrap
             position="center"
-
-            // style={{
-            //   width: "100%",
-            //   left: "50%",
-            //   transform: "translateX(-50%)",
-            //   // border: "1px solid red",
-            //   position: "absolute",
-            //   bottom: "20%",
-            //   zIndex: 10,
-            // }}
           >
             <Group align={"flex-end"}>
-              {" "}
-              {/*              <Select
-                  size={"lg"}
-                  styles={{ label: { color: "white" } }}
-                  label="Supplier"
-                  placeholder="Select A Supplier"
-                  // onChange={setSearchSupplier}
-                  data={[
-                    { value: "venue", label: "Venue" },
-                    { value: "vendor", label: "Vendor" },
-                  ]}
-                />*/}
               <Select
                 size={"lg"}
                 styles={{ label: { color: "white" } }}
@@ -137,8 +118,14 @@ const AllVendorsPage = () => {
       </Paper>
       <Container size={"xl"} my={"md"}>
         <Grid>
-          <Grid.Col hidden={matches1026 ? true : false} span={3}></Grid.Col>
-          <Grid.Col span={matches1026 ? 12 : 9}></Grid.Col>
+          <Grid.Col hidden={matches1026 ? true : false} span={3}>
+            <AllVendorCities />
+            <AllVendorCategories />
+            <AllVendorDuration />
+          </Grid.Col>
+          <Grid.Col span={matches1026 ? 12 : 9}>
+            <AllVendorsGrid allVendors={allVendors} />
+          </Grid.Col>
         </Grid>
       </Container>
     </Paper>

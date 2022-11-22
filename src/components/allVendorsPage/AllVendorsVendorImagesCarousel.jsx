@@ -26,18 +26,12 @@ const useStyles = createStyles((theme, _params, getRef) => ({
     paddingRight: theme.spacing.md,
   },
 }));
-const AllVenuesVenueListCarousel = ({ venueImages }) => {
+const AllVendorsVendorImagesCarousel = ({ vendorImages }) => {
   const { classes } = useStyles();
-  const slides = venueImages.map((image, index) => {
+  const slides = vendorImages.map((image, index) => {
     return (
       <Carousel.Slide key={index}>
-        <Image
-          radius={"0.5rem"}
-          height={"201px"}
-          width={"290px"}
-          fit={"cover"}
-          src={image}
-        />
+        <Image height={"201px"} width={"100%"} fit={"cover"} src={image} />
       </Carousel.Slide>
     );
   });
@@ -53,7 +47,6 @@ const AllVenuesVenueListCarousel = ({ venueImages }) => {
         controls: classes.carouselControls,
         indicator: classes.carouselIndicator,
       }}
-      style={{ width: "290px" }}
       styles={{
         container: {},
 
@@ -86,4 +79,4 @@ const AllVenuesVenueListCarousel = ({ venueImages }) => {
   );
 };
 
-export default AllVenuesVenueListCarousel;
+export default AllVendorsVendorImagesCarousel;

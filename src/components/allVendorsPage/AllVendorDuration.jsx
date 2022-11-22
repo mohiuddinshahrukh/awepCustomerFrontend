@@ -1,30 +1,16 @@
 import { Accordion, Checkbox } from "@mantine/core";
 import React from "react";
-
 const allCities = [
   {
-    value: "islamabad",
-    label: "Islamabad",
+    value: "perHour",
+    label: "Per Hour",
   },
   {
-    value: "rawalpindi",
-    label: "Rawalpindi",
-  },
-  {
-    value: "lahore",
-    label: "Lahore",
-  },
-  {
-    value: "karachi",
-    label: "Karachi",
-  },
-  {
-    value: "multan",
-    label: "Multan",
+    value: "perEvent",
+    label: "Per Event",
   },
 ];
-
-const AdvanceFilterVenueCities = () => {
+const AllVendorDuration = () => {
   const services = allCities?.map((city, index) => {
     return (
       <Checkbox
@@ -38,9 +24,9 @@ const AdvanceFilterVenueCities = () => {
     );
   });
   return (
-    <Accordion defaultValue="venueCities">
-      <Accordion.Item value={"venueCities"}>
-        <Accordion.Control>{"Venue Cities"}</Accordion.Control>
+    <Accordion defaultValue="vendorDuration">
+      <Accordion.Item value={"vendorDuration"}>
+        <Accordion.Control>{"Vendor Duration"}</Accordion.Control>
         <Accordion.Panel>
           <Checkbox.Group
 
@@ -54,4 +40,4 @@ const AdvanceFilterVenueCities = () => {
   );
 };
 
-export default AdvanceFilterVenueCities;
+export default AllVendorDuration;

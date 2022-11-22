@@ -16,6 +16,9 @@ import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import AllVendorsGrid from "./AllVendorsGrid";
+import AllVendorCategories from "./AllVendorCategories";
+import AllVendorCities from "./AllVendorCities";
+import AllVendorDuration from "./AllVendorDuration";
 
 const fetchAllVendors = async () => {
   try {
@@ -115,7 +118,11 @@ const AllVendorsPage = () => {
       </Paper>
       <Container size={"xl"} my={"md"}>
         <Grid>
-          <Grid.Col hidden={matches1026 ? true : false} span={3}></Grid.Col>
+          <Grid.Col hidden={matches1026 ? true : false} span={3}>
+            <AllVendorCities />
+            <AllVendorCategories />
+            <AllVendorDuration />
+          </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
             <AllVendorsGrid allVendors={allVendors} />
           </Grid.Col>

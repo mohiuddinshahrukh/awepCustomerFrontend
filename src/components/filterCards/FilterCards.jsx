@@ -1,4 +1,4 @@
-import { Container, Group, Paper, ScrollArea, SimpleGrid } from "@mantine/core";
+import { Container, Group, Paper, ScrollArea } from "@mantine/core";
 import {
   IconBuildingSkyscraper,
   IconChevronRight,
@@ -37,12 +37,12 @@ const FilterCards = () => {
             cardsData={[
               {
                 cardTitle: "Venues",
-                cardLinkPath: "/",
+                cardLinkPath: "/allVenues",
                 cardLinkIcon: <IconSearch size={50} color="#775A97" />,
               },
               {
                 cardTitle: "Vendors",
-                cardLinkPath: "/",
+                cardLinkPath: "/allVendors",
                 cardLinkIcon: <IconUsers size={50} color="#775A97" />,
               },
               {

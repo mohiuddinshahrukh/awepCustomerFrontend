@@ -23,8 +23,7 @@ const allCities = [
     label: "Multan",
   },
 ];
-
-const AdvanceFilterVenueCities = () => {
+const AllVendorCities = () => {
   const services = allCities?.map((city, index) => {
     return (
       <Checkbox
@@ -38,9 +37,9 @@ const AdvanceFilterVenueCities = () => {
     );
   });
   return (
-    <Accordion defaultValue="venueCities">
-      <Accordion.Item value={"venueCities"}>
-        <Accordion.Control>{"Venue Cities"}</Accordion.Control>
+    <Accordion defaultValue="vendorCities">
+      <Accordion.Item value={"vendorCities"}>
+        <Accordion.Control>{"Vendor Cities"}</Accordion.Control>
         <Accordion.Panel>
           <Checkbox.Group
 
@@ -54,4 +53,4 @@ const AdvanceFilterVenueCities = () => {
   );
 };
 
-export default AdvanceFilterVenueCities;
+export default AllVendorCities;

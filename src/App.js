@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
+import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
@@ -30,13 +31,14 @@ function App() {
         <Paper className="App">
           <TopNavbar />
           <Routes>
+            <Route path="/" element={<LandingPageMain />} />
+            <Route path="/cardEditor" element={<CustomerCardEditor />} />
+            <Route path="/allVendors" element={<AllVendorsPage />} />
+            <Route path="/allVenues" element={<AllVenuesPage />} />
             <Route
               path="/specificVendor"
               element={<SpecificVendorBusinessDetails />}
             />
-            <Route path="/allVendors" element={<AllVendorsPage />} />
-            <Route path="/" element={<LandingPageMain />} />
-            <Route path="/allVenues" element={<AllVenuesPage />} />
             <Route
               path="/specificVendor:id"
               element={<SpecificVendorBusinessDetails />}

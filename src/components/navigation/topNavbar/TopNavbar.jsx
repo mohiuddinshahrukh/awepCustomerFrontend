@@ -46,7 +46,7 @@ const TopNavbar = () => {
                 ],
               },
               { title: "Vendors", path: "/allVendors" },
-              { title: "Card Editor", path: "#" },
+              { title: "Card Editor", path: "/cardEditor" },
               { title: "Contact Us", path: "#" },
               { title: "About Us", path: "#" },
             ]}
@@ -76,7 +76,7 @@ const TopNavbar = () => {
               linksData={[
                 { title: "Venues", path: "/allVenues" },
                 { title: "Vendors", path: "/allVendors" },
-                { title: "Card Editor", path: "#" },
+                { title: "Card Editor", path: "/cardEditor" },
                 { title: "Contact Us", path: "#" },
                 { title: "About Us", path: "#" },
               ]}

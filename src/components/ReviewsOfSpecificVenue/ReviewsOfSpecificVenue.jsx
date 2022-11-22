@@ -21,8 +21,9 @@ const ReviewsOfSpecificVenue = ({
   qualityOfService,
   professionalism,
   ratingCount,
+  reviews,
 }) => {
-  const reviews = [1, 2, 3];
+  // const reviews = [1, 2, 3];
   return (
     <div
       ref={targetRef}

@@ -26,6 +26,7 @@ import MapComponentView from "../MapViewComponent/MapComponentView";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import { useParams } from "react-router-dom";
+import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -48,6 +49,8 @@ const SpecificVenueDetails = () => {
   console.log("scrollRef", scrollRef);
   const [refresh, setRefresh] = useState(true);
   const [venueDetails, setVenueDetails] = useState({});
+  const [venueFeedbacks, setVenueFeedbacks] = useState([]);
+  console.log("venueFeedbacks", venueFeedbacks);
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [date, setDate] = useState("");
@@ -64,6 +67,25 @@ const SpecificVenueDetails = () => {
         if (res.data.status === "success") {
           console.log("Retrieved Data Is", res.data.data);
           setVenueDetails(res.data.data);
+
+          setRefresh(false);
+        } else {
+          console.log("Errored Data Is", res.data);
+          setRefresh(false);
+        }
+      });
+    }
+  }, [refresh]);
+
+  const url1 = `https://a-wep.herokuapp.com/customer/getVenueFeedbacks/63492169c5ba3ae82a864418`;
+  useEffect(() => {
+    if (refresh) {
+      // setVisible(true);
+      axios.get(url1).then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          console.log("Retrieved Reviews are", res.data.data);
+          setVenueFeedbacks(res.data.data);
 
           setRefresh(false);
         } else {
@@ -221,7 +243,9 @@ const SpecificVenueDetails = () => {
             targetRef={scrollRef4.targetRef}
             menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
           />
-          {/* <CarouselOfThemes /> */}
+          <CarouselOfThemes
+            themes={venueDetails?.themes ? venueDetails?.themes : [{}]}
+          />
           <ReviewsOfSpecificVenue
             targetRef={scrollRef6.targetRef}
             flexibility={
@@ -245,6 +269,7 @@ const SpecificVenueDetails = () => {
             ratingCount={
               venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
             }
+            reviews={venueFeedbacks ? venueFeedbacks : [{}]}
           />
 
           <MapComponentView

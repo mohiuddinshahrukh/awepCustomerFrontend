@@ -197,7 +197,7 @@ const BookVenueSideColums = ({
           value={date}
           // onChange={onChange}
 
-          {...form.getInputProps("date")}
+          // {...form.getInputProps("date")}
         />
         <Select
           label="Time"

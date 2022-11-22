@@ -29,7 +29,7 @@ const AdvanceFilterVenueServices = () => {
     console.count();
   }, []);
 
-  const services = allServices.map((service, index) => {
+  const services = allServices?.map((service, index) => {
     return (
       <Checkbox
         key={index}

@@ -31,41 +31,61 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   },
 }));
 
-const SpecificTheme = () => {
+const SpecificTheme = ({ theme }) => {
   const { classes } = useStyles();
 
   return (
-    <Card radius="md" withBorder p="xl">
+    <Card
+      radius="md"
+      withBorder
+      p="xl"
+      style={{
+        minHeight: "400px",
+      }}
+    >
       <Card.Section>
-        <Image
-          src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
-          height={220}
-        />
+        <Image src={theme.coverImage} height={220} />
       </Card.Section>
 
       <Group position="apart" mt="lg">
         <Text weight={500} size="lg">
-          Forde, Norway
+          {theme.themeTitle}
         </Text>
       </Group>
-      <Text size="sm" color="dimmed" mt="sm">
-        Relax, rejuvenate and unplug in this unique contemporary Birdbox. Feel
-        close to nature in ultimate comfort. Enjoy the view of the epic mountain
-        range of Blegja and the Førdefjord.
+      <Text
+        size="sm"
+        color="dimmed"
+        mt="sm"
+        style={{
+          wordBreak: "break-word",
+          whiteSpace: "normal",
+        }}
+        lineClamp={2}
+      >
+        {theme.themeDescription}
       </Text>
 
-      <Group position="apart" mt="md">
-        <div>
-          <Text size="xl" span weight={500} className={classes.price}>
-            397$
-          </Text>
-          <Text span size="sm" color="dimmed">
-            {" "}
-            / night
-          </Text>
-        </div>
-
-        <Button radius="md">Book now</Button>
+      <Group pt="md">
+        <Group>
+          <Button
+            size="xs"
+            radius={50}
+            style={{
+              backgroundColor: theme?.themeColors ? theme.themeColors[0] : "",
+            }}
+          ></Button>
+          <Text>{theme?.themeColors ? theme.themeColors[0] : ""}</Text>
+        </Group>
+        <Group>
+          <Button
+            size="xs"
+            radius={50}
+            style={{
+              backgroundColor: theme?.themeColors ? theme.themeColors[1] : "",
+            }}
+          ></Button>
+          <Text>{theme?.themeColors ? theme.themeColors[1] : ""}</Text>
+        </Group>
       </Group>
     </Card>
   );

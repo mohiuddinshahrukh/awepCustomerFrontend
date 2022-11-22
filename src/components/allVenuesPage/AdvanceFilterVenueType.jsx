@@ -11,9 +11,10 @@ const AdvanceFilterVenueType = ({ accordionsData, setVenueType }) => {
             <Checkbox.Group
             // defaultValue={["react"]}
             >
-              {accordion.venueTypes.map((type) => {
+              {accordion.venueTypes.map((type, index) => {
                 return (
                   <Checkbox
+                    key={index}
                     onChange={(event) =>
                       setVenueType(event.currentTarget.checked)
                     }

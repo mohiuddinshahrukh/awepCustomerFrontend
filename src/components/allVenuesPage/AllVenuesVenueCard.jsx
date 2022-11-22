@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import AllVenuesVenueCardCarousel from "./AllVenuesVenueCardCarousel";
 
 const AllVenuesVenueCard = ({ allVenues }) => {
-  const venues = allVenues.map((venue, index) => {
+  const venues = allVenues?.map((venue, index) => {
     return (
       <Card
         key={index}
@@ -39,7 +39,6 @@ const AllVenuesVenueCard = ({ allVenues }) => {
           style={{ height: "154px" }}
           component={Link}
           to={`/specificVenue${venue._id}`}
-          
         >
           <Paper p={"lg"}>
             <Text lineClamp={1} weight={500} size={"lg"}>
@@ -78,7 +77,7 @@ const AllVenuesVenueCard = ({ allVenues }) => {
                   {Math.min
                     .apply(
                       Math,
-                      venue?.subVenues.map((subvenue) => {
+                      venue?.subVenues?.map((subvenue) => {
                         return subvenue?.subVenueMinCapacity;
                       })
                     )
@@ -89,7 +88,7 @@ const AllVenuesVenueCard = ({ allVenues }) => {
                   {Math.max
                     .apply(
                       Math,
-                      venue?.subVenues.map((subvenue) => {
+                      venue?.subVenues?.map((subvenue) => {
                         return subvenue?.subVenueCapacity;
                       })
                     )
@@ -106,7 +105,7 @@ const AllVenuesVenueCard = ({ allVenues }) => {
                   ? Math.max
                       .apply(
                         Math,
-                        venue?.menus.map((menu) => {
+                        venue?.menus?.map((menu) => {
                           return menu.price;
                         })
                       )
@@ -114,7 +113,7 @@ const AllVenuesVenueCard = ({ allVenues }) => {
                   : Math.max
                       .apply(
                         Math,
-                        venue?.subVenues.map((subvenue) => {
+                        venue?.subVenues?.map((subvenue) => {
                           return subvenue?.subVenueBookingCharges;
                         })
                       )

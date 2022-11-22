@@ -20,9 +20,9 @@ const AllVenuesGrid = ({ allVenues }) => {
     <Paper>
       <Group position="apart" mb={"md"}>
         <Text weight={500}>
-          {allVenues.length > 1
-            ? allVenues.length.toLocaleString() + " Results"
-            : allVenues.length + "Result"}
+          {allVenues?.length > 1
+            ? allVenues?.length.toLocaleString() + " Results"
+            : allVenues?.length + "Result"}
         </Text>
 
         <Group>

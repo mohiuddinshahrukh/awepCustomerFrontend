@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
+  Anchor,
+  Button,
   Center,
   Container,
   Group,
@@ -32,6 +34,7 @@ import {
 } from "@tabler/icons";
 // import { AlignCenter, AlignLeft, AlignRight } from "tabler-icons-react";
 
+let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
   new URL("./imgs/1.jpg", import.meta.url),
@@ -168,11 +171,24 @@ const CustomerCardEditor = () => {
       ctx.wrapText(`${eventDate}`, eventDateX, eventDateY, 500, 40);
       ctx.wrapText(`${venueName}`, venueNameX, venueNameY, 500, 40);
       ctx.wrapText(`${eventRsvpName}`, eventRsvpNameX, eventRsvpNameY, 500, 40);
+      console.log("DOWNLOAD IMAGE URL: ", canvas.current.toDataURL());
+      url = "";
+      url += canvas.current.toDataURL();
+      console.log("TALHA URL: ", canvas.current.toDataURL());
       setDownload(canvas.current.toDataURL());
     };
   });
   return (
     <Container size={"xl"} style={{ position: "relative" }}>
+      {console.log("TALHA: ", url)}
+      {}
+      <Button
+        component={Anchor}
+        href={`https://web.whatsapp.com/send?text=${url}&app_absent=0`}
+        target="_blank"
+      >
+        Click
+      </Button>
       <Title my={"lg"} align="center">
         Wedding Card Editor
       </Title>
@@ -180,21 +196,14 @@ const CustomerCardEditor = () => {
         <Grid.Col lg={12} style={{}}>
           <Grid>
             <Grid.Col>
-              <a href={downloadLink} download>
-                <ActionIcon
-                  style={{
-                    position: "absolute",
-                    top: "100px",
-                    right: "50px",
-                    height: "50px",
-                    width: "50px",
-                    objectFit: "contain",
-                    cursor: "pointer",
-                  }}
-                >
-                  <IconDownload />
-                </ActionIcon>
-              </a>
+              <Group position="right" align={"flex-end"}>
+                <Text>Download Card</Text>
+                <Anchor variant="text" href={downloadLink} download>
+                  <ActionIcon variant="filled" color={"blue"} style={{}}>
+                    <IconDownload />
+                  </ActionIcon>
+                </Anchor>
+              </Group>
 
               <Title order={4}>Choose Image Or upload</Title>
               <Group position="left">

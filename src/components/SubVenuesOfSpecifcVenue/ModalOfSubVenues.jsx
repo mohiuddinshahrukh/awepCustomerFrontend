@@ -12,6 +12,8 @@ const ModalOfSubVenues = ({
   setContactPhone,
   contactEmail,
   setContactEmail,
+  eventType,
+  setEventType,
   date,
   setDate,
   time,
@@ -75,6 +77,8 @@ const ModalOfSubVenues = ({
           setContactPhone={setContactPhone}
           contactEmail={contactEmail}
           setContactEmail={setContactEmail}
+          eventType={eventType}
+          setEventType={setEventType}
           date={date}
           setDate={setDate}
           time={time}

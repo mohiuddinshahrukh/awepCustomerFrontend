@@ -22,6 +22,7 @@ import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg"
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import AllVenuesRatingFilter from "./AllVenuesRatingFilter";
 
 const fetchAllVenues = async () => {
   try {
@@ -160,6 +161,7 @@ const AllVenuesPage = () => {
                 },
               ]}
             />
+            <AllVenuesRatingFilter />
             <AdvanceFilterVenueServices />
             <AdvanceFilterVenuePrice />
             <AdvanceFilterVenueCapacity />

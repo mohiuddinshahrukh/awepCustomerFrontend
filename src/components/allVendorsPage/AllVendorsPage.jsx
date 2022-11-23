@@ -19,6 +19,8 @@ import AllVendorsGrid from "./AllVendorsGrid";
 import AllVendorCategories from "./AllVendorCategories";
 import AllVendorCities from "./AllVendorCities";
 import AllVendorDuration from "./AllVendorDuration";
+import AllVendorsCustomerBudget from "./AllVendorsCustomerBudget";
+import AllVendorRatingFilter from "./AllVendorRatingFilter";
 
 const fetchAllVendors = async () => {
   try {
@@ -119,7 +121,9 @@ const AllVendorsPage = () => {
       <Container size={"xl"} my={"md"}>
         <Grid>
           <Grid.Col hidden={matches1026 ? true : false} span={3}>
+            <AllVendorRatingFilter />
             <AllVendorCities />
+            <AllVendorsCustomerBudget />
             <AllVendorCategories />
             <AllVendorDuration />
           </Grid.Col>

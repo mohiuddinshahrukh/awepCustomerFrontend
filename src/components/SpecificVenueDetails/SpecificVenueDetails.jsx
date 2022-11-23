@@ -53,6 +53,7 @@ const SpecificVenueDetails = () => {
   console.log("venueFeedbacks", venueFeedbacks);
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [eventType, setEventType] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState();
@@ -229,6 +230,8 @@ const SpecificVenueDetails = () => {
             setContactPhone={setContactPhone}
             contactEmail={contactEmail}
             setContactEmail={setContactEmail}
+            eventType={eventType}
+            setEventType={setEventType}
             date={date}
             setDate={setDate}
             time={time}
@@ -303,6 +306,8 @@ const SpecificVenueDetails = () => {
             setContactPhone={setContactPhone}
             contactEmail={contactEmail}
             setContactEmail={setContactEmail}
+            eventType={eventType}
+            setEventType={setEventType}
             date={date}
             setDate={setDate}
             time={time}

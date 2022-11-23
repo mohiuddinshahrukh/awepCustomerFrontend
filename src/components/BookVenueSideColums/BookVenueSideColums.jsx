@@ -16,6 +16,7 @@ import InputMask from "react-input-mask";
 import {
   IconCalendar,
   IconClock,
+  IconConfetti,
   IconMail,
   IconPhone,
   IconUsers,
@@ -45,6 +46,8 @@ const BookVenueSideColums = ({
   setContactPhone,
   contactEmail,
   setContactEmail,
+  eventType,
+  setEventType,
   date,
   setDate,
   time,
@@ -75,7 +78,7 @@ const BookVenueSideColums = ({
   // });
   const [error, setError] = useState({});
   const handleSubmit = async (event) => {
-    var { date, time, guests } = event;
+    var { eventType, date, time, guests } = event;
     console.log("onClickFunction 11");
     //validation comes here
     const errorValues = {};
@@ -84,6 +87,9 @@ const BookVenueSideColums = ({
     }
     if (time === "") {
       errorValues.time = "Please select a time";
+    }
+    if (eventType === "") {
+      errorValues.eventType = "Please select a event type";
     }
 
     console.log("guests1", guests);
@@ -99,7 +105,9 @@ const BookVenueSideColums = ({
         onClickFunction();
       } else {
         console.log("onClickFunction SUBVENUE");
-        navigate(`/venueBooking/${date}/${time}/${guests}/${venueId}`);
+        navigate(
+          `/venueBooking/${eventType}/${date}/${time}/${guests}/${venueId}`
+        );
       }
     }
   };
@@ -115,33 +123,32 @@ const BookVenueSideColums = ({
       <Text align="center" weight="bold" size="xl">
         Booking
       </Text>
-      {/* <form onSubmit={form.onSubmit((values) => handleSubmit(values))}> */}
-      {/* <TextInput
-          type="email"
-          label="Email"
-          placeholder="Email"
-          radius="md"
-          pt="md"
-          size="md"
-          rightSection={<IconMail color="gray" size={20} stroke={1} />}
-          value={contactEmail}
-          onInput={(event) => setContactEmail(event.currentTarget.value)}
-          {...form.getInputProps("email")}
-        />
-        <TextInput
-          type="tel"
-          label="Phone"
-          placeholder="Phone"
-          radius="md"
-          component={InputMask}
-          mask="03999999999"
-          pt="md"
-          size="md"
-          rightSection={<IconPhone color="gray" size={20} stroke={1} />}
-          value={contactPhone}
-          onInput={(event) => setContactPhone(event.currentTarget.value)}
-          {...form.getInputProps("phone")}
-        /> */}
+
+      <Select
+        label="Event Type"
+        placeholder="Event Type"
+        radius="md"
+        size="md"
+        error={error?.eventType}
+        rightSection={<IconConfetti color="gray" size={20} stroke={1} />}
+        value={eventType}
+        defaultValue={undefined}
+        // onChange={setTime}
+        onChange={(event) => {
+          setError(() => {
+            return { ...error, eventType: "" };
+          });
+          setEventType(event);
+        }}
+        data={[
+          { label: "Mehendi", value: "MEHENDI" },
+          { label: "Walima", value: "WALIMA" },
+          { label: "Barat", value: "BARAT" },
+          { label: "Seminar", value: "SEMINAR" },
+          { label: "Other", value: "OTHER" },
+        ]}
+        // {...form.getInputProps("eventType")}
+      />
       <NumberInput
         label="Guests"
         placeholder="Guests"
@@ -217,7 +224,7 @@ const BookVenueSideColums = ({
         className={classes.button}
         radius="md"
         // type="submit"
-        onClick={() => handleSubmit({ date, time, guests })}
+        onClick={() => handleSubmit({ eventType, date, time, guests })}
         size="md"
         fullWidth
       >

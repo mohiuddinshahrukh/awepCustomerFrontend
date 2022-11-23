@@ -9,6 +9,8 @@ const CarouselForModalOfSubVenues = ({
   setContactPhone,
   contactEmail,
   setContactEmail,
+  eventType,
+  setEventType,
   date,
   setDate,
   time,
@@ -65,6 +67,8 @@ const CarouselForModalOfSubVenues = ({
           setContactPhone={setContactPhone}
           contactEmail={contactEmail}
           setContactEmail={setContactEmail}
+          eventType={eventType}
+          setEventType={setEventType}
           date={date}
           setDate={setDate}
           time={time}

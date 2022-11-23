@@ -141,7 +141,7 @@ const BookVenueSideColums = ({
           setEventType(event);
         }}
         data={[
-          { label: "Mehendi", value: "MEHENDI" },
+          { label: "Mehendi", value: "MEHNDI" },
           { label: "Walima", value: "WALIMA" },
           { label: "Barat", value: "BARAT" },
           { label: "Seminar", value: "SEMINAR" },

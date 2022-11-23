@@ -1,6 +1,7 @@
-import { Accordion, Checkbox } from "@mantine/core";
+import { Select } from "@mantine/core";
 import React from "react";
-const allCities = [
+const allDurations = [
+  { label: "all", value: "all" },
   {
     value: "perHour",
     label: "Per Hour",
@@ -11,32 +12,13 @@ const allCities = [
   },
 ];
 const AllVendorDuration = () => {
-  const services = allCities?.map((city, index) => {
-    return (
-      <Checkbox
-        key={index}
-        // onChange={(event) =>
-        //   setVenueType(event.currentTarget.checked)
-        // }
-        value={city.value}
-        label={city.label}
-      />
-    );
-  });
   return (
-    <Accordion defaultValue="vendorDuration">
-      <Accordion.Item value={"vendorDuration"}>
-        <Accordion.Control>{"Vendor Duration"}</Accordion.Control>
-        <Accordion.Panel>
-          <Checkbox.Group
-
-          // defaultValue={["react"]}
-          >
-            {services}
-          </Checkbox.Group>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+    <Select
+      label="Duration Filter"
+      defaultValue={"all"}
+      data={allDurations}
+      placeholder="Duration Filter"
+    />
   );
 };
 

@@ -17,8 +17,8 @@ const AllVendorsGrid = ({ allVendors }) => {
   const [viewStyle, setViewStyle] = useState("card");
   return (
     <Paper>
-      <Group position="apart" mb={"md"}>
-        <Text weight={500}>
+      <Group position="apart" mb={"md"} align="flex-end">
+        <Text weight={500} size={"lg"}>
           {allVendors?.length > 1
             ? allVendors?.length.toLocaleString() + " Results"
             : allVendors?.length + "Result"}

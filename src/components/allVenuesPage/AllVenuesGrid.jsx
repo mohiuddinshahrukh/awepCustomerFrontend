@@ -18,8 +18,8 @@ const AllVenuesGrid = ({ allVenues }) => {
   console.log("Venue Sort Value", venueSort);
   return (
     <Paper>
-      <Group position="apart" mb={"md"}>
-        <Text weight={500}>
+      <Group position="apart" mb={"md"} align="flex-end">
+        <Text weight={500} size={"lg"}>
           {allVenues?.length > 1
             ? allVenues?.length.toLocaleString() + " Results"
             : allVenues?.length + "Result"}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import axios from "axios";
-import { Accordion, Checkbox } from "@mantine/core";
+import { Accordion, Checkbox, Select } from "@mantine/core";
 const fetchAllVenueServices = async () => {
   try {
     const apiResponse = await axios.get(
@@ -29,32 +29,25 @@ const AdvanceFilterVenueServices = () => {
     console.count();
   }, []);
 
-  const services = allServices?.map((service, index) => {
-    return (
-      <Checkbox
-        key={index}
-        // onChange={(event) =>
-        //   setVenueType(event.currentTarget.checked)
-        // }
-        value={service.serviceTitle}
-        label={service.serviceTitle}
-      />
-    );
-  });
   return (
-    <Accordion defaultValue="Venue Services">
-      <Accordion.Item value={"venueServices"}>
-        <Accordion.Control>{"Venue Services"}</Accordion.Control>
-        <Accordion.Panel>
-          <Checkbox.Group
-
-          // defaultValue={["react"]}
-          >
-            {services}
-          </Checkbox.Group>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+    <Select
+      label="Services Filter"
+      defaultValue={"all"}
+      placeholder="Services Filter"
+      data={[
+        {
+          value: "all",
+          label: "all",
+        },
+      ].concat(
+        allServices?.map((service) => {
+          return {
+            value: service.serviceTitle,
+            label: service.serviceTitle,
+          };
+        })
+      )}
+    />
   );
 };
 

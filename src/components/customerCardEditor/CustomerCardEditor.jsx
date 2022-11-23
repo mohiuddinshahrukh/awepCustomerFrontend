@@ -7,6 +7,7 @@ import {
   Group,
   //   Image as mantineImage,
   NumberInput,
+  Slider,
   //   Slider,
   Text,
   TextInput,
@@ -17,61 +18,106 @@ import {
 // import img3 from "./imgs/3.jpg";
 // import img4 from "./imgs/4.jpg";
 // import img5 from "./imgs/5.jpg";
-// import download from "./imgs/download.jpg";
+import download from "./imgs/download.jpg";
 // import slider from "./slider";
 // import "./Card.css";
 // import { RangeSlider } from "@mantine/core";
 import { Grid, Paper } from "@mantine/core";
 import SliderComponent from "./SliderComponent";
-import { IconAlignCenter, IconAlignLeft, IconAlignRight } from "@tabler/icons";
+import {
+  IconAlignCenter,
+  IconAlignLeft,
+  IconAlignRight,
+  IconDownload,
+} from "@tabler/icons";
 // import { AlignCenter, AlignLeft, AlignRight } from "tabler-icons-react";
+
+// PICTURE BACKGROUNDS
+const pictureBackground = [
+  new URL("./imgs/1.jpg", import.meta.url),
+  new URL("./imgs/2.jpg", import.meta.url),
+  new URL("./imgs/3.jpg", import.meta.url),
+  new URL("./imgs/4.jpg", import.meta.url),
+  new URL("./imgs/5.jpg", import.meta.url),
+];
 // COMPONENT
 const CustomerCardEditor = () => {
   const canvas = useRef(null);
+  const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
   // HOOKS
-  const [image, setImage] = useState("");
-  const [menuName, setMenuName] = useState("");
-  const [menuPrice, setMenuPrice] = useState(0);
-  const [venueName, setVenueName] = useState("");
-  const [menuDishes, setMenuDishes] = useState("Happy Wedding");
-  const [color, setColor] = useState("#f2ceaf");
-  const [downloadLink, setDownload] = useState("");
+  const [image, setImage] = useState(pictureBackground[0]);
+  const [eventType, setEventType] = useState("Enter Event Name");
+  const [invitationName, setInvitationName] = useState(
+    "Enter Invitation from Name"
+  );
+  const [groomName, setGroomName] = useState("Enter Groom Name");
+  const [brideName, setBrideName] = useState("Enter Bride Name");
+  const [eventTime, setEventTime] = useState("Enter Event Time");
+  const [eventDate, setEventDate] = useState("Enter Event Date");
+  const [eventRsvpName, setEventRsvpName] = useState("Enter RSVP Name");
+  const [venueName, setVenueName] = useState("Enter Venue Name");
 
+  // const [rsvpName, setRsvpName] = useState("Enter RSVP Name");
+  const [color, setColor] = useState("#000000");
+  const [downloadLink, setDownload] = useState("");
   // CANVAS FONT
   const [getFontSize, setFontSize] = useState(22);
   // CANVAS HEIGHT & WIDTH
   const [getWidth, setWidth] = useState(450);
   const [getHeight, setHeight] = useState(650);
-
   // ALIGNMENT FUNTION
   const alignTextHorizontalFunction = (position) => {
-    // if (position === "left") {
-    //   setVenueX(getWidth - getWidth);
-    // } else if (position === "center") {
-    //   setVenueX(getWidth / 2);
-    // } else {
-    //   setVenueX(getWidth);
-    // }
+    if (position === "left") {
+      setCanvasAllTextAlign("left");
+      setVenueNameX(getWidth - getWidth);
+      setEventTypeX(getWidth - getWidth);
+      setInvitationFromX(getWidth - getWidth);
+      setGroomNameX(getWidth - getWidth);
+      setBrideNameX(getWidth - getWidth);
+      setEventTimeX(getWidth - getWidth);
+      setEventDateX(getWidth - getWidth);
+      setEventRsvpNameX(getWidth - getWidth);
+      setVenueNameX(getWidth - getWidth);
+    } else if (position === "center") {
+      setCanvasAllTextAlign("center");
+      setEventTypeX(getWidth / 2);
+      setInvitationFromX(getWidth / 2);
+      setGroomNameX(getWidth / 2);
+      setBrideNameX(getWidth / 2);
+      setEventTimeX(getWidth / 2);
+      setEventDateX(getWidth / 2);
+      setEventRsvpNameX(getWidth / 2);
+      setVenueNameX(getWidth / 2);
+    } else {
+      setCanvasAllTextAlign("right");
+      setEventTypeX(getWidth);
+      setInvitationFromX(getWidth);
+      setGroomNameX(getWidth);
+      setBrideNameX(getWidth);
+      setEventTimeX(getWidth);
+      setEventDateX(getWidth);
+      setEventRsvpNameX(getWidth);
+      setVenueNameX(getWidth);
+    }
   };
   // X AXIS VALUES
-  const [venueX, setVenueX] = useState(0);
-  const [menuX, setMenuX] = useState(0);
-  const [dishesX, setDishesX] = useState(0);
-  const [priceX, setPriceX] = useState(0);
+  const [eventTypeX, setEventTypeX] = useState(getWidth / 2);
+  const [invitationFromX, setInvitationFromX] = useState(getWidth / 2);
+  const [groomNameX, setGroomNameX] = useState(getWidth / 2);
+  const [brideNameX, setBrideNameX] = useState(getWidth / 2);
+  const [eventTimeX, setEventTimeX] = useState(getWidth / 2);
+  const [eventDateX, setEventDateX] = useState(getWidth / 2);
+  const [eventRsvpNameX, setEventRsvpNameX] = useState(getWidth / 2);
+  const [venueNameX, setVenueNameX] = useState(getWidth / 2);
   //  Y AXIS VALUES
-  const [venueY, setVenueY] = useState(100);
-  const [menuY, setMenuY] = useState(200);
-  const [dishesY, setDishesY] = useState(300);
-  const [priceY, setPriceY] = useState(400);
-
-  // PICTURE BACKGROUNDS
-  const pictureBackground = [
-    new URL("./imgs/1.jpg", import.meta.url),
-    new URL("./imgs/2.jpg", import.meta.url),
-    new URL("./imgs/3.jpg", import.meta.url),
-    new URL("./imgs/4.jpg", import.meta.url),
-    new URL("./imgs/5.jpg", import.meta.url),
-  ];
+  const [eventTypeY, setEventTypeY] = useState(100);
+  const [invitationFromY, setInvitationFromY] = useState(150);
+  const [groomNameY, setGroomNameY] = useState(200);
+  const [brideNameY, setBrideNameY] = useState(250);
+  const [eventTimeY, setEventTimeY] = useState(300);
+  const [eventDateY, setEventDateY] = useState(350);
+  const [venueNameY, setVenueNameY] = useState(400);
+  const [eventRsvpNameY, setEventRsvpNameY] = useState(450);
   CanvasRenderingContext2D.prototype.wrapText = function (
     text,
     x,
@@ -80,11 +126,9 @@ const CustomerCardEditor = () => {
     lineHeight
   ) {
     var lines = text.split("\n");
-
     for (var i = 0; i < lines.length; i++) {
       var words = lines[i].split(" ");
       var line = "";
-
       for (var n = 0; n < words.length; n++) {
         var testLine = line + words[n] + " ";
         var metrics = this.measureText(testLine);
@@ -97,7 +141,6 @@ const CustomerCardEditor = () => {
           line = testLine;
         }
       }
-
       this.fillText(line, x, y);
       y += lineHeight;
     }
@@ -107,18 +150,29 @@ const CustomerCardEditor = () => {
     let img = new Image();
     img.src = image;
     img.onload = function () {
+      ctx.textAlign = `${canvasAllTextAlign}`;
       ctx.drawImage(img, 0, 0, getWidth, getHeight);
       ctx.font = `${getFontSize}px Poppins`;
       ctx.fillStyle = color;
-      ctx.wrapText(`${venueName}`, venueX, venueY, 500, 40);
-      ctx.wrapText(`${menuName}`, menuX, menuY, 500, 40);
-      ctx.wrapText(`${menuDishes}`, dishesX, dishesY, 500, 40);
-      ctx.wrapText(`${menuPrice}`, priceX, priceY, 500, 40);
+      ctx.wrapText(`${eventType}`, eventTypeX, eventTypeY, 500, 40);
+      ctx.wrapText(
+        `${invitationName}`,
+        invitationFromX,
+        invitationFromY,
+        500,
+        40
+      );
+      ctx.wrapText(`${groomName}`, groomNameX, groomNameY, 500, 40);
+      ctx.wrapText(`${brideName}`, brideNameX, brideNameY, 500, 40);
+      ctx.wrapText(`${eventTime}`, eventTimeX, eventTimeY, 500, 40);
+      ctx.wrapText(`${eventDate}`, eventDateX, eventDateY, 500, 40);
+      ctx.wrapText(`${venueName}`, venueNameX, venueNameY, 500, 40);
+      ctx.wrapText(`${eventRsvpName}`, eventRsvpNameX, eventRsvpNameY, 500, 40);
       setDownload(canvas.current.toDataURL());
     };
   });
   return (
-    <Container size={"xl"}>
+    <Container size={"xl"} style={{ position: "relative" }}>
       <Title my={"lg"} align="center">
         Wedding Card Editor
       </Title>
@@ -127,14 +181,27 @@ const CustomerCardEditor = () => {
           <Grid>
             <Grid.Col>
               <a href={downloadLink} download>
-                <img src={""} alt="" className="downloadIcon" />
+                <ActionIcon
+                  style={{
+                    position: "absolute",
+                    top: "100px",
+                    right: "50px",
+                    height: "50px",
+                    width: "50px",
+                    objectFit: "contain",
+                    cursor: "pointer",
+                  }}
+                >
+                  <IconDownload />
+                </ActionIcon>
               </a>
 
               <Title order={4}>Choose Image Or upload</Title>
               <Group position="left">
-                {pictureBackground.map((image) => {
+                {pictureBackground?.map((image, index) => {
                   return (
                     <img
+                      key={index}
                       height={200}
                       alt=""
                       src={image}
@@ -147,8 +214,62 @@ const CustomerCardEditor = () => {
           </Grid>
         </Grid.Col>
         <Grid.Col lg={6}>
+          <Group position="center" mt={"lg"}>
+            <canvas ref={canvas} width={getWidth} height={670} />
+          </Group>
+        </Grid.Col>
+        <Grid.Col lg={6} style={{ borderLeft: "1px solid #eaeaea" }}>
           <Grid>
-            {" "}
+            <Grid.Col lg={6}>
+              <TextInput
+                styles={{ input: { textAlign: "center" } }}
+                label="Event Name"
+                value={eventType}
+                onChange={(event) => setEventType(event.target.value)}
+              />
+            </Grid.Col>
+            <Grid.Col lg={6}>
+              <TextInput
+                styles={{ input: { textAlign: "center" } }}
+                label="Invitaiton From"
+                value={invitationName}
+                onChange={(event) => setInvitationName(event.target.value)}
+              />
+            </Grid.Col>
+
+            <Grid.Col lg={6}>
+              <TextInput
+                styles={{ input: { textAlign: "center" } }}
+                label="Groom Name"
+                value={groomName}
+                onChange={(event) => setGroomName(event.target.value)}
+              />
+            </Grid.Col>
+            <Grid.Col lg={6}>
+              <TextInput
+                styles={{ input: { textAlign: "center" } }}
+                label="Bride Name"
+                value={brideName}
+                onChange={(event) => setBrideName(event.target.value)}
+              />
+            </Grid.Col>
+            <Grid.Col lg={6}>
+              <TextInput
+                styles={{ input: { textAlign: "center" } }}
+                label="Time"
+                value={eventTime}
+                onChange={(event) => setEventTime(event.target.value)}
+              />
+            </Grid.Col>
+            <Grid.Col lg={6}>
+              <TextInput
+                styles={{ input: { textAlign: "center" } }}
+                label="Event Date & Time"
+                value={eventDate}
+                onChange={(event) => setEventDate(event.target.value)}
+              />
+            </Grid.Col>
+
             <Grid.Col lg={6}>
               <TextInput
                 styles={{ input: { textAlign: "center" } }}
@@ -160,49 +281,12 @@ const CustomerCardEditor = () => {
             <Grid.Col lg={6}>
               <TextInput
                 styles={{ input: { textAlign: "center" } }}
-                label="Bride Name"
-                value={menuName}
-                onChange={(event) => setMenuName(event.target.value)}
-              />
-            </Grid.Col>
-            <Grid.Col lg={6}>
-              <TextInput
-                styles={{ input: { textAlign: "center" } }}
-                label="Groom Name"
-                value={menuName}
-                onChange={(event) => setMenuName(event.target.value)}
-              />
-            </Grid.Col>
-            <Grid.Col lg={6}>
-              <TextInput
-                styles={{ input: { textAlign: "center" } }}
                 label="RSVP"
-                value={menuDishes}
-                onChange={(event) => setMenuDishes(event.target.value)}
-              />
-            </Grid.Col>
-            <Grid.Col lg={6}>
-              <TextInput
-                styles={{ input: { textAlign: "center" } }}
-                label="Event Date & Time"
-                value={menuPrice}
-                onChange={(event) => setMenuPrice(event.target.value)}
-              />
-            </Grid.Col>
-            <Grid.Col lg={6}>
-              <TextInput
-                styles={{ input: { textAlign: "center" } }}
-                label="Time"
-                value={menuPrice}
-                onChange={(event) => setMenuPrice(event.target.value)}
+                value={eventRsvpName}
+                onChange={(event) => setEventRsvpName(event.target.value)}
               />
             </Grid.Col>
           </Grid>
-          <Group position="center" mt={"lg"}>
-            <canvas ref={canvas} width={getWidth} height={670} />
-          </Group>
-        </Grid.Col>
-        <Grid.Col lg={6} style={{ borderLeft: "1px solid #eaeaea" }}>
           <Grid align="flex-end">
             <Grid.Col lg={12}>Alignment Options</Grid.Col>
             <Grid.Col lg={12}>
@@ -230,93 +314,197 @@ const CustomerCardEditor = () => {
                 </ActionIcon>
               </Group>
             </Grid.Col>
+
             <Grid.Col lg={6}>
-              <Text>X AXIS SETTINGS</Text>
-
+              <Text weight={500} size={"lg"}>
+                X AXIS SETTINGS
+              </Text>
+              <Text>X Axis All Fields Setting</Text>
+              <Slider
+                label="Adjust All X Axis Values"
+                onChange={(e) => {
+                  console.log("VALUE CHANGED: ", e);
+                  setEventTypeX(eventTypeX + e);
+                  setInvitationFromX(invitationFromX + e);
+                  setGroomNameX(groomNameX + e);
+                  setBrideNameX(brideNameX + e);
+                  setEventTimeX(eventTimeX + e);
+                  setEventDateX(eventDateX + e);
+                  setEventRsvpNameX(eventRsvpNameX + e);
+                  setVenueNameX(venueNameX + e);
+                }}
+              />
               <SliderComponent
-                text="Adjust your venue name X Axis"
+                text="Adjust your EVENT name X Axis"
                 color="grape"
-                label="Set Venue Name X Axis"
-                value={venueX}
-                max={getWidth}
-                setX={setVenueX}
+                label="Set Event Type X Axis"
+                value={eventTypeX}
+                max={getHeight}
+                setX={setEventTypeX}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust Invitation From X Axis"
+                color="grape"
+                label="Set Invitation From X Axis"
+                value={invitationFromX}
+                max={getHeight}
+                setX={setInvitationFromX}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust GROOM NAME X Axis"
+                color="grape"
+                label="Set GROOM NAME X Axis"
+                value={groomNameX}
+                max={getHeight}
+                setX={setGroomNameX}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust your BRIDE NAME X Axis"
+                color="grape"
+                label="Set BRIDE NAME X Axis"
+                value={brideNameX}
+                max={getHeight}
+                setX={setBrideNameX}
                 min={getFontSize}
               />
 
               <SliderComponent
-                text="Adjust your Menu Name X Axis"
+                text="Adjust your EVENT TIME X Axis"
                 color="grape"
-                label="Set Venue Name X Axis"
-                value={menuX}
+                label="Set EVENT TIME X Axis"
+                value={eventTimeX}
                 max={getWidth}
-                setX={setMenuX}
+                setX={setEventTimeX}
                 min={getFontSize}
               />
 
               <SliderComponent
-                text="Adjust your Menu Name X Axis"
+                text="Adjust your EVENT DATE X Axis"
                 color="grape"
-                label="Set Venue Name X Axis"
-                value={dishesX}
+                label="Set EVENT DATE X Axis"
+                value={eventDateX}
                 max={getWidth}
-                setX={setDishesX}
+                setX={setEventDateX}
                 min={getFontSize}
               />
-
               <SliderComponent
-                text="Adjust your Menu Name X Axis"
+                text="Adjust your VENUE name X Axis"
                 color="grape"
-                label="Set Venue Name X Axis"
-                value={priceX}
+                label="Set Venue VENUE X Axis"
+                value={venueNameX}
                 max={getWidth}
-                setX={setPriceX}
+                setX={setVenueNameX}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust your RSVP NAME X Axis"
+                color="grape"
+                label="Set Venue RSVP NAME X Axis"
+                value={eventRsvpNameX}
+                max={getWidth}
+                setX={setEventRsvpNameX}
                 min={getFontSize}
               />
             </Grid.Col>
 
             <Grid.Col lg={6}>
-              <Text>Y AXIS SETTINGS</Text>
+              <Text weight={500} size={"lg"}>
+                Y AXIS SETTINGS
+              </Text>
+              <Text>Y Axis All Fields Setting</Text>
+              <Slider
+                label="Adjust All Y Axis Values"
+                onChange={(e) => {
+                  console.log("VALUE CHANGED: ", e);
+                  setEventTypeY(eventTypeY + e);
+                  setInvitationFromY(invitationFromY + e);
+                  setGroomNameY(groomNameY + e);
+                  setBrideNameY(brideNameY + e);
+                  setEventTimeY(eventTimeY + e);
+                  setEventDateY(eventDateY + e);
+                  setEventRsvpNameY(eventRsvpNameY + e);
+                  setVenueNameY(venueNameY + e);
+                }}
+              />
+              <SliderComponent
+                text="Adjust your EVENT name Y Axis"
+                color="grape"
+                label="Set Event Type Y Axis"
+                value={eventTypeY}
+                max={getHeight}
+                setX={setEventTypeY}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust Invitation From Y Axis"
+                color="grape"
+                label="Set Invitation From Y Axis"
+                value={invitationFromY}
+                max={getHeight}
+                setX={setInvitationFromY}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust GROOM NAME Y Axis"
+                color="grape"
+                label="Set GROOM NAME Y Axis"
+                value={groomNameY}
+                max={getHeight}
+                setX={setGroomNameY}
+                min={getFontSize}
+              />
+              <SliderComponent
+                text="Adjust your BRIDE NAME Y Axis"
+                color="grape"
+                label="Set BRIDE NAME Y Axis"
+                value={brideNameY}
+                max={getHeight}
+                setX={setBrideNameY}
+                min={getFontSize}
+              />
+
+              <SliderComponent
+                text="Adjust your EVENT TIME Y Axis"
+                color="grape"
+                label="Set EVENT TIME Y Axis"
+                value={eventTimeY}
+                max={getHeight}
+                setX={setEventTimeY}
+                min={getFontSize}
+              />
+
+              <SliderComponent
+                text="Adjust your EVENT DATE Y Axis"
+                color="grape"
+                label="Set EVENT DATE Y Axis"
+                value={eventDateY}
+                max={getHeight}
+                setX={setEventDateY}
+                min={getFontSize}
+              />
+
               <SliderComponent
                 text="Adjust your venue name Y Axis"
                 color="grape"
                 label="Set Venue Name Y Axis"
-                value={venueY}
+                value={venueNameY}
                 max={getHeight}
-                setX={setVenueY}
+                setX={setVenueNameY}
                 min={getFontSize}
               />
-
               <SliderComponent
-                text="Adjust your Menu Name Y Axis"
+                text="Adjust your RSVP NAME X Axis"
                 color="grape"
-                label="Set Venue Name Y Axis"
-                value={menuY}
+                label="Adjust your RSVP NAME X Axis"
+                value={eventRsvpNameY}
                 max={getHeight}
-                setX={setMenuY}
-                min={getFontSize}
-              />
-
-              <SliderComponent
-                text="Adjust your Menu Name Y Axis"
-                color="grape"
-                label="Set Venue Name Y Axis"
-                value={dishesY}
-                max={getHeight}
-                setX={setDishesY}
-                min={getFontSize}
-              />
-
-              <SliderComponent
-                text="Adjust your Menu Name Y Axis"
-                color="grape"
-                label="Set Venue Name Y Axis"
-                value={priceY}
-                max={getHeight}
-                setX={setPriceY}
+                setX={setEventRsvpNameY}
                 min={getFontSize}
               />
             </Grid.Col>
-
             <Grid.Col>
               <NumberInput
                 label="Enter Font size"

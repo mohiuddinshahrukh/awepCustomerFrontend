@@ -1,6 +1,10 @@
-import { Accordion, Checkbox } from "@mantine/core";
+import { Select } from "@mantine/core";
 import React from "react";
 const allRating = [
+  {
+    value: "all",
+    label: "all",
+  },
   {
     value: "1star",
     label: "1 Star",
@@ -23,32 +27,13 @@ const allRating = [
   },
 ];
 const AllVenuesRatingFilter = () => {
-  const services = allRating?.map((city, index) => {
-    return (
-      <Checkbox
-        key={index}
-        // onChange={(event) =>
-        //   setVenueType(event.currentTarget.checked)
-        // }
-        value={city.value}
-        label={city.label}
-      />
-    );
-  });
   return (
-    <Accordion defaultValue="venueRating">
-      <Accordion.Item value={"venueRating"}>
-        <Accordion.Control>{"Venue Rating"}</Accordion.Control>
-        <Accordion.Panel>
-          <Checkbox.Group
-
-          // defaultValue={["react"]}
-          >
-            {services}
-          </Checkbox.Group>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+    <Select
+      label="Venue Ratings Filter"
+      defaultValue={"all"}
+      data={allRating}
+      placeholder="Venue Ratings Filter"
+    />
   );
 };
 

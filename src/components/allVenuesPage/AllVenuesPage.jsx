@@ -6,6 +6,8 @@ import {
   Group,
   Paper,
   Select,
+  Stack,
+  Text,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
@@ -145,28 +147,20 @@ const AllVenuesPage = () => {
       </Paper>
       <Container size={"xl"} my={"md"}>
         <Grid>
-          <Grid.Col hidden={matches1026 ? true : false} span={3}>
-            <AdvanceFilterVenueCities />
-            <AdvanceSearchAndFilters
-              setVenueType={setVenueType}
-              accordionsData={[
-                {
-                  value: "venueType",
-                  title: "Venue Type",
-                  venueTypes: [
-                    { value: "halls", label: "Halls" },
-                    { value: "marquees", label: "Marquees" },
-                    { value: "outdoors", label: "Outdoors" },
-                  ],
-                },
-              ]}
-            />
-            <AllVenuesRatingFilter />
-            <AdvanceFilterVenueServices />
-            <AdvanceFilterVenuePrice />
-            <AdvanceFilterVenueCapacity />
-            <AdvanceFilterHallCharges />
-            <AdvanceFilterMenuCharges />
+          <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
+            <Stack spacing={"sm"}>
+              <Text size={"lg"} align="left" weight={500}>
+                Advance Filters
+              </Text>
+              <AdvanceFilterVenueCities />
+              <AdvanceSearchAndFilters setVenueType={setVenueType} />
+              <AllVenuesRatingFilter />
+              <AdvanceFilterVenueServices />
+              <AdvanceFilterVenuePrice />
+              <AdvanceFilterVenueCapacity />
+              <AdvanceFilterHallCharges />
+              <AdvanceFilterMenuCharges />
+            </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
             <AllVenuesGrid allVenues={allVenues} />

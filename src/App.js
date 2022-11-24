@@ -10,6 +10,7 @@ import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEdit
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
+import NewBookingFile from "./components/NewBookingFile/NewBookingFile";
 import SpecificVendorBusinessDetails from "./components/SpecificVendorBusinessDetails/SpecificVendorBusinessDetails";
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
 
@@ -31,6 +32,10 @@ function App() {
         <Paper className="App">
           <TopNavbar />
           <Routes>
+            <Route
+              path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
+              element={<NewBookingFile />}
+            />
             <Route path="/" element={<LandingPageMain />} />
             <Route path="/cardEditor" element={<CustomerCardEditor />} />
             <Route path="/allVendors" element={<AllVendorsPage />} />

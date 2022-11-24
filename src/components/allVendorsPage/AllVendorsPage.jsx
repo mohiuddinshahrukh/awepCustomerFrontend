@@ -6,6 +6,8 @@ import {
   Group,
   Paper,
   Select,
+  Stack,
+  Text,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
@@ -120,12 +122,17 @@ const AllVendorsPage = () => {
       </Paper>
       <Container size={"xl"} my={"md"}>
         <Grid>
-          <Grid.Col hidden={matches1026 ? true : false} span={3}>
-            <AllVendorRatingFilter />
-            <AllVendorCities />
-            <AllVendorsCustomerBudget />
-            <AllVendorCategories />
-            <AllVendorDuration />
+          <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
+            <Stack spacing={"sm"}>
+              <Text size={"lg"} align="left" weight={500}>
+                Advance Filters
+              </Text>
+              <AllVendorRatingFilter />
+              <AllVendorCities />
+              <AllVendorsCustomerBudget />
+              <AllVendorCategories />
+              <AllVendorDuration />
+            </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
             <AllVendorsGrid allVendors={allVendors} />

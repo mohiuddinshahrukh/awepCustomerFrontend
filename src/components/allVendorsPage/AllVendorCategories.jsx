@@ -1,4 +1,4 @@
-import { Accordion, Checkbox } from "@mantine/core";
+import { Select } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -32,32 +32,26 @@ const AllVendorCategories = () => {
     fetchAllVendorsCategories().then(setAllVendorsCategories);
   }, []);
 
-  const [categories, setCategories] = useState([]);
-  const accordion = (
-    <Accordion>
-      <Accordion.Item value="categories">
-        <Accordion.Control>Categories</Accordion.Control>
-        <Accordion.Panel>
-          <Checkbox.Group>
-            {allVendorsCategories.map((category, index) => {
-              return (
-                <Checkbox
-                  key={index}
-                  checked={categories}
-                  label={category.categoryTitle}
-                  value={category.categoryTitle}
-                  onChange={(event) =>
-                    setCategories(event.currentTarget.checked)
-                  }
-                />
-              );
-            })}
-          </Checkbox.Group>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+  return (
+    <Select
+      placeholder="Categories Filter"
+      label="Categories Filter"
+      defaultValue={"all"}
+      data={[
+        {
+          value: "all",
+          label: "all",
+        },
+      ].concat(
+        allVendorsCategories.map((category) => {
+          return {
+            value: category.categoryTitle,
+            label: category.categoryTitle,
+          };
+        })
+      )}
+    />
   );
-  return <div>{accordion}</div>;
 };
 
 export default AllVendorCategories;

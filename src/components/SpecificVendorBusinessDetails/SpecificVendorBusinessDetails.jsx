@@ -31,6 +31,7 @@ import CarouselOfPackages from "../SpecificVendorPackages/CarouselOfPackages";
 import ModalOfPackages from "../SpecificVendorPackages/ModalOfPackages";
 import { useParams } from "react-router-dom";
 import { IconMessageCircle, IconSettings } from "@tabler/icons";
+import BookVenueSideColumnsForVendor from "../BookVenueSideColums/BookVenueSideColumnsForVendor";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -53,6 +54,16 @@ const SpecificVendorBusinessDetails = () => {
   const [refresh, setRefresh] = useState(true);
   const [vendorDetails, setVendorDetails] = useState({});
   const [vendorFeedbacks, setVendorFeedbacks] = useState([]);
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [eventType, setEventType] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [guests, setGuests] = useState();
+  const [isSignIn, setIsSignIn] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [idOfSpecificVendorPackage, setIdOfSpecificVendorPackage] =
+    useState("");
   console.log("vendorDetails are", vendorDetails);
   const [open, setOpen] = useState(false);
 
@@ -235,6 +246,8 @@ const SpecificVendorBusinessDetails = () => {
                     ? vendorDetails?.vendorServicePackages
                     : [{}]
                 }
+                idOfSpecificVendorPackage={idOfSpecificVendorPackage}
+                setIdOfSpecificVendorPackage={setIdOfSpecificVendorPackage}
               />
             </Tabs.Panel>
 
@@ -294,11 +307,42 @@ const SpecificVendorBusinessDetails = () => {
               vendorDetails?.vendorServicePackages
                 ? vendorDetails?.vendorServicePackages
                 : [{}]
-            } 
+            }
+            contactPhone={contactPhone}
+            setContactPhone={setContactPhone}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            eventType={eventType}
+            setEventType={setEventType}
+            date={date}
+            setDate={setDate}
+            time={time}
+            setTime={setTime}
+            setIsSignIn={setIsSignIn}
+            setIsSignUp={setIsSignUp}
+            idOfSpecificVendorPackage={idOfSpecificVendorPackage}
           />
         </Grid.Col>
         <Grid.Col lg={3} pl="xl">
-          <BookVenueSideColums />
+          <BookVenueSideColumnsForVendor
+            onClickFunction={() => {
+              console.log("onClickFunction111");
+              setOpen(true);
+            }}
+            contactPhone={contactPhone}
+            setContactPhone={setContactPhone}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            eventType={eventType}
+            setEventType={setEventType}
+            date={date}
+            setDate={setDate}
+            time={time}
+            setTime={setTime}
+            venueId={params.id}
+            isSignIn={isSignIn}
+            setIsSignIn={setIsSignIn}
+          />
         </Grid.Col>
       </Grid>
       {/* <Text ref={scrollRef.targetRef}>asdsadsa</Text> */}

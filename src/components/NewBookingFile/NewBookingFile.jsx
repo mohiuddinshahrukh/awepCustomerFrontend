@@ -28,6 +28,7 @@ import {
   useMantineTheme,
   Stack,
   Badge,
+  Container,
 } from "@mantine/core";
 import { Modal } from "@mantine/core";
 import moment from "moment";
@@ -673,23 +674,23 @@ const NewBookingFile = () => {
   };
 
   return (
-    <Paper
-      style={{
-        width: "100%",
-        height: "100%",
-        position: "relative",
-      }}
-      p={0}
-    >
-      <LoadingOverlay
-        visible={visible}
-        loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
-        overlayOpacity={0.5}
-        overlayColor="#c5c5c5"
-        zIndex={1}
-      />
+    <Container size="xl">
+      <Paper
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+        }}
+        // p={0}
+      >
+        <LoadingOverlay
+          visible={visible}
+          loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
+          overlayOpacity={0.5}
+          overlayColor="#c5c5c5"
+          zIndex={1}
+        />
 
-      <Center>
         <Modal
           styles={{
             close: {
@@ -1021,7 +1022,7 @@ const NewBookingFile = () => {
         <Paper
           py="xl"
           style={{
-            width: "80%",
+            width: "100%",
             height: "100%",
           }}
         >
@@ -1964,8 +1965,8 @@ const NewBookingFile = () => {
             </Stepper.Step>
           </Stepper>
         </Paper>
-      </Center>
-    </Paper>
+      </Paper>
+    </Container>
   );
 };
 

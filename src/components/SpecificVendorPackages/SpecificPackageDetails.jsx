@@ -1,18 +1,8 @@
-import {
-  createStyles,
-  Divider,
-  Grid,
-  Group,
-  Image,
-  Paper,
-  Text,
-} from "@mantine/core";
+import { createStyles, Group, Image, Paper, Text } from "@mantine/core";
 import { IconStar } from "@tabler/icons";
 import React from "react";
 import AboutVenue from "../AboutVenue/AboutVenue";
-import Carousal from "../Carousal/Carousal";
-import InPageNavigation from "../InPageNavigation/InPageNavigation";
-import VenueServices from "../VenueServices/VenueServices";
+
 const useStyles = createStyles((theme, _params, getRef) => ({
   price: {
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
@@ -22,7 +12,7 @@ const SpecificPackageDetails = ({ vendorPackage }) => {
   const { classes } = useStyles();
 
   return (
-    <Paper px={80}>
+    <Paper>
       <Image height="500px" width="100%" src={vendorPackage.coverImage} />
       <Group position="apart" pt="xl">
         <Text weight="bold" size="xl">

@@ -34,7 +34,12 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   },
 }));
 
-const SpecificVendorPackageCard = ({ open, setOpen, vendorPackage }) => {
+const SpecificVendorPackageCard = ({
+  open,
+  setOpen,
+  vendorPackage,
+  setIdOfSpecificVendorPackage,
+}) => {
   let vendorPackageData = vendorPackage ? vendorPackage : {};
   const { classes } = useStyles();
 
@@ -44,7 +49,10 @@ const SpecificVendorPackageCard = ({ open, setOpen, vendorPackage }) => {
         <Image src={vendorPackageData?.coverImage} height={220} />
       </Card.Section>
       <div
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setIdOfSpecificVendorPackage(vendorPackageData?._id);
+          setOpen(true);
+        }}
         style={{
           cursor: "pointer",
         }}

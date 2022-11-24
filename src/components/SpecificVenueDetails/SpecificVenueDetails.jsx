@@ -18,7 +18,6 @@ import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
 import RatingStars from "../RatingStars/RatingStars";
 import Carousal from "../Carousal/Carousal";
-import InPageNavigation from "../InPageNavigation/InPageNavigation";
 import AboutVenue from "../AboutVenue/AboutVenue";
 import VenueServices from "../VenueServices/VenueServices";
 import CarouselOfSubVenues from "../SubVenuesOfSpecifcVenue/CarouselOfSubVenues";

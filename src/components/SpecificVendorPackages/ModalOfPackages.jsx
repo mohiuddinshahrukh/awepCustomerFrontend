@@ -1,16 +1,41 @@
-import { Grid, Group, Modal, Text, Title } from "@mantine/core";
+import { Carousel } from "@mantine/carousel";
+import { Container, Grid, Group, Modal, Text, Title } from "@mantine/core";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons";
 import React from "react";
+import BookVenueSideColumnsForVendor from "../BookVenueSideColums/BookVenueSideColumnsForVendor";
 import CarouselForModalOfPackages from "./CarouselForModalOfPackages";
-const ModalOfPackages = ({ open, setOpen, vendorBusinessPackages }) => {
+import SpecificPackageDetails from "./SpecificPackageDetails";
+const ModalOfPackages = ({
+  open,
+  setOpen,
+  vendorBusinessPackages,
+
+  contactPhone,
+  setContactPhone,
+  contactEmail,
+  setContactEmail,
+  eventType,
+  setEventType,
+  date,
+  setDate,
+  time,
+  setTime,
+
+  setIsSignIn,
+  setIsSignUp,
+  idOfSpecificVendorPackage,
+}) => {
   let vendorPackages = vendorBusinessPackages ? vendorBusinessPackages : [{}];
+  let specificVendorPackage = vendorPackages.filter(
+    (e) => e._id === idOfSpecificVendorPackage
+  )[0];
   return (
     <>
       <Modal
-        padding="2%"
+        // padding="2%"
         opened={open}
         onClose={() => setOpen(false)}
         fullScreen
-        title={<Title order={2}>Packages</Title>}
         styles={{
           close: {
             color: "black",
@@ -24,9 +49,67 @@ const ModalOfPackages = ({ open, setOpen, vendorBusinessPackages }) => {
           },
         }}
       >
+        <Container size="xl">
+          <Grid>
+            <Grid.Col lg={9}>
+              {/* <Carousel
+              withIndicators
+              // height={800}
+              slideSize="100%"
+              nextControlIcon={<IconArrowRight size={25} />}
+              previousControlIcon={<IconArrowLeft size={25} />}
+              slideGap={2}
+              controlSize={50}
+              breakpoints={[
+                { maxWidth: "md", slideSize: "100%" },
+                { maxWidth: "sm", slideSize: "100%", slideGap: 0 },
+              ]}
+              //   loop
+              align="start"
+            >
+              {slides}
+            </Carousel> */}
+              <SpecificPackageDetails vendorPackage={specificVendorPackage} />
+            </Grid.Col>
+            <Grid.Col lg={3}>
+              <BookVenueSideColumnsForVendor
+                onClickFunction={() => {
+                  console.log("onClickFunction111");
+                  setOpen(true);
+                }}
+                contactPhone={contactPhone}
+                setContactPhone={setContactPhone}
+                contactEmail={contactEmail}
+                setContactEmail={setContactEmail}
+                eventType={eventType}
+                setEventType={setEventType}
+                date={date}
+                setDate={setDate}
+                time={time}
+                setTime={setTime}
+                setIsSignIn={setIsSignIn}
+              />
+            </Grid.Col>
+          </Grid>
+        </Container>
         {/* <Grid>
           <Grid.Col lg={9} pl="xl"> */}
-        <CarouselForModalOfPackages vendorPackages={vendorPackages} />
+        {/* <CarouselForModalOfPackages
+          vendorPackages={vendorPackages}
+          contactPhone={contactPhone}
+          setContactPhone={setContactPhone}
+          contactEmail={contactEmail}
+          setContactEmail={setContactEmail}
+          eventType={eventType}
+          setEventType={setEventType}
+          date={date}
+          setDate={setDate}
+          time={time}
+          setTime={setTime}
+          setIsSignIn={setIsSignIn}
+          setIsSignUp={setIsSignUp}
+          idOfSpecificVendorPackage={idOfSpecificVendorPackage}
+        /> */}
         {/* </Grid.Col>
          
         </Grid> */}

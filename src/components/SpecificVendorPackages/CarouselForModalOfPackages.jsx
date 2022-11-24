@@ -2,9 +2,27 @@ import { Carousel } from "@mantine/carousel";
 import { Grid, Text } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons";
 import React, { Children, useRef } from "react";
+import BookVenueSideColumnsForVendor from "../BookVenueSideColums/BookVenueSideColumnsForVendor";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import SpecificPackageDetails from "./SpecificPackageDetails";
-const CarouselForModalOfPackages = ({ vendorPackages }) => {
+const CarouselForModalOfPackages = ({
+  vendorPackages,
+  contactPhone,
+  setContactPhone,
+  contactEmail,
+  setContactEmail,
+  eventType,
+  setEventType,
+  date,
+  setDate,
+  time,
+  setTime,
+  isSignIn,
+  setOpen,
+  setIsSignIn,
+  setIsSignUp,
+  idOfSpecificVendorPackage,
+}) => {
   let vendorPackages2 = vendorPackages ? vendorPackages : [{}];
   const slides = vendorPackages2.map((vendorPackage, index) => (
     <Carousel.Slide key={index}>
@@ -33,7 +51,24 @@ const CarouselForModalOfPackages = ({ vendorPackages }) => {
         </Carousel>
       </Grid.Col>
       <Grid.Col lg={3} pl="xl">
-        <BookVenueSideColums />
+        <BookVenueSideColumnsForVendor
+          onClickFunction={() => {
+            console.log("onClickFunction111");
+            setOpen(true);
+          }}
+          contactPhone={contactPhone}
+          setContactPhone={setContactPhone}
+          contactEmail={contactEmail}
+          setContactEmail={setContactEmail}
+          eventType={eventType}
+          setEventType={setEventType}
+          date={date}
+          setDate={setDate}
+          time={time}
+          setTime={setTime}
+          isSignIn={isSignIn}
+          setIsSignIn={setIsSignIn}
+        />
       </Grid.Col>
     </Grid>
   );

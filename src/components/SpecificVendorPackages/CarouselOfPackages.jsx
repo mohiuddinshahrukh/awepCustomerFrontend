@@ -3,7 +3,14 @@ import { Text } from "@mantine/core";
 import React from "react";
 import SpecificVendorPackageCard from "./SpecificVendorPackagesCard";
 
-const CarouselOfPackages = ({ open, setOpen, packages, targetRef }) => {
+const CarouselOfPackages = ({
+  open,
+  setOpen,
+  packages,
+  targetRef,
+  idOfSpecificVendorPackage,
+  setIdOfSpecificVendorPackage,
+}) => {
   let packagesArray = packages ? packages : [{}];
   const slides = packagesArray.map((vendorPackage, index) => (
     <Carousel.Slide key={index}>
@@ -11,6 +18,9 @@ const CarouselOfPackages = ({ open, setOpen, packages, targetRef }) => {
         open={open}
         setOpen={setOpen}
         vendorPackage={vendorPackage}
+        setIdOfSpecificVendorPackage={setIdOfSpecificVendorPackage}
+
+
       />
     </Carousel.Slide>
   ));

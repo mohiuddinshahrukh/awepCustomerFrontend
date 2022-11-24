@@ -12,7 +12,6 @@ import {
   Title,
   Button,
   TextInput,
-  NativeSelect,
   LoadingOverlay,
   Stepper,
   Checkbox,
@@ -26,32 +25,21 @@ import {
   Divider,
   createStyles,
   RingProgress,
-  ActionIcon,
   useMantineTheme,
-  NumberInput,
   Stack,
   Badge,
 } from "@mantine/core";
 import { Modal } from "@mantine/core";
 import moment from "moment";
 import dayjs from "dayjs";
-
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-
 import { DatePicker } from "@mantine/dates";
-
-// import StripePromise from "../paymentGateways/StripePromise";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { useMediaQuery } from "@mantine/hooks";
-// import VenueBookingReview from "./VenueBookingReview";
 import Congrats from "./Congrats.png";
 import { useScrollIntoView } from "@mantine/hooks";
-// import ThemesForSpecificVenue from "./ThemesForBooking";
-// import { SentimentDissatisfiedOutlined } from "@material-ui/icons";
-// import BookingReviewInvoice from "../InvoiceGenerator/BookingReviewInvoice";
 import { socket } from "../Socket/Socket";
-// import MenuOfSpecificVenueForBooking from "./MenuOfSpecificVenueForBooking";
 import {
   IconArrowDown,
   IconArrowLeft,
@@ -102,7 +90,6 @@ const useStyles = createStyles((theme) => ({
   title: {
     lineHeight: 1,
     textAlign: "center",
-    // marginTop: theme.spacing.xl,
   },
 
   description: {
@@ -128,7 +115,6 @@ const NewBookingFile = () => {
   console.log("MY PARAMS: ", params);
   const theme = useMantineTheme();
 
-  // setCurrentLocation("Add Venue Booking");
   const { scrollIntoView, targetRef } = useScrollIntoView({ offset: 60 });
   const { classes } = useStyles();
   const matches1200 = useMediaQuery("(min-width: 1200px)");
@@ -181,7 +167,7 @@ const NewBookingFile = () => {
   const [value2, setValue2] = useState("");
   const [value1, onChange] = useState(new Date());
   const [time, setTime] = useState("");
-  const [noOfGuests, setNoOfGuests] = useState(0);
+  const [noOfGuests, setNoOfGuests] = useState("");
   const [filterSubVenues, setFilterSubVenues] = useState([]);
   const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState("");
   const [chargesError, setChargesError] = useState("");
@@ -390,7 +376,7 @@ const NewBookingFile = () => {
   };
 
   const form1 = useForm({
-    validateInputOnChange: true,
+    // validateInputOnChange: true,
     initialValues: {
       // venue: "",
       date: new Date(params.date),
@@ -402,11 +388,10 @@ const NewBookingFile = () => {
     validate: {
       noOfGuests: (value) =>
         value > 49 ? null : "No of guests Must be At Least 50",
-      // venue: (value) => {
-      //   if (!value) {
-      //     return "Venue is required";
-      //   }
-      // },
+      date: (value) => (value === null ? "Please Select a Date" : null),
+      time: (value) => (value === "" ? "Please Select a Time" : null),
+      eventType: (value) =>
+        value === "" ? "Please Select an Event Type" : null,
     },
   });
   let userData = JSON.parse(localStorage.getItem("userData"));
@@ -545,20 +530,25 @@ const NewBookingFile = () => {
 
   useEffect(() => {
     if (
-      venueCity === "" ||
-      eventType === "" ||
-      time === "" ||
-      value1 === "" ||
-      noOfGuests === "" ||
-      noOfGuests === 0
+      form1.values.eventType === "" ||
+      form1.values.time === "" ||
+      form1.values.date === "" ||
+      form1.values.noOfGuests < 50
     ) {
+      console.log("@TEST in if", form1.values);
       setHideSelectButton(true);
       return;
     } else {
+      console.log("we are here in use effect of if");
       setHideSelectButton(false);
       return;
     }
-  }, [venueCity, eventType, time, value1, noOfGuests]);
+  }, [
+    form1.values.eventType,
+    form1.values.date,
+    form1.values.time,
+    form1.values.noOfGuests,
+  ]);
   useEffect(() => {
     if (
       venueDetails?.subVenues?.filter((e) => e._id === idOfSelectedSubVenue)[0]
@@ -1118,12 +1108,12 @@ const NewBookingFile = () => {
                     onClick={() => {
                       setEventType("");
                       form1.setFieldValue("eventType", "");
-                      form1.setFieldValue("date", "");
+                      form1.setFieldValue("date", null);
                       form1.setFieldValue("time", "");
-                      form1.setFieldValue("noOfGuests", 50);
+                      form1.setFieldValue("noOfGuests", "");
 
                       setTime("");
-                      setNoOfGuests(0);
+                      setNoOfGuests("");
 
                       setIdOfSelectedSubVenue("");
                       setSelectedVenueServices([]);
@@ -1137,6 +1127,9 @@ const NewBookingFile = () => {
                       setHidden(true);
                       setChecked(false);
                       onChange("");
+                      setError("");
+                      setDisabled(false);
+
                       // form1.reset();
                     }}
                   >
@@ -1150,7 +1143,6 @@ const NewBookingFile = () => {
                   <Grid justify="space-around" py="md">
                     <Grid.Col lg={6}>
                       <Select
-                        required
                         size="md"
                         disabled={idOfSelectedSubVenue !== ""}
                         label="Event Type"
@@ -1193,7 +1185,6 @@ const NewBookingFile = () => {
                       <DatePicker
                         inputFormat="YYYY-MM-DD"
                         size="md"
-                        required
                         disabled={idOfSelectedSubVenue !== ""}
                         minDate={dayjs(new Date())
                           .startOf("month")
@@ -1219,7 +1210,6 @@ const NewBookingFile = () => {
                     </Grid.Col>
                     <Grid.Col lg={6}>
                       <Select
-                        required
                         size="md"
                         label="Event Time"
                         disabled={idOfSelectedSubVenue !== ""}
@@ -1255,13 +1245,12 @@ const NewBookingFile = () => {
                         type="number"
                         size="md"
                         min={49}
-                        required
                         // disabled={idOfSelectedSubVenue !== ""}
                         value={noOfGuests}
                         label="Number of Guests"
                         placeholder="Enter Number of Guests"
                         onInput={(e) => {
-                          setNoOfGuests(e.target.value);
+                          setNoOfGuests(e.currentTarget.value);
                           setIdOfSelectedSubVenue("");
                           setMenuPrice(0);
                           setChargesError("");
@@ -1271,7 +1260,7 @@ const NewBookingFile = () => {
                           setTotalPrice(0);
                         }}
                         onChange={(e) => {
-                          setNoOfGuests(e.target.value);
+                          setNoOfGuests(e.currentTarget.value);
                         }}
                         {...form1.getInputProps("noOfGuests")}
                       />
@@ -1287,7 +1276,7 @@ const NewBookingFile = () => {
                       idOfSelectedSubVenue={idOfSelectedSubVenue}
                       refreshStates={refreshStates}
                       bookedDateAndTime={bookedDateAndTime}
-                      noOfGuests={noOfGuests}
+                      noOfGuests={form1.values.noOfGuests}
                       setHidden={setHidden}
                       error={error}
                       setError={setError}
@@ -1696,7 +1685,7 @@ const NewBookingFile = () => {
                   </Group>
                   {idOfSelectedTheme === "" && (
                     <Text size="xl" color="red" weight="bold">
-                      Please Select A Menu{" "}
+                      Please Select A Theme{" "}
                     </Text>
                   )}
                 </Paper>

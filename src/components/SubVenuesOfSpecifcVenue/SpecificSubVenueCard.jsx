@@ -1,5 +1,5 @@
 import React from "react";
-import { createStyles, Image, Card, Text, Group, Button } from "@mantine/core";
+import { createStyles, Image, Card, Text, Group } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { IconStar } from "@tabler/icons";
 import CustomButton from "../CustomButton/CustomButton";
@@ -34,7 +34,12 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   },
 }));
 
-const SpecificSubVenue = ({ open, setOpen, subVenue }) => {
+const SpecificSubVenue = ({
+  open,
+  setOpen,
+  subVenue,
+  setIdOfSpecificSubVenue,
+}) => {
   let subVenueData = subVenue ? subVenue : {};
   const images = subVenueData?.images ? subVenueData?.images : [""];
   const { classes } = useStyles();
@@ -61,7 +66,10 @@ const SpecificSubVenue = ({ open, setOpen, subVenue }) => {
         </Carousel>
       </Card.Section>
       <div
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setIdOfSpecificSubVenue(subVenueData?._id);
+          setOpen(true);
+        }}
         style={{
           cursor: "pointer",
         }}

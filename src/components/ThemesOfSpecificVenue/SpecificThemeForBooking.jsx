@@ -49,25 +49,24 @@ const SpecificThemeForBooking = ({
   const { classes } = useStyles();
 
   return (
-    <Paper
-      withBorder
-      shadow="md"
-      onClick={() => {
-        setIdOfSelectedTheme(theme?._id);
-        setSelectedTheme(theme);
-        console.log("theme clicked", theme);
-      }}
-      style={{
-        border: idOfSelectedTheme === theme?._id ? "5px solid #E60084" : "none",
-      }}
-    >
+    <Paper>
       <Card
+        shadow={idOfSelectedTheme === theme.id ? "md" : "sm"}
+        onClick={() => {
+          setIdOfSelectedTheme(theme?._id);
+          setSelectedTheme(theme);
+          console.log("theme clicked", theme);
+        }}
+        style={{
+          border:
+            idOfSelectedTheme === theme?._id ? "5px solid #E60084" : "none",
+          minHeight: "400px",
+        }}
         radius="md"
         withBorder
         p="xl"
-        style={{
-          minHeight: "400px",
-        }}
+        // style={{
+        // }}
       >
         <Card.Section>
           <Image src={theme.coverImage} height={220} />

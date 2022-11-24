@@ -65,6 +65,7 @@ const SpecificVenueDetails = () => {
   const [guests, setGuests] = useState();
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [idOfSpecificSubVenue, setIdOfSpecificSubVenue] = useState("");
   console.log("venueDetails are", venueDetails);
   const [open, setOpen] = useState(false);
   const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.id}`;
@@ -128,6 +129,7 @@ const SpecificVenueDetails = () => {
         venueId={params.id}
         setIsSignIn={setIsSignIn}
         setIsSignUp={setIsSignUp}
+        idOfSpecificSubVenue={idOfSpecificSubVenue}
       />
       <Modal opened={isSignIn} onClose={() => setIsSignIn(false)} fullScreen>
         <SignIn
@@ -306,6 +308,8 @@ const SpecificVenueDetails = () => {
                 <CarouselOfSubVenues
                   targetRef={scrollRef3.targetRef}
                   setOpen={setOpen}
+                  setIdOfSpecificSubVenue={setIdOfSpecificSubVenue}
+                  idOfSpecificSubVenue={idOfSpecificSubVenue}
                   subVenues={
                     venueDetails?.subVenues ? venueDetails?.subVenues : [{}]
                   }

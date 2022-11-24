@@ -13,6 +13,7 @@ import {
   Modal,
   Button,
   Title,
+  Paper,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
 import {
@@ -27,6 +28,10 @@ import SpecificSubVenueDetails from "../SubVenuesOfSpecifcVenue/SpecificSubVenue
 const useStyles = createStyles((theme) => ({
   th: {
     padding: "0 !important",
+
+    "&:first-child": {
+      width: "100px",
+    },
   },
 
   control: {
@@ -118,6 +123,7 @@ const SubVenuesForBooking = ({
   time,
   form1,
 }) => {
+  console.log("number of guests", noOfGuests);
   const [viewModal, setViewModal] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -135,17 +141,6 @@ const SubVenuesForBooking = ({
     );
   };
 
-  const handleSearchChange = (event) => {
-    const { value } = event.currentTarget;
-    setSearch(value);
-    setSortedData(
-      sortData(subvenueDetails, {
-        sortBy,
-        reversed: reverseSortDirection,
-        search: value,
-      })
-    );
-  };
   useEffect(() => {
     filtering();
   }, [noOfGuests, bookedDateAndTime, time]);
@@ -220,7 +215,13 @@ const SubVenuesForBooking = ({
           </ActionIcon>
           <Button
             size="xs"
-            color="dark"
+            hidden={hideSelectButton}
+            style={{
+              backgroundColor:
+                row._id === idOfSelectedSubVenue ? "#E60084" : "white",
+              color: row._id === idOfSelectedSubVenue ? "white" : "#B8258B",
+              border: "1px solid #B8258B",
+            }}
             // hidden={hideSelectButton}
             disabled={row._id === idOfSelectedSubVenue}
             onClick={() => {
@@ -229,7 +230,6 @@ const SubVenuesForBooking = ({
               setHidden(true);
               setError("");
               setDisabled(false);
-
               filteringAfterSelection(row._id);
 
               checkForCharges(
@@ -248,20 +248,6 @@ const SubVenuesForBooking = ({
 
   return (
     <ScrollArea>
-      <Modal
-        opened={viewModal}
-        onClose={() => setViewModal(false)}
-        title="Introduce yourself!"
-      >
-        <SpecificSubVenueDetails subVenue={subvenueDetails[index]} />
-      </Modal>
-      {/* <TextInput
-        placeholder="Search by any field"
-        mb="md"
-        icon={<IconSearch size={14} stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
-      /> */}
       {error === "" ? (
         <Title py="xl" order={3} align="center">
           Available Sub Venues
@@ -271,76 +257,66 @@ const SubVenuesForBooking = ({
           Please Select A Venue To Proceed
         </Text>
       )}
-      <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        sx={{ tableLayout: "fixed", minWidth: 700 }}
-      >
-        <thead>
-          <tr>
-            <Th
-              sorted={sortBy === "ID"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("ID")}
-            >
-              ID
-            </Th>
-            <th
+      <Paper withBorder shadow="xl" radius="md">
+        <Modal
+          opened={viewModal}
+          size="50%"
+          onClose={() => setViewModal(false)}
+        >
+          <SpecificSubVenueDetails subVenue={subvenueDetails[index]} />
+        </Modal>
 
-            //   sorted={sortBy === "email"}
-            //   reversed={reverseSortDirection}
-            //   onSort={() => setSorting("email")}
-            >
-              Image
-            </th>
-            <Th
-              sorted={sortBy === "subVenueName"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("subVenueName")}
-            >
-              Name
-            </Th>
-            <Th
-              sorted={sortBy === "subVenueMinCapacity"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("subVenueMinCapacity")}
-            >
-              Min Capacity
-            </Th>
-            <Th
-              sorted={sortBy === "company"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("company")}
-            >
-              Max Capacity
-            </Th>
-            <Th
-              sorted={sortBy === "company"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("company")}
-            >
-              Type
-            </Th>
-            <Th
-              sorted={sortBy === "subVenueType"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("subVenueType")}
-            >
-              Actions
-            </Th>
-          </tr>
-        </thead>
-        <tbody>{rows?.length > 0 ? rows : null}</tbody>
-      </Table>
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          sx={{ tableLayout: "fixed", minWidth: 700 }}
+        >
+          <thead>
+            <tr>
+              <Th
+                sorted={sortBy === "ID"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("ID")}
+              >
+                ID
+              </Th>
+              <th style={{ width: "10%" }}>Image</th>
+              <Th
+                sorted={sortBy === "subVenueName"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("subVenueName")}
+              >
+                Name
+              </Th>
+              <Th
+                sorted={sortBy === "subVenueMinCapacity"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("subVenueMinCapacity")}
+              >
+                Min Capacity
+              </Th>
+              <Th
+                sorted={sortBy === "company"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("company")}
+              >
+                Max Capacity
+              </Th>
+              <Th
+                sorted={sortBy === "company"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("company")}
+              >
+                Type
+              </Th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{rows?.length > 0 ? rows : null}</tbody>
+        </Table>
+      </Paper>
     </ScrollArea>
   );
 };
 
 export default SubVenuesForBooking;
-// <tr>
-//               <td colSpan={Object.keys(subvenueDetails[0]).length}>
-//                 <Text weight={500} align="center">
-//                   Nothing found
-//                 </Text>
-//               </td>
-//             </tr>

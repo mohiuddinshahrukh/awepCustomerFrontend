@@ -3,11 +3,24 @@ import { Text } from "@mantine/core";
 import React from "react";
 import SpecificSubVenue from "./SpecificSubVenueCard";
 
-const CarouselOfSubVenues = ({ open, setOpen, subVenues, targetRef }) => {
+const CarouselOfSubVenues = ({
+  open,
+  setOpen,
+  subVenues,
+  targetRef,
+  setIdOfSpecificSubVenue,
+  idOfSpecificSubVenue,
+}) => {
   let subVenuesArray = subVenues ? subVenues : [{}];
   const slides = subVenuesArray.map((subVenue, index) => (
     <Carousel.Slide key={index}>
-      <SpecificSubVenue open={open} setOpen={setOpen} subVenue={subVenue} />
+      <SpecificSubVenue
+        open={open}
+        setOpen={setOpen}
+        subVenue={subVenue}
+        setIdOfSpecificSubVenue={setIdOfSpecificSubVenue}
+        idOfSpecificSubVenue={idOfSpecificSubVenue}
+      />
     </Carousel.Slide>
   ));
   return (

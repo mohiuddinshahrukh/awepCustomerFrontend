@@ -3,7 +3,6 @@ import {
   Grid,
   Group,
   LoadingOverlay,
-  Paper,
   TextInput,
   MantineProvider,
   Text,
@@ -11,7 +10,6 @@ import {
   PasswordInput,
   NumberInput,
   Container,
-  Anchor,
 } from "@mantine/core";
 import jwt_decode from "jwt-decode";
 import { Box } from "@mantine/core";
@@ -26,7 +24,6 @@ import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import FooterComponenet from "./FooterComponenet";
 import SignUpSignInCarousel from "./SignUpSignInCarousel";
 import {
   IconAt,

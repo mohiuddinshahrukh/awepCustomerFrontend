@@ -21,6 +21,8 @@ const CarouselForModalOfSubVenues = ({
   setSubVenueDetails,
   venueId,
   setIsSignIn,
+
+  idOfSpecificSubVenue,
 }) => {
   const [subVenueData, setSubVenueData] = React.useState({});
   const [index, setIndex] = React.useState(0);

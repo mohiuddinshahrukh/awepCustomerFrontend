@@ -4,13 +4,30 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./features/user";
+import tokenReducer from "./features/authToken";
+import settingsReducer from "./features/settings";
+import navbarReducer from "./features/navbarState";
+// STORE
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    token: tokenReducer,
+    settings: settingsReducer,
+    navbarState: navbarReducer,
+  },
+});
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -1,24 +1,28 @@
 // import logo from "./logo.svg";
 import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
+import axios from "axios";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
+import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
+import CustomerBookings from "./components/navigation/sideNavbar/CustomerBookings";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import NewBookingFile from "./components/NewBookingFile/NewBookingFile";
 import SpecificVendorBusinessDetails from "./components/SpecificVendorBusinessDetails/SpecificVendorBusinessDetails";
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
+import SignIn from "./components/userProfiling/SignIn";
+import SignUp from "./components/userProfiling/SignUp";
 
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
-
   return (
     <ColorSchemeProvider
       colorScheme={colorScheme}
@@ -32,6 +36,8 @@ function App() {
         <Paper className="App">
           <TopNavbar />
           <Routes>
+            <Route path="/signIn" element={<SignIn />} />
+            <Route path="/signUp" element={<SignUp />} />
             <Route
               path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
               element={<NewBookingFile />}
@@ -52,6 +58,9 @@ function App() {
               path="/specificVenue:id"
               element={<SpecificVenueDetails />}
             />
+            <Route path="/shahrukhTest" element={<ShahrukhsDevTest />}>
+              <Route path="bookings" element={<CustomerBookings />} />
+            </Route>
             {/* <Route
                 path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
                 element={<NewBookingFile />}

@@ -56,7 +56,7 @@ const pictureBackground = [
   //
 ];
 // NAVIGATION
-const SignIn = ({ email, password }) => {
+const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
   // DISPATCH
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -214,6 +214,7 @@ const SignIn = ({ email, password }) => {
                 color: "green",
                 message: "Login Successful, redirecting you to dashboard!",
               });
+
               setVisible(false);
               dispatch(
                 login({
@@ -240,8 +241,11 @@ const SignIn = ({ email, password }) => {
                 "userData",
                 JSON.stringify(response.data.data)
               );
-
-              navigate("/");
+              if (closeModal) {
+                setIsSignIn(false);
+              } else {
+                navigate("/");
+              }
             } else if (
               response.data.status === "success" &&
               response.data.data.userType !== "superAdmin"
@@ -258,7 +262,7 @@ const SignIn = ({ email, password }) => {
               });
               form.setFieldError(
                 "email",
-                `You cannot sign in as super admin with this email`
+                `You cannot sign in as customer with this email`
               );
 
               setVisible(false);
@@ -1120,7 +1124,12 @@ const SignIn = ({ email, password }) => {
                           setModalPhoneNumber("");
                           setUserType("");
                           setVerificationCode("");
-                          navigate("/signup");
+                          if (closeModal) {
+                            setIsSignUp(true);
+                            setIsSignIn(false);
+                          } else {
+                            navigate("/signup");
+                          }
                         }}
                         size={18}
                       >

@@ -40,12 +40,19 @@ import {
 
 // NAVIGATION
 
-const SignUp = ({ setHookEmail, setHookPassword }) => {
+const SignUp = ({
+  setHookEmail,
+  setHookPassword,
+  closeModal,
+  setIsSignUp,
+  setIsSignIn,
+}) => {
   // HOOKS
   let navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [userType, setUserType] = useState("");
+
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [blockedEmailField, setBlockEmailField] = useState(false);
   const [blockedUserNameField, setBlockUserNameField] = useState(false);
@@ -113,7 +120,11 @@ const SignUp = ({ setHookEmail, setHookPassword }) => {
           });
           setHookEmail(values.email);
           setHookPassword(values.password);
-          navigate("/signin");
+          if (closeModal) {
+            setIsSignUp(false);
+          } else {
+            navigate("/signin");
+          }
           // setInterval(() => {
           // }, 3000);
         } else if (response.data.status === "error") {
@@ -496,7 +507,12 @@ const SignUp = ({ setHookEmail, setHookPassword }) => {
                       <Text
                         color="dimmed"
                         onClick={() => {
-                          navigate("/signin");
+                          if (closeModal) {
+                            setIsSignIn(true);
+                            setIsSignUp(false);
+                          } else {
+                            navigate("/signin");
+                          }
                         }}
                         size={18}
                       >

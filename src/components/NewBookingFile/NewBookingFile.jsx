@@ -173,7 +173,6 @@ const NewBookingFile = () => {
   const [confirmBooking, setConfirmBooking] = useState(false);
   const [bookingId, setBookingId] = useState("");
 
-  const [allSubVenues, setAllSubVenues] = useState([]);
   const [venueDetails, setVenueDetails] = useState({});
   console.log("VENUE DETAILS: ", venueDetails);
   const [customer, setCustomer] = useState("");
@@ -377,8 +376,6 @@ const NewBookingFile = () => {
 
   console.log("no of noOfGuests", noOfGuests);
 
-  console.log(allSubVenues);
-
   const refreshStates = () => {
     setTotalPrice(0);
     setSelectedVenueServices([]);
@@ -412,9 +409,16 @@ const NewBookingFile = () => {
       // },
     },
   });
+  let userData = JSON.parse(localStorage.getItem("userData"));
+  let customerEmail = userData?.email;
+  let customerPhone = userData?.phone;
   const form = useForm({
     validateInputOnChange: ["phone", "email"],
-    initialValues: { phone: "", email: "", description: "" },
+    initialValues: {
+      phone: customerPhone,
+      email: customerEmail,
+      description: "",
+    },
 
     validate: {
       phone: (value) =>
@@ -470,21 +474,6 @@ const NewBookingFile = () => {
   };
 
   useEffect(() => {
-    const url1 =
-      "https://a-wep.herokuapp.com/superAdmin/getAllSubVenuesForSuperAdminBooking";
-    if (refresh) {
-      axios.get(url1).then((res) => {
-        console.log(res.data);
-        if (res.data.status === "success") {
-          console.log("we are here in api call");
-          setAllSubVenues(res.data.data);
-          setRefresh(false);
-          setVisible(false);
-        } else {
-          // alert("Error");
-        }
-      });
-    }
     const url2 = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.venueId}`;
     if (refresh) {
       axios.get(url2).then((res) => {
@@ -1806,8 +1795,10 @@ const NewBookingFile = () => {
                         placeholder="Describe Your Event"
                         value={description}
                         required
-                        minRows={10}
+                        minRows={3}
+                        maxRows={10}
                         maxLength={1000}
+                        autosize
                         // disabled={disabled}
                         label="Booking Description"
                         onChange={(e) => setDescription(e.target.value)}

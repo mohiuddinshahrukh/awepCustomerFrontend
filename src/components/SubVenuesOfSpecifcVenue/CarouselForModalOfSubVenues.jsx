@@ -20,6 +20,7 @@ const CarouselForModalOfSubVenues = ({
   subVenuesArray,
   setSubVenueDetails,
   venueId,
+  setIsSignIn,
 }) => {
   const [subVenueData, setSubVenueData] = React.useState({});
   const [index, setIndex] = React.useState(0);
@@ -77,6 +78,7 @@ const CarouselForModalOfSubVenues = ({
           setGuests={setGuests}
           subVenue={subVenuesArray2[index]}
           venueId={venueId}
+          setIsSignIn={setIsSignIn}
         />
       </Grid.Col>
     </Grid>

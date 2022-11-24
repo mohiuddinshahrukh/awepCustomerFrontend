@@ -121,10 +121,8 @@ const SubVenuesForBooking = ({
   const [viewModal, setViewModal] = useState(false);
   const [index, setIndex] = useState(0);
 
-  console.log("SUBVENUE DETAILS", subvenueDetails);
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(subvenueDetails);
-  console.log("@SORTED DATA: ", sortData);
   const [sortBy, setSortBy] = useState(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 

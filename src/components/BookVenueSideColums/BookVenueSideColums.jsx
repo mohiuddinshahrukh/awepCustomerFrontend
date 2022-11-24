@@ -55,11 +55,14 @@ const BookVenueSideColums = ({
   guests,
   setGuests,
   venueId,
+  isSignIn,
+  setIsSignIn,
 }) => {
   const navigate = useNavigate();
-
+  console.log("AAAA", setIsSignIn);
+  // const signIn = setIsSignIn;
   const { classes } = useStyles();
-
+  // console.log(signIn);
   // const form = useForm({
   //   // validateInputOnChange: true,
   //   initialValues: {
@@ -100,14 +103,23 @@ const BookVenueSideColums = ({
     if (Object.keys(errorValues).length > 0) {
       setError(errorValues);
     } else {
-      if (onClickFunction !== undefined) {
-        console.log("onClickFunction VENUE");
-        onClickFunction();
-      } else {
+      if (localStorage.getItem("userToken") !== null) {
         console.log("onClickFunction SUBVENUE");
+
         navigate(
           `/venueBooking/${eventType}/${date}/${time}/${guests}/${venueId}`
         );
+      } else {
+        console.log("onClickFunction if not signed in");
+
+        setIsSignIn(true);
+
+        showNotification({
+          title: "Please Login First",
+          message: "You need to login first to book a venue",
+          color: "red",
+          icon: <IconMail />,
+        });
       }
     }
   };

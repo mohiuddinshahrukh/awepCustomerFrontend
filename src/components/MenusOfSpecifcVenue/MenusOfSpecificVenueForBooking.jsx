@@ -26,6 +26,7 @@ const MenusOfSpecificVenueForBooking = ({
       >
         {venueMenu?.map((menu, index) => (
           <SpecificMenuForBooking
+            key={index}
             menu={menu}
             setIdOfSelectedMenu={setIdOfSelectedMenu}
             idOfSelectedMenu={idOfSelectedMenu}

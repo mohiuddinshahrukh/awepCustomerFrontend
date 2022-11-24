@@ -24,13 +24,16 @@ const ThemesOfSpecificVenueForBooking = ({
         ]}
       >
         {themesArray?.map((theme, index) => (
+          // <div key={index}>
           <SpecificThemeForBooking
+            key={index}
             theme={theme}
             setIdOfSelectedTheme={setIdOfSelectedTheme}
             idOfSelectedTheme={idOfSelectedTheme}
             setSelectedTheme={setSelectedTheme}
             selectedTheme={selectedTheme}
           />
+          // </div>
         ))}
       </SimpleGrid>
     </div>

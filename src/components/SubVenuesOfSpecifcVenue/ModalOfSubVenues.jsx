@@ -21,6 +21,8 @@ const ModalOfSubVenues = ({
   guests,
   setGuests,
   venueId,
+  setIsSignIn
+
 }) => {
   const [subVenueDetails, setSubVenueDetails] = React.useState({});
 
@@ -89,6 +91,8 @@ const ModalOfSubVenues = ({
           setSubVenueDetails={setSubVenueDetails}
           subVenueDetails={subVenueDetails}
           venueId={venueId}
+          setIsSignIn={setIsSignIn}
+
         />
         {/* </Grid.Col>
          

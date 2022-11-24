@@ -6,6 +6,7 @@ import {
   Divider,
   Grid,
   Group,
+  Modal,
   Paper,
   Tabs,
   Text,
@@ -29,6 +30,8 @@ import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import { useParams } from "react-router-dom";
 import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
 import { IconMessageCircle, IconSettings } from "@tabler/icons";
+import SignIn from "../userProfiling/SignIn";
+import SignUp from "../userProfiling/SignUp";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -60,6 +63,8 @@ const SpecificVenueDetails = () => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState();
+  const [isSignIn, setIsSignIn] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   console.log("venueDetails are", venueDetails);
   const [open, setOpen] = useState(false);
   const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.id}`;
@@ -103,6 +108,42 @@ const SpecificVenueDetails = () => {
 
   return (
     <Container size="xl" my="lg">
+      {console.log("BBBBBBBBBBBBB", isSignIn)}
+      <ModalOfSubVenues
+        contactPhone={contactPhone}
+        setContactPhone={setContactPhone}
+        contactEmail={contactEmail}
+        setContactEmail={setContactEmail}
+        eventType={eventType}
+        setEventType={setEventType}
+        date={date}
+        setDate={setDate}
+        time={time}
+        setTime={setTime}
+        guests={guests}
+        setGuests={setGuests}
+        open={open}
+        setOpen={setOpen}
+        subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
+        venueId={params.id}
+        setIsSignIn={setIsSignIn}
+        setIsSignUp={setIsSignUp}
+      />
+      <Modal opened={isSignIn} onClose={() => setIsSignIn(false)} fullScreen>
+        <SignIn
+          closeModal={true}
+          setIsSignIn={setIsSignIn}
+          setIsSignUp={setIsSignUp}
+        />
+      </Modal>
+      <Modal opened={isSignUp} onClose={() => setIsSignUp(false)} fullScreen>
+        <SignUp
+          closeModal={true}
+          setIsSignUp={setIsSignUp}
+          setIsSignIn={setIsSignIn}
+        />
+      </Modal>
+
       <BreadCrumbs />
       <Title pt="md" order={3}>
         {venueDetails?.venueName}
@@ -333,25 +374,6 @@ const SpecificVenueDetails = () => {
               />
             </Tabs.Panel>
           </Tabs>
-
-          <ModalOfSubVenues
-            contactPhone={contactPhone}
-            setContactPhone={setContactPhone}
-            contactEmail={contactEmail}
-            setContactEmail={setContactEmail}
-            eventType={eventType}
-            setEventType={setEventType}
-            date={date}
-            setDate={setDate}
-            time={time}
-            setTime={setTime}
-            guests={guests}
-            setGuests={setGuests}
-            open={open}
-            setOpen={setOpen}
-            subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
-            venueId={params.id}
-          />
         </Grid.Col>
         <Grid.Col lg={3} pl="xl">
           <BookVenueSideColums
@@ -372,6 +394,8 @@ const SpecificVenueDetails = () => {
             guests={guests}
             setGuests={setGuests}
             venueId={params.id}
+            isSignIn={isSignIn}
+            setIsSignIn={setIsSignIn}
           />
         </Grid.Col>
       </Grid>

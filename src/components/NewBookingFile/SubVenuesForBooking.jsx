@@ -11,6 +11,8 @@ import {
   Avatar,
   ActionIcon,
   Modal,
+  Button,
+  Title,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
 import {
@@ -96,98 +98,29 @@ function sortData(data, payload) {
 }
 // DATA
 
-const venueDetails = [
-  {
-    name: "Athena Weissnat",
-    company: "Little - Rippin",
-    email: "Elouise.Prohaska@yahoo.com",
-  },
-  {
-    name: "Deangelo Runolfsson",
-    company: "Greenfelder - Krajcik",
-    email: "Kadin_Trantow87@yahoo.com",
-  },
-  {
-    name: "Danny Carter",
-    company: "Kohler and Sons",
-    email: "Marina3@hotmail.com",
-  },
-  {
-    name: "Trace Tremblay PhD",
-    company: "Crona, Aufderhar and Senger",
-    email: "Antonina.Pouros@yahoo.com",
-  },
-  {
-    name: "Derek Dibbert",
-    company: "Gottlieb LLC",
-    email: "Abagail29@hotmail.com",
-  },
-  {
-    name: "Viola Bernhard",
-    company: "Funk, Rohan and Kreiger",
-    email: "Jamie23@hotmail.com",
-  },
-  {
-    name: "Austin Jacobi",
-    company: "Botsford - Corwin",
-    email: "Genesis42@yahoo.com",
-  },
-  {
-    name: "Hershel Mosciski",
-    company: "Okuneva, Farrell and Kilback",
-    email: "Idella.Stehr28@yahoo.com",
-  },
-  {
-    name: "Mylene Ebert",
-    company: "Kirlin and Sons",
-    email: "Hildegard17@hotmail.com",
-  },
-  {
-    name: "Lou Trantow",
-    company: "Parisian - Lemke",
-    email: "Hillard.Barrows1@hotmail.com",
-  },
-  {
-    name: "Dariana Weimann",
-    company: "Schowalter - Donnelly",
-    email: "Colleen80@gmail.com",
-  },
-  {
-    name: "Dr. Christy Herman",
-    company: "VonRueden - Labadie",
-    email: "Lilyan98@gmail.com",
-  },
-  {
-    name: "Katelin Schuster",
-    company: "Jacobson - Smitham",
-    email: "Erich_Brekke76@gmail.com",
-  },
-  {
-    name: "Melyna Macejkovic",
-    company: "Schuster LLC",
-    email: "Kylee4@yahoo.com",
-  },
-  {
-    name: "Pinkie Rice",
-    company: "Wolf, Trantow and Zulauf",
-    email: "Fiona.Kutch@hotmail.com",
-  },
-  {
-    name: "Brain Kreiger",
-    company: "Lueilwitz Group",
-    email: "Rico98@hotmail.com",
-  },
-];
+const SubVenuesForBooking = ({
+  subvenueDetails,
 
-//
-const SubVenuesForBooking = ({ subvenueDetails }) => {
+  setIdOfSelectedSubVenue,
+  idOfSelectedSubVenue,
+  refreshStates,
+  bookedDateAndTime,
+  noOfGuests,
+  setHidden,
+  error,
+  setError,
+  setDisabled,
+  setChargesError,
+  hallCharges,
+  setHallCharges,
+  setNoOfGuests,
+  hideSelectButton,
+  time,
+  form1,
+}) => {
   const [viewModal, setViewModal] = useState(false);
   const [index, setIndex] = useState(0);
-  const data = subvenueDetails.map((subVenue) => ({
-    subVenueName: subVenue.subVenueName,
-    company: "Little - Rippin",
-    email: "",
-  }));
+
   console.log("SUBVENUE DETAILS", subvenueDetails);
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(subvenueDetails);
@@ -215,6 +148,55 @@ const SubVenuesForBooking = ({ subvenueDetails }) => {
       })
     );
   };
+  useEffect(() => {
+    filtering();
+  }, [noOfGuests, bookedDateAndTime, time]);
+
+  const filtering = () => {
+    if (idOfSelectedSubVenue === "") {
+      const filteredSubVenues = subvenueDetails.filter((subVenue) => {
+        if (subVenue.bookedOn) {
+          if (subVenue.bookedOn[bookedDateAndTime]) {
+            return false;
+          }
+        }
+        if (noOfGuests) {
+          return subVenue.subVenueCapacity >= noOfGuests;
+        }
+        return true;
+      });
+
+      return setSortedData(filteredSubVenues);
+    } else if (idOfSelectedSubVenue !== "") {
+      return setSortedData(
+        subvenueDetails.filter(
+          (subVenue) => subVenue._id === idOfSelectedSubVenue
+        )
+      );
+    }
+  };
+  const filteringAfterSelection = (id) => {
+    let filteredSubVenues = subvenueDetails.filter(
+      (subVenue) => subVenue._id === id
+    );
+    setSortedData(filteredSubVenues);
+  };
+
+  const checkForCharges = (minCapacity, charges) => {
+    if (minCapacity > noOfGuests) {
+      setChargesError(
+        "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
+          minCapacity +
+          " or Minimum booking charges will be applied of Rs. " +
+          charges
+      );
+      console.log("Minimum Booking Charges Will Be Applied", charges);
+      setHallCharges(charges);
+    } else {
+      setChargesError("");
+      setHallCharges(0);
+    }
+  };
 
   const rows = sortedData?.map((row, index) => (
     <tr key={index}>
@@ -238,7 +220,29 @@ const SubVenuesForBooking = ({ subvenueDetails }) => {
           >
             <IconEye />
           </ActionIcon>
-          <ActionIcon pl="md"></ActionIcon>
+          <Button
+            size="xs"
+            color="dark"
+            // hidden={hideSelectButton}
+            disabled={row._id === idOfSelectedSubVenue}
+            onClick={() => {
+              // refreshStates();
+              setIdOfSelectedSubVenue(row._id);
+              setHidden(true);
+              setError("");
+              setDisabled(false);
+
+              filteringAfterSelection(row._id);
+
+              checkForCharges(
+                row.subVenueMinCapacity,
+                row.subVenueBookingCharges
+              );
+              // }
+            }}
+          >
+            {row._id !== idOfSelectedSubVenue ? "Select" : "Selected"}
+          </Button>
         </Group>
       </td>
     </tr>
@@ -253,13 +257,22 @@ const SubVenuesForBooking = ({ subvenueDetails }) => {
       >
         <SpecificSubVenueDetails subVenue={subvenueDetails[index]} />
       </Modal>
-      <TextInput
+      {/* <TextInput
         placeholder="Search by any field"
         mb="md"
         icon={<IconSearch size={14} stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
-      />
+      /> */}
+      {error === "" ? (
+        <Title py="xl" order={3} align="center">
+          Available Sub Venues
+        </Title>
+      ) : (
+        <Text py="xl" size="xl" align="center" color="red" weight="bold">
+          Please Select A Venue To Proceed
+        </Text>
+      )}
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"

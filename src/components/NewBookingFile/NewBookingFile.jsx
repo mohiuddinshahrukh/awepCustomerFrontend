@@ -40,8 +40,6 @@ import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 
 import { DatePicker } from "@mantine/dates";
-// import SubVenuesForBooking from "../SubVenuesForBooking/SubVenuesForBooking";
-// import MenuOfSpecificVenue from "../MenuOfSpecificVenue/MenuOfSpecificVenue";
 
 // import StripePromise from "../paymentGateways/StripePromise";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
@@ -67,6 +65,10 @@ import {
   IconX,
 } from "@tabler/icons";
 import SubVenuesForBooking from "./SubVenuesForBooking";
+import MenusOfSpecificVenueForBooking from "../MenusOfSpecifcVenue/MenusOfSpecificVenueForBooking";
+import ThemesOfSpecificVenueForBooking from "../ThemesOfSpecificVenue/ThemesOfSpecificVenueForBooking";
+import BookingReviewInvoice from "../InvoiceGenerator/BookingReviewInvoice";
+import StripePromise from "../paymentGateways/StripePromise";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -169,9 +171,11 @@ const NewBookingFile = () => {
 
   const [stepperDisabled, setStepperDisabled] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
+  const [bookingId, setBookingId] = useState("");
 
   const [allSubVenues, setAllSubVenues] = useState([]);
   const [venueDetails, setVenueDetails] = useState({});
+  console.log("VENUE DETAILS: ", venueDetails);
   const [customer, setCustomer] = useState("");
   const [venue, setVenue] = useState("");
   const [venueCity, setVenueCity] = useState("");
@@ -324,8 +328,8 @@ const NewBookingFile = () => {
         "Remaining 75% Payment is Required 7 Days Before The Event Date",
     },
   ];
-  const items = data.map((item) => (
-    <div className={classes.item} key={item.image}>
+  const items = data?.map((item, index) => (
+    <div className={classes.item} key={index}>
       <Group position="center">
         <RingProgress
           size={100}
@@ -370,9 +374,8 @@ const NewBookingFile = () => {
   //     alert(id);
   //   }
   console.log("_id of subvenue from table", idOfSelectedSubVenue);
-  // console.log("testing date and time", bookedDateAndTime);
 
-  console.log("no of guests", noOfGuests);
+  console.log("no of noOfGuests", noOfGuests);
 
   console.log(allSubVenues);
 
@@ -409,18 +412,11 @@ const NewBookingFile = () => {
       // },
     },
   });
-
   const form = useForm({
-    validateInputOnChange: ["customer", "phone", "email"],
-    initialValues: { customer: "", phone: "", email: "", description: "" },
+    validateInputOnChange: ["phone", "email"],
+    initialValues: { phone: "", email: "", description: "" },
 
     validate: {
-      customer: (value) => {
-        if (value === "") {
-          return "Customer is required";
-        }
-      },
-
       phone: (value) =>
         /^(03)(\d{9})$/.test(value)
           ? null
@@ -437,12 +433,17 @@ const NewBookingFile = () => {
           : "Describe in At least 20 Characters",
     },
   });
-  // const bookedDateAndTime =
-  //   new moment(form1.values.date).format().split("T")[0] + time;
+  const bookedDateAndTime =
+    new moment(form1.values.date).format().split("T")[0] + form1.values.time;
+  console.log("testing date and time", bookedDateAndTime);
 
   const handleSubmit = async (event) => {
-    var { noOfGuests } = event;
+    var { noOfGuests, eventType, time, date } = event;
     setNoOfGuests(noOfGuests);
+    setEventType(eventType);
+    setTime(time);
+    onChange(date);
+
     if (idOfSelectedSubVenue === "") {
       setError("Please Select A Venue To Proceed");
       setDisabled(true);
@@ -453,7 +454,7 @@ const NewBookingFile = () => {
     }
   };
   const handleSubmit1 = async (event) => {
-    var { customer, phone, email, description } = event;
+    var { phone, email, description } = event;
     console.log("phone", phone);
     console.log("email", email);
     console.log("description", description);
@@ -463,7 +464,6 @@ const NewBookingFile = () => {
     setPhone(phone);
     setEmail(email);
     setDescription(description);
-    setCustomer(customer);
 
     nextStep();
     // makeVenueBooking();
@@ -572,13 +572,14 @@ const NewBookingFile = () => {
   }, [venueCity, eventType, time, value1, noOfGuests]);
   useEffect(() => {
     if (
-      allSubVenues.filter((e) => e._id === idOfSelectedSubVenue)[0]
-        ?.subVenueServices.length > 0
+      venueDetails?.subVenues?.filter((e) => e._id === idOfSelectedSubVenue)[0]
+        ?.subVenueServices?.length > 0
     ) {
       if (
-        selectedVenueServices.length ===
-        allSubVenues.filter((e) => e._id === idOfSelectedSubVenue)[0]
-          ?.subVenueServices.length
+        selectedVenueServices?.length ===
+        venueDetails?.subVenues?.filter(
+          (e) => e._id === idOfSelectedSubVenue
+        )[0]?.subVenueServices?.length
       ) {
         setChecked(true);
       } else {
@@ -596,10 +597,7 @@ const NewBookingFile = () => {
     console.log("MAKING THE BOOKING");
     const body = {
       subVenueBookingCharges: hallCharges,
-      city: venueCity,
       subVenueId: idOfSelectedSubVenue,
-      customerId: customer,
-
       bookingDate: moment(value1).format(),
       bookingTime: time,
       selectedVenueTheme: {
@@ -610,6 +608,7 @@ const NewBookingFile = () => {
         price: menuPrice,
         modifiedMenu: selectedMenu,
       },
+
       pointOfContact: {
         email: email,
         phone: phone,
@@ -631,11 +630,12 @@ const NewBookingFile = () => {
 
     const headers = {
       "Content-Type": "application/json",
+      token: localStorage.getItem("userToken"),
     };
     try {
       const response = await axios({
         method: "post",
-        url: "https://a-wep.herokuapp.com/superAdmin/addSubVenueBooking",
+        url: "https://a-wep.herokuapp.com/customer/bookSubVenue",
         data: body,
         headers: headers,
       });
@@ -644,9 +644,9 @@ const NewBookingFile = () => {
 
       if (response.data.status === "error") {
         showNotification({
-          title: `${response.data.message}`,
+          title: `ERROR`,
           color: "red",
-          message: `${response.data.error.message}`,
+          message: `${response.data.error?.message || response.data.error}`,
         });
         console.log("error", response.data.error.message);
         console.log("error", response.data.error);
@@ -659,12 +659,13 @@ const NewBookingFile = () => {
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
         });
-
+        setBookingId(response.data?.data?.trackingId);
         showNotification({
           color: "green",
           title: `Successfully`,
           message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
         });
+        setConfirmBooking(true);
 
         nextStep();
         setVisible(false);
@@ -743,7 +744,7 @@ const NewBookingFile = () => {
           <Stack>
             <Group position="apart">
               <Group position="left">
-                <Text weight={900}>Booking ID: {"12345678910"}</Text>
+                <Text weight={900}>Booking ID: {bookingId}</Text>
               </Group>
               <Badge size="lg">New Booking</Badge>
             </Group>
@@ -761,8 +762,8 @@ const NewBookingFile = () => {
               <Grid>
                 <Grid.Col span={6}>
                   <Text>
-                    {allSubVenues
-                      .filter((e) => e._id === idOfSelectedSubVenue)
+                    {venueDetails?.subVenues
+                      ?.filter((e) => e._id === idOfSelectedSubVenue)
                       .map((e) => e.subVenueName)}
                   </Text>
 
@@ -1120,18 +1121,21 @@ const NewBookingFile = () => {
                   </Text>
                   <Button
                     size="md"
-                    disabled={venueCity === ""}
+                    // disabled={eventType === ""}
                     variant="filled"
                     color="red"
                     // disabled={loading}
                     // leftIcon={<X />}
                     onClick={() => {
-                      setVenueCity("");
-                      setVenue("");
                       setEventType("");
+                      form1.setFieldValue("eventType", "");
+                      form1.setFieldValue("date", "");
+                      form1.setFieldValue("time", "");
+                      form1.setFieldValue("noOfGuests", 50);
+
                       setTime("");
                       setNoOfGuests(0);
-                      // form1.setFieldValue("noOfGuests", "");
+
                       setIdOfSelectedSubVenue("");
                       setSelectedVenueServices([]);
                       setSelectedVenueServiceObject([]);
@@ -1143,8 +1147,8 @@ const NewBookingFile = () => {
                       setHallCharges(0);
                       setHidden(true);
                       setChecked(false);
-                      onChange(new Date());
-                      form1.reset();
+                      onChange("");
+                      // form1.reset();
                     }}
                   >
                     RESET
@@ -1276,15 +1280,9 @@ const NewBookingFile = () => {
 
                           setIdOfSelectedMenu("");
                           setTotalPrice(0);
-
-                          // setValue2([]);
-
-                          //   setValue2([]);
                         }}
                         onChange={(e) => {
                           setNoOfGuests(e.target.value);
-                          // setValue2("");
-                          //   setRetrievedSubVenueServices([]);
                         }}
                         {...form1.getInputProps("noOfGuests")}
                       />
@@ -1296,30 +1294,25 @@ const NewBookingFile = () => {
                       subvenueDetails={
                         venueDetails?.subVenues ? venueDetails?.subVenues : []
                       }
+                      setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
+                      idOfSelectedSubVenue={idOfSelectedSubVenue}
+                      refreshStates={refreshStates}
+                      bookedDateAndTime={bookedDateAndTime}
+                      noOfGuests={noOfGuests}
+                      setHidden={setHidden}
+                      error={error}
+                      setError={setError}
+                      setDisabled={setDisabled}
+                      setChargesError={setChargesError}
+                      hallCharges={hallCharges}
+                      setHallCharges={setHallCharges}
+                      setNoOfGuests={setNoOfGuests}
+                      hideSelectButton={hideSelectButton}
+                      time={time}
+                      form1={form1}
                     />
                   )}
-                  {/*                  <SubVenuesForBooking
-                    setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
-                    idOfSelectedSubVenue={idOfSelectedSubVenue}
-                    refreshStates={refreshStates}
-                    bookedDateAndTime={bookedDateAndTime}
-                    noOfGuests={noOfGuests}
-                    venueCity={venueCity}
-                    venue={venue}
-                    setHidden={setHidden}
-                    error={error}
-                    setError={setError}
-                    setDisabled={setDisabled}
-                    setChargesError={setChargesError}
-                    hallCharges={hallCharges}
-                    setHallCharges={setHallCharges}
-                    setVenueCity={setVenueCity}
-                    setVenue={setVenue}
-                    setNoOfGuests={setNoOfGuests}
-                    hideSelectButton={hideSelectButton}
-                    time={time}
-                    form1={form1}
-                  />*/}
+
                   <Text align="center" color="red">
                     {chargesError}
                   </Text>
@@ -1330,7 +1323,6 @@ const NewBookingFile = () => {
                         fullWidth
                         variant="filled"
                         color="red"
-                        // disabled={loading}
                         leftIcon={<IconX />}
                         onClick={() => setOpened(true)}
                       >
@@ -1383,13 +1375,14 @@ const NewBookingFile = () => {
                         setChecked(event.currentTarget.checked)
                       }
                       onClick={() => {
-                        const SelectedVenueServiceObjects = allSubVenues.filter(
-                          (f) => f._id === idOfSelectedSubVenue
-                        )[0]?.subVenueServices;
+                        const SelectedVenueServiceObjects =
+                          venueDetails?.subVenues?.filter(
+                            (f) => f._id === idOfSelectedSubVenue
+                          )[0]?.subVenueServices;
                         if (!checked) {
                           setSelectedVenueServices(
-                            allSubVenues
-                              .filter((f) => f._id === idOfSelectedSubVenue)[0]
+                            venueDetails?.subVenues
+                              ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
                               ?.subVenueServices.map((m) => m.serviceTitle)
                           );
 
@@ -1435,11 +1428,12 @@ const NewBookingFile = () => {
                           setHidden(true);
                         }
                         setSelectedVenueServices(e);
-                        const SelectedVenueServiceObjects = allSubVenues
-                          .filter((f) => f._id === idOfSelectedSubVenue)[0]
-                          ?.subVenueServices.filter((g) =>
-                            e.includes(g.serviceTitle)
-                          );
+                        const SelectedVenueServiceObjects =
+                          venueDetails?.subVenues
+                            ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
+                            ?.subVenueServices.filter((g) =>
+                              e.includes(g.serviceTitle)
+                            );
                         console.log("555555", SelectedVenueServiceObjects);
                         setSelectedVenueServiceObject(
                           SelectedVenueServiceObjects
@@ -1455,86 +1449,61 @@ const NewBookingFile = () => {
                           }, 0)
                         );
                       }}
-                      // onChange={setSelectedVenueServices}
                       size="md"
                       pb="xl"
                     >
                       <Grid>
-                        {allSubVenues
-                          .filter((e) => e._id === idOfSelectedSubVenue)[0]
+                        {venueDetails?.subVenues
+                          ?.filter((e) => e._id === idOfSelectedSubVenue)[0]
                           ?.subVenueServices.map((row, index) => {
                             return (
-                              <>
-                                <Grid.Col lg={12}>
-                                  <Group>
-                                    <Checkbox
-                                      key={row.serviceTitle}
-                                      value={row.serviceTitle}
-                                      label={
-                                        <Paper
-                                          style={{
-                                            display: "flex",
-                                            // justifyContent:"center"
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          <Avatar
-                                            src={row.coverImage}
-                                            alt="it's me"
-                                          />
-                                          <div
-                                            style={{
-                                              paddingLeft: "1rem",
-                                            }}
-                                          >
-                                            <Text align="justify">
-                                              {row.serviceTitle}{" "}
-                                              <b>
-                                                (Rs.{" "}
-                                                {row.servicePrice === 0
-                                                  ? "Complimentary"
-                                                  : row.servicePrice}
-                                                )
-                                              </b>
-                                            </Text>
+                              <Grid.Col lg={12} key={index}>
+                                <Group>
+                                  <Checkbox
+                                    key={row.serviceTitle}
+                                    value={row.serviceTitle}
+                                    label={
+                                      <Paper
+                                        style={{
+                                          display: "flex",
 
-                                            <Text
-                                              align="justify"
-                                              size="xs"
-                                              color="dimmed"
-                                            >
-                                              {row.serviceDescription}
-                                            </Text>
-                                          </div>
-                                        </Paper>
-                                      }
-                                      pr="md"
-                                    />
-                                    {selectedVenueServices.includes(
-                                      row.serviceTitle
-                                    ) && (
-                                      <ActionIcon
-                                        onClick={() => {
-                                          console.log(
-                                            "we are in action",
-                                            row.serviceTitle
-                                          );
-                                          setOldServicePrice(row.servicePrice);
-                                          setServiceTitle(row.serviceTitle);
-                                          setFreeService(
-                                            row.servicePrice === 0
-                                              ? true
-                                              : false
-                                          );
-                                          setAlterPrice(true);
+                                          alignItems: "center",
                                         }}
                                       >
-                                        <IconEdit />
-                                      </ActionIcon>
-                                    )}
-                                  </Group>
-                                </Grid.Col>
-                              </>
+                                        <Avatar
+                                          src={row.coverImage}
+                                          alt="it's me"
+                                        />
+                                        <div
+                                          style={{
+                                            paddingLeft: "1rem",
+                                          }}
+                                        >
+                                          <Text align="justify">
+                                            {row.serviceTitle}{" "}
+                                            <b>
+                                              (Rs.{" "}
+                                              {row.servicePrice === 0
+                                                ? "Complimentary"
+                                                : row.servicePrice}
+                                              )
+                                            </b>
+                                          </Text>
+
+                                          <Text
+                                            align="justify"
+                                            size="xs"
+                                            color="dimmed"
+                                          >
+                                            {row.serviceDescription}
+                                          </Text>
+                                        </div>
+                                      </Paper>
+                                    }
+                                    pr="md"
+                                  />
+                                </Group>
+                              </Grid.Col>
                             );
                           })}
                       </Grid>
@@ -1622,8 +1591,6 @@ const NewBookingFile = () => {
                       fullWidth
                       variant="filled"
                       color="dark"
-                      // disabled={disabled}
-                      // loading={loading}
                       rightIcon={<IconArrowRight />}
                       onClick={nextStep}
                     >
@@ -1633,166 +1600,157 @@ const NewBookingFile = () => {
                 </Grid>
               </Paper>
             </Stepper.Step>
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Menu Selection"
-              description="Select A Menu"
-              allowStepSelect={active > 2}
-              disabled={stepperDisabled}
-            >
-              <Paper pb="xl">
-                <Group position="apart">
-                  <Text weight="bold" size="xl" py="md">
-                    Menu Selection
-                  </Text>
-                  <Text weight="bold" size="xl" py="md" color="red">
-                    Total{" "}
-                    <b>
-                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
-                    </b>
-                  </Text>
-                </Group>
-              </Paper>
-              {/*<MenuOfSpecificVenueForBooking
-                setIdOfSelectedMenu={setIdOfSelectedMenu}
-                idOfSelectedMenu={idOfSelectedMenu}
-                setMenuPrice={setMenuPrice}
-                setSelectedMenu={setSelectedMenu}
-                noOfGuests={noOfGuests}
-                // refreshStates={refreshStates}
-                // bookedDateAndTime={bookedDateAndTime}
-                // noOfGuests={noOfGuests}
-                // venueCity={venueCity}
-                venue={venue}
-              />*/}
-              <Grid justify="flex-end" py="md">
-                <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                  <Button
-                    size="md"
-                    fullWidth
-                    variant="filled"
-                    color="red"
-                    // disabled={loading}
-                    leftIcon={<IconArrowLeft />}
-                    onClick={prevStep}
-                  >
-                    BACK
-                  </Button>
-                </Grid.Col>
+            {venueDetails?.menus?.length !== 0 && (
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Menu Selection"
+                description="Select A Menu"
+                allowStepSelect={active > 2}
+                disabled={stepperDisabled}
+              >
+                <Paper pb="xl">
+                  <Group position="apart">
+                    <Text weight="bold" size="xl" py="md">
+                      Menu Selection
+                    </Text>
+                    <Text weight="bold" size="xl" py="md" color="red">
+                      Total{" "}
+                      <b>
+                        Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                      </b>
+                    </Text>
+                  </Group>
+                  {idOfSelectedMenu === "" && (
+                    <Text size="xl" color="red" weight="bold">
+                      Please Select A Menu{" "}
+                    </Text>
+                  )}
+                </Paper>
 
-                {idOfSelectedMenu === "" ? (
+                <MenusOfSpecificVenueForBooking
+                  menus={venueDetails?.menus}
+                  setIdOfSelectedMenu={setIdOfSelectedMenu}
+                  idOfSelectedMenu={idOfSelectedMenu}
+                  setMenuPrice={setMenuPrice}
+                  setSelectedMenu={setSelectedMenu}
+                  noOfGuests={noOfGuests}
+                />
+                <Grid justify="flex-end" py="md">
                   <Grid.Col xs={6} sm={3} md={3} lg={3}>
                     <Button
                       size="md"
                       fullWidth
                       variant="filled"
-                      color="dark"
-                      // type="submit"
-                      // disabled={disabled}
-                      // loading={loading}
-                      rightIcon={<IconArrowRight />}
-                      // onClick={nextStep}
-                      onClick={() => {
-                        setMenuPrice(0);
-                        setIdOfSelectedMenu("");
-                        setSelectedMenu("");
-                        nextStep();
-                      }}
+                      color="red"
+                      // disabled={loading}
+                      leftIcon={<IconArrowLeft />}
+                      onClick={prevStep}
                     >
-                      Skip
+                      BACK
                     </Button>
                   </Grid.Col>
-                ) : (
+
+                  {idOfSelectedMenu === "" ? (
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        rightIcon={<IconArrowRight />}
+                        onClick={() => {
+                          setMenuPrice(0);
+                          setIdOfSelectedMenu("");
+                          setSelectedMenu("");
+                          nextStep();
+                        }}
+                      >
+                        Skip
+                      </Button>
+                    </Grid.Col>
+                  ) : (
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        rightIcon={<IconArrowRight />}
+                        onClick={handleMenuSelect}
+                      >
+                        NEXT
+                      </Button>
+                    </Grid.Col>
+                  )}
+                </Grid>
+              </Stepper.Step>
+            )}
+            {venueDetails?.themes?.length !== 0 && (
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Theme Selection"
+                description="Select A Theme"
+                allowStepSelect={active > 2}
+                disabled={stepperDisabled}
+              >
+                <Paper pb="xl">
+                  <Group position="apart">
+                    <Text weight="bold" size="xl" py="md">
+                      Theme Selection
+                    </Text>
+                    <Text weight="bold" size="xl" py="md" color="red">
+                      Total{" "}
+                      <b>
+                        Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                      </b>
+                    </Text>
+                  </Group>
+                  {idOfSelectedTheme === "" && (
+                    <Text size="xl" color="red" weight="bold">
+                      Please Select A Menu{" "}
+                    </Text>
+                  )}
+                </Paper>
+
+                <ThemesOfSpecificVenueForBooking
+                  themes={venueDetails?.themes}
+                  setIdOfSelectedTheme={setIdOfSelectedTheme}
+                  idOfSelectedTheme={idOfSelectedTheme}
+                  setSelectedTheme={setSelectedTheme}
+                  selectedTheme={selectedTheme}
+                />
+
+                <Grid justify="flex-end" py="md">
+                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                    <Button
+                      size="md"
+                      fullWidth
+                      variant="filled"
+                      color="red"
+                      // disabled={loading}
+                      leftIcon={<IconArrowLeft />}
+                      onClick={prevStep}
+                    >
+                      BACK
+                    </Button>
+                  </Grid.Col>
+
                   <Grid.Col xs={6} sm={3} md={3} lg={3}>
                     <Button
                       size="md"
                       fullWidth
                       variant="filled"
                       color="dark"
-                      // type="submit"
-                      // disabled={disabled}
-                      // loading={loading}
                       rightIcon={<IconArrowRight />}
-                      onClick={handleMenuSelect}
+                      onClick={nextStep}
                     >
                       NEXT
                     </Button>
                   </Grid.Col>
-                )}
-              </Grid>
-            </Stepper.Step>
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Theme Selection"
-              description="Select A Theme"
-              allowStepSelect={active > 2}
-              disabled={stepperDisabled}
-            >
-              <Paper pb="xl">
-                <Group position="apart">
-                  <Text weight="bold" size="xl" py="md">
-                    Theme Selection
-                  </Text>
-                  <Text weight="bold" size="xl" py="md" color="red">
-                    Total{" "}
-                    <b>
-                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
-                    </b>
-                  </Text>
-                </Group>
-              </Paper>
+                </Grid>
+              </Stepper.Step>
+            )}
 
-              {/* <ThemesForSpecificVenue
-                setIdOfSelectedTheme={setIdOfSelectedTheme}
-                idOfSelectedTheme={idOfSelectedTheme}
-                setSelectedTheme={setSelectedTheme}
-                selectedTheme={selectedTheme}
-                venue={venue}
-              />*/}
-              {/* <MenuOfSpecificVenue
-                setIdOfSelectedMenu={setIdOfSelectedMenu}
-                idOfSelectedMenu={idOfSelectedMenu}
-                setMenuPrice={setMenuPrice}
-                setSelectedMenu={setSelectedMenu}
-                noOfGuests={noOfGuests}
-                // refreshStates={refreshStates}
-                // bookedDateAndTime={bookedDateAndTime}
-                // noOfGuests={noOfGuests}
-                // venueCity={venueCity}
-                venue={venue}
-              /> */}
-              <Grid justify="flex-end" py="md">
-                <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                  <Button
-                    size="md"
-                    fullWidth
-                    variant="filled"
-                    color="red"
-                    // disabled={loading}
-                    leftIcon={<IconArrowLeft />}
-                    onClick={prevStep}
-                  >
-                    BACK
-                  </Button>
-                </Grid.Col>
-
-                <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                  <Button
-                    size="md"
-                    fullWidth
-                    variant="filled"
-                    color="dark"
-                    // type="submit"
-                    // disabled={disabled}
-                    // loading={loading}
-                    rightIcon={<IconArrowRight />}
-                    onClick={nextStep}
-                  >
-                    NEXT
-                  </Button>
-                </Grid.Col>
-              </Grid>
-            </Stepper.Step>
             <Stepper.Step
               color={!stepperDisabled ? "grape" : "gray"}
               label="Contact Information"
@@ -1814,6 +1772,33 @@ const NewBookingFile = () => {
                   onSubmit={form.onSubmit((values) => handleSubmit1(values))}
                 >
                   <Grid>
+                    <Grid.Col md={12} lg={6}>
+                      <TextInput
+                        error={renderErrorMessage("phone")}
+                        size="md"
+                        required
+                        type="number"
+                        label="Contact Number"
+                        placeholder="03XXXXXXXX"
+                        // disabled={disabled}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        {...form.getInputProps("phone")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col md={12} lg={6}>
+                      <TextInput
+                        error={renderErrorMessage("email")}
+                        size="md"
+                        placeholder="abc@gmail.com"
+                        value={email}
+                        required
+                        // disabled={disabled}
+                        label="Email Address"
+                        onChange={(e) => setEmail(e.target.value)}
+                        {...form.getInputProps("email")}
+                      />
+                    </Grid.Col>
                     <Grid.Col md={12} lg={12}>
                       <Textarea
                         error={renderErrorMessage("description")}
@@ -1851,10 +1836,7 @@ const NewBookingFile = () => {
                         variant="filled"
                         color="dark"
                         type="submit"
-                        // disabled={disabled}
-                        // loading={loading}
                         rightIcon={<IconArrowRight />}
-                        // onClick={nextStep}
                       >
                         NEXT
                       </Button>
@@ -1863,83 +1845,7 @@ const NewBookingFile = () => {
                 </form>
               </Paper>
             </Stepper.Step>
-            {/* <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Review Booking Information"
-              description="Please review your booking details"
-              allowStepSelect={active > 5}
-              disabled={stepperDisabled}
-            >
-              <Paper
-                py="xl"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
-                <Text size="xl" weight="bold" pb="xl">
-                  Please Review Your Given Information
-                </Text>
-                <VenueBookingReview
-                  allVenues={allVenues}
-                  allSubVenues={allSubVenues}
-                  allCustomers={allCustomers}
-                  selectedVenueServiceObject={selectedVenueServiceObject}
-                  venue={venue}
-                  idOfSelectedSubVenue={idOfSelectedSubVenue}
-                  value1={value1}
-                  time={time}
-                  eventType={eventType}
-                  noOfGuests={noOfGuests}
-                  hallCharges={hallCharges}
-                  selectedMenu={selectedMenu}
-                  menuPrice={menuPrice}
-                  totalPrice={totalPrice}
-                  customer={customer}
-                  phone={phone}
-                  email={email}
-                  description={description}
-                  setDescription={setDescription}
-                  step={5}
-                />
 
-
-
-
-
-                <Grid justify="flex-end" p="md">
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="red"
-                      // disabled={loading}
-                      leftIcon={<ArrowLeft />}
-                      onClick={prevStep}
-                    >
-                      BACK
-                    </Button>
-                  </Grid.Col>
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="dark"
-                      type="submit"
-                      // disabled={disabled}
-                      // loading={loading}
-                      rightIcon={<ArrowRight />}
-                      onClick={nextStep}
-                      uppercase
-                    >
-                      next
-                    </Button>
-                  </Grid.Col>
-                </Grid>
-              </Paper>
-            </Stepper.Step> */}
             <Stepper.Step
               color={!stepperDisabled ? "grape" : "gray"}
               label="Payment Details"
@@ -1977,10 +1883,10 @@ const NewBookingFile = () => {
                       Total Cost Rs. {totalPrice + hallCharges}
                     </Text>
                   </Group>
-                  {/*                  <BookingReviewInvoice
-                    allVenues={allVenues}
-                    allSubVenues={allSubVenues}
-                    allCustomers={allCustomers}
+                  <BookingReviewInvoice
+                    // allVenues={allVenues}
+                    // allSubVenues={allSubVenues}
+                    // allCustomers={allCustomers}
                     selectedVenueServiceObject={selectedVenueServiceObject}
                     venue={venue}
                     idOfSelectedSubVenue={idOfSelectedSubVenue}
@@ -1997,7 +1903,7 @@ const NewBookingFile = () => {
                     email={email}
                     description={description}
                     step={6}
-                  />*/}
+                  />
                   <Text weight="bold" size="xl" py="lg">
                     Pay With Stripe
                   </Text>
@@ -2029,12 +1935,11 @@ const NewBookingFile = () => {
                       </Paper>
                     </Grid.Col>
                     <Grid.Col md={12} lg={6} ref={targetRef}>
-                      {/* <Center> */}
-                      {/*                      <StripePromise
+                      <StripePromise
                         paidSuccessfully={paidSuccessfully}
                         setPaidSuccessfully={setPaidSuccessfully}
                         onClickBack={prevStep}
-                        setConfirmBooking={setConfirmBooking}
+                        // setConfirmBooking={setConfirmBooking}
                         // start={start}
                         amountPayable={
                           (hallCharges +
@@ -2071,85 +1976,12 @@ const NewBookingFile = () => {
                               0.17) *
                           0.25
                         }
-                      />*/}
-                      {/* </Center> */}
+                      />
                     </Grid.Col>
                   </Grid>
                 </form>
               </Paper>
             </Stepper.Step>
-            <Stepper.Completed>
-              {/*              <Paper
-py="xl"
-style={{
-  width: "100%",
-  height: "100%",
-}}
->
-<Text size="xl" weight="bold" pb="xl" color="green">
-  Booking Has Been Successfully Logged!
-</Text>
-
-<div
-  ref={componentRef}
-  text={text}
-  style={{
-    border: "1px solid #c5c5c5",
-    padding: "1rem",
-  }}
->
-  <VenueBookingReview
-    allVenues={allVenues}
-    allSubVenues={allSubVenues}
-    allCustomers={allCustomers}
-    selectedVenueServiceObject={selectedVenueServiceObject}
-    venue={venue}
-    idOfSelectedSubVenue={idOfSelectedSubVenue}
-    value1={value1}
-    time={time}
-    eventType={eventType}
-    noOfGuests={noOfGuests}
-    hallCharges={hallCharges}
-    selectedMenu={selectedMenu}
-    menuPrice={menuPrice}
-    totalPrice={totalPrice}
-    customer={customer}
-    phone={phone}
-    email={email}
-    description={description}
-    step={7}
-  />
-</div>
-
-<Grid justify="flex-end" py="md">
-  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-    <Button
-      size="md"
-      fullWidth
-      variant="filled"
-      color="red"
-      // disabled={loading}
-      leftIcon={<X />}
-      onClick={() => navigate("/viewbookings")}
-      uppercase
-    >
-      Close
-    </Button>
-  </Grid.Col>
-  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-    <ReactToPrint
-      content={reactToPrintContent}
-      documentTitle="invoiceGenerated"
-      onAfterPrint={handleAfterPrint}
-      onBeforeGetContent={handleOnBeforeGetContent}
-      onBeforePrint={handleBeforePrint}
-      removeAfterPrint
-      trigger={reactToPrintTrigger}
-    />
-  </Grid.Col>
-</Grid>
-</Paper>*/}
-            </Stepper.Completed>
           </Stepper>
         </Paper>
       </Center>

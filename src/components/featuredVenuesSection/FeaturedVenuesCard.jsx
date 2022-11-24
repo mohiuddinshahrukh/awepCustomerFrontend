@@ -77,7 +77,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 {Math.min
                   .apply(
                     Math,
-                    venue?.subVenues.map((subvenue) => {
+                    venue?.subVenues?.map((subvenue) => {
                       return subvenue?.subVenueMinCapacity;
                     })
                   )
@@ -88,7 +88,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 {Math.max
                   .apply(
                     Math,
-                    venue?.subVenues.map((subvenue) => {
+                    venue?.subVenues?.map((subvenue) => {
                       return subvenue?.subVenueCapacity;
                     })
                   )
@@ -105,7 +105,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 ? Math.max
                     .apply(
                       Math,
-                      venue?.menus.map((menu) => {
+                      venue?.menus?.map((menu) => {
                         return menu.price;
                       })
                     )
@@ -113,7 +113,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 : Math.max
                     .apply(
                       Math,
-                      venue?.subVenues.map((subvenue) => {
+                      venue?.subVenues?.map((subvenue) => {
                         return subvenue?.subVenueBookingCharges;
                       })
                     )

@@ -27,7 +27,7 @@ const FeaturedVenuesCarousel = () => {
     return () => {};
   }, []);
 
-  const carouselSlides = landingPageVenues.map((venue, index) => {
+  const carouselSlides = landingPageVenues?.map((venue, index) => {
     return (
       <Carousel.Slide key={index}>
         <FeaturedVenuesCard venue={venue} />

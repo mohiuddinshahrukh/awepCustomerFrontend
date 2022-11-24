@@ -101,8 +101,8 @@ const TopNavbar = () => {
             {matches1027 ? (
               <TopNavbarButtons
                 buttonsData={[
-                  { title: "Sign In", path: "#", variant: "filled" },
-                  { title: "Sign Up", path: "#", variant: "outline" },
+                  { title: "Sign In", path: "/signIn", variant: "filled" },
+                  { title: "Sign Up", path: "/signUp", variant: "outline" },
                 ]}
               />
             ) : (

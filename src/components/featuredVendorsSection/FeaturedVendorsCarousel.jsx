@@ -27,7 +27,7 @@ const FeaturedVendorsCarousel = () => {
     return () => {};
   }, []);
 
-  const carouselSlides = landingPageVendors.map((vendor, index) => {
+  const carouselSlides = landingPageVendors?.map((vendor, index) => {
     return (
       <Carousel.Slide key={index}>
         <FeaturedVendorsCard vendor={vendor} />

@@ -6,11 +6,12 @@ import {
   Divider,
   Grid,
   Group,
+  Paper,
+  Tabs,
   Text,
   Title,
 } from "@mantine/core";
 import { useScrollIntoView } from "@mantine/hooks";
-
 import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
@@ -27,11 +28,13 @@ import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import { useParams } from "react-router-dom";
 import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
+import { IconMessageCircle, IconSettings } from "@tabler/icons";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
     position: "sticky",
     top: 0,
+    zIndex: 1,
   },
 }));
 const SpecificVenueDetails = () => {
@@ -183,48 +186,154 @@ const SpecificVenueDetails = () => {
           <Carousal
             images={venueDetails?.images ? venueDetails?.images : ["", ""]}
           />
-          <InPageNavigation
-            scrollRef={scrollRef}
-            scrollRef1={scrollRef1}
-            scrollRef2={scrollRef2}
-            scrollRef3={scrollRef3}
-            scrollRef4={scrollRef4}
-            scrollRef5={scrollRef5}
-            scrollRef6={scrollRef6}
-          />
-          <Divider mt="xl" />
-          <AboutVenue
-            targetRef={scrollRef1.targetRef}
-            details={
-              venueDetails?.venueDescription
-                ? venueDetails?.venueDescription
-                : ""
-            }
-            venueName={venueDetails?.venueName ? venueDetails?.venueName : ""}
-            facebook={
-              venueDetails?.facebookHandle ? venueDetails?.facebookHandle : ""
-            }
-            instagram={
-              venueDetails?.instagramHandle ? venueDetails?.instagramHandle : ""
-            }
-            website={
-              venueDetails?.websiteHandle ? venueDetails?.websiteHandle : ""
-            }
-          />
-          <VenueServices
-            targetRef={scrollRef2.targetRef}
-            services={
-              venueDetails?.providedVenueServices
-                ? venueDetails?.providedVenueServices
-                : []
-            }
-          />
-          <Divider mt="xl" />
-          <CarouselOfSubVenues
-            targetRef={scrollRef3.targetRef}
-            setOpen={setOpen}
-            subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
-          />
+          <Tabs defaultValue="About" py="xl" color="grape">
+            <Paper className={classes.stickySThings}>
+              <Tabs.List py="md">
+                <Tabs.Tab icon={<IconMessageCircle size={14} />} value="About">
+                  About
+                </Tabs.Tab>
+                <Tabs.Tab icon={<IconSettings size={14} />} value="Services">
+                  Services
+                </Tabs.Tab>
+                {venueDetails?.subVenues?.length !== 0 && (
+                  <Tabs.Tab
+                    icon={<IconSettings size={14} />}
+                    value="Sub Venues"
+                  >
+                    Sub Venues
+                  </Tabs.Tab>
+                )}
+                {venueDetails?.menus?.length !== 0 && (
+                  <Tabs.Tab icon={<IconSettings size={14} />} value="Menus">
+                    Menus
+                  </Tabs.Tab>
+                )}
+                {venueDetails?.themes?.length !== 0 && (
+                  <Tabs.Tab icon={<IconSettings size={14} />} value="Themes">
+                    Themes
+                  </Tabs.Tab>
+                )}
+                <Tabs.Tab icon={<IconSettings size={14} />} value="Reviews">
+                  Reviews
+                </Tabs.Tab>
+                <Tabs.Tab icon={<IconSettings size={14} />} value="Map">
+                  Map
+                </Tabs.Tab>
+              </Tabs.List>
+            </Paper>
+
+            <Tabs.Panel value="About">
+              <AboutVenue
+                targetRef={scrollRef1.targetRef}
+                details={
+                  venueDetails?.venueDescription
+                    ? venueDetails?.venueDescription
+                    : ""
+                }
+                venueName={
+                  venueDetails?.venueName ? venueDetails?.venueName : ""
+                }
+                facebook={
+                  venueDetails?.facebookHandle
+                    ? venueDetails?.facebookHandle
+                    : ""
+                }
+                instagram={
+                  venueDetails?.instagramHandle
+                    ? venueDetails?.instagramHandle
+                    : ""
+                }
+                website={
+                  venueDetails?.websiteHandle ? venueDetails?.websiteHandle : ""
+                }
+              />
+              <Divider mt="xl" />
+            </Tabs.Panel>
+            <Tabs.Panel value="Services">
+              <VenueServices
+                targetRef={scrollRef2.targetRef}
+                services={
+                  venueDetails?.providedVenueServices
+                    ? venueDetails?.providedVenueServices
+                    : []
+                }
+              />
+              <Divider mt="xl" />
+            </Tabs.Panel>
+            {venueDetails?.subVenues?.length !== 0 && (
+              <Tabs.Panel value="Sub Venues">
+                <CarouselOfSubVenues
+                  targetRef={scrollRef3.targetRef}
+                  setOpen={setOpen}
+                  subVenues={
+                    venueDetails?.subVenues ? venueDetails?.subVenues : [{}]
+                  }
+                />
+              </Tabs.Panel>
+            )}
+            {venueDetails?.menus?.length !== 0 && (
+              <Tabs.Panel value="Menus">
+                <MenusOfSpecificVenue
+                  targetRef={scrollRef4.targetRef}
+                  menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
+                />
+              </Tabs.Panel>
+            )}
+            {venueDetails?.themes?.length !== 0 && (
+              <Tabs.Panel value="Themes">
+                <CarouselOfThemes
+                  themes={venueDetails?.themes ? venueDetails?.themes : [{}]}
+                />
+              </Tabs.Panel>
+            )}
+            <Tabs.Panel value="Reviews">
+              <ReviewsOfSpecificVenue
+                targetRef={scrollRef6.targetRef}
+                flexibility={
+                  venueDetails?.flexibility ? venueDetails?.flexibility : 5
+                }
+                responseTime={
+                  venueDetails?.responseTime ? venueDetails?.responseTime : 5
+                }
+                valueForMoney={
+                  venueDetails?.valueForMoney ? venueDetails?.valueForMoney : 5
+                }
+                qualityOfService={
+                  venueDetails?.qualityOfService
+                    ? venueDetails?.qualityOfService
+                    : 5
+                }
+                professionalism={
+                  venueDetails?.professionalism
+                    ? venueDetails?.professionalism
+                    : 5
+                }
+                rating={venueDetails?.rating ? venueDetails?.rating : 5}
+                ratingCount={
+                  venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
+                }
+                reviews={venueFeedbacks ? venueFeedbacks : [{}]}
+              />
+            </Tabs.Panel>
+            <Tabs.Panel value="Map">
+              <MapComponentView
+                targetRef={scrollRef.targetRef}
+                pinLocation={
+                  venueDetails?.pinLocation
+                    ? venueDetails?.pinLocation
+                    : {
+                        lat: 30,
+                        lng: 70,
+                      }
+                }
+                address={
+                  venueDetails?.venueAddress ? venueDetails?.venueAddress : ""
+                }
+                pinGeoLocation={"null"}
+              />
+            </Tabs.Panel>
+          </Tabs>
+
           <ModalOfSubVenues
             contactPhone={contactPhone}
             setContactPhone={setContactPhone}
@@ -242,58 +351,6 @@ const SpecificVenueDetails = () => {
             setOpen={setOpen}
             subVenues={venueDetails?.subVenues ? venueDetails?.subVenues : [{}]}
             venueId={params.id}
-          />
-          {venueDetails?.menus?.length !== 0 && (
-            <MenusOfSpecificVenue
-              targetRef={scrollRef4.targetRef}
-              menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
-            />
-          )}
-
-          {venueDetails?.themes?.length !== 0 && (
-            <CarouselOfThemes
-              themes={venueDetails?.themes ? venueDetails?.themes : [{}]}
-            />
-          )}
-          <ReviewsOfSpecificVenue
-            targetRef={scrollRef6.targetRef}
-            flexibility={
-              venueDetails?.flexibility ? venueDetails?.flexibility : 5
-            }
-            responseTime={
-              venueDetails?.responseTime ? venueDetails?.responseTime : 5
-            }
-            valueForMoney={
-              venueDetails?.valueForMoney ? venueDetails?.valueForMoney : 5
-            }
-            qualityOfService={
-              venueDetails?.qualityOfService
-                ? venueDetails?.qualityOfService
-                : 5
-            }
-            professionalism={
-              venueDetails?.professionalism ? venueDetails?.professionalism : 5
-            }
-            rating={venueDetails?.rating ? venueDetails?.rating : 5}
-            ratingCount={
-              venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
-            }
-            reviews={venueFeedbacks ? venueFeedbacks : [{}]}
-          />
-          <MapComponentView
-            targetRef={scrollRef.targetRef}
-            pinLocation={
-              venueDetails?.pinLocation
-                ? venueDetails?.pinLocation
-                : {
-                    lat: 30,
-                    lng: 70,
-                  }
-            }
-            address={
-              venueDetails?.venueAddress ? venueDetails?.venueAddress : ""
-            }
-            pinGeoLocation={"null"}
           />
         </Grid.Col>
         <Grid.Col lg={3} pl="xl">

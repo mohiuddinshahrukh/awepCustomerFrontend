@@ -11,6 +11,7 @@ import React from "react";
 import CustomButtonUnFilled from "../CustomButton/CustomButtonUnFilled";
 import RatingStars from "../RatingStars/RatingStars";
 import Comments from "./Comments";
+import { Spoiler } from "@mantine/core";
 
 const ReviewsOfSpecificVenue = ({
   targetRef,
@@ -152,9 +153,15 @@ const ReviewsOfSpecificVenue = ({
           </SimpleGrid>
         </div>
       </Group>
-      {reviews?.map((review, index) => (
-        <Comments key={index} review={review} />
-      ))}
+      <Spoiler
+        maxHeight={400}
+        showLabel={<Text color="#775A97">Show more</Text>}
+        hideLabel={<Text color="#775A97">Show Less</Text>}
+      >
+        {reviews?.map((review, index) => (
+          <Comments key={index} review={review} />
+        ))}
+      </Spoiler>
     </div>
   );
 };

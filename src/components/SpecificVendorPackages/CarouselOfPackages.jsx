@@ -17,7 +17,7 @@ const CarouselOfPackages = ({ open, setOpen, packages, targetRef }) => {
   return (
     <div>
       <Text weight="bold" py="md" size="lg" ref={targetRef}>
-        Sub Venues
+        Vendor Packages
       </Text>
       <Carousel
         withIndicators

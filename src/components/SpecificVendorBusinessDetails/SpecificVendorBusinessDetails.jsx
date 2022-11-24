@@ -7,6 +7,7 @@ import {
   Grid,
   Group,
   Paper,
+  Tabs,
   Text,
   Title,
 } from "@mantine/core";
@@ -29,6 +30,7 @@ import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import CarouselOfPackages from "../SpecificVendorPackages/CarouselOfPackages";
 import ModalOfPackages from "../SpecificVendorPackages/ModalOfPackages";
 import { useParams } from "react-router-dom";
+import { IconMessageCircle, IconSettings } from "@tabler/icons";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -50,6 +52,7 @@ const SpecificVendorBusinessDetails = () => {
   console.log("scrollRef", scrollRef);
   const [refresh, setRefresh] = useState(true);
   const [vendorDetails, setVendorDetails] = useState({});
+  const [vendorFeedbacks, setVendorFeedbacks] = useState([]);
   console.log("vendorDetails are", vendorDetails);
   const [open, setOpen] = useState(false);
 
@@ -62,6 +65,26 @@ const SpecificVendorBusinessDetails = () => {
         if (res.data.status === "success") {
           console.log("Retrieved Data Is", res.data.data);
           setVendorDetails(res.data.data);
+
+          setRefresh(false);
+        } else {
+          console.log("Errored Data Is", res.data);
+          setRefresh(false);
+        }
+      });
+    }
+  }, [refresh]);
+
+  const url1 = `https://a-wep.herokuapp.com/customer/getVendorFeedbacks/${params.id}`;
+
+  useEffect(() => {
+    if (refresh) {
+      // setVisible(true);
+      axios.get(url1).then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          console.log("Retrieved Reviews are", res.data.data);
+          setVendorFeedbacks(res.data.data);
 
           setRefresh(false);
         } else {
@@ -131,75 +154,139 @@ const SpecificVendorBusinessDetails = () => {
           <Carousal
             images={vendorDetails?.images ? vendorDetails?.images : ["", ""]}
           />
-          <InPageNavigation
-            scrollRef={scrollRef}
-            scrollRef1={scrollRef1}
-            scrollRef2={scrollRef2}
-            scrollRef3={scrollRef3}
-            scrollRef4={scrollRef4}
-            scrollRef5={scrollRef5}
-            scrollRef6={scrollRef6}
-          />
-          <Divider mt="xl" />
-          <Grid py="xl">
-            <Grid.Col lg={8}>
-              <AboutVenue
-                targetRef={scrollRef1.targetRef}
-                details={
-                  vendorDetails?.vendorBusinessDescription
-                    ? vendorDetails?.vendorBusinessDescription
-                    : ""
-                }
-                facebook={
-                  vendorDetails?.facebookHandle
-                    ? vendorDetails?.facebookHandle
-                    : ""
-                }
-                instagram={
-                  vendorDetails?.instagramHandle
-                    ? vendorDetails?.instagramHandle
-                    : ""
+          <Tabs defaultValue="About" py="xl" color="grape">
+            <Paper className={classes.stickySThings}>
+              <Tabs.List py="md">
+                <Tabs.Tab icon={<IconMessageCircle size={14} />} value="About">
+                  About
+                </Tabs.Tab>
+                <Tabs.Tab icon={<IconSettings size={14} />} value="Packages">
+                  Services
+                </Tabs.Tab>
+
+                <Tabs.Tab icon={<IconSettings size={14} />} value="Reviews">
+                  Reviews
+                </Tabs.Tab>
+                <Tabs.Tab icon={<IconSettings size={14} />} value="Map">
+                  Map
+                </Tabs.Tab>
+              </Tabs.List>
+            </Paper>
+
+            <Tabs.Panel value="About">
+              <Grid py="xl">
+                <Grid.Col lg={8}>
+                  <AboutVenue
+                    targetRef={scrollRef1.targetRef}
+                    details={
+                      vendorDetails?.vendorBusinessDescription
+                        ? vendorDetails?.vendorBusinessDescription
+                        : ""
+                    }
+                    facebook={
+                      vendorDetails?.facebookHandle
+                        ? vendorDetails?.facebookHandle
+                        : ""
+                    }
+                    instagram={
+                      vendorDetails?.instagramHandle
+                        ? vendorDetails?.instagramHandle
+                        : ""
+                    }
+                  />
+                </Grid.Col>
+                <Grid.Col lg={4}>
+                  <Paper
+                    mt="md"
+                    withBorder
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    p="md"
+                    radius="md"
+                  >
+                    <Text>Highlight</Text>
+                    <Text py="md" weight="bold">
+                      Services
+                    </Text>
+                    <Group spacing={3}>
+                      {vendorDetails?.providedServices?.map(
+                        (service, index) => (
+                          <Text key={index}>
+                            {vendorDetails?.providedServices.length !==
+                            index + 1
+                              ? service?.serviceTitle + ","
+                              : service?.serviceTitle + ""}
+                          </Text>
+                        )
+                      )}
+                    </Group>
+                  </Paper>
+                </Grid.Col>
+              </Grid>
+            </Tabs.Panel>
+            <Tabs.Panel value="Packages">
+              <CarouselOfPackages
+                targetRef={scrollRef3.targetRef}
+                setOpen={setOpen}
+                packages={
+                  vendorDetails?.vendorServicePackages
+                    ? vendorDetails?.vendorServicePackages
+                    : [{}]
                 }
               />
-            </Grid.Col>
-            <Grid.Col lg={4}>
-              <Paper
-                mt="md"
-                withBorder
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
-                p="md"
-                radius="md"
-              >
-                <Text>Highlight</Text>
-                <Text py="md" weight="bold">
-                  Services
-                </Text>
-                <Group spacing={3}>
-                  {vendorDetails?.providedServices?.map((service, index) => (
-                    <Text key={index}>
-                      {vendorDetails?.providedServices.length !== index + 1
-                        ? service?.serviceTitle + ","
-                        : service?.serviceTitle + ""}
-                    </Text>
-                  ))}
-                </Group>
-              </Paper>
-            </Grid.Col>
-          </Grid>
+            </Tabs.Panel>
 
-          <Divider />
-          <CarouselOfPackages
-            targetRef={scrollRef3.targetRef}
-            setOpen={setOpen}
-            packages={
-              vendorDetails?.vendorServicePackages
-                ? vendorDetails?.vendorServicePackages
-                : [{}]
-            }
-          />
+            <Tabs.Panel value="Reviews">
+              <ReviewsOfSpecificVenue
+                targetRef={scrollRef6.targetRef}
+                flexibility={
+                  vendorDetails?.flexibility ? vendorDetails?.flexibility : 5
+                }
+                responseTime={
+                  vendorDetails?.responseTime ? vendorDetails?.responseTime : 5
+                }
+                valueForMoney={
+                  vendorDetails?.valueForMoney
+                    ? vendorDetails?.valueForMoney
+                    : 5
+                }
+                qualityOfService={
+                  vendorDetails?.qualityOfService
+                    ? vendorDetails?.qualityOfService
+                    : 5
+                }
+                professionalism={
+                  vendorDetails?.professionalism
+                    ? vendorDetails?.professionalism
+                    : 5
+                }
+                rating={vendorDetails?.rating ? vendorDetails?.rating : 5}
+                ratingCount={
+                  vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0
+                }
+              />
+            </Tabs.Panel>
+            <Tabs.Panel value="Map">
+              <MapComponentView
+                targetRef={scrollRef.targetRef}
+                pinLocation={
+                  vendorDetails?.pinLocation
+                    ? vendorDetails?.pinLocation
+                    : {
+                        lat: 30,
+                        lng: 70,
+                      }
+                }
+                address={vendorDetails?.address ? vendorDetails?.address : ""}
+                pinGeoLocation={"null"}
+              />
+            </Tabs.Panel>
+          </Tabs>
+
+          <Divider mt="xl" />
+
           <ModalOfPackages
             open={open}
             setOpen={setOpen}
@@ -207,48 +294,7 @@ const SpecificVendorBusinessDetails = () => {
               vendorDetails?.vendorServicePackages
                 ? vendorDetails?.vendorServicePackages
                 : [{}]
-            }
-          />
-
-          <ReviewsOfSpecificVenue
-            targetRef={scrollRef6.targetRef}
-            flexibility={
-              vendorDetails?.flexibility ? vendorDetails?.flexibility : 5
-            }
-            responseTime={
-              vendorDetails?.responseTime ? vendorDetails?.responseTime : 5
-            }
-            valueForMoney={
-              vendorDetails?.valueForMoney ? vendorDetails?.valueForMoney : 5
-            }
-            qualityOfService={
-              vendorDetails?.qualityOfService
-                ? vendorDetails?.qualityOfService
-                : 5
-            }
-            professionalism={
-              vendorDetails?.professionalism
-                ? vendorDetails?.professionalism
-                : 5
-            }
-            rating={vendorDetails?.rating ? vendorDetails?.rating : 5}
-            ratingCount={
-              vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0
-            }
-          />
-
-          <MapComponentView
-            targetRef={scrollRef.targetRef}
-            pinLocation={
-              vendorDetails?.pinLocation
-                ? vendorDetails?.pinLocation
-                : {
-                    lat: 30,
-                    lng: 70,
-                  }
-            }
-            address={vendorDetails?.address ? vendorDetails?.address : ""}
-            pinGeoLocation={"null"}
+            } 
           />
         </Grid.Col>
         <Grid.Col lg={3} pl="xl">

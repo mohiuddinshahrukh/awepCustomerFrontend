@@ -1,4 +1,4 @@
-import { createStyles, Group, Paper, Text } from "@mantine/core";
+import { createStyles, Group, Paper, Tabs, Text } from "@mantine/core";
 import React from "react";
 
 const useStyles = createStyles(() => ({
@@ -31,7 +31,7 @@ const InPageNavigation = ({
   return (
     <Paper className={classes.stickySThings}>
       <Group spacing="xl" py="xl">
-        <Text
+        {/* <Text
           className={classes.text}
           onClick={() => scrollRef1.scrollIntoView()}
         >
@@ -60,7 +60,7 @@ const InPageNavigation = ({
       onClick={() => scrollRef5.scrollIntoView()}
     >
       Themes
-    </Text> */}
+    </Text> 
         <Text
           className={classes.text}
           onClick={() => scrollRef6.scrollIntoView()}
@@ -72,7 +72,8 @@ const InPageNavigation = ({
           onClick={() => scrollRef.scrollIntoView()}
         >
           Map
-        </Text>
+        </Text>{" "}
+        */}
       </Group>
     </Paper>
   );

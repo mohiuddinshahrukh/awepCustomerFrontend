@@ -13,6 +13,7 @@ import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import NewBookingFile from "./components/NewBookingFile/NewBookingFile";
+import NewVendorBookingFile from "./components/NewVendorBooking/NewVendorBooking";
 import SpecificVendorBusinessDetails from "./components/SpecificVendorBusinessDetails/SpecificVendorBusinessDetails";
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
 import SignIn from "./components/userProfiling/SignIn";
@@ -40,6 +41,10 @@ function App() {
             <Route
               path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
               element={<NewBookingFile />}
+            />
+            <Route
+              path="/vendorBooking/:eventType/:date/:time/:vendorId"
+              element={<NewVendorBookingFile />}
             />
             <Route path="/" element={<LandingPageMain />} />
             <Route path="/cardEditor" element={<CustomerCardEditor />} />

@@ -53,7 +53,7 @@ const BookVenueSideColumnsForVendor = ({
   time,
   setTime,
 
-  venueId,
+  vendorId,
   setIsSignIn,
 }) => {
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ const BookVenueSideColumnsForVendor = ({
       if (localStorage.getItem("userToken") !== null) {
         console.log("onClickFunction SUBVENUE");
 
-        navigate(`/vendorBooking/${eventType}/${date}/${time}/${venueId}`);
+        navigate(`/vendorBooking/${eventType}/${date}/${time}/${vendorId}`);
       } else {
         console.log("onClickFunction if not signed in");
 
@@ -200,9 +200,9 @@ const BookVenueSideColumnsForVendor = ({
         }}
         data={[
           { label: "1 Day", value: "1 Day" },
-          { label: "2 Day", value: "2 Day" },
-          { label: "3 Day", value: "3 Day" },
-          { label: "4 Day", value: "4 Day" },
+          { label: "2 Days", value: "2 Days" },
+          { label: "3 Days", value: "3 Days" },
+          { label: "4 Days", value: "4 Days" },
         ]}
         // {...form.getInputProps("time")}
       />

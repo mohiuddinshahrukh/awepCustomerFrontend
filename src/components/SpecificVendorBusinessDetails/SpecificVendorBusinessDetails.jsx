@@ -6,32 +6,27 @@ import {
   Divider,
   Grid,
   Group,
+  Modal,
   Paper,
   Tabs,
   Text,
   Title,
 } from "@mantine/core";
-import { useScrollIntoView } from "@mantine/hooks";
-
 import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
 import RatingStars from "../RatingStars/RatingStars";
 import Carousal from "../Carousal/Carousal";
-import InPageNavigation from "../InPageNavigation/InPageNavigation";
 import AboutVenue from "../AboutVenue/AboutVenue";
-import VenueServices from "../VenueServices/VenueServices";
-import CarouselOfSubVenues from "../SubVenuesOfSpecifcVenue/CarouselOfSubVenues";
-import MenusOfSpecificVenue from "../MenusOfSpecifcVenue/MenusOfSpecificVenue";
 import ReviewsOfSpecificVenue from "../ReviewsOfSpecificVenue/ReviewsOfSpecificVenue";
 import MapComponentView from "../MapViewComponent/MapComponentView";
-import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
-import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import CarouselOfPackages from "../SpecificVendorPackages/CarouselOfPackages";
 import ModalOfPackages from "../SpecificVendorPackages/ModalOfPackages";
 import { useParams } from "react-router-dom";
 import { IconMessageCircle, IconSettings } from "@tabler/icons";
 import BookVenueSideColumnsForVendor from "../BookVenueSideColums/BookVenueSideColumnsForVendor";
+import SignIn from "../userProfiling/SignIn";
+import SignUp from "../userProfiling/SignUp";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -43,14 +38,6 @@ const SpecificVendorBusinessDetails = () => {
   const params = useParams();
   const { classes } = useStyles();
 
-  const scrollRef = useScrollIntoView({});
-  const scrollRef1 = useScrollIntoView({});
-  const scrollRef2 = useScrollIntoView({});
-  const scrollRef3 = useScrollIntoView({});
-  const scrollRef4 = useScrollIntoView({});
-  const scrollRef5 = useScrollIntoView({});
-  const scrollRef6 = useScrollIntoView({});
-  console.log("scrollRef", scrollRef);
   const [refresh, setRefresh] = useState(true);
   const [vendorDetails, setVendorDetails] = useState({});
   const [vendorFeedbacks, setVendorFeedbacks] = useState([]);
@@ -62,8 +49,9 @@ const SpecificVendorBusinessDetails = () => {
   const [guests, setGuests] = useState();
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [idOfSpecificVendorPackage, setIdOfSpecificVendorPackage] =
-    useState("");
+  const [idOfSpecificVendorPackage, setIdOfSpecificVendorPackage] = useState(
+    ""
+  );
   console.log("vendorDetails are", vendorDetails);
   const [open, setOpen] = useState(false);
 
@@ -119,10 +107,22 @@ const SpecificVendorBusinessDetails = () => {
           alignItems: "center",
         }}
       >
+        <Modal opened={isSignIn} onClose={() => setIsSignIn(false)} fullScreen>
+          <SignIn
+            closeModal={true}
+            setIsSignIn={setIsSignIn}
+            setIsSignUp={setIsSignUp}
+          />
+        </Modal>
+        <Modal opened={isSignUp} onClose={() => setIsSignUp(false)} fullScreen>
+          <SignUp
+            closeModal={true}
+            setIsSignUp={setIsSignUp}
+            setIsSignIn={setIsSignIn}
+          />
+        </Modal>
         <Text color="dimmed">{vendorDetails?.city}, Pakistan</Text>
-        <Text onClick={() => scrollRef.scrollIntoView()} underline>
-          View Map
-        </Text>
+        <Text underline>View Map</Text>
         <Text underline>Phone Number</Text>
         <Anchor
           // component={Link}
@@ -151,11 +151,7 @@ const SpecificVendorBusinessDetails = () => {
             }
           />
         </Group>
-        <Text
-          color="dimmed"
-          underline
-          onClick={() => scrollRef6.scrollIntoView()}
-        >
+        <Text color="dimmed" underline>
           {vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0}{" "}
           {vendorDetails?.ratingCount === 1 ? "Review" : "Reviews"}
         </Text>
@@ -188,7 +184,6 @@ const SpecificVendorBusinessDetails = () => {
               <Grid py="xl">
                 <Grid.Col lg={8}>
                   <AboutVenue
-                    targetRef={scrollRef1.targetRef}
                     details={
                       vendorDetails?.vendorBusinessDescription
                         ? vendorDetails?.vendorBusinessDescription
@@ -239,7 +234,6 @@ const SpecificVendorBusinessDetails = () => {
             </Tabs.Panel>
             <Tabs.Panel value="Packages">
               <CarouselOfPackages
-                targetRef={scrollRef3.targetRef}
                 setOpen={setOpen}
                 packages={
                   vendorDetails?.vendorServicePackages
@@ -253,7 +247,6 @@ const SpecificVendorBusinessDetails = () => {
 
             <Tabs.Panel value="Reviews">
               <ReviewsOfSpecificVenue
-                targetRef={scrollRef6.targetRef}
                 flexibility={
                   vendorDetails?.flexibility ? vendorDetails?.flexibility : 5
                 }
@@ -283,7 +276,6 @@ const SpecificVendorBusinessDetails = () => {
             </Tabs.Panel>
             <Tabs.Panel value="Map">
               <MapComponentView
-                targetRef={scrollRef.targetRef}
                 pinLocation={
                   vendorDetails?.pinLocation
                     ? vendorDetails?.pinLocation
@@ -339,13 +331,12 @@ const SpecificVendorBusinessDetails = () => {
             setDate={setDate}
             time={time}
             setTime={setTime}
-            venueId={params.id}
+            vendorId={params.id}
             isSignIn={isSignIn}
             setIsSignIn={setIsSignIn}
           />
         </Grid.Col>
-      </Grid>
-      {/* <Text ref={scrollRef.targetRef}>asdsadsa</Text> */}
+      </Grid>{" "}
     </Container>
   );
 };

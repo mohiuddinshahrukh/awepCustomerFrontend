@@ -165,7 +165,7 @@ const SpecificVendorBusinessDetails = () => {
           <Carousal
             images={vendorDetails?.images ? vendorDetails?.images : ["", ""]}
           />
-          <Tabs defaultValue="About" py="xl" color="grape">
+          <Tabs defaultValue="About" py="xl" color="grape" keepMounted={false}>
             <Paper className={classes.stickySThings}>
               <Tabs.List py="md">
                 <Tabs.Tab icon={<IconMessageCircle size={14} />} value="About">

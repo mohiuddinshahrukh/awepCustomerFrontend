@@ -53,20 +53,22 @@ function App() {
             <Route path="/" element={<LandingPageMain />} />
             <Route path="/cardEditor" element={<CustomerCardEditor />} />
             <Route path="/allVendors" element={<AllVendorsPage />} />
+            {/* <Route path="/allVenues/date/:date" element={<AllVenuesPage />} /> */}
+            {/* <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} /> */}
             <Route path="/allVenues" element={<AllVenuesPage />} />
-            <Route path="/allVenues/:date" element={<AllVenuesPage />} />
-            <Route path="/allVenues/:date/:time" element={<AllVenuesPage />} />
             <Route
-              path="/allVenues/:date/:time/:city"
+              path="/allVenues/date/:date/time/:time/city/:city"
               element={<AllVenuesPage />}
             />
-            <Route path="/allVenues//:time/:city" element={<AllVenuesPage />} />
-            <Route path="/allVenues/:date//:city" element={<AllVenuesPage />} />
-            <Route path="/allVenues/:date/:time/" element={<AllVenuesPage />} />
-            <Route path="/allVenues/:date//" element={<AllVenuesPage />} />
-            <Route path="/allVenues//:time" element={<AllVenuesPage />} />
+            <Route path="/allVenues/time/:time/city/:city" element={<AllVenuesPage />} />
+            <Route path="/allVenues/date/:date/city/:city" element={<AllVenuesPage />} />
+            <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} />
+            <Route path="/allVenues/date/:date" element={<AllVenuesPage />} />
+            <Route path="/allVenues/time/:time" element={<AllVenuesPage />} />
+            <Route path="/allVenues/city/:city" element={<AllVenuesPage />} />
 
-            <Route path="/allVenues///:city" element={<AllVenuesPage />} />
+
+
             <Route
               path="/specificVendor"
               element={<SpecificVendorBusinessDetails />}

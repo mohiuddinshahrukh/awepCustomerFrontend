@@ -150,7 +150,9 @@ const SearchBackground = ({ carouselImages }) => {
           component={Link}
           to={
             searchSupplier === "venue"
-              ? `/allVenues/${date}/${time}/${city}`
+              ? `/allVenues${date ? "/date/" + date : ""}${
+                  time ? "/time/" + time : ""
+                }${city ? "/city/" + city : ""}`
               : `/allVendors`
           }
           style={{ backgroundColor: "#775A97" }}

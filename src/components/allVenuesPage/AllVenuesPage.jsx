@@ -23,7 +23,7 @@ import AllVenuesGrid from "./AllVenuesGrid";
 import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg";
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AllVenuesRatingFilter from "./AllVenuesRatingFilter";
 
 const fetchAllVenues = async () => {
@@ -45,9 +45,16 @@ const fetchAllVenues = async () => {
   }
 };
 const AllVenuesPage = () => {
+  const params = useParams();
+  console.log("PARAMS:", params);
+  const [city, setCity] = useState(params.city ? params.city : "");
+  const [date, setDate] = useState(
+    params.date ? new Date(params.date) : new Date(Date.now())
+  );
+  const [time, setTime] = useState(params.time ? params.time : "");
   const [venueType, setVenueType] = useState([]);
   const [allVenues, setAllVenues] = useState([]);
-  console.log("Venue Type", venueType);
+
   useEffect(() => {
     console.count();
     fetchAllVenues().then(setAllVenues);
@@ -102,6 +109,8 @@ const AllVenuesPage = () => {
                 styles={{ label: { color: "white" } }}
                 label="City"
                 placeholder="Select A City"
+                value={city}
+                onChange={setCity}
                 data={[
                   { value: "islamabad", label: "Islamabad" },
                   { value: "rawalpindi", label: "Rawalpindi" },
@@ -110,6 +119,8 @@ const AllVenuesPage = () => {
                 ]}
               />
               <DatePicker
+                value={date}
+                onChange={setDate}
                 size={"lg"}
                 styles={{ label: { color: "white" } }}
                 placeholder="Pick date"
@@ -125,6 +136,8 @@ const AllVenuesPage = () => {
               />
               <Select
                 size={"lg"}
+                value={time}
+                onChange={setTime}
                 styles={{ label: { color: "white" } }}
                 label="Time"
                 placeholder="Select A Time"

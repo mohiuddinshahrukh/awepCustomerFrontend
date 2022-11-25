@@ -20,6 +20,11 @@ import dayjs from "dayjs";
 const SearchBackground = ({ carouselImages }) => {
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const [searchSupplier, setSearchSupplier] = useState("venue");
+  const [date, setDate] = useState("");
+  const [city, setCity] = useState("");
+  const [time, setTime] = useState("");
+  console.log(date, "haha");
+
   const searchBackgroundCarousel = (
     <Carousel
       loop
@@ -90,6 +95,7 @@ const SearchBackground = ({ carouselImages }) => {
           size={"lg"}
           styles={{ label: { color: "white" } }}
           label="City"
+          onChange={setCity}
           placeholder="Select A City"
           data={[
             { value: "islamabad", label: "Islamabad" },
@@ -103,26 +109,46 @@ const SearchBackground = ({ carouselImages }) => {
           styles={{ label: { color: "white" } }}
           placeholder="Pick date"
           label="Event date"
+          value={date}
+          onChange={setDate}
           minDate={dayjs(new Date()).startOf("month").add(5, "days").toDate()}
           maxDate={dayjs(new Date())
             .endOf("month")
             .subtract(5, "days")
             .toDate()}
         />
-        <Select
-          size={"lg"}
-          styles={{ label: { color: "white" } }}
-          label="Time"
-          placeholder="Select A Time"
-          data={[
-            { value: "LUNCH", label: "Lunch" },
-            { value: "DINNER", label: "Dinner" },
-          ]}
-        />
+        {searchSupplier === "venue" ? (
+          <Select
+            size={"lg"}
+            styles={{ label: { color: "white" } }}
+            label="Time"
+            onChange={setTime}
+            placeholder="Select A Time"
+            data={[
+              { value: "LUNCH", label: "Lunch" },
+              { value: "DINNER", label: "Dinner" },
+            ]}
+          />
+        ) : (
+          <Select
+            size={"lg"}
+            styles={{ label: { color: "white" } }}
+            label="Duration"
+            onChange={setTime}
+            placeholder="Select Duration"
+            data={[
+              { value: "1 Day", label: "1 Day" },
+              { value: "2 Days", label: "2 Days" },
+              { value: "3 Days", label: "3 Days" },
+              { value: "4 Days", label: "4 Days" },
+            ]}
+          />
+        )}
+
         <Button
           size={"lg"}
           component={Link}
-          to={searchSupplier === "venue" ? "/allVenues" : "/allVendors"}
+          to={searchSupplier === "venue" ? `/allVenues` : `/allVendors`}
           style={{ backgroundColor: "#775A97" }}
         >
           Search

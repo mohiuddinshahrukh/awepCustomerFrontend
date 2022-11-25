@@ -12,7 +12,6 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useScrollIntoView } from "@mantine/hooks";
 import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
@@ -44,14 +43,6 @@ const SpecificVenueDetails = () => {
   console.log("Route Params: ", params);
   const { classes } = useStyles();
 
-  const scrollRef = useScrollIntoView({});
-  const scrollRef1 = useScrollIntoView({});
-  const scrollRef2 = useScrollIntoView({});
-  const scrollRef3 = useScrollIntoView({});
-  const scrollRef4 = useScrollIntoView({});
-  const scrollRef5 = useScrollIntoView({});
-  const scrollRef6 = useScrollIntoView({});
-  console.log("scrollRef", scrollRef);
   const [refresh, setRefresh] = useState(true);
   const [venueDetails, setVenueDetails] = useState({});
   const [venueFeedbacks, setVenueFeedbacks] = useState([]);
@@ -157,9 +148,7 @@ const SpecificVenueDetails = () => {
         }}
       >
         <Text color="dimmed">{venueDetails?.venueCity}, Pakistan</Text>
-        <Text onClick={() => scrollRef.scrollIntoView()} underline>
-          View Map
-        </Text>
+        <Text underline>View Map</Text>
         <Text underline>Phone Number</Text>
         <Anchor
           // component={Link}
@@ -188,11 +177,7 @@ const SpecificVenueDetails = () => {
             }
           />
         </Group>
-        <Text
-          color="dimmed"
-          underline
-          onClick={() => scrollRef6.scrollIntoView()}
-        >
+        <Text color="dimmed" underline>
           {venueDetails?.ratingCount ? venueDetails?.ratingCount : 0}{" "}
           {venueDetails?.ratingCount === 1 ? "Review" : "Reviews"}
         </Text>
@@ -266,7 +251,6 @@ const SpecificVenueDetails = () => {
 
             <Tabs.Panel value="About">
               <AboutVenue
-                targetRef={scrollRef1.targetRef}
                 details={
                   venueDetails?.venueDescription
                     ? venueDetails?.venueDescription
@@ -293,7 +277,6 @@ const SpecificVenueDetails = () => {
             </Tabs.Panel>
             <Tabs.Panel value="Services">
               <VenueServices
-                targetRef={scrollRef2.targetRef}
                 services={
                   venueDetails?.providedVenueServices
                     ? venueDetails?.providedVenueServices
@@ -305,7 +288,6 @@ const SpecificVenueDetails = () => {
             {venueDetails?.subVenues?.length !== 0 && (
               <Tabs.Panel value="Sub Venues">
                 <CarouselOfSubVenues
-                  targetRef={scrollRef3.targetRef}
                   setOpen={setOpen}
                   setIdOfSpecificSubVenue={setIdOfSpecificSubVenue}
                   idOfSpecificSubVenue={idOfSpecificSubVenue}
@@ -318,7 +300,6 @@ const SpecificVenueDetails = () => {
             {venueDetails?.menus?.length !== 0 && (
               <Tabs.Panel value="Menus">
                 <MenusOfSpecificVenue
-                  targetRef={scrollRef4.targetRef}
                   menus={venueDetails?.menus ? venueDetails?.menus : [{}]}
                 />
               </Tabs.Panel>
@@ -332,7 +313,6 @@ const SpecificVenueDetails = () => {
             )}
             <Tabs.Panel value="Reviews">
               <ReviewsOfSpecificVenue
-                targetRef={scrollRef6.targetRef}
                 flexibility={
                   venueDetails?.flexibility ? venueDetails?.flexibility : 5
                 }
@@ -361,7 +341,6 @@ const SpecificVenueDetails = () => {
             </Tabs.Panel>
             <Tabs.Panel value="Map">
               <MapComponentView
-                targetRef={scrollRef.targetRef}
                 pinLocation={
                   venueDetails?.pinLocation
                     ? venueDetails?.pinLocation
@@ -402,7 +381,6 @@ const SpecificVenueDetails = () => {
           />
         </Grid.Col>
       </Grid>
-      {/* <Text ref={scrollRef.targetRef}>asdsadsa</Text> */}
     </Container>
   );
 };

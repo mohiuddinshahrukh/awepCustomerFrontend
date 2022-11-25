@@ -159,8 +159,6 @@ const NewBookingFile = () => {
   const [stepperDisabled, setStepperDisabled] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
   const [bookingId, setBookingId] = useState("");
-  const [bookingDetails, setBookingDetails] = useState({});
-  console.log("bookingDetails", bookingDetails);
 
   const [venueDetails, setVenueDetails] = useState({});
   console.log("VENUE DETAILS: ", venueDetails);
@@ -428,12 +426,6 @@ const NewBookingFile = () => {
   const bookedDateAndTime =
     new moment(form1.values.date).format().split("T")[0] + form1.values.time;
   console.log("testing date and time", bookedDateAndTime);
-  const bookingDateAndTime =
-    bookingDetails?.bookingDate && bookingDetails?.bookingTime
-      ? new moment(bookingDetails?.bookingDate).format().split("T")[0] +
-        bookingDetails?.bookingTime
-      : null;
-  console.log("testing date and time bookingDateAndTime", bookingDateAndTime);
 
   const handleSubmit = async (event) => {
     var { noOfGuests, eventType, time, date } = event;
@@ -470,64 +462,17 @@ const NewBookingFile = () => {
   useEffect(() => {
     const url2 = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.venueId}`;
     if (refresh) {
-      try {
-        //if we have booking id we will fetch the booking in this if statement
-        if (params.bookingId) {
-          const headers = {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("userToken"),
-          };
-          axios({
-            method: "get",
-            url: `https://a-wep.herokuapp.com/customer/getSubVenueBooking/${params.bookingId}`,
-            headers: headers,
-          }).then((res) => {
-            console.log(res.data);
-            if (res.data.status === "success") {
-              const response = res.data.data;
-              console.log("THIS IS THE RESPONSE OBJECT:   ", response);
-              setBookingDetails(response);
-              setIdOfSelectedSubVenue(params.subVenueId);
-              setIdOfSelectedMenu(response?.selectedMenu?.menu?._id);
-              setIdOfSelectedTheme(response?.selectedVenueTheme?.theme?._id);
-              setSelectedVenueServices(
-                response?.selectedVenueServices.map(
-                  (service) => service.serviceTitle
-                )
-              );
-              setSelectedVenueServiceObject(response?.selectedVenueServices);
-              setTotalPrice(response?.totalPrice);
-              setNoOfGuests(response?.numberOfGuests);
-              setEventType(response?.eventType);
-              setTime(response?.bookingTime);
-              onChange(response?.bookingDate);
-              setPhone(response?.phone);
-              setEmail(response?.email);
-              setDescription(response?.description);
-              setMenuPrice(response?.selectedMenu?.menu?.price);
-
-              setRefresh(false);
-              setVisible(false);
-            } else {
-              // alert("Error");
-            }
-          });
+      axios.get(url2).then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          console.log("we are here in api call");
+          setVenueDetails(res.data.data);
+          setRefresh(false);
+          setVisible(false);
+        } else {
+          // alert("Error");
         }
-
-        axios.get(url2).then((res) => {
-          console.log(res.data);
-          if (res.data.status === "success") {
-            console.log("we are here in api call");
-            setVenueDetails(res.data.data);
-            setRefresh(false);
-            setVisible(false);
-          } else {
-            // alert("Error");
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      });
     }
   }, [refresh]);
 
@@ -1156,7 +1101,6 @@ const NewBookingFile = () => {
                   </Text>
                   <Button
                     size="md"
-                    hidden={params.bookingId}
                     // disabled={eventType === ""}
                     variant="filled"
                     color="red"
@@ -1201,11 +1145,7 @@ const NewBookingFile = () => {
                     <Grid.Col lg={6}>
                       <Select
                         size="md"
-                        disabled={
-                          params.subVenueId
-                            ? false
-                            : idOfSelectedSubVenue !== ""
-                        }
+                        disabled={idOfSelectedSubVenue !== ""}
                         label="Event Type"
                         placeholder="Event Type"
                         value={eventType}
@@ -1246,11 +1186,7 @@ const NewBookingFile = () => {
                       <DatePicker
                         inputFormat="YYYY-MM-DD"
                         size="md"
-                        disabled={
-                          params.subVenueId
-                            ? false
-                            : idOfSelectedSubVenue !== ""
-                        }
+                        disabled={idOfSelectedSubVenue !== ""}
                         minDate={dayjs(new Date())
                           .startOf("month")
                           .add(new Date().getDate(), "days")
@@ -1263,14 +1199,12 @@ const NewBookingFile = () => {
                         // onChange={onChange}
                         onInput={(e) => {
                           onChange(e);
-                          if (!params.bookingId) {
-                            setIdOfSelectedSubVenue("");
-                            setMenuPrice(0);
-                            setHallCharges(0);
-                            setIdOfSelectedMenu("");
-                            setTotalPrice(0);
-                            setHidden(true);
-                          }
+                          setIdOfSelectedSubVenue("");
+                          setIdOfSelectedMenu("");
+                          setTotalPrice(0);
+                          setHidden(true);
+                          setMenuPrice(0);
+                          setValue2([]);
                         }}
                         {...form1.getInputProps("date")}
                       />
@@ -1279,22 +1213,19 @@ const NewBookingFile = () => {
                       <Select
                         size="md"
                         label="Event Time"
-                        disabled={
-                          params.subVenueId
-                            ? false
-                            : idOfSelectedSubVenue !== ""
-                        }
+                        disabled={idOfSelectedSubVenue !== ""}
                         placeholder="Time"
                         value={time}
-                        onInput={(e) => {
-                          if (!params.bookingId) {
-                            setIdOfSelectedSubVenue("");
-                            setMenuPrice(0);
-                            setHallCharges(0);
-                            setIdOfSelectedMenu("");
-                            setTotalPrice(0);
-                          }
-                        }}
+                        // onChange={(e) => {
+                        //   setTime(e.target.value);
+                        //   setIdOfSelectedSubVenue("");
+                        //   setIdOfSelectedMenu("");
+                        //   setMenuPrice(0);
+                        //   setChargesError("");
+                        //   setHidden(true);
+
+                        //   setTotalPrice(0);
+                        // }}
                         data={[
                           {
                             value: "LUNCH",
@@ -1321,14 +1252,13 @@ const NewBookingFile = () => {
                         placeholder="Enter Number of Guests"
                         onInput={(e) => {
                           setNoOfGuests(e.currentTarget.value);
-                          if (!params.bookingId) {
-                            setIdOfSelectedSubVenue("");
-                            setMenuPrice(0);
-                            setHallCharges(0);
-                            setIdOfSelectedMenu("");
-                            setTotalPrice(0);
-                          }
+                          setIdOfSelectedSubVenue("");
+                          setMenuPrice(0);
                           setChargesError("");
+                          setHallCharges(0);
+
+                          setIdOfSelectedMenu("");
+                          setTotalPrice(0);
                         }}
                         onChange={(e) => {
                           setNoOfGuests(e.currentTarget.value);
@@ -1340,17 +1270,13 @@ const NewBookingFile = () => {
 
                   {venueDetails?.subVenues && (
                     <SubVenuesForBooking
-                      isUpdate={params.bookingId ? true : false}
                       subvenueDetails={
                         venueDetails?.subVenues ? venueDetails?.subVenues : []
                       }
                       setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
-                      idOfSelectedSubVenue={
-                        params.subVenueId || idOfSelectedSubVenue
-                      }
+                      idOfSelectedSubVenue={idOfSelectedSubVenue}
                       refreshStates={refreshStates}
                       bookedDateAndTime={bookedDateAndTime}
-                      bookingDateAndTime={bookingDateAndTime}
                       noOfGuests={form1.values.noOfGuests}
                       setHidden={setHidden}
                       error={error}
@@ -1389,7 +1315,7 @@ const NewBookingFile = () => {
                         variant="filled"
                         color="dark"
                         type="submit"
-                        disabled={disabled || !idOfSelectedSubVenue}
+                        disabled={disabled}
                         // loading={loading}
                         rightIcon={<IconArrowRight />}
                         // onClick={nextStep}

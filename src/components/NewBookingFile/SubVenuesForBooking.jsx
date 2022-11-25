@@ -104,8 +104,9 @@ function sortData(data, payload) {
 // DATA
 
 const SubVenuesForBooking = ({
-  subVenueBookingUpdate,
+  isUpdate,
   subvenueDetails,
+  bookingDateAndTime,
   setIdOfSelectedSubVenue,
   idOfSelectedSubVenue,
   refreshStates,
@@ -142,7 +143,21 @@ const SubVenuesForBooking = ({
   };
 
   useEffect(() => {
-    filtering();
+    console.log("@TESTING subvenue details", subvenueDetails, isUpdate);
+    if (isUpdate) {
+      let subVenue = subvenueDetails.filter(
+        (subVenue) => subVenue._id === idOfSelectedSubVenue
+      );
+      console.log(
+        "@TESTING subvenue details in isUpdate",
+        idOfSelectedSubVenue,
+        subVenue
+      );
+      setSortedData(subVenue);
+      available(subVenue[0]);
+    } else {
+      filtering();
+    }
   }, [noOfGuests, bookedDateAndTime, time]);
 
   const filtering = () => {
@@ -168,6 +183,42 @@ const SubVenuesForBooking = ({
       );
     }
   };
+  const available = (subVenue) => {
+    console.log("@TESTING aVaileble called")
+    let error = "";
+    if (subVenue.bookedOn) {
+      console.log("@TESTING BOOKED ON", subVenue.bookedOn);
+      console.log("@TESTING BOOKED ON", bookedDateAndTime, bookingDateAndTime);
+      if (
+        bookingDateAndTime &&
+        bookedDateAndTime != bookingDateAndTime &&
+        subVenue.bookedOn[bookedDateAndTime]
+      ) {
+        console.log("@TESTING BOOKED ON", subVenue.bookedOn[bookedDateAndTime]);
+
+        error += "SubVenue is not available on this date and time \n";
+      }
+    }
+    if (noOfGuests) {
+      console.log(
+        "@TESTING no of guests",
+        noOfGuests,
+        subVenue.subVenueCapacity
+      );
+      if (subVenue.subVenueCapacity < noOfGuests) {
+        console.log("@TESTING no of guests", subVenue.subVenueCapacity);
+        error += "Number of guests exceeds the capacity of the subvenue ";
+      }
+      checkForCharges(
+        subVenue.subVenueMinCapacity,
+        subVenue.subVenueBookingCharges
+      );
+    }
+    console.log("@TESTING ERROR", error);
+    setError(error);
+    error ? setDisabled(true) : setDisabled(false);
+  };
+
   const filteringAfterSelection = (id) => {
     let filteredSubVenues = subvenueDetails.filter(
       (subVenue) => subVenue._id === id
@@ -192,7 +243,12 @@ const SubVenuesForBooking = ({
   };
 
   const rows = sortedData?.map((row, index) => (
-    <tr key={index}>
+    <tr
+      key={index}
+      style={{
+        backgroundColor: idOfSelectedSubVenue === row._id ? "#e6e6e6" : "white",
+      }}
+    >
       {console.log("ROW", row)}
       <td>{index + 1}</td>
       <td>
@@ -215,7 +271,7 @@ const SubVenuesForBooking = ({
           </ActionIcon>
           <Button
             size="xs"
-            hidden={hideSelectButton}
+            hidden={hideSelectButton || isUpdate}
             style={{
               backgroundColor:
                 row._id === idOfSelectedSubVenue ? "#E60084" : "white",
@@ -226,6 +282,7 @@ const SubVenuesForBooking = ({
             disabled={row._id === idOfSelectedSubVenue}
             onClick={() => {
               // refreshStates();
+
               setIdOfSelectedSubVenue(row._id);
               setHidden(true);
               setError("");
@@ -248,7 +305,8 @@ const SubVenuesForBooking = ({
 
   return (
     <ScrollArea>
-      {error === "" ? (
+      {console.log("TESTING ERROR, ", error)}
+      {isUpdate || error === "" ? (
         <Title py="xl" order={3} align="center">
           Available Sub Venues
         </Title>
@@ -314,6 +372,9 @@ const SubVenuesForBooking = ({
           </thead>
           <tbody>{rows?.length > 0 ? rows : null}</tbody>
         </Table>
+        <Text color="red" align="center" hidden={!error}>
+          {error}
+        </Text>
       </Paper>
     </ScrollArea>
   );

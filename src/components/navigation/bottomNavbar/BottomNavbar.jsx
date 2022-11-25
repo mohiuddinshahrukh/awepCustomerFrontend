@@ -44,6 +44,15 @@ const BottomNavbar = () => {
                   { title: "Terms of Use", path: "#" },
                   { title: "Prvacy Policy", path: "#" },
                   { title: "Wedding Cards", path: "#" },
+                ],
+              },
+            ]}
+          />
+          <BottomNavbarLinks
+            footerLinks={[
+              {
+                title: "More Information",
+                links: [
                   { title: "Cookies Policy", path: "#" },
                   { title: "Featured Venues", path: "#" },
                   { title: "Featured Vendors", path: "#" },

@@ -4,6 +4,7 @@ import {
   IconMessagePlus,
   IconMessages,
   IconNotebook,
+  IconSettings,
 } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -18,6 +19,36 @@ const data = [
     title: "Chat",
     path: "#",
     icon: <IconMessages />,
+  },
+  {
+    title: "Wedding Cards",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Complaints & Feedback",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Payments",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "FAQ & Help",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Invite",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Profile",
+    path: "#",
+    icon: <IconSettings />,
   },
 ];
 

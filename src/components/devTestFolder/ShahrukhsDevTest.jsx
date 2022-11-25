@@ -6,7 +6,7 @@ import Sidebar from "../navigation/sideNavbar/bookings/Sidebar";
 const ShahrukhsDevTest = () => {
   return (
     <Container size={"xl"}>
-      <Group align={"flex-start"} style={{ flexShrink: 0 }} noWrap>
+      <Group align={"flex-start"} noWrap>
         <Sidebar />
         <Outlet />
       </Group>

@@ -11,6 +11,8 @@ import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";
+import CustomerProfile from "./components/navigation/sideNavbar/customerProfile/CustomerProfile";
+import CustomerPayments from "./components/navigation/sideNavbar/payments/CustomerPayments";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import NewBookingFile from "./components/NewBookingFile/NewBookingFile";
 import NewVendorBookingFile from "./components/NewVendorBooking/NewVendorBooking";
@@ -60,14 +62,21 @@ function App() {
               path="/allVenues/date/:date/time/:time/city/:city"
               element={<AllVenuesPage />}
             />
-            <Route path="/allVenues/time/:time/city/:city" element={<AllVenuesPage />} />
-            <Route path="/allVenues/date/:date/city/:city" element={<AllVenuesPage />} />
-            <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} />
+            <Route
+              path="/allVenues/time/:time/city/:city"
+              element={<AllVenuesPage />}
+            />
+            <Route
+              path="/allVenues/date/:date/city/:city"
+              element={<AllVenuesPage />}
+            />
+            <Route
+              path="/allVenues/date/:date/time/:time"
+              element={<AllVenuesPage />}
+            />
             <Route path="/allVenues/date/:date" element={<AllVenuesPage />} />
             <Route path="/allVenues/time/:time" element={<AllVenuesPage />} />
             <Route path="/allVenues/city/:city" element={<AllVenuesPage />} />
-
-
 
             <Route
               path="/specificVendor"
@@ -83,6 +92,16 @@ function App() {
             />
             <Route path="/shahrukhTest" element={<ShahrukhsDevTest />}>
               <Route path="bookings" element={<CustomerBookings />} />
+              <Route path="chats" element={<>CHATS</>} />
+              <Route path="weddingCards" element={<>WEDDING CARDS</>} />
+              <Route
+                path="complaintsAndFeedback"
+                element={<>COMPLAINTS AND FEEDBACK</>}
+              />
+              <Route path="payments" element={<CustomerPayments />} />
+              <Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
+              <Route path="invite" element={<>INVITE</>} />
+              <Route path="profile" element={<CustomerProfile />} />
             </Route>
             {/* <Route
                 path="/venueBooking/:eventType/:date/:time/:guests/:venueId"

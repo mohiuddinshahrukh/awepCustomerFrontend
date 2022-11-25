@@ -172,9 +172,7 @@ const NewBookingFile = () => {
   const [time, setTime] = useState("");
   const [noOfGuests, setNoOfGuests] = useState("");
   const [filterSubVenues, setFilterSubVenues] = useState([]);
-  const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState(
-    params.subVenueId
-  );
+  const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState("");
   const [chargesError, setChargesError] = useState("");
   const [eventType, setEventType] = useState("");
   console.log("event type is", eventType);
@@ -430,9 +428,11 @@ const NewBookingFile = () => {
   const bookedDateAndTime =
     new moment(form1.values.date).format().split("T")[0] + form1.values.time;
   console.log("testing date and time", bookedDateAndTime);
-  const bookingDateAndTime = bookingDetails?.bookingDate && bookingDetails?.bookingTime ?
-    new moment(bookingDetails?.bookingDate).format().split("T")[0] +
-    bookingDetails?.bookingTime : null;
+  const bookingDateAndTime =
+    bookingDetails?.bookingDate && bookingDetails?.bookingTime
+      ? new moment(bookingDetails?.bookingDate).format().split("T")[0] +
+        bookingDetails?.bookingTime
+      : null;
   console.log("testing date and time bookingDateAndTime", bookingDateAndTime);
 
   const handleSubmit = async (event) => {
@@ -487,7 +487,7 @@ const NewBookingFile = () => {
               const response = res.data.data;
               console.log("THIS IS THE RESPONSE OBJECT:   ", response);
               setBookingDetails(response);
-              setIdOfSelectedSubVenue(response?.subVenue?._id);
+              setIdOfSelectedSubVenue(params.subVenueId);
               setIdOfSelectedMenu(response?.selectedMenu?.menu?._id);
               setIdOfSelectedTheme(response?.selectedVenueTheme?.theme?._id);
               setSelectedVenueServices(
@@ -496,6 +496,15 @@ const NewBookingFile = () => {
                 )
               );
               setSelectedVenueServiceObject(response?.selectedVenueServices);
+              setTotalPrice(response?.totalPrice);
+              setNoOfGuests(response?.numberOfGuests);
+              setEventType(response?.eventType);
+              setTime(response?.bookingTime);
+              onChange(response?.bookingDate);
+              setPhone(response?.phone);
+              setEmail(response?.email);
+              setDescription(response?.description);
+              setMenuPrice(response?.selectedMenu?.menu?.price);
 
               setRefresh(false);
               setVisible(false);
@@ -1380,7 +1389,7 @@ const NewBookingFile = () => {
                         variant="filled"
                         color="dark"
                         type="submit"
-                        disabled={disabled}
+                        disabled={disabled || !idOfSelectedSubVenue}
                         // loading={loading}
                         rightIcon={<IconArrowRight />}
                         // onClick={nextStep}

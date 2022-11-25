@@ -184,6 +184,7 @@ const SubVenuesForBooking = ({
     }
   };
   const available = (subVenue) => {
+    console.log("@TESTING aVaileble called")
     let error = "";
     if (subVenue.bookedOn) {
       console.log("@TESTING BOOKED ON", subVenue.bookedOn);

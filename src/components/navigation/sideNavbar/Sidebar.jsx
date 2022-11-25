@@ -1,10 +1,5 @@
-import { Anchor, Box, Group, Paper, Text } from "@mantine/core";
-import {
-  IconBook,
-  IconMessagePlus,
-  IconMessages,
-  IconNotebook,
-} from "@tabler/icons";
+import { Anchor, Box, Group, Text } from "@mantine/core";
+import { IconMessages, IconNotebook, IconSettings } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -18,6 +13,36 @@ const data = [
     title: "Chat",
     path: "#",
     icon: <IconMessages />,
+  },
+  {
+    title: "Wedding Cards",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Complaints & Feedback",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Payments",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "FAQ & Help",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Invite",
+    path: "#",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Profile",
+    path: "#",
+    icon: <IconSettings />,
   },
 ];
 

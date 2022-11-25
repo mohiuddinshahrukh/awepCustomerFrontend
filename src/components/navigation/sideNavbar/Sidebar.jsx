@@ -1,11 +1,5 @@
-import { Anchor, Box, Group, Paper, Text } from "@mantine/core";
-import {
-  IconBook,
-  IconMessagePlus,
-  IconMessages,
-  IconNotebook,
-  IconSettings,
-} from "@tabler/icons";
+import { Anchor, Box, Group, Text } from "@mantine/core";
+import { IconMessages, IconNotebook, IconSettings } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 

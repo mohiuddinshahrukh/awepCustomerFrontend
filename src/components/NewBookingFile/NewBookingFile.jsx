@@ -161,6 +161,8 @@ const NewBookingFile = () => {
   const [bookingId, setBookingId] = useState("");
 
   const [venueDetails, setVenueDetails] = useState({});
+  const [bookingDetails, setBookingDetails] = useState({});
+  console.log("BOOKING DETAILS: ", bookingDetails);
   console.log("VENUE DETAILS: ", venueDetails);
   const [customer, setCustomer] = useState("");
   const [venue, setVenue] = useState("");
@@ -170,7 +172,9 @@ const NewBookingFile = () => {
   const [time, setTime] = useState("");
   const [noOfGuests, setNoOfGuests] = useState("");
   const [filterSubVenues, setFilterSubVenues] = useState([]);
-  const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState("");
+  const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState(
+    params?.subVenueId ? params?.subVenueId : ""
+  );
   const [chargesError, setChargesError] = useState("");
   const [eventType, setEventType] = useState("");
   console.log("event type is", eventType);
@@ -473,6 +477,28 @@ const NewBookingFile = () => {
           // alert("Error");
         }
       });
+    }
+    if (params.bookingId) {
+      console.log("hello there")
+      const url3 = `https://a-wep.herokuapp.com/customer/getSubVenueBookings`;
+      if (refresh) {
+        axios.get(url3).then((res) => {
+          console.log(res.data);
+          if (res.data.status === "success") {
+            console.log("we are here in api call");
+            let bookings = res.data.data;
+            console.log("all bookings", bookings);
+            let booking = bookings.filter(
+              (booking) => booking._id === params.bookingId
+            );
+            setBookingDetails(booking);
+            setRefresh(false);
+            setVisible(false);
+          } else {
+            // alert("Error");
+          }
+        });
+      }
     }
   }, [refresh]);
 
@@ -1107,31 +1133,31 @@ const NewBookingFile = () => {
                     // disabled={loading}
                     // leftIcon={<X />}
                     onClick={() => {
-                      setEventType("");
-                      form1.setFieldValue("eventType", "");
-                      form1.setFieldValue("date", null);
-                      form1.setFieldValue("time", "");
-                      form1.setFieldValue("noOfGuests", "");
-
-                      setTime("");
-                      setNoOfGuests("");
-
-                      setIdOfSelectedSubVenue("");
-                      setSelectedVenueServices([]);
-                      setSelectedVenueServiceObject([]);
-                      setIdOfSelectedMenu("");
-                      setIdOfSelectedTheme("");
-                      setTotalPrice(0);
-                      setMenuPrice(0);
-                      setChargesError("");
-                      setHallCharges(0);
-                      setHidden(true);
-                      setChecked(false);
-                      onChange("");
-                      setError("");
-                      setDisabled(false);
-
-                      // form1.reset();
+                      if (params.subVenueId) {
+                        form1.reset();
+                      } else {
+                        setEventType("");
+                        form1.setFieldValue("eventType", "");
+                        form1.setFieldValue("date", null);
+                        form1.setFieldValue("time", "");
+                        form1.setFieldValue("noOfGuests", "");
+                        setTime("");
+                        setNoOfGuests("");
+                        setIdOfSelectedSubVenue("");
+                        setSelectedVenueServices([]);
+                        setSelectedVenueServiceObject([]);
+                        // setIdOfSelectedMenu("");
+                        // setIdOfSelectedTheme("");
+                        setTotalPrice(0);
+                        // setMenuPrice(0);
+                        setChargesError("");
+                        setHallCharges(0);
+                        setHidden(true);
+                        setChecked(false);
+                        onChange("");
+                        setError("");
+                        setDisabled(false);
+                      }
                     }}
                   >
                     RESET
@@ -1270,6 +1296,7 @@ const NewBookingFile = () => {
 
                   {venueDetails?.subVenues && (
                     <SubVenuesForBooking
+                      subVenueBookingUpdate={true}
                       subvenueDetails={
                         venueDetails?.subVenues ? venueDetails?.subVenues : []
                       }
@@ -1354,10 +1381,9 @@ const NewBookingFile = () => {
                         setChecked(event.currentTarget.checked)
                       }
                       onClick={() => {
-                        const SelectedVenueServiceObjects =
-                          venueDetails?.subVenues?.filter(
-                            (f) => f._id === idOfSelectedSubVenue
-                          )[0]?.subVenueServices;
+                        const SelectedVenueServiceObjects = venueDetails?.subVenues?.filter(
+                          (f) => f._id === idOfSelectedSubVenue
+                        )[0]?.subVenueServices;
                         if (!checked) {
                           setSelectedVenueServices(
                             venueDetails?.subVenues
@@ -1407,12 +1433,11 @@ const NewBookingFile = () => {
                           setHidden(true);
                         }
                         setSelectedVenueServices(e);
-                        const SelectedVenueServiceObjects =
-                          venueDetails?.subVenues
-                            ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
-                            ?.subVenueServices.filter((g) =>
-                              e.includes(g.serviceTitle)
-                            );
+                        const SelectedVenueServiceObjects = venueDetails?.subVenues
+                          ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
+                          ?.subVenueServices.filter((g) =>
+                            e.includes(g.serviceTitle)
+                          );
                         console.log("555555", SelectedVenueServiceObjects);
                         setSelectedVenueServiceObject(
                           SelectedVenueServiceObjects

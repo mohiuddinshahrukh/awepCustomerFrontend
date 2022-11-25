@@ -104,8 +104,8 @@ function sortData(data, payload) {
 // DATA
 
 const SubVenuesForBooking = ({
+  subVenueBookingUpdate,
   subvenueDetails,
-
   setIdOfSelectedSubVenue,
   idOfSelectedSubVenue,
   refreshStates,

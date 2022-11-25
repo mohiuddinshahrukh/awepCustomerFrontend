@@ -5,13 +5,12 @@ import {
   Grid,
   Group,
   Image,
-  List,
   Paper,
   Table,
   Text,
   Title,
 } from "@mantine/core";
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -53,173 +52,7 @@ const billHeadCells = [
 ];
 let iconSize = 20;
 const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
-  const matches1200 = useMediaQuery("(min-width: 1200px)");
-  const matches1000 = useMediaQuery("(min-width: 1000px)");
-  const matches800 = useMediaQuery("(min-width: 800px)");
   const matches500 = useMediaQuery("(min-width: 500px)");
-
-  console.log("Single Invoice: ", singleInvoice);
-  const [hallCharges, setHallCharges] = useState(
-    singleInvoice?.subVenueBookingCharges
-  );
-  const [serviceCharges, setServiceCharges] = useState(
-    singleInvoice?.selectedVenueServices
-      ?.map(
-        (service) =>
-          service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-      )
-      .reduce((a, b) => a + b, 0)
-  );
-  const [menuCharges, setMenuCharges] = useState(
-    singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
-  );
-  const [subtotalCharges, setSubtotalCharges] = useState(
-    singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
-  );
-  const [discountCharges, setDiscountCharges] = useState(
-    (singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-      0.25
-  );
-  const [taxCharges, setTaxCharges] = useState(
-    (singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-      0.17
-  );
-  const [totalCharges, setTotalCharges] = useState(
-    singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.17 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.25
-  );
-  const [totalDepositDue, setDepositDueCharges] = useState(
-    (singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.17 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.25) *
-      0.25
-  );
-  const [totalDepositRemainging, setDepositRemaingingCharges] = useState(
-    singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.17 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.25 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-        (singleInvoice?.subVenueBookingCharges +
-          singleInvoice?.selectedVenueServices
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-          0.17 -
-        (singleInvoice?.subVenueBookingCharges +
-          singleInvoice?.selectedVenueServices
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-          0.25) *
-        0.25
-  );
-
   let awepLogoSize = 40;
   let invoiceTextBG = "#1ABD9C";
   let invoiceTextColor = "white";
@@ -238,28 +71,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
       })}
     </tr>
   );
-  const serviceHeaders = (
-    <tr>
-      {servicesHeadCells.map((headCell, index) => {
-        return (
-          <th key={index} style={{ whiteSpace: "nowrap" }}>
-            <Text align={headCell.align}>{headCell.title}</Text>
-          </th>
-        );
-      })}
-    </tr>
-  );
-  //   const menuHeaders = (
-  //     <tr>
-  //       {menuHeadCells.map((headCell, index) => {
-  //         return (
-  //           <th key={index} style={{ whiteSpace: "nowrap" }}>
-  //             <Text align={headCell.align}>{headCell.title}</Text>
-  //           </th>
-  //         );
-  //       })}
-  //     </tr>
-  //   );
+
   const billHeaders = (
     <tr>
       {billHeadCells.map((headCell, index) => {
@@ -272,48 +84,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
     </tr>
   );
 
-  const serviceRows = singleInvoice?.selectedVenueServices?.map(
-    (service, index) => {
-      return (
-        <tr key={index}>
-          <td align="center">{index + 1}</td>
-
-          <td>{service?.serviceTitle}</td>
-          <td>{service?.duration}</td>
-          {/*          <td>
-                  <Text align="justify">{service?.serviceDescription}</Text>
-                </td>*/}
-          <td align="right">
-            <Text>
-              {service?.servicePrice.toLocaleString()}
-              {service?.duration === "Per Event" ? (
-                <span
-                  component={Text}
-                  style={{ color: "GrayText", fontSize: 12 }}
-                >
-                  &nbsp;x 1
-                </span>
-              ) : (
-                <span
-                  component={Text}
-                  style={{ color: "GrayText", fontSize: 12 }}
-                >
-                  &nbsp;x 3
-                </span>
-              )}
-            </Text>
-          </td>
-          <td align="right">
-            {service?.duration === "Per Event"
-              ? service?.servicePrice.toLocaleString()
-              : (service?.servicePrice * 3).toLocaleString()}
-          </td>
-        </tr>
-      );
-    }
-  );
   const componentRef = useRef();
-
   const handlePrint = useReactToPrint({
     documentTitle: `AWEP_Invoice_${singleInvoice?.subVenueName}_${singleInvoice?.customerName}_${singleInvoice?.pointOfContact?.phone}`,
     content: () => componentRef.current,

@@ -3,8 +3,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconEye } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import CustomeLoadingOverlay from "../../customLoadingOverlay/CustomeLoadingOverlay";
-import BookingViewAllBookings from "./BookingViewAllBookings";
+import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import ViewAllVendorPaymentReceipts from "./ViewAllVendorPaymentReceipts";
 
 const fetchAllVendors = async () => {
@@ -111,8 +110,8 @@ const CustomerVendorBookings = () => {
   ];
   const headers = (
     <tr>
-      {headerData.map((header) => {
-        return <th>{header}</th>;
+      {headerData?.map((header, index) => {
+        return <th key={index}>{header}</th>;
       })}
     </tr>
   );

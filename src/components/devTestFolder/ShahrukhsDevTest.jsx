@@ -1,7 +1,7 @@
 import { Container, Group } from "@mantine/core";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../navigation/sideNavbar/Sidebar";
+import Sidebar from "../navigation/sideNavbar/bookings/Sidebar";
 
 const ShahrukhsDevTest = () => {
   return (

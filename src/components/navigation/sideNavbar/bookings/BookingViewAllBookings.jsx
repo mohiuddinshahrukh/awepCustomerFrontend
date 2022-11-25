@@ -542,9 +542,8 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           <>
             {singleInvoice?.selectedVenueServices?.map((service, index) => {
               return (
-                <>
-                  {" "}
-                  <Paper key={index}>
+                <Paper key={index}>
+                  <Paper>
                     <Group position="apart" spacing={3}>
                       <Text>{service?.serviceTitle}</Text>
                       <Text>{service?.duration}</Text>{" "}
@@ -580,7 +579,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
 </td>*/}
                   </Paper>
                   <Divider />
-                </>
+                </Paper>
               );
             })}
 

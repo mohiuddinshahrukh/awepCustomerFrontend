@@ -1,8 +1,7 @@
 // import logo from "./logo.svg";
 import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
-import axios from "axios";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
@@ -11,7 +10,7 @@ import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEdit
 import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
-import CustomerBookings from "./components/navigation/sideNavbar/CustomerBookings";
+import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import NewBookingFile from "./components/NewBookingFile/NewBookingFile";
 import NewVendorBookingFile from "./components/NewVendorBooking/NewVendorBooking";

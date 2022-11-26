@@ -62,7 +62,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
 
   const subvenueHeaders = (
     <tr>
-      {subvenueHeadCells.map((headCell, index) => {
+      {subvenueHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -74,7 +74,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
 
   const billHeaders = (
     <tr>
-      {billHeadCells.map((headCell, index) => {
+      {billHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -315,7 +315,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                 height={300}
                 width={300}
                 src={
-                  singleInvoice.paymentStatus === "ADVANCE PAID"
+                  singleInvoice?.paymentStatus === "ADVANCE PAID"
                     ? AdvanceStamp
                     : CompleteStamp
                 }
@@ -347,26 +347,29 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                 </tr>
                 <tr>
                   <td align="left">
-                    Discount <b>25%</b>
+                    Discount{" "}
+                    <b>{singleInvoice?.price?.discountPercentage * 100}%</b>
                   </td>
                   <td align="right">
                     <b>
                       -
                       {(
-                        singleInvoice?.price?.totalPrice * 0.25
+                        singleInvoice?.price?.discountPercentage *
+                        singleInvoice?.price?.totalPrice
                       ).toLocaleString()}
                     </b>
                   </td>
                 </tr>
                 <tr>
                   <td align="left">
-                    Tax <b>17%</b>
+                    Tax <b>{singleInvoice?.price?.taxPercentage * 100}%</b>
                   </td>
                   <td align="right">
                     <b>
                       +
                       {(
-                        singleInvoice?.price?.totalPrice * 0.17
+                        singleInvoice?.price?.taxPercentage *
+                        singleInvoice?.price?.totalPrice
                       ).toLocaleString()}
                     </b>
                   </td>
@@ -375,11 +378,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                   <td align="left">Total </td>
                   <td align="right">
                     <b>
-                      {(
-                        singleInvoice?.price?.totalPrice -
-                        singleInvoice?.price?.totalPrice * 0.25 +
-                        singleInvoice?.price?.totalPrice * 0.17
-                      ).toLocaleString()}
+                      {(singleInvoice?.price?.totalPriceAfterTaxAndDiscount).toLocaleString()}
                     </b>
                   </td>
                 </tr>
@@ -388,14 +387,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                     Deposit <b>PAID</b>{" "}
                   </td>
                   <td align="right">
-                    <b>
-                      {(
-                        (singleInvoice?.price?.totalPrice -
-                          singleInvoice?.price?.totalPrice * 0.25 +
-                          singleInvoice?.price?.totalPrice * 0.17) *
-                        0.25
-                      ).toLocaleString()}
-                    </b>
+                    <b>{singleInvoice?.price?.paidAmount.toLocaleString()}</b>
                   </td>
                 </tr>
                 <tr>
@@ -404,15 +396,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                   </td>
                   <td align="right">
                     <b>
-                      {(
-                        singleInvoice?.price?.totalPrice -
-                        singleInvoice?.price?.totalPrice * 0.25 +
-                        singleInvoice?.price?.totalPrice * 0.17 -
-                        (singleInvoice?.price?.totalPrice -
-                          singleInvoice?.price?.totalPrice * 0.25 +
-                          singleInvoice?.price?.totalPrice * 0.17) *
-                          0.25
-                      ).toLocaleString()}
+                      {(singleInvoice?.price?.remainingAmount).toLocaleString()}
                     </b>
                   </td>
                 </tr>

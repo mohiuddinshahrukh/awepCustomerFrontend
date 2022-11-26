@@ -5,83 +5,39 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import BookingViewAllBookings from "../bookings/BookingViewAllBookings";
 
-const fetchAllVenuePayments = async () => {
-  try {
-    const apiResponse = await axios({
-      method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
-      headers: {
-        token: localStorage.getItem("userToken"),
-      },
-    });
-    console.log("API RESPONSE: ", apiResponse.data);
-
-    if (apiResponse.data.status === "success") {
-      console.log("Successfully fetched all venues:", apiResponse.data.data);
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venues");
-    } else {
-      console.log("Failed to fetch all venues, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
-const VenuePayments = () => {
+const VenuePayments = ({ venueBookings }) => {
+  console.log("VENUE BOOKINGS: ", venueBookings);
   let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
-  const [visible, setVisible] = useState(true);
+
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
-  const [venueBookings, setVenueBookings] = useState([]);
-  useEffect(() => {
-    fetchAllVenuePayments().then(setVenueBookings).then(setVisible(false));
-  }, []);
+
   console.log("venueBookings", venueBookings);
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
       <td align="center">{index + 1}</td>
+      <td>{row.venueName}</td>
       <td>{row.subVenueName}</td>
-      <td>{row.eventType}</td>
+      <td>{row.paymentMethod}</td>
+      <td align="right">{row?.paymentAmount?.toLocaleString()}</td>
       <td>
-        {row.createdAt.split("T")[0] +
+        {row.createdAt?.split("T")[0] +
           " " +
-          row.createdAt.split("T")[1].split(".")[0]}
+          row.createdAt?.split("T")[1]?.split(".")[0]}
       </td>
-      <td>{row.bookingDate.split("T")[0] + " " + row.bookingTime}</td>
-      <td align="center">
-        <Badge color={row.bookingStatus === "IN PROGRESS" ? "blue" : "red"}>
-          {row.bookingStatus}
-        </Badge>
-      </td>
-      <td align="center">
-        <Badge color={row.paymentStatus === "ADVANCE PAID" ? "yellow" : "blue"}>
-          {row.paymentStatus}
-        </Badge>
-      </td>
-      <td align="right">{row.numberOfGuests}</td>
       <td align="center">
         <Group spacing={0} noWrap align={"center"} position="center">
           <ActionIcon
             onClick={() => {
               console.log("Clicked on view button");
-              setSingleInvoice(row);
+              setSingleInvoice(row?.subVenueBookingObject);
               setViewBookingModal(true);
             }}
           >
             <IconEye />
-          </ActionIcon>
-          <ActionIcon
-            onClick={() => {
-              console.log("Clicked on edit button");
-              navigate(
-                `/updatevendorBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
-              );
-            }}
-          >
-            <IconEdit />
           </ActionIcon>
         </Group>
       </td>
@@ -90,13 +46,11 @@ const VenuePayments = () => {
 
   const headerData = [
     "ID",
+    "Venue Name",
     "Sub Venue Name",
-    "Event Type",
-    "Booking Lodged At",
-    "Event Date & Time",
-    "Booking Status",
-    "Payment Status",
-    "Guests",
+    "Method",
+    "Amount",
+    "Lodging date",
     "Action",
   ];
   const headers = (
@@ -108,7 +62,6 @@ const VenuePayments = () => {
   );
   return (
     <div style={{ position: "relative" }}>
-      <CustomeLoadingOverlay visible={visible} />
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"
@@ -116,7 +69,9 @@ const VenuePayments = () => {
         overlayBlur={3}
         opened={viewBookingModal}
         onClose={() => setViewBookingModal(!viewBookingModal)}
-      ></Modal>
+      >
+        <BookingViewAllBookings singleInvoice={singleInvoice} />
+      </Modal>
       <Table striped withBorder withColumnBorders>
         <thead>{headers}</thead>
         <tbody>{rows}</tbody>

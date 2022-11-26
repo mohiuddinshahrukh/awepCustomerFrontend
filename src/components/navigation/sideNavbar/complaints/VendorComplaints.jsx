@@ -1,10 +1,19 @@
-import { ActionIcon, Badge, Group, Modal, Table, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Group,
+  Modal,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import ViewVendorComplaintModal from "./ViewVendorComplaintModal";
 
 const fetchAllVendorComplaints = async () => {
   try {
@@ -34,11 +43,13 @@ const fetchAllVendorComplaints = async () => {
 };
 
 const VendorComplaints = () => {
+  const [viewVendorComplaintModal, setViewVendorComplaintModal] =
+    useState(false);
   const matches500 = useMediaQuery("(min-width: 500px)");
+  const matches800 = useMediaQuery("(min-width: 800px)");
   const [visible, setVisible] = useState(true);
   const [refresh, setRefresh] = useState(false);
-  const [singleInvoice, setSingleInvoice] = useState([]);
-  const [viewBookingModal, setViewBookingModal] = useState(false);
+  const [viewComplaintData, setViewComplaintData] = useState({});
   const [vendorBookings, setVendorBookings] = useState([]);
   const deleteVendorComplaint = async (id) => {
     try {
@@ -109,8 +120,8 @@ const VendorComplaints = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on view button");
-              setSingleInvoice(row);
-              setViewBookingModal(true);
+              setViewComplaintData(row);
+              setViewVendorComplaintModal(true);
             }}
           >
             <IconEye />
@@ -158,13 +169,31 @@ const VendorComplaints = () => {
   return (
     <div>
       <Modal
-        size={matches500 ? "calc(100vw-30vw)" : "sm"}
-        radius="sm"
+        styles={{
+          close: {
+            color: "black",
+            backgroundColor: "#EAEAEA",
+            borderRadius: "50%",
+            "&:hover": {
+              transition: "50ms",
+              color: "white",
+              backgroundColor: "red",
+            },
+          },
+        }}
+        centered
         overlayOpacity={0.55}
         overlayBlur={3}
-        opened={viewBookingModal}
-        onClose={() => setViewBookingModal(!viewBookingModal)}
-      ></Modal>
+        size={matches800 ? "60%" : "lg"}
+        title={<Title>Vendor Complaint</Title>}
+        opened={viewVendorComplaintModal}
+        onClose={() => {
+          setViewVendorComplaintModal(!viewVendorComplaintModal);
+        }}
+      >
+        <ViewVendorComplaintModal complaintView={viewComplaintData} />
+      </Modal>
+
       <Table
         style={{ position: "relative" }}
         striped

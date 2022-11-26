@@ -50,7 +50,7 @@ const VenuePayments = ({ venueBookings }) => {
     "Sub Venue Name",
     "Method",
     "Amount",
-    "Event Date & Time",
+    "Lodging date",
     "Action",
   ];
   const headers = (

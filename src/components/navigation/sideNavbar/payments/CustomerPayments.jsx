@@ -17,7 +17,10 @@ const fetchAllVenuePayments = async () => {
     console.log("API RESPONSE: ", apiResponse.data);
 
     if (apiResponse.data.status === "success") {
-      console.log("Successfully fetched all venues:", apiResponse.data.data);
+      console.log(
+        "@Successfully fetched all venue payemnts:",
+        apiResponse.data.data
+      );
       return apiResponse.data.data;
     } else if (apiResponse.data.status === "error") {
       console.log("Error while fetching all venues");
@@ -55,7 +58,7 @@ const CustomerPayments = () => {
       </Tabs.Panel>
 
       <Tabs.Panel value="vendorPayments" pt="xs">
-        <VendorPayments />
+        <VendorPayments vendorBookings={venueBookings.vendorPayments} />
       </Tabs.Panel>
     </Tabs>
   );

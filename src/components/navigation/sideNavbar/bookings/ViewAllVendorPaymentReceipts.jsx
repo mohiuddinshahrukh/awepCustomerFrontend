@@ -62,7 +62,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
 
   const subvenueHeaders = (
     <tr>
-      {subvenueHeadCells.map((headCell, index) => {
+      {subvenueHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -74,7 +74,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
 
   const billHeaders = (
     <tr>
-      {billHeadCells.map((headCell, index) => {
+      {billHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -315,7 +315,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                 height={300}
                 width={300}
                 src={
-                  singleInvoice.paymentStatus === "ADVANCE PAID"
+                  singleInvoice?.paymentStatus === "ADVANCE PAID"
                     ? AdvanceStamp
                     : CompleteStamp
                 }

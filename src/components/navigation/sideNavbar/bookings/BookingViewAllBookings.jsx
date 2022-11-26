@@ -8,7 +8,6 @@ import {
   Image,
   List,
   Paper,
-  Stack,
   Table,
   Text,
   Title,
@@ -20,8 +19,6 @@ import { useReactToPrint } from "react-to-print";
 import WaterMark from "./AWEP_WATERMARK.svg";
 
 import InvoiceHeaders from "./InvoiceHeaders";
-// import borderLeftRight from "./AWEP_BORDER_LOGO_LEFT_RIGHT.svg";
-// import borderTopBottom from "./AWEP_BORDER_LOGO_TOP_BOTTOM.svg";
 import AdvanceStamp from "./AWEP_ADVANCE_PAID_STAMP.svg";
 import CompleteStamp from "./AWEP_COMPLETE_PAID_STAMP.svg";
 import { useMediaQuery } from "@mantine/hooks";
@@ -62,9 +59,6 @@ const billHeadCells = [
 const BookingViewAllBookings = ({ singleInvoice }) => {
   //
 
-  const matches1200 = useMediaQuery("(min-width: 1200px)");
-  const matches1000 = useMediaQuery("(min-width: 1000px)");
-  const matches800 = useMediaQuery("(min-width: 800px)");
   const matches500 = useMediaQuery("(min-width: 500px)");
   //
 
@@ -92,142 +86,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
         .reduce((a, b) => a + b, 0) +
       singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
   );
-  const [discountCharges, setDiscountCharges] = useState(
-    (singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-      0.25
-  );
-  const [taxCharges, setTaxCharges] = useState(
-    (singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-      0.17
-  );
-  const [totalCharges, setTotalCharges] = useState(
-    singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.17 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.25
-  );
-  const [totalDepositDue, setDepositDueCharges] = useState(
-    (singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.17 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.25) *
-      0.25
-  );
-  const [totalDepositRemainging, setDepositRemaingingCharges] = useState(
-    singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.17 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-        0.25 -
-      (singleInvoice?.subVenueBookingCharges +
-        singleInvoice?.selectedVenueServices
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests +
-        (singleInvoice?.subVenueBookingCharges +
-          singleInvoice?.selectedVenueServices
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-          0.17 -
-        (singleInvoice?.subVenueBookingCharges +
-          singleInvoice?.selectedVenueServices
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests) *
-          0.25) *
-        0.25
-  );
+
   let iconSize = 20;
   let awepLogoSize = 40;
   let invoiceTextBG = "#1ABD9C";
@@ -753,7 +612,8 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 </tr>
                 <tr>
                   <td align="left">
-                    Discount <b>25%</b>
+                    Discount{" "}
+                    <b>{singleInvoice?.price?.discountPercentage * 100}%</b>
                   </td>
                   <td align="right">
                     -

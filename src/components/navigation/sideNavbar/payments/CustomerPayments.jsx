@@ -1,11 +1,41 @@
 import { Tabs } from "@mantine/core";
 import { IconBuildingFortress, IconBuildingStore } from "@tabler/icons";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import VendorPayments from "./VendorPayments";
 import VenuePayments from "./VenuePayments";
 
-const CustomerPayments = () => {
-  // FETCH ALL VENUES
+const fetchAllVenuePayments = async () => {
+  try {
+    const apiResponse = await axios({
+      method: "get",
+      url: "https://a-wep.herokuapp.com/customer/getMyPayments",
+      headers: {
+        token: localStorage.getItem("userToken"),
+      },
+    });
+    console.log("API RESPONSE: ", apiResponse.data);
 
+    if (apiResponse.data.status === "success") {
+      console.log("Successfully fetched all venues:", apiResponse.data.data);
+      return apiResponse.data.data;
+    } else if (apiResponse.data.status === "error") {
+      console.log("Error while fetching all venues");
+    } else {
+      console.log("Failed to fetch all venues, dont know this error");
+    }
+  } catch (e) {
+    console.log("ERROR in fetching all venues:", e);
+  }
+};
+const CustomerPayments = () => {
+  const [venueBookings, setVenueBookings] = useState([]);
+  const [visible, setVisible] = useState(true);
+  // <CustomeLoadingOverlay visible={visible} />
+  // FETCH ALL VENUES
+  useEffect(() => {
+    fetchAllVenuePayments().then(setVenueBookings).then(setVisible(false));
+  }, []);
   return (
     <Tabs mt={"lg"} defaultValue="subvenuePayments" variant="default">
       <Tabs.List>
@@ -21,7 +51,7 @@ const CustomerPayments = () => {
       </Tabs.List>
 
       <Tabs.Panel value="subvenuePayments" pt="xs">
-        <VenuePayments />
+        <VenuePayments venueBookings={venueBookings.subVenueBookingPayments} />
       </Tabs.Panel>
 
       <Tabs.Panel value="vendorPayments" pt="xs">

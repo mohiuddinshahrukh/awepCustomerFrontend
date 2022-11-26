@@ -238,7 +238,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
 
   const subvenueHeaders = (
     <tr>
-      {subvenueHeadCells.map((headCell, index) => {
+      {subvenueHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -249,7 +249,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   );
   const serviceHeaders = (
     <tr>
-      {servicesHeadCells.map((headCell, index) => {
+      {servicesHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -260,7 +260,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   );
   const menuHeaders = (
     <tr>
-      {menuHeadCells.map((headCell, index) => {
+      {menuHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -271,7 +271,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   );
   const billHeaders = (
     <tr>
-      {billHeadCells.map((headCell, index) => {
+      {billHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -602,7 +602,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 <td>
                   {/*<Group spacing={3}>*/}
                   <List>
-                    {singleInvoice?.selectedMenu?.menu?.dishes.map(
+                    {singleInvoice?.selectedMenu?.menu?.dishes?.map(
                       (dish, index) => {
                         return (
                           <List.Item p={0} m={0} key={index}>
@@ -640,7 +640,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             <Text mb={3}>
               {/*<Group spacing={3}>*/}
               <List>
-                {singleInvoice?.selectedMenu?.menu?.dishes.map(
+                {singleInvoice?.selectedMenu?.menu?.dishes?.map(
                   (dish, index) => {
                     return (
                       <List.Item p={0} m={0} key={index}>
@@ -756,21 +756,35 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     Discount <b>25%</b>
                   </td>
                   <td align="right">
-                    -<b>{discountCharges?.toLocaleString()}</b>
+                    -
+                    <b>
+                      {(
+                        singleInvoice?.price?.totalPrice *
+                        singleInvoice?.price?.discountPercentage
+                      ).toLocaleString()}
+                    </b>
                   </td>
                 </tr>
                 <tr>
                   <td align="left">
-                    Tax <b>17%</b>
+                    Tax <b>{singleInvoice?.price?.taxPercentage * 100}%</b>
                   </td>
                   <td align="right">
-                    +<b>{taxCharges?.toLocaleString()}</b>
+                    +
+                    <b>
+                      {(
+                        singleInvoice?.price?.totalPrice *
+                        singleInvoice?.price?.taxPercentage
+                      ).toLocaleString()}
+                    </b>
                   </td>
                 </tr>
                 <tr>
                   <td align="left">Total</td>
                   <td align="right">
-                    <b>{totalCharges?.toLocaleString()}</b>
+                    <b>
+                      {singleInvoice?.price?.totalPriceAfterTaxAndDiscount?.toLocaleString()}
+                    </b>
                   </td>
                 </tr>
                 <tr>
@@ -778,7 +792,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     Deposit <b>PAID</b>
                   </td>
                   <td align="right">
-                    <b>{totalDepositDue?.toLocaleString()}</b>
+                    <b>{singleInvoice?.price?.paidAmount?.toLocaleString()}</b>
                   </td>
                 </tr>
                 <tr>
@@ -786,7 +800,9 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     Deposit <b>REMAINING</b>
                   </td>
                   <td align="right">
-                    <b>{totalDepositRemainging?.toLocaleString()}</b>
+                    <b>
+                      {singleInvoice?.price?.remainingAmount?.toLocaleString()}
+                    </b>
                   </td>
                 </tr>
               </tbody>

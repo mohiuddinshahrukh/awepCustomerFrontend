@@ -568,6 +568,19 @@ const NewVendorBookingFile = () => {
       },
       price: {
         totalPrice: totalPrice,
+        paidAmount: price.paidAmount,
+        remainingAmount:
+          totalPrice -
+          totalPrice * discountPercentage +
+          totalPrice * taxPercentage -
+          price.paidAmount,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount:
+          totalPrice +
+          totalPrice * taxPercentage -
+          totalPrice * discountPercentage,
+        paymentHistory: price.paymentHistory,
       },
       bookingDescription: description,
     };

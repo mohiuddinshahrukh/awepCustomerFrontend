@@ -169,9 +169,8 @@ const NewBookingFile = () => {
   const [venueCity, setVenueCity] = useState("");
   const [value2, setValue2] = useState("");
   const [value1, onChange] = useState(null);
-  console.log("VALUE1.0: ", new Date(value1));
-  console.log("VALUE1.1: ", new moment(value1).format());
-  console.log("VALUE1.2: ", value1);
+  console.log("VALUE1.1: ", moment(value1).format());
+  console.log("VALUE1.5: ", moment(value1).format());
   const [time, setTime] = useState("");
   const [noOfGuests, setNoOfGuests] = useState("");
   const [filterSubVenues, setFilterSubVenues] = useState([]);
@@ -411,11 +410,11 @@ const NewBookingFile = () => {
     },
   });
   const bookedDateAndTime =
-    new moment(form1.values.date).format().split("T")[0] + form1.values.time;
+    moment(form1.values.date).format().split("T")[0] + form1.values.time;
   console.log("testing date and time", bookedDateAndTime);
   const bookingDateAndTime =
     bookingDetails?.bookingDate && bookingDetails?.bookingTime
-      ? new moment(bookingDetails?.bookingDate).format().split("T")[0] +
+      ? moment(bookingDetails?.bookingDate).format().split("T")[0] +
         bookingDetails?.bookingTime
       : null;
   console.log("testing date and time bookingDateAndTime", bookingDateAndTime);
@@ -432,7 +431,7 @@ const NewBookingFile = () => {
       setDisabled(true);
       return;
     } else {
-      onChange(new moment(form1.values.date).format().split("T")[0]);
+      onChange(moment(form1.values.date).format().split("T")[0]);
       nextStep();
     }
   };

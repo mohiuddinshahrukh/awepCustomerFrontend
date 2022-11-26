@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import ViewAllVendorPaymentReceipts from "./ViewAllVendorPaymentReceipts";
+import moment from "moment";
 
 const fetchAllVendors = async () => {
   try {
@@ -55,7 +56,7 @@ const CustomerVendorBookings = () => {
           " " +
           row.createdAt.split("T")[1].split(".")[0]}
       </td>
-      <td>{row.bookingDate.split("T")[0]}</td>
+      <td>{moment(row?.bookingDate).format().split("T")[0]}</td>
       <td>{row.eventDuration}</td>
       <td align="center">
         <Badge

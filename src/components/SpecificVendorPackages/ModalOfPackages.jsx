@@ -9,7 +9,7 @@ const ModalOfPackages = ({
   open,
   setOpen,
   vendorBusinessPackages,
-
+  vendorId,
   contactPhone,
   setContactPhone,
   contactEmail,
@@ -88,6 +88,7 @@ const ModalOfPackages = ({
                 time={time}
                 setTime={setTime}
                 setIsSignIn={setIsSignIn}
+                vendorId={vendorId}
               />
             </Grid.Col>
           </Grid>

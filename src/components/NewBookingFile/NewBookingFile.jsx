@@ -169,9 +169,8 @@ const NewBookingFile = () => {
   const [venueCity, setVenueCity] = useState("");
   const [value2, setValue2] = useState("");
   const [value1, onChange] = useState(null);
-  console.log("VALUE1.0: ", new Date(value1));
-  console.log("VALUE1.1: ", new moment(value1).format());
-  console.log("VALUE1.2: ", value1);
+  console.log("VALUE1.1: ", moment(value1).format());
+  console.log("VALUE1.5: ", moment(value1).format());
   const [time, setTime] = useState("");
   const [noOfGuests, setNoOfGuests] = useState("");
   const [filterSubVenues, setFilterSubVenues] = useState([]);
@@ -211,113 +210,50 @@ const NewBookingFile = () => {
   const [idOfSelectedTheme, setIdOfSelectedTheme] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
   console.log("selected theme", selectedTheme);
+  const [bookingPercentage, setBookingPercentage] = useState(0.2);
+  const [taxPercentage, setTaxPercentage] = useState(0.17);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
   const data = [
     {
-      percent: 25,
+      percent: bookingPercentage * 100,
       Amount: (
         (hallCharges +
-          selectedVenueServiceObject
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests -
-          (hallCharges +
-            selectedVenueServiceObject
-              ?.map(
-                (service) =>
-                  service.servicePrice *
-                  (service.duration === "Per Event" ? 1 : 3)
-              )
-              .reduce((a, b) => a + b, 0) +
-            (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-            0.25 +
-          (hallCharges +
-            selectedVenueServiceObject
-              ?.map(
-                (service) =>
-                  service.servicePrice *
-                  (service.duration === "Per Event" ? 1 : 3)
-              )
-              .reduce((a, b) => a + b, 0) +
-            (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-            0.17) *
-        0.25
+          totalPrice +
+          menuPrice * noOfGuests +
+          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage) *
+        bookingPercentage
       ).toLocaleString(),
       color: "red",
-      title: "25% Advance Payment",
-      description:
-        "To Book A Date 20% Advance Payment is Required Which is Non Refundable",
+      title: `${bookingPercentage * 100} % Advance Payment`,
+      description: `To Book A Date ${
+        bookingPercentage * 100
+      } % Advance Payment is Required `,
     },
     {
-      percent: 100,
+      percent: (1 - bookingPercentage) * 100,
       Amount: (
         hallCharges +
-        selectedVenueServiceObject
-          ?.map(
-            (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-          )
-          .reduce((a, b) => a + b, 0) +
-        (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests -
+        totalPrice +
+        menuPrice * noOfGuests -
+        (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          discountPercentage +
+        (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
         (hallCharges +
-          selectedVenueServiceObject
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-          0.25 +
-        (hallCharges +
-          selectedVenueServiceObject
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-          0.17 -
-        (hallCharges +
-          selectedVenueServiceObject
-            ?.map(
-              (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0) +
-          (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests -
-          (hallCharges +
-            selectedVenueServiceObject
-              ?.map(
-                (service) =>
-                  service.servicePrice *
-                  (service.duration === "Per Event" ? 1 : 3)
-              )
-              .reduce((a, b) => a + b, 0) +
-            (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-            0.25 +
-          (hallCharges +
-            selectedVenueServiceObject
-              ?.map(
-                (service) =>
-                  service.servicePrice *
-                  (service.duration === "Per Event" ? 1 : 3)
-              )
-              .reduce((a, b) => a + b, 0) +
-            (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-            0.17) *
-          0.25
-      )?.toLocaleString(),
+          totalPrice +
+          menuPrice * noOfGuests -
+          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage +
+          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage) *
+          bookingPercentage
+      ).toLocaleString(),
       color: "green",
-      title: "75% Remaining Payment",
-      description:
-        "Remaining 75% Payment is Required 7 Days Before The Event Date",
+      title: `${(1 - bookingPercentage) * 100} % Remaining Payment`,
+      description: `Remaining ${
+        (1 - bookingPercentage) * 100
+      } % Payment is Required 7 Days Before The Event Date`,
     },
   ];
   const items = data?.map((item, index) => (
@@ -411,11 +347,11 @@ const NewBookingFile = () => {
     },
   });
   const bookedDateAndTime =
-    new moment(form1.values.date).format().split("T")[0] + form1.values.time;
+    moment(form1.values.date).format().split("T")[0] + form1.values.time;
   console.log("testing date and time", bookedDateAndTime);
   const bookingDateAndTime =
     bookingDetails?.bookingDate && bookingDetails?.bookingTime
-      ? new moment(bookingDetails?.bookingDate).format().split("T")[0] +
+      ? moment(bookingDetails?.bookingDate).format().split("T")[0] +
         bookingDetails?.bookingTime
       : null;
   console.log("testing date and time bookingDateAndTime", bookingDateAndTime);
@@ -432,7 +368,7 @@ const NewBookingFile = () => {
       setDisabled(true);
       return;
     } else {
-      onChange(new moment(form1.values.date).format().split("T")[0]);
+      onChange(moment(form1.values.date).format().split("T")[0]);
       nextStep();
     }
   };
@@ -639,10 +575,25 @@ const NewBookingFile = () => {
       },
       //   selectedSubVenueServices: selectedFilteredSubVenueServices,
       price: {
-        totalPrice: totalPrice + hallCharges + menuPrice * noOfGuests,
+        totalPrice: hallCharges + totalPrice + menuPrice * noOfGuests,
         paidAmount: price.paidAmount,
         remainingAmount:
-          totalPrice + hallCharges + menuPrice * noOfGuests - price.paidAmount,
+          hallCharges +
+          totalPrice +
+          menuPrice * noOfGuests -
+          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage +
+          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          price.paidAmount,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount:
+          hallCharges +
+          totalPrice +
+          menuPrice * noOfGuests +
+          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage,
         paymentHistory: price.paymentHistory,
       },
       selectedVenueTheme: {
@@ -725,10 +676,40 @@ const NewBookingFile = () => {
         phone: phone,
       },
       price: {
-        totalPrice: totalPrice + menuPrice * noOfGuests + hallCharges,
-        paidAmount: 0.2 * (totalPrice + menuPrice * noOfGuests + hallCharges),
+        totalPrice: hallCharges + totalPrice + menuPrice * noOfGuests,
+        paidAmount:
+          (hallCharges +
+            totalPrice +
+            menuPrice * noOfGuests +
+            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+              taxPercentage -
+            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+              discountPercentage) *
+          bookingPercentage,
         remainingAmount:
-          0.8 * (totalPrice + menuPrice * noOfGuests + hallCharges),
+          hallCharges +
+          totalPrice +
+          menuPrice * noOfGuests -
+          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage +
+          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          (hallCharges +
+            totalPrice +
+            menuPrice * noOfGuests -
+            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+              discountPercentage +
+            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+              taxPercentage) *
+            bookingPercentage,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount:
+          hallCharges +
+          totalPrice +
+          menuPrice * noOfGuests +
+          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage,
       },
       //   selectedSubVenueServices: selectedFilteredSubVenueServices,
       selectedVenueServices: selectedVenueServiceObject,
@@ -2113,46 +2094,17 @@ const NewBookingFile = () => {
                             // start={start}
                             amountPayable={
                               (hallCharges +
-                                selectedVenueServiceObject
-                                  ?.map(
-                                    (service) =>
-                                      service.servicePrice *
-                                      (service.duration === "Per Event" ? 1 : 3)
-                                  )
-                                  .reduce((a, b) => a + b, 0) +
-                                (selectedMenu?.price ? selectedMenu.price : 0) *
-                                  noOfGuests -
+                                totalPrice +
+                                menuPrice * noOfGuests +
                                 (hallCharges +
-                                  selectedVenueServiceObject
-                                    ?.map(
-                                      (service) =>
-                                        service.servicePrice *
-                                        (service.duration === "Per Event"
-                                          ? 1
-                                          : 3)
-                                    )
-                                    .reduce((a, b) => a + b, 0) +
-                                  (selectedMenu?.price
-                                    ? selectedMenu.price
-                                    : 0) *
-                                    noOfGuests) *
-                                  0.25 +
+                                  totalPrice +
+                                  menuPrice * noOfGuests) *
+                                  taxPercentage -
                                 (hallCharges +
-                                  selectedVenueServiceObject
-                                    ?.map(
-                                      (service) =>
-                                        service.servicePrice *
-                                        (service.duration === "Per Event"
-                                          ? 1
-                                          : 3)
-                                    )
-                                    .reduce((a, b) => a + b, 0) +
-                                  (selectedMenu?.price
-                                    ? selectedMenu.price
-                                    : 0) *
-                                    noOfGuests) *
-                                  0.17) *
-                              0.25
+                                  totalPrice +
+                                  menuPrice * noOfGuests) *
+                                  discountPercentage) *
+                              bookingPercentage
                             }
                           />
                         </Grid.Col>

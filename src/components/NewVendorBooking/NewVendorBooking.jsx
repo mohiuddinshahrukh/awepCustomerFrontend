@@ -153,6 +153,9 @@ const NewVendorBookingFile = () => {
   const [bookingDetails, setBookingDetails] = useState({});
   console.log("BOOKING DETAILS: ", bookingDetails);
   const [price, setPrice] = useState({});
+  const [bookingPercentage, setBookingPercentage] = useState(0.2);
+  const [taxPercentage, setTaxPercentage] = useState(0.17);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
   const [vendorCategory, setVendorCategory] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
@@ -169,28 +172,35 @@ const NewVendorBookingFile = () => {
 
   const data = [
     {
-      percent: 25,
+      percent: bookingPercentage * 100,
       Amount: (
-        (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
-        0.25
+        (totalPrice +
+          totalPrice * taxPercentage -
+          totalPrice * discountPercentage) *
+        bookingPercentage
       ).toLocaleString(),
       color: "red",
-      title: "25% Advance Payment",
-      description:
-        "To Book A Date 25% Advance Payment is Required Which is Non Refundable",
+      title: `${bookingPercentage * 100} % Advance Payment`,
+      description: `To Book A Date ${
+        bookingPercentage * 100
+      } % Advance Payment is Required `,
     },
     {
-      percent: 100,
+      percent: (1 - bookingPercentage) * 100,
       Amount: (
         totalPrice -
-        totalPrice * 0.25 +
-        totalPrice * 0.17 -
-        (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) * 0.25
+        totalPrice * discountPercentage +
+        totalPrice * taxPercentage -
+        (totalPrice -
+          totalPrice * discountPercentage +
+          totalPrice * taxPercentage) *
+          bookingPercentage
       ).toLocaleString(),
       color: "green",
-      title: "75% Remaining Payment",
-      description:
-        "Remaining 75% Payment is Required 7 Days Before The Event Date",
+      title: `${(1 - bookingPercentage) * 100} % Remaining Payment`,
+      description: `Remaining ${
+        (1 - bookingPercentage) * 100
+      } % Payment is Required 7 Days Before The Event Date`,
     },
   ];
   const items = data?.map((item, index) => (
@@ -459,7 +469,7 @@ const NewVendorBookingFile = () => {
     console.log("MAKING THE BOOKING");
     const body = {
       vendorPackageId: idOfSelectedPackage,
-      bookingDate: bookedDateAndTime,
+      bookingDate: moment(value1).format(),
       bookingTime: time,
       eventType: eventType,
       eventDuration: time,
@@ -469,8 +479,25 @@ const NewVendorBookingFile = () => {
       },
       price: {
         totalPrice: totalPrice,
-        paidAmount: 0.2 * totalPrice,
-        remainingAmount: 0.8 * totalPrice,
+        paidAmount:
+          (totalPrice +
+            totalPrice * taxPercentage -
+            totalPrice * discountPercentage) *
+          bookingPercentage,
+        remainingAmount:
+          totalPrice -
+          totalPrice * discountPercentage +
+          totalPrice * taxPercentage -
+          (totalPrice -
+            totalPrice * discountPercentage +
+            totalPrice * taxPercentage) *
+            bookingPercentage,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount:
+          totalPrice +
+          totalPrice * taxPercentage -
+          totalPrice * discountPercentage,
       },
 
       bookingDescription: description,
@@ -503,6 +530,7 @@ const NewVendorBookingFile = () => {
         setVisible(false);
         setLoading(false);
       } else {
+        console.log("success response", response.data.data);
         socket.emit("generateNotification", {
           userId: JSON.parse(localStorage.getItem("userData")).id,
           title: "Subvenue Booking Successful",
@@ -540,6 +568,19 @@ const NewVendorBookingFile = () => {
       },
       price: {
         totalPrice: totalPrice,
+        paidAmount: price.paidAmount,
+        remainingAmount:
+          totalPrice -
+          totalPrice * discountPercentage +
+          totalPrice * taxPercentage -
+          price.paidAmount,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount:
+          totalPrice +
+          totalPrice * taxPercentage -
+          totalPrice * discountPercentage,
+        paymentHistory: price.paymentHistory,
       },
       bookingDescription: description,
     };
@@ -1285,10 +1326,10 @@ const NewVendorBookingFile = () => {
                             onClickBack={prevStep}
                             setConfirmBooking={setConfirmBooking}
                             amountPayable={
-                              (totalPrice -
-                                totalPrice * 0.25 +
-                                totalPrice * 0.17) *
-                              0.25
+                              (totalPrice +
+                                totalPrice * taxPercentage -
+                                totalPrice * discountPercentage) *
+                              bookingPercentage
                             }
                             // start={start}
                           />

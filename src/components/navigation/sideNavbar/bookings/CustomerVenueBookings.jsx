@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import BookingViewAllBookings from "./BookingViewAllBookings";
+import moment from "moment";
 
 const fetchAllVenues = async () => {
   try {
@@ -51,7 +52,12 @@ const CustomerVenueBookings = () => {
           " " +
           row.createdAt.split("T")[1].split(".")[0]}
       </td>
-      <td>{row.bookingDate.split("T")[0] + " " + row.bookingTime}</td>
+
+      <td>
+        {moment(row?.bookingDate).format().split("T")[0] +
+          " " +
+          row.bookingTime}
+      </td>
       <td align="center">
         <Badge color={row.bookingStatus === "IN PROGRESS" ? "blue" : "red"}>
           {row.bookingStatus}

@@ -49,9 +49,8 @@ const SpecificVendorBusinessDetails = () => {
   const [guests, setGuests] = useState();
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [idOfSpecificVendorPackage, setIdOfSpecificVendorPackage] = useState(
-    ""
-  );
+  const [idOfSpecificVendorPackage, setIdOfSpecificVendorPackage] =
+    useState("");
   console.log("vendorDetails are", vendorDetails);
   const [open, setOpen] = useState(false);
 
@@ -312,6 +311,7 @@ const SpecificVendorBusinessDetails = () => {
             setTime={setTime}
             setIsSignIn={setIsSignIn}
             setIsSignUp={setIsSignUp}
+            vendorId={params.id}
             idOfSpecificVendorPackage={idOfSpecificVendorPackage}
           />
         </Grid.Col>

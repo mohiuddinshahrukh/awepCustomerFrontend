@@ -11,6 +11,7 @@ import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";
+import Complaints from "./components/navigation/sideNavbar/complaints/Complaints";
 import CustomerProfile from "./components/navigation/sideNavbar/customerProfile/CustomerProfile";
 import CustomerPayments from "./components/navigation/sideNavbar/payments/CustomerPayments";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
@@ -94,10 +95,7 @@ function App() {
               <Route path="bookings" element={<CustomerBookings />} />
               <Route path="chats" element={<>CHATS</>} />
               <Route path="weddingCards" element={<>WEDDING CARDS</>} />
-              <Route
-                path="complaintsAndFeedback"
-                element={<>COMPLAINTS AND FEEDBACK</>}
-              />
+              <Route path="complaintsAndFeedback" element={<Complaints />} />
               <Route path="payments" element={<CustomerPayments />} />
               <Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
               <Route path="invite" element={<>INVITE</>} />

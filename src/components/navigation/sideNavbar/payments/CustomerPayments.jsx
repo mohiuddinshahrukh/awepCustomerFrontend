@@ -7,7 +7,7 @@ const CustomerPayments = () => {
   // FETCH ALL VENUES
 
   return (
-    <Tabs mt={"lg"} defaultValue="subvenueBookings" variant="default">
+    <Tabs mt={"lg"} defaultValue="subvenuePayments" variant="default">
       <Tabs.List>
         <Tabs.Tab
           value="subvenuePayments"

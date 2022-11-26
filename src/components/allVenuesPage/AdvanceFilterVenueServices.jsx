@@ -56,14 +56,7 @@ import { useListState, randomId } from "@mantine/hooks";
 import { Checkbox, Input } from "@mantine/core";
 import { useEffect } from "react";
 
-const AdvanceFilterVenueServices = ({
-  allServices,
-  setFilteredServices,
-  allche,
-  inder,
-  setAllche,
-  setInder,
-}) => {
+const AdvanceFilterVenueServices = ({ allServices, setFilteredServices }) => {
   const initialValues = allServices?.map((service) => {
     return {
       value: service.serviceTitle,
@@ -82,9 +75,7 @@ const AdvanceFilterVenueServices = ({
       .map((value) => value.value);
     console.log("services are filtered", services);
     setFilteredServices(services);
-    setAllche(allChecked);
-    setInder(indeterminate);
-  }, [values, allChecked, indeterminate]);
+  }, [values]);
 
   const items = values.map((value, index) => (
     <Checkbox

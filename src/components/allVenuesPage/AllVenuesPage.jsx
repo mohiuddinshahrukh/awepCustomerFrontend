@@ -25,6 +25,7 @@ import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
 import AllVenuesRatingFilter from "./AllVenuesRatingFilter";
+import moment from "moment";
 
 const AllVenuesPage = () => {
   const params = useParams();
@@ -100,8 +101,7 @@ const AllVenuesPage = () => {
       console.log("ERROR in fetching all venues:", e);
     }
   };
-  const [inder, setInder] = useState(false);
-  const [allche, setAllche] = useState(false);
+
   const filterVenues = () => {
     console.log("Filtering venues", params.city);
     //filter venues according to the filter options
@@ -172,6 +172,28 @@ const AllVenuesPage = () => {
         );
         console.log("serviceMatch", serviceMatch);
         if (!serviceMatch) {
+          return false;
+        }
+      }
+      //subVenues have a bookedOn object in which the date and time is concated and stored in key value pair. find the all the venues which have at lease one sub venue which is not booked on the selected date and time
+      if (date !== null && time !== "") {
+        const bookedDateAndTime = moment(date).format().split("T")[0] + time;
+        console.log("testing date and time", bookedDateAndTime);
+        console.log("date and time", date, time);
+        let dateMatch = false;
+        venue?.subVenues?.forEach((subVenue) => {
+          if (subVenue.bookedOn) {
+            if (subVenue?.bookedOn[bookedDateAndTime] === undefined) {
+              console.log(
+                "subVenue.bookedOn",
+                subVenue.subVenueName,
+                subVenue.bookedOn
+              );
+              dateMatch = true;
+            }
+          }
+        });
+        if (!dateMatch) {
           return false;
         }
       }
@@ -268,12 +290,9 @@ const AllVenuesPage = () => {
                 label="Event date"
                 minDate={dayjs(new Date())
                   .startOf("month")
-                  .add(5, "days")
+                  .add(new Date().getDate(), "days")
                   .toDate()}
-                maxDate={dayjs(new Date())
-                  .endOf("month")
-                  .subtract(5, "days")
-                  .toDate()}
+                maxDate={dayjs(new Date()).add(365, "days").toDate()}
               />
               <Select
                 size={"lg"}
@@ -319,10 +338,6 @@ const AllVenuesPage = () => {
                   allServices={allServices}
                   setFilteredServices={setFilteredServices}
                   filteredServices={filteredServices}
-                  allche={allche}
-                  inder={inder}
-                  setAllche={setAllche}
-                  setInder={setInder}
                 />
               )}
               <AdvanceFilterVenuePrice />

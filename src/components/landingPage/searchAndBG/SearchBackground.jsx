@@ -111,11 +111,11 @@ const SearchBackground = ({ carouselImages }) => {
           label="Event date"
           value={date}
           onChange={setDate}
-          minDate={dayjs(new Date()).startOf("month").add(5, "days").toDate()}
-          maxDate={dayjs(new Date())
-            .endOf("month")
-            .subtract(5, "days")
+          minDate={dayjs(new Date())
+            .startOf("month")
+            .add(new Date().getDate(), "days")
             .toDate()}
+          maxDate={dayjs(new Date()).add(365, "days").toDate()}
         />
         {searchSupplier === "venue" ? (
           <Select

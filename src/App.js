@@ -45,8 +45,12 @@ function App() {
               element={<NewBookingFile />}
             />
             <Route
-              path="/updatevendorBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
+              path="/updateVenueBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
               element={<NewBookingFile />}
+            />
+            <Route
+              path="/updateVendorBooking/:eventType/:date/:time/:vendorId/:vendorPackageId/:bookingId"
+              element={<NewVendorBookingFile />}
             />
             <Route
               path="/vendorBooking/:eventType/:date/:time/:vendorId"

@@ -142,7 +142,6 @@ const NewVendorBookingFile = () => {
 
   const [stepperDisabled, setStepperDisabled] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
-  const [bookingId, setBookingId] = useState("");
 
   const [vendorDetails, setVendorDetails] = useState({});
   console.log("VENDOR DETAILS: ", vendorDetails);
@@ -150,6 +149,11 @@ const NewVendorBookingFile = () => {
   const [time, setTime] = useState("");
   const [idOfSelectedPackage, setIdOfSelectedPackage] = useState("");
   const [eventType, setEventType] = useState("");
+  const [bookingId, setBookingId] = useState("");
+  const [bookingDetails, setBookingDetails] = useState({});
+  console.log("BOOKING DETAILS: ", bookingDetails);
+  const [price, setPrice] = useState({});
+
   const [vendorCategory, setVendorCategory] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedVendorPackage, setSelectedVendorPackage] = useState({});
@@ -286,6 +290,10 @@ const NewVendorBookingFile = () => {
     .format()
     .split("T")[0];
   console.log("testing date and time", bookedDateAndTime);
+  const bookingDateAndTime = bookingDetails?.bookingDate
+    ? new moment(bookingDetails?.bookingDate).format().split("T")[0]
+    : null;
+  console.log("testing date and time bookingDateAndTime", bookingDateAndTime);
 
   const handleSubmit = async (event) => {
     var { eventType, time, date } = event;
@@ -315,12 +323,54 @@ const NewVendorBookingFile = () => {
     setDescription(description);
 
     nextStep();
-    // makeVenueBooking();
+    // makeVendorBooking();
   };
 
   useEffect(() => {
     const url2 = `https://a-wep.herokuapp.com/customer/getSpecificVendorBusinessDetails/${params.vendorId}`;
     if (refresh) {
+      if (params.bookingId) {
+        const headers = {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("userToken"),
+        };
+        axios({
+          method: "get",
+          // url: `https://a-wep.herokuapp.com/customer/getSubVenueBooking/${params.bookingId}`,
+          url: `https://a-wep.herokuapp.com/customer/getVendorPackageBookings`,
+          headers: headers,
+        }).then((res) => {
+          console.log(res.data);
+          if (res.data.status === "success") {
+            const response = res.data.data.filter((item) => {
+              return item._id === params.bookingId;
+            })[0];
+            console.log("THIS IS THE RESPONSE OBJECT:   ", response);
+            setBookingDetails(response);
+            setIdOfSelectedPackage(response?.vendorPackageId?._id);
+            setTotalPrice(response?.vendorPackageId?.price);
+            setSelectedVendorPackage(response?.vendorPackageId);
+
+            setEventType(response?.eventType);
+            setTime(response?.eventDuration);
+            onChange(response?.bookingDate);
+            setPhone(response?.pointOfContact?.phone);
+            setEmail(response?.pointOfContact?.email);
+            setDescription(response?.bookingDescription);
+            form.setFieldValue("phone", response?.pointOfContact?.phone);
+            form.setFieldValue("email", response?.pointOfContact?.email);
+            form.setFieldValue("description", response?.bookingDescription);
+
+            setPrice(response?.price);
+
+            setRefresh(false);
+            setVisible(false);
+          } else {
+            // alert("Error");
+          }
+        });
+      }
+
       axios.get(url2).then((res) => {
         console.log(res.data);
         if (res.data.status === "success") {
@@ -338,7 +388,7 @@ const NewVendorBookingFile = () => {
   useEffect(() => {
     if (paidSuccessfully) {
       console.log("DO THE AXIOS CALL");
-      makeVenueBooking();
+      makeVendorBooking();
       setStepperDisabled(true);
     }
   }, [paidSuccessfully]);
@@ -404,11 +454,8 @@ const NewVendorBookingFile = () => {
     }
   }, [form1.values.eventType, form1.values.date, form1.values.time]);
 
-  const makeVenueBooking = async () => {
-    // setComponent("3");
-    // setLoading(true);
+  const makeVendorBooking = async () => {
     setVisible(true);
-
     console.log("MAKING THE BOOKING");
     const body = {
       vendorPackageId: idOfSelectedPackage,
@@ -481,11 +528,65 @@ const NewVendorBookingFile = () => {
     setLoading(false);
   };
 
-  const CategoryData = vendorDetails?.vendorCategories?.map((item) => ({
-    value: item?._id,
-    label: item?.categoryTitle,
-  }));
+  const updateVendorPackageBooking = async () => {
+    setVisible(true);
+    const body = {
+      bookingDate: moment(value1).format(),
+      eventType: eventType,
+      eventDuration: time,
+      pointOfContact: {
+        email: email,
+        phone: phone,
+      },
+      price: {
+        totalPrice: totalPrice,
+      },
+      bookingDescription: description,
+    };
+    console.log("body");
+    console.log("bosyyyy in vendor Booking", body);
 
+    const headers = {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("userToken"),
+    };
+    try {
+      const response = await axios({
+        method: "patch",
+        url: `https://a-wep.herokuapp.com/customer/updateVendorPackageBooking/${params.bookingId}`,
+        data: body,
+        headers: headers,
+      });
+      // setLoading(false);
+      console.log(response.data);
+
+      if (response.data.status === "error") {
+        // setErrorMessages(response.data.error);
+        // setLoading(false);
+        console.log(response.data.error);
+        setVisible(false);
+        showNotification({
+          color: "red",
+          title: `ERROR`,
+
+          message: `${response.data.error?.message || response.data.error}`,
+        });
+      } else {
+        showNotification({
+          color: "green",
+          title: `SUCCESS`,
+
+          message: `PACKAGE UPDATED SUCCESSFULLY!!`,
+        });
+        console.log("navigating");
+        // setOpened(true);
+        console.log("navigated");
+        navigate("/shahrukhTest/bookings");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Container size="xl">
       <Paper
@@ -657,9 +758,15 @@ const NewVendorBookingFile = () => {
             height: "100%",
           }}
         >
-          <Title order={2} align="center" py="xl">
-            Sub Venue Booking
-          </Title>
+          {params.bookingId ? (
+            <Title order={2} align="center" py="xl">
+              Vendor Package Booking Update
+            </Title>
+          ) : (
+            <Title order={2} align="center" py="xl">
+              Vendor Package Booking
+            </Title>
+          )}
           <Modal
             styles={{
               close: {
@@ -699,7 +806,7 @@ const NewVendorBookingFile = () => {
                   align="center"
                   color="red"
                   leftIcon={<IconTrash size={14} />}
-                  onClick={() => navigate("/viewbookings")}
+                  onClick={() => navigate("/shahrukhTest/bookings")}
                 >
                   Yes, Cancel
                 </Button>
@@ -732,6 +839,7 @@ const NewVendorBookingFile = () => {
                   </Text>
                   <Button
                     size="md"
+                    hidden={params.bookingId ? true : false}
                     // disabled={eventType === ""}
                     variant="filled"
                     color="red"
@@ -770,7 +878,11 @@ const NewVendorBookingFile = () => {
                     <Grid.Col lg={12}>
                       <Select
                         size="md"
-                        disabled={idOfSelectedPackage !== ""}
+                        disabled={
+                          params.vendorPackageId
+                            ? false
+                            : idOfSelectedPackage !== ""
+                        }
                         label="Event Type"
                         placeholder="Event Type"
                         value={eventType}
@@ -805,7 +917,11 @@ const NewVendorBookingFile = () => {
                       <DatePicker
                         inputFormat="YYYY-MM-DD"
                         size="md"
-                        disabled={idOfSelectedPackage !== ""}
+                        disabled={
+                          params.vendorPackageId
+                            ? false
+                            : idOfSelectedPackage !== ""
+                        }
                         minDate={dayjs(new Date())
                           .startOf("month")
                           .add(new Date().getDate(), "days")
@@ -828,7 +944,11 @@ const NewVendorBookingFile = () => {
                       <Select
                         size="md"
                         label="Event Time"
-                        disabled={idOfSelectedPackage !== ""}
+                        disabled={
+                          params.vendorPackageId
+                            ? false
+                            : idOfSelectedPackage !== ""
+                        }
                         placeholder="Time"
                         value={time}
                         // onChange={(e) => {
@@ -883,6 +1003,7 @@ const NewVendorBookingFile = () => {
 
                   {vendorDetails?.vendorServicePackages && (
                     <VendorPackagesForBooking
+                      isUpdate={params.bookingId ? true : false}
                       vendorPackageDetails={
                         vendorDetails?.vendorServicePackages
                           ? vendorDetails?.vendorServicePackages
@@ -891,8 +1012,11 @@ const NewVendorBookingFile = () => {
                       totalPrice={totalPrice}
                       setTotalPrice={setTotalPrice}
                       setIdOfSelectedPackage={setIdOfSelectedPackage}
-                      idOfSelectedPackage={idOfSelectedPackage}
+                      idOfSelectedPackage={
+                        params.vendorPackageId || idOfSelectedPackage
+                      }
                       bookedDateAndTime={bookedDateAndTime}
+                      bookingDateAndTime={bookingDateAndTime}
                       // vendorCategory={form1.values.vendorCategory}
                       vendorCategory=""
                       setHidden={setHidden}
@@ -927,7 +1051,7 @@ const NewVendorBookingFile = () => {
                         variant="filled"
                         color="dark"
                         type="submit"
-                        disabled={disabled}
+                        disabled={disabled || !idOfSelectedPackage}
                         // loading={loading}
                         rightIcon={<IconArrowRight />}
                         // onClick={nextStep}
@@ -1045,26 +1169,33 @@ const NewVendorBookingFile = () => {
                   onSubmit={form.onSubmit((values) => handleSubmit1(values))}
                 >
                   <Group position="apart">
-                    <Group>
+                    {params.bookingId ? (
                       <Text weight="bold" size="xl" py="md">
-                        Review And
+                        Review And Confirm
                       </Text>
+                    ) : (
+                      <Group>
+                        <Text weight="bold" size="xl" py="md">
+                          Review And
+                        </Text>
 
-                      <Button
-                        rightIcon={
-                          <div className="xyz">
-                            <IconArrowDown />
-                          </div>
-                        }
-                        onClick={() => scrollIntoView({ alignment: "center" })}
-                        style={{
-                          backgroundImage:
-                            "url(https://media.istockphoto.com/photos/violet-color-velvet-texture-background-picture-id587219358?k=20&m=587219358&s=612x612&w=0&h=PtwQq0Cx7AllJLpAqQkO315w8NxwwAJIrquHjaTym3Y=)",
-                        }}
-                      >
-                        Pay
-                      </Button>
-                    </Group>
+                        <Button
+                          rightIcon={
+                            <div className="xyz">
+                              <IconArrowDown />
+                            </div>
+                          }
+                          onClick={() =>
+                            scrollIntoView({ alignment: "center" })
+                          }
+                          style={{
+                            background: "#E60084",
+                          }}
+                        >
+                          Pay
+                        </Button>
+                      </Group>
+                    )}
 
                     <Text weight="bold" color="red" size="xl" py="md">
                       Total Cost Rs. {totalPrice}
@@ -1085,50 +1216,86 @@ const NewVendorBookingFile = () => {
                     customerEmail={customerEmail}
                     customerPhone={customerPhone}
                   />
-                  <Text weight="bold" size="xl" py="lg">
-                    Pay With Stripe
-                  </Text>
-                  <Grid>
-                    <Grid.Col md={12} lg={6}>
-                      <Paper
-                        p="sm"
-                        withBorder
-                        shadow="md"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      >
-                        <Title className={classes.title} order={2} pt="sm">
-                          Payment Breakdown
-                        </Title>
-
-                        <SimpleGrid
-                          cols={1}
-                          spacing={20}
-                          breakpoints={[
-                            { maxWidth: 550, cols: 1, spacing: 40 },
-                          ]}
-                          style={{ marginTop: 30 }}
+                  {params.bookingId ? (
+                    <Grid justify="flex-end" py="md">
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="red"
+                          // disabled={loading}
+                          leftIcon={<IconArrowLeft />}
+                          onClick={prevStep}
                         >
-                          {items}
-                        </SimpleGrid>
-                      </Paper>
-                    </Grid.Col>
-                    <Grid.Col md={12} lg={6} ref={targetRef}>
-                      <StripePromise
-                        paidSuccessfully={paidSuccessfully}
-                        setPaidSuccessfully={setPaidSuccessfully}
-                        onClickBack={prevStep}
-                        setConfirmBooking={setConfirmBooking}
-                        amountPayable={
-                          (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
-                          0.25
-                        }
-                        // start={start}
-                      />
-                    </Grid.Col>
-                  </Grid>
+                          BACK
+                        </Button>
+                      </Grid.Col>
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="dark"
+                          onClick={() => {
+                            updateVendorPackageBooking();
+                          }}
+                          rightIcon={<IconArrowRight />}
+                        >
+                          UPDATE
+                        </Button>
+                      </Grid.Col>
+                    </Grid>
+                  ) : (
+                    <>
+                      <Text weight="bold" size="xl" py="lg">
+                        Pay With Stripe
+                      </Text>
+                      <Grid>
+                        <Grid.Col md={12} lg={6}>
+                          <Paper
+                            p="sm"
+                            withBorder
+                            shadow="md"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                            }}
+                          >
+                            <Title className={classes.title} order={2} pt="sm">
+                              Payment Breakdown
+                            </Title>
+
+                            <SimpleGrid
+                              cols={1}
+                              spacing={20}
+                              breakpoints={[
+                                { maxWidth: 550, cols: 1, spacing: 40 },
+                              ]}
+                              style={{ marginTop: 30 }}
+                            >
+                              {items}
+                            </SimpleGrid>
+                          </Paper>
+                        </Grid.Col>
+                        <Grid.Col md={12} lg={6} ref={targetRef}>
+                          <StripePromise
+                            paidSuccessfully={paidSuccessfully}
+                            setPaidSuccessfully={setPaidSuccessfully}
+                            onClickBack={prevStep}
+                            setConfirmBooking={setConfirmBooking}
+                            amountPayable={
+                              (totalPrice -
+                                totalPrice * 0.25 +
+                                totalPrice * 0.17) *
+                              0.25
+                            }
+                            // start={start}
+                          />
+                        </Grid.Col>
+                      </Grid>
+                    </>
+                  )}
                 </form>
               </Paper>
             </Stepper.Step>

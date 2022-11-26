@@ -168,7 +168,10 @@ const NewBookingFile = () => {
   const [venue, setVenue] = useState("");
   const [venueCity, setVenueCity] = useState("");
   const [value2, setValue2] = useState("");
-  const [value1, onChange] = useState(new Date());
+  const [value1, onChange] = useState(null);
+  console.log("VALUE1.0: ", new Date(value1));
+  console.log("VALUE1.1: ", new moment(value1).format());
+  console.log("VALUE1.2: ", value1);
   const [time, setTime] = useState("");
   const [noOfGuests, setNoOfGuests] = useState("");
   const [filterSubVenues, setFilterSubVenues] = useState([]);
@@ -625,7 +628,7 @@ const NewBookingFile = () => {
     setVisible(true);
 
     const body = {
-      bookingDate: value1,
+      bookingDate: moment(value1).format(),
       subVenueBookingCharges: hallCharges,
 
       bookingTime: time,
@@ -1154,9 +1157,15 @@ const NewBookingFile = () => {
             height: "100%",
           }}
         >
-          <Title order={2} align="center" py="xl">
-            Sub Venue Booking
-          </Title>
+          {params.bookingId ? (
+            <Title order={2} align="center" py="xl">
+              Sub Venue Booking Update
+            </Title>
+          ) : (
+            <Title order={2} align="center" py="xl">
+              Sub Venue Booking
+            </Title>
+          )}
           <Modal
             styles={{
               close: {
@@ -1999,8 +2008,7 @@ const NewBookingFile = () => {
                             scrollIntoView({ alignment: "center" })
                           }
                           style={{
-                            backgroundImage:
-                              "url(https://media.istockphoto.com/photos/violet-color-velvet-texture-background-picture-id587219358?k=20&m=587219358&s=612x612&w=0&h=PtwQq0Cx7AllJLpAqQkO315w8NxwwAJIrquHjaTym3Y=)",
+                            background: "#E60084",
                           }}
                         >
                           Pay
@@ -2060,13 +2068,12 @@ const NewBookingFile = () => {
                           }}
                           rightIcon={<IconArrowRight />}
                         >
-                          NEXT
+                          UPDATE
                         </Button>
                       </Grid.Col>
                     </Grid>
                   ) : (
                     <>
-                      {" "}
                       <Text weight="bold" size="xl" py="lg">
                         Pay With Stripe
                       </Text>

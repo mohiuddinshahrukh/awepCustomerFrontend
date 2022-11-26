@@ -306,7 +306,6 @@ const SubVenuesForBooking = ({
     <ScrollArea>
       {rows.length > 0 ? (
         <>
-          {" "}
           {console.log("TESTING ERROR, ", error)}
           {error === ""
             ? !isUpdate && (

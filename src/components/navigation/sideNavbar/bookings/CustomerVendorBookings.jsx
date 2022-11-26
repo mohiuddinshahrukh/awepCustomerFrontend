@@ -3,6 +3,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconEye } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import ViewAllVendorPaymentReceipts from "./ViewAllVendorPaymentReceipts";
 
@@ -33,11 +34,13 @@ const fetchAllVendors = async () => {
   }
 };
 const CustomerVendorBookings = () => {
+  let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
   const [visible, setVisible] = useState(true);
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
   const [vendorBookings, setVendorBookings] = useState([]);
+  console.log("vendorBookings", vendorBookings);
   useEffect(() => {
     fetchAllVendors().then(setVendorBookings).then(setVisible(false));
   }, []);
@@ -87,6 +90,9 @@ const CustomerVendorBookings = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on edit button");
+              navigate(
+                `/updateVendorBooking/${row.eventType}/${row.bookingDate}/${row.eventDuration}/${row.vendorBusinessId._id}/${row.vendorPackageId._id}/${row._id}`
+              );
             }}
           >
             <IconEdit />

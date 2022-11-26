@@ -103,6 +103,8 @@ function sortData(data, payload) {
 // DATA
 
 const VendorPackagesForBooking = ({
+  isUpdate,
+  bookingDateAndTime,
   vendorPackageDetails,
   setIdOfSelectedPackage,
   idOfSelectedPackage,
@@ -132,9 +134,36 @@ const VendorPackagesForBooking = ({
   };
 
   useEffect(() => {
-    filtering();
-  }, [vendorCategory, bookedDateAndTime, time]);
+    if (isUpdate) {
+      let vendorPackage = vendorPackageDetails.filter(
+        (e) => e._id === idOfSelectedPackage
+      );
 
+      setSortedData(vendorPackage);
+      available(vendorPackage[0]);
+    } else {
+      filtering();
+    }
+  }, [vendorCategory, bookedDateAndTime, time]);
+  const available = (vendorPackage) => {
+    console.log("@TESTING aVaileble called");
+    let error = "";
+
+    if (vendorPackage.bookedOn) {
+      const bookingsOnDate =
+        (bookingDateAndTime &&
+          bookedDateAndTime != bookingDateAndTime &&
+          vendorPackage.bookedOn[bookedDateAndTime]) ||
+        0;
+      if (bookingsOnDate >= vendorPackage.noOfBookingsPerDay) {
+        error += "SubVenue is not available on this date and time \n";
+      }
+    }
+
+    console.log("@TESTING ERROR", error);
+    setError(error);
+    error ? setDisabled(true) : setDisabled(false);
+  };
   const filtering = () => {
     if (idOfSelectedPackage === "") {
       const filteredPackages = vendorPackageDetails.filter(
@@ -164,7 +193,7 @@ const VendorPackagesForBooking = ({
   };
   const filteringAfterSelection = (id) => {
     let filteredSubVenues = vendorPackageDetails.filter(
-      (subVenue) => subVenue._id === id
+      (vendorPackage) => vendorPackage._id === id
     );
     setSortedData(filteredSubVenues);
   };
@@ -195,7 +224,7 @@ const VendorPackagesForBooking = ({
           </ActionIcon>
           <Button
             size="xs"
-            hidden={hideSelectButton}
+            hidden={hideSelectButton || isUpdate}
             style={{
               backgroundColor:
                 row._id === idOfSelectedPackage ? "#E60084" : "white",
@@ -226,15 +255,17 @@ const VendorPackagesForBooking = ({
 
   return (
     <ScrollArea>
-      {error === "" ? (
-        <Title py="xl" order={3} align="center">
-          Available Sub Venues
-        </Title>
-      ) : (
-        <Text py="xl" size="xl" align="center" color="red" weight="bold">
-          Please Select A Venue To Proceed
-        </Text>
-      )}
+      {error === ""
+        ? !isUpdate && (
+            <Title py="xl" order={3} align="center">
+              Available Packages
+            </Title>
+          )
+        : !isUpdate && (
+            <Text py="xl" size="xl" align="center" color="red" weight="bold">
+              Please Select A Package To Proceed
+            </Text>
+          )}
       {sortedData.length !== 0 ? (
         <Paper withBorder shadow="xl" radius="md">
           <Modal
@@ -296,6 +327,9 @@ const VendorPackagesForBooking = ({
             </thead>
             <tbody>{rows?.length > 0 ? rows : null}</tbody>
           </Table>
+          <Text color="red" align="center" hidden={!error}>
+            {error}
+          </Text>
         </Paper>
       ) : (
         <Text py="xl" size="xl" align="center" color="red" weight="bold">

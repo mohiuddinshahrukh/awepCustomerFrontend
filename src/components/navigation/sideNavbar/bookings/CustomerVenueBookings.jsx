@@ -78,7 +78,7 @@ const CustomerVenueBookings = () => {
             onClick={() => {
               console.log("Clicked on edit button");
               navigate(
-                `/updatevendorBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
+                `/updateVenueBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
               );
             }}
           >

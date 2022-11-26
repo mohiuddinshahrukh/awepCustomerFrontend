@@ -109,7 +109,6 @@ const SubVenuesForBooking = ({
   bookingDateAndTime,
   setIdOfSelectedSubVenue,
   idOfSelectedSubVenue,
-  refreshStates,
   bookedDateAndTime,
   noOfGuests,
   setHidden,
@@ -184,7 +183,7 @@ const SubVenuesForBooking = ({
     }
   };
   const available = (subVenue) => {
-    console.log("@TESTING aVaileble called")
+    console.log("@TESTING aVaileble called");
     let error = "";
     if (subVenue.bookedOn) {
       console.log("@TESTING BOOKED ON", subVenue.bookedOn);
@@ -305,77 +304,100 @@ const SubVenuesForBooking = ({
 
   return (
     <ScrollArea>
-      {console.log("TESTING ERROR, ", error)}
-      {isUpdate || error === "" ? (
-        <Title py="xl" order={3} align="center">
-          Available Sub Venues
-        </Title>
-      ) : (
-        <Text py="xl" size="xl" align="center" color="red" weight="bold">
-          Please Select A Venue To Proceed
-        </Text>
-      )}
-      <Paper withBorder shadow="xl" radius="md">
-        <Modal
-          opened={viewModal}
-          size="50%"
-          onClose={() => setViewModal(false)}
-        >
-          <SpecificSubVenueDetails subVenue={subvenueDetails[index]} />
-        </Modal>
+      {rows.length > 0 ? (
+        <>
+          {console.log("TESTING ERROR, ", error)}
+          {error === ""
+            ? !isUpdate && (
+                <Title py="xl" order={3} align="center">
+                  Available Sub Venues
+                </Title>
+              )
+            : !isUpdate && (
+                <Text
+                  py="xl"
+                  size="xl"
+                  align="center"
+                  color="red"
+                  weight="bold"
+                >
+                  Please Select A Venue To Proceed
+                </Text>
+              )}
+          <Paper withBorder shadow="xl" radius="md">
+            <Modal
+              opened={viewModal}
+              size="50%"
+              onClose={() => setViewModal(false)}
+            >
+              <SpecificSubVenueDetails subVenue={subvenueDetails[index]} />
+            </Modal>
 
-        <Table
-          horizontalSpacing="md"
-          verticalSpacing="xs"
-          sx={{ tableLayout: "fixed", minWidth: 700 }}
-        >
-          <thead>
-            <tr>
-              <Th
-                sorted={sortBy === "ID"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("ID")}
-              >
-                ID
-              </Th>
-              <th style={{ width: "10%" }}>Image</th>
-              <Th
-                sorted={sortBy === "subVenueName"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("subVenueName")}
-              >
-                Name
-              </Th>
-              <Th
-                sorted={sortBy === "subVenueMinCapacity"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("subVenueMinCapacity")}
-              >
-                Min Capacity
-              </Th>
-              <Th
-                sorted={sortBy === "company"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("company")}
-              >
-                Max Capacity
-              </Th>
-              <Th
-                sorted={sortBy === "company"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("company")}
-              >
-                Type
-              </Th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{rows?.length > 0 ? rows : null}</tbody>
-        </Table>
-        <Text color="red" align="center" hidden={!error}>
-          {error}
-        </Text>
-      </Paper>
+            <Table
+              horizontalSpacing="md"
+              verticalSpacing="xs"
+              sx={{ tableLayout: "fixed", minWidth: 700 }}
+            >
+              <thead>
+                <tr>
+                  <Th
+                    sorted={sortBy === "ID"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("ID")}
+                  >
+                    ID
+                  </Th>
+                  <th style={{ width: "10%" }}>Image</th>
+                  <Th
+                    sorted={sortBy === "subVenueName"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("subVenueName")}
+                  >
+                    Name
+                  </Th>
+                  <Th
+                    sorted={sortBy === "subVenueMinCapacity"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("subVenueMinCapacity")}
+                  >
+                    Min Capacity
+                  </Th>
+                  <Th
+                    sorted={sortBy === "company"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("company")}
+                  >
+                    Max Capacity
+                  </Th>
+                  <Th
+                    sorted={sortBy === "company"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("company")}
+                  >
+                    Type
+                  </Th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{rows?.length > 0 ? rows : null}</tbody>
+            </Table>
+            <Text color="red" align="center" hidden={!error}>
+              {error}
+            </Text>
+          </Paper>
+        </>
+      ) : (
+        <>
+          <Text pt="xl" size="xl" align="center" color="red" weight="bold">
+            No Sub Venues Available
+          </Text>
+          <Text size="lg" align="center" color="red">
+            No Sub Venues Available For Your Selection. Please Select Another
+            Date Or Time To Proceed Or Contact The Vendor For More Details On
+            Availability On The Selected Date And Time . Thank You !
+          </Text>
+        </>
+      )}
     </ScrollArea>
   );
 };

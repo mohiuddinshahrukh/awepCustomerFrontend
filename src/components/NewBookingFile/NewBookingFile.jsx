@@ -186,6 +186,7 @@ const NewBookingFile = () => {
   console.log("selected service to be edited is", serviceTitle);
   console.log("selected venue services", selectedVenueServices);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [price, setPrice] = useState({});
   const [selectedVenueServiceObject, setSelectedVenueServiceObject] = useState(
     []
   );
@@ -357,26 +358,7 @@ const NewBookingFile = () => {
     </div>
   ));
 
-  console.log("selected venue is ", venue);
-  //   function setIdOfSelectedSubVenue(id) {
-  //     alert(id);
-  //   }
-  console.log("_id of subvenue from table", idOfSelectedSubVenue);
-
-  console.log("no of noOfGuests", noOfGuests);
-
-  const refreshStates = () => {
-    setTotalPrice(0);
-    setSelectedVenueServices([]);
-    setSelectedVenueServiceObject([]);
-  };
-
   let navigate = useNavigate();
-  const renderErrorMessage = (name) => {
-    if (errorMessages[name]) {
-      return errorMessages[name];
-    }
-  };
 
   const form1 = useForm({
     // validateInputOnChange: true,
@@ -398,14 +380,14 @@ const NewBookingFile = () => {
     },
   });
   let userData = JSON.parse(localStorage.getItem("userData"));
-  let customerEmail = userData?.email;
-  let customerPhone = userData?.phone;
+  let localCustomerEmail = userData?.email;
+  let localCustomerPhone = userData?.phone;
   const form = useForm({
     validateInputOnChange: ["phone", "email"],
     initialValues: {
-      phone: customerPhone,
-      email: customerEmail,
-      description: "",
+      phone: params.bookingId ? phone : localCustomerPhone,
+      email: params.bookingId ? email : localCustomerEmail,
+      description: params.bookingId ? description : "",
     },
 
     validate: {
@@ -496,15 +478,29 @@ const NewBookingFile = () => {
                 )
               );
               setSelectedVenueServiceObject(response?.selectedVenueServices);
-              setTotalPrice(response?.totalPrice);
               setNoOfGuests(response?.numberOfGuests);
               setEventType(response?.eventType);
               setTime(response?.bookingTime);
               onChange(response?.bookingDate);
-              setPhone(response?.phone);
-              setEmail(response?.email);
-              setDescription(response?.description);
+              setPhone(response?.pointOfContact?.phone);
+              setEmail(response?.pointOfContact?.email);
+              setDescription(response?.bookingDescription);
+              form.setFieldValue("phone", response?.pointOfContact?.phone);
+              form.setFieldValue("email", response?.pointOfContact?.email);
+              form.setFieldValue("description", response?.bookingDescription);
+              setSelectedMenu(response?.selectedMenu?.menu);
+              setSelectedTheme(response?.selectedVenueTheme?.theme);
+              setPrice(response?.price);
               setMenuPrice(response?.selectedMenu?.menu?.price);
+              setTotalPrice(
+                response?.selectedVenueServices?.reduce((acc, curr) => {
+                  const price =
+                    curr.duration === "Per Hour"
+                      ? acc + curr.servicePrice * 3
+                      : acc + curr.servicePrice;
+                  return price;
+                }, 0)
+              );
 
               setRefresh(false);
               setVisible(false);
@@ -624,9 +620,86 @@ const NewBookingFile = () => {
       setChecked(false);
     }
   }, [selectedVenueServices]);
+
+  const updateSubVenueBooking = async () => {
+    setVisible(true);
+
+    const body = {
+      bookingDate: value1,
+      subVenueBookingCharges: hallCharges,
+
+      bookingTime: time,
+      eventType: eventType,
+      pointOfContact: {
+        email: email,
+        phone: phone,
+      },
+      //   selectedSubVenueServices: selectedFilteredSubVenueServices,
+      price: {
+        totalPrice: totalPrice + hallCharges + menuPrice * noOfGuests,
+        paidAmount: price.paidAmount,
+        remainingAmount:
+          totalPrice + hallCharges + menuPrice * noOfGuests - price.paidAmount,
+        paymentHistory: price.paymentHistory,
+      },
+      selectedVenueTheme: {
+        theme: selectedTheme,
+      },
+      selectedMenu: {
+        menu: idOfSelectedMenu,
+        price: menuPrice,
+        modifiedMenu: selectedMenu,
+      },
+
+      selectedVenueServices: selectedVenueServiceObject,
+      bookingDescription: description,
+      numberOfGuests: noOfGuests,
+    };
+    console.log("body");
+    console.log("bosyyyy in update", body);
+    const headers = {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("userToken"),
+    };
+    try {
+      const response = await axios({
+        method: "patch",
+        url: `https://a-wep.herokuapp.com/customer/updateSubVenueBooking/${params.bookingId}`,
+        data: body,
+        headers: headers,
+      });
+      // setLoading(false);
+      console.log(response.data);
+
+      if (response.data.status === "error") {
+        console.log("error", response.data);
+        showNotification({
+          color: "yellow",
+          title: `${response.data.error}`,
+
+          message: `${response.data.message}`,
+        });
+        setVisible(false);
+        console.log(response.data.error);
+      } else {
+        showNotification({
+          color: "green",
+          title: `Successfully`,
+
+          message: `BOOKING DETAILS UPDATED!!`,
+        });
+        console.log("navigating");
+        navigate("/shahrukhTest/bookings");
+        // setOpened(true);
+        console.log("navigated");
+        // navigate(-1);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const makeVenueBooking = async () => {
-    // setComponent("3");
-    // setLoading(true);
     setVisible(true);
 
     console.log("MAKING THE BOOKING");
@@ -773,7 +846,7 @@ const NewBookingFile = () => {
           transitionTimingFunction="ease"
           onClose={() => {
             setConfirmBooking(false);
-            navigate("/viewbookings");
+            navigate("/shahrukhTest/bookings");
           }}
         >
           <Stack>
@@ -1061,7 +1134,7 @@ const NewBookingFile = () => {
           <Group position="center">
             <Button
               component={Link}
-              to="/viewbookings"
+              to="/shahrukhTest/bookings"
               mt="md"
               leftIcon={<IconX />}
               color="green"
@@ -1123,7 +1196,7 @@ const NewBookingFile = () => {
                   align="center"
                   color="red"
                   leftIcon={<IconTrash size={14} />}
-                  onClick={() => navigate("/viewbookings")}
+                  onClick={() => navigate("/shahrukhTest/bookings")}
                 >
                   Yes, Cancel
                 </Button>
@@ -1348,7 +1421,6 @@ const NewBookingFile = () => {
                       idOfSelectedSubVenue={
                         params.subVenueId || idOfSelectedSubVenue
                       }
-                      refreshStates={refreshStates}
                       bookedDateAndTime={bookedDateAndTime}
                       bookingDateAndTime={bookingDateAndTime}
                       noOfGuests={form1.values.noOfGuests}
@@ -1428,9 +1500,10 @@ const NewBookingFile = () => {
                         setChecked(event.currentTarget.checked)
                       }
                       onClick={() => {
-                        const SelectedVenueServiceObjects = venueDetails?.subVenues?.filter(
-                          (f) => f._id === idOfSelectedSubVenue
-                        )[0]?.subVenueServices;
+                        const SelectedVenueServiceObjects =
+                          venueDetails?.subVenues?.filter(
+                            (f) => f._id === idOfSelectedSubVenue
+                          )[0]?.subVenueServices;
                         if (!checked) {
                           setSelectedVenueServices(
                             venueDetails?.subVenues
@@ -1480,11 +1553,12 @@ const NewBookingFile = () => {
                           setHidden(true);
                         }
                         setSelectedVenueServices(e);
-                        const SelectedVenueServiceObjects = venueDetails?.subVenues
-                          ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
-                          ?.subVenueServices.filter((g) =>
-                            e.includes(g.serviceTitle)
-                          );
+                        const SelectedVenueServiceObjects =
+                          venueDetails?.subVenues
+                            ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
+                            ?.subVenueServices.filter((g) =>
+                              e.includes(g.serviceTitle)
+                            );
                         console.log("555555", SelectedVenueServiceObjects);
                         setSelectedVenueServiceObject(
                           SelectedVenueServiceObjects
@@ -1825,13 +1899,11 @@ const NewBookingFile = () => {
                   <Grid>
                     <Grid.Col md={12} lg={6}>
                       <TextInput
-                        error={renderErrorMessage("phone")}
                         size="md"
                         required
                         type="number"
                         label="Contact Number"
                         placeholder="03XXXXXXXX"
-                        // disabled={disabled}
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         {...form.getInputProps("phone")}
@@ -1839,12 +1911,10 @@ const NewBookingFile = () => {
                     </Grid.Col>
                     <Grid.Col md={12} lg={6}>
                       <TextInput
-                        error={renderErrorMessage("email")}
                         size="md"
                         placeholder="abc@gmail.com"
                         value={email}
                         required
-                        // disabled={disabled}
                         label="Email Address"
                         onChange={(e) => setEmail(e.target.value)}
                         {...form.getInputProps("email")}
@@ -1852,7 +1922,6 @@ const NewBookingFile = () => {
                     </Grid.Col>
                     <Grid.Col md={12} lg={12}>
                       <Textarea
-                        error={renderErrorMessage("description")}
                         size="md"
                         placeholder="Describe Your Event"
                         value={description}
@@ -1861,7 +1930,6 @@ const NewBookingFile = () => {
                         maxRows={10}
                         maxLength={1000}
                         autosize
-                        // disabled={disabled}
                         label="Booking Description"
                         onChange={(e) => setDescription(e.target.value)}
                         {...form.getInputProps("description")}
@@ -1911,29 +1979,38 @@ const NewBookingFile = () => {
                   onSubmit={form.onSubmit((values) => handleSubmit1(values))}
                 >
                   <Group position="apart">
-                    <Group>
+                    {params.bookingId ? (
                       <Text weight="bold" size="xl" py="md">
-                        Review And
+                        Review And Confirm
                       </Text>
+                    ) : (
+                      <Group>
+                        <Text weight="bold" size="xl" py="md">
+                          Review And
+                        </Text>
 
-                      <Button
-                        rightIcon={
-                          <div className="xyz">
-                            <IconArrowDown />
-                          </div>
-                        }
-                        onClick={() => scrollIntoView({ alignment: "center" })}
-                        style={{
-                          backgroundImage:
-                            "url(https://media.istockphoto.com/photos/violet-color-velvet-texture-background-picture-id587219358?k=20&m=587219358&s=612x612&w=0&h=PtwQq0Cx7AllJLpAqQkO315w8NxwwAJIrquHjaTym3Y=)",
-                        }}
-                      >
-                        Pay
-                      </Button>
-                    </Group>
+                        <Button
+                          rightIcon={
+                            <div className="xyz">
+                              <IconArrowDown />
+                            </div>
+                          }
+                          onClick={() =>
+                            scrollIntoView({ alignment: "center" })
+                          }
+                          style={{
+                            backgroundImage:
+                              "url(https://media.istockphoto.com/photos/violet-color-velvet-texture-background-picture-id587219358?k=20&m=587219358&s=612x612&w=0&h=PtwQq0Cx7AllJLpAqQkO315w8NxwwAJIrquHjaTym3Y=)",
+                          }}
+                        >
+                          Pay
+                        </Button>
+                      </Group>
+                    )}
 
                     <Text weight="bold" color="red" size="xl" py="md">
-                      Total Cost Rs. {totalPrice + hallCharges}
+                      Total Cost Rs.{" "}
+                      {totalPrice + hallCharges + menuPrice * noOfGuests}
                     </Text>
                   </Group>
                   <BookingReviewInvoice
@@ -1957,81 +2034,124 @@ const NewBookingFile = () => {
                     description={description}
                     step={6}
                   />
-                  <Text weight="bold" size="xl" py="lg">
-                    Pay With Stripe
-                  </Text>
-                  <Grid>
-                    <Grid.Col md={12} lg={6}>
-                      <Paper
-                        p="sm"
-                        withBorder
-                        shadow="md"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      >
-                        <Title className={classes.title} order={2} pt="sm">
-                          Payment Breakdown
-                        </Title>
-
-                        <SimpleGrid
-                          cols={1}
-                          spacing={20}
-                          breakpoints={[
-                            { maxWidth: 550, cols: 1, spacing: 40 },
-                          ]}
-                          style={{ marginTop: 30 }}
+                  {params.bookingId ? (
+                    <Grid justify="flex-end" py="md">
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="red"
+                          // disabled={loading}
+                          leftIcon={<IconArrowLeft />}
+                          onClick={prevStep}
                         >
-                          {items}
-                        </SimpleGrid>
-                      </Paper>
-                    </Grid.Col>
-                    <Grid.Col md={12} lg={6} ref={targetRef}>
-                      <StripePromise
-                        paidSuccessfully={paidSuccessfully}
-                        setPaidSuccessfully={setPaidSuccessfully}
-                        onClickBack={prevStep}
-                        // setConfirmBooking={setConfirmBooking}
-                        // start={start}
-                        amountPayable={
-                          (hallCharges +
-                            selectedVenueServiceObject
-                              ?.map(
-                                (service) =>
-                                  service.servicePrice *
-                                  (service.duration === "Per Event" ? 1 : 3)
-                              )
-                              .reduce((a, b) => a + b, 0) +
-                            (selectedMenu?.price ? selectedMenu.price : 0) *
-                              noOfGuests -
-                            (hallCharges +
-                              selectedVenueServiceObject
-                                ?.map(
-                                  (service) =>
-                                    service.servicePrice *
-                                    (service.duration === "Per Event" ? 1 : 3)
-                                )
-                                .reduce((a, b) => a + b, 0) +
-                              (selectedMenu?.price ? selectedMenu.price : 0) *
-                                noOfGuests) *
-                              0.25 +
-                            (hallCharges +
-                              selectedVenueServiceObject
-                                ?.map(
-                                  (service) =>
-                                    service.servicePrice *
-                                    (service.duration === "Per Event" ? 1 : 3)
-                                )
-                                .reduce((a, b) => a + b, 0) +
-                              (selectedMenu?.price ? selectedMenu.price : 0) *
-                                noOfGuests) *
-                              0.17) *
-                          0.25
-                        }
-                      />
-                    </Grid.Col>
-                  </Grid>
+                          BACK
+                        </Button>
+                      </Grid.Col>
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="dark"
+                          onClick={() => {
+                            updateSubVenueBooking();
+                          }}
+                          rightIcon={<IconArrowRight />}
+                        >
+                          NEXT
+                        </Button>
+                      </Grid.Col>
+                    </Grid>
+                  ) : (
+                    <>
+                      {" "}
+                      <Text weight="bold" size="xl" py="lg">
+                        Pay With Stripe
+                      </Text>
+                      <Grid>
+                        <Grid.Col md={12} lg={6}>
+                          <Paper
+                            p="sm"
+                            withBorder
+                            shadow="md"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                            }}
+                          >
+                            <Title className={classes.title} order={2} pt="sm">
+                              Payment Breakdown
+                            </Title>
+
+                            <SimpleGrid
+                              cols={1}
+                              spacing={20}
+                              breakpoints={[
+                                { maxWidth: 550, cols: 1, spacing: 40 },
+                              ]}
+                              style={{ marginTop: 30 }}
+                            >
+                              {items}
+                            </SimpleGrid>
+                          </Paper>
+                        </Grid.Col>
+                        <Grid.Col md={12} lg={6} ref={targetRef}>
+                          <StripePromise
+                            paidSuccessfully={paidSuccessfully}
+                            setPaidSuccessfully={setPaidSuccessfully}
+                            onClickBack={prevStep}
+                            // setConfirmBooking={setConfirmBooking}
+                            // start={start}
+                            amountPayable={
+                              (hallCharges +
+                                selectedVenueServiceObject
+                                  ?.map(
+                                    (service) =>
+                                      service.servicePrice *
+                                      (service.duration === "Per Event" ? 1 : 3)
+                                  )
+                                  .reduce((a, b) => a + b, 0) +
+                                (selectedMenu?.price ? selectedMenu.price : 0) *
+                                  noOfGuests -
+                                (hallCharges +
+                                  selectedVenueServiceObject
+                                    ?.map(
+                                      (service) =>
+                                        service.servicePrice *
+                                        (service.duration === "Per Event"
+                                          ? 1
+                                          : 3)
+                                    )
+                                    .reduce((a, b) => a + b, 0) +
+                                  (selectedMenu?.price
+                                    ? selectedMenu.price
+                                    : 0) *
+                                    noOfGuests) *
+                                  0.25 +
+                                (hallCharges +
+                                  selectedVenueServiceObject
+                                    ?.map(
+                                      (service) =>
+                                        service.servicePrice *
+                                        (service.duration === "Per Event"
+                                          ? 1
+                                          : 3)
+                                    )
+                                    .reduce((a, b) => a + b, 0) +
+                                  (selectedMenu?.price
+                                    ? selectedMenu.price
+                                    : 0) *
+                                    noOfGuests) *
+                                  0.17) *
+                              0.25
+                            }
+                          />
+                        </Grid.Col>
+                      </Grid>
+                    </>
+                  )}
                 </form>
               </Paper>
             </Stepper.Step>

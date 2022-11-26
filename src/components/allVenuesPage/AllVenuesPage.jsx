@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useListState, useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import AdvanceFilterHallCharges from "./AdvanceFilterHallCharges";
@@ -26,39 +26,179 @@ import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
 import AllVenuesRatingFilter from "./AllVenuesRatingFilter";
 
-const fetchAllVenues = async () => {
-  try {
-    const apiResponse = await axios.get(
-      "https://a-wep.herokuapp.com/customer/getVenues"
-    );
-
-    if (apiResponse.data.status === "success") {
-      console.log("Successfully fetched all venues:", apiResponse.data.data);
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venues");
-    } else {
-      console.log("Failed to fetch all venues, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
 const AllVenuesPage = () => {
   const params = useParams();
   console.log("PARAMS:", params);
   const [city, setCity] = useState(params.city ? params.city : "");
-  const [date, setDate] = useState(
-    params.date ? new Date(params.date) : new Date(Date.now())
-  );
+  const [date, setDate] = useState(params.date ? new Date(params.date) : null);
   const [time, setTime] = useState(params.time ? params.time : "");
-  const [venueType, setVenueType] = useState([]);
+  const [venueCapacity, setVenueCapacity] = useState();
+  const [rating, setRating] = useState(null);
+  console.log("rating", rating);
+  const [services, setServices] = useState([]);
+  const [menuPrices, setMenuPrices] = useState([]);
+  // const [venueType, setVenueType] = useState("all");
   const [allVenues, setAllVenues] = useState([]);
+  const [filteredVenues, setFilteredVenues] = useState([]);
+  console.log("All venues:", allVenues);
+  console.log("Filtered venues:", filteredVenues);
+  const initialValues = [
+    { value: "HALL", label: "Halls", checked: true },
+    { value: "MARQUEE", label: "Marquees", checked: true },
+    { value: "OUTDOOR", label: "Out Doors", checked: true },
+  ];
+  const [venueType, setVenueType] = useListState(initialValues);
+  console.log("values in check boxes", venueType);
+  const allChecked = venueType.every((value) => value.checked);
+  const indeterminate = venueType.some((value) => value.checked) && !allChecked;
 
+  const [filteredServices, setFilteredServices] = useState([]);
+  console.log("filteredServices we retrieved", filteredServices);
+  const [allServices, setAllServices] = useState([]);
+  const fetchAllVenueServices = async () => {
+    try {
+      const apiResponse = await axios.get(
+        "https://a-wep.herokuapp.com/customer/getAllVenueServices"
+      );
+      console.log("API Response", apiResponse);
+      if (apiResponse.data.status === "success") {
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        console.log(
+          "Error while fetching all venue services",
+          apiResponse.data.error
+        );
+      } else {
+        console.log("Unknown Error: ", apiResponse.data.error);
+      }
+    } catch (error) {
+      console.log("Error in fetchAllVenueServices catch block", error);
+    }
+  };
+  useEffect(() => {
+    fetchAllVenueServices().then(setAllServices);
+    console.count();
+  }, []);
+
+  const fetchAllVenues = async () => {
+    try {
+      const apiResponse = await axios.get(
+        "https://a-wep.herokuapp.com/customer/getVenues"
+      );
+
+      if (apiResponse.data.status === "success") {
+        console.log("Successfully fetched all venues:", apiResponse.data.data);
+        setFilteredVenues(apiResponse.data.data);
+
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        console.log("Error while fetching all venues");
+      } else {
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
+  const [inder, setInder] = useState(false);
+  const [allche, setAllche] = useState(false);
+  const filterVenues = () => {
+    console.log("Filtering venues", params.city);
+    //filter venues according to the filter options
+    let filteredVenues = allVenues.filter((venue) => {
+      //filter by venue city
+
+      if (city !== "" && city !== "all") {
+        if (city !== venue.venueCity) {
+          return false;
+        }
+      }
+      if (rating !== null) {
+        if (rating > venue.rating) {
+          return false;
+        }
+      }
+      //filter by subvenue types
+      // if (venueType !== "all") {
+      //   let venueTypeMatch = false;
+      //   // venueType.forEach((type) => {
+      //   if (
+      //     venue?.subVenues?.map((e) => e?.subVenueType)?.includes(venueType)
+      //   ) {
+      //     console.log("MATCHED");
+      //     venueTypeMatch = true;
+      //     // return false;
+      //   }
+      //   // });
+      //   if (!venueTypeMatch) {
+      //     return false;
+      //   }
+      // }
+      if (indeterminate || allChecked) {
+        let venueTypeMatch = false;
+        //make array of venue types only of checked values
+        let venueTypes = venueType
+          .filter((value) => value.checked)
+          .map((value) => value.value);
+        console.log("venueTypes", venueTypes);
+        const filteredArray = venue?.subVenues?.filter((value) =>
+          venueTypes.includes(value.subVenueType)
+        );
+        console.log("filteredArray", filteredArray);
+        if (filteredArray.length > 0) {
+          console.log("MATCHED");
+          venueTypeMatch = true;
+        }
+
+        if (!venueTypeMatch) {
+          return false;
+        }
+      }
+      if (filteredServices.length > 0) {
+        //get all services of a venue in an array
+        let serviceMatch = false;
+
+        let venueServices = venue.providedVenueServices.map(
+          (e) => e?.serviceTitle
+        );
+        console.log("venueServices with title", venueServices);
+
+        // serviceMatch =
+        //   JSON.stringify(venueServices) == JSON.stringify(filteredServices);
+
+        //check if filtered services is a subset of venue services
+        serviceMatch = filteredServices.every((value) =>
+          venueServices.includes(value)
+        );
+        console.log("serviceMatch", serviceMatch);
+        if (!serviceMatch) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+    console.log("Filtered venues:", filteredVenues);
+    setFilteredVenues(filteredVenues);
+  };
   useEffect(() => {
     console.count();
     fetchAllVenues().then(setAllVenues);
   }, []);
+  useEffect(() => {
+    filterVenues();
+  }, [
+    allVenues,
+    city,
+    date,
+    time,
+    venueCapacity,
+    rating,
+    services,
+    menuPrices,
+    venueType,
+    filteredServices,
+  ]);
 
   const matches1026 = useMediaQuery("(max-width: 1026px)");
   return (
@@ -112,6 +252,7 @@ const AllVenuesPage = () => {
                 value={city}
                 onChange={setCity}
                 data={[
+                  { value: "all", label: "All" },
                   { value: "islamabad", label: "Islamabad" },
                   { value: "rawalpindi", label: "Rawalpindi" },
                   { value: "lahore", label: "Lahore" },
@@ -165,10 +306,25 @@ const AllVenuesPage = () => {
               <Text size={"lg"} align="left" weight={500}>
                 Advance Filters
               </Text>
-              <AdvanceFilterVenueCities />
-              <AdvanceSearchAndFilters setVenueType={setVenueType} />
-              <AllVenuesRatingFilter />
-              <AdvanceFilterVenueServices />
+              <AdvanceFilterVenueCities city={city} setCity={setCity} />
+              <AdvanceSearchAndFilters
+                setVenueType={setVenueType}
+                venueType={venueType}
+                indeterminate={indeterminate}
+                allChecked={allChecked}
+              />
+              <AllVenuesRatingFilter rating={rating} setRating={setRating} />
+              {allServices.length > 0 && (
+                <AdvanceFilterVenueServices
+                  allServices={allServices}
+                  setFilteredServices={setFilteredServices}
+                  filteredServices={filteredServices}
+                  allche={allche}
+                  inder={inder}
+                  setAllche={setAllche}
+                  setInder={setInder}
+                />
+              )}
               <AdvanceFilterVenuePrice />
               <AdvanceFilterVenueCapacity />
               <AdvanceFilterHallCharges />
@@ -176,7 +332,7 @@ const AllVenuesPage = () => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
-            <AllVenuesGrid allVenues={allVenues} />
+            <AllVenuesGrid allVenues={filteredVenues} />
           </Grid.Col>
         </Grid>
       </Container>

@@ -101,11 +101,15 @@ const VendorComplaints = () => {
       <td align="center">
         <Badge
           color={
-            row?.status === "IN PROGRESS"
+            row?.status === "in progress"
               ? "blue"
-              : row?.status === "COMPLETED"
+              : row?.status === "resolved"
               ? "green"
-              : "red"
+              : row?.status === "pending"
+              ? "yellow"
+              : row?.status === "rejected"
+              ? "red"
+              : "default"
           }
         >
           {row?.status}

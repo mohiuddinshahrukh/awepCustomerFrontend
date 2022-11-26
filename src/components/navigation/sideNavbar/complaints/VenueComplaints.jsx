@@ -1,12 +1,21 @@
-import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Group,
+  Modal,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconEdit, IconEye } from "@tabler/icons";
+import { showNotification } from "@mantine/notifications";
+import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import ViewVenueComplaintModal from "./ViewVenueComplaintModal";
 
-const fetchAllVenueComplaints = async () => {
+const fetchAllvenueComplaints = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
@@ -18,57 +27,106 @@ const fetchAllVenueComplaints = async () => {
     console.log("API RESPONSE: ", apiResponse.data);
 
     if (apiResponse.data.status === "success") {
-      console.log("Successfully fetched all venues:", apiResponse.data.data);
+      console.log(
+        "Successfully fetched all venue bookings:",
+        apiResponse.data.data
+      );
       return apiResponse.data.data;
     } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venues");
+      console.log("Error while fetching all venue bookings");
     } else {
-      console.log("Failed to fetch all venues, dont know this error");
+      console.log("Failed to fetch all venue bookings, dont know this error");
     }
   } catch (e) {
     console.log("ERROR in fetching all venues:", e);
   }
 };
+
 const VenueComplaints = () => {
-  let navigate = useNavigate();
+  const [viewvenueComplaintModal, setViewvenueComplaintModal] = useState(false);
   const matches500 = useMediaQuery("(min-width: 500px)");
+  const matches800 = useMediaQuery("(min-width: 800px)");
   const [visible, setVisible] = useState(true);
-  const [singleInvoice, setSingleInvoice] = useState([]);
-  const [viewBookingModal, setViewBookingModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [viewComplaintData, setViewComplaintData] = useState({});
   const [venueBookings, setVenueBookings] = useState([]);
+  const deleteVenueComplaint = async (id) => {
+    try {
+      const apiResponse = await axios({
+        method: "delete",
+        url: `https://a-wep.herokuapp.com/customer//deleteSubVenueBookingComplaint/${id}`,
+        headers: {
+          token: localStorage.getItem("userToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "Successfully fetched all venue bookings:",
+          apiResponse.data.data
+        );
+        showNotification({
+          title: "Complian Deleted",
+          message: "Complaint deleted successfully",
+          color: "green",
+        });
+
+        setRefresh(!refresh);
+        return apiResponse.data.status;
+      } else if (apiResponse.data.status === "error") {
+        console.log("Error while fetching all venue bookings");
+      } else {
+        console.log("Failed to fetch all venue bookings, dont know this error");
+      }
+    } catch (e) {
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
   useEffect(() => {
-    fetchAllVenueComplaints().then(setVenueBookings).then(setVisible(false));
-  }, []);
-  console.log("venueBookings", venueBookings);
+    fetchAllvenueComplaints().then(setVenueBookings).then(setVisible(false));
+  }, [refresh]);
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
       <td align="center">{index + 1}</td>
-      <td>{row.subVenueName}</td>
-      <td>{row.eventType}</td>
+      <td>{row?.venueId?.venueName}</td>
+      <td>{row?.subVenueId?.subVenueName}</td>
+      <td>{row?.complaintType}</td>
+      <td>{row?.complaintTitle}</td>
+      <td>{row?.createdAt?.split("T")[0]}</td>
       <td>
-        {row.createdAt.split("T")[0] +
+        {row?.subVenueBookingId?.bookingDate?.split("T")[0] +
           " " +
-          row.createdAt.split("T")[1].split(".")[0]}
+          row?.subVenueBookingId?.bookingTime}
       </td>
-      <td>{row.bookingDate.split("T")[0] + " " + row.bookingTime}</td>
       <td align="center">
-        <Badge color={row.bookingStatus === "IN PROGRESS" ? "blue" : "red"}>
-          {row.bookingStatus}
+        <Badge
+          color={
+            row?.status === "in progress"
+              ? "blue"
+              : row?.status === "resolved"
+              ? "green"
+              : row?.status === "pending"
+              ? "yellow"
+              : row?.status === "rejected"
+              ? "red"
+              : "default"
+          }
+        >
+          {row?.status}
         </Badge>
       </td>
       <td align="center">
-        <Badge color={row.paymentStatus === "ADVANCE PAID" ? "yellow" : "blue"}>
-          {row.paymentStatus}
-        </Badge>
+        <Text lineClamp={1}>{row?.complaintDescription}</Text>
       </td>
-      <td align="right">{row.numberOfGuests}</td>
+
       <td align="center">
         <Group spacing={0} noWrap align={"center"} position="center">
           <ActionIcon
             onClick={() => {
               console.log("Clicked on view button");
-              setSingleInvoice(row);
-              setViewBookingModal(true);
+              setViewComplaintData(row);
+              setViewvenueComplaintModal(true);
             }}
           >
             <IconEye />
@@ -76,12 +134,18 @@ const VenueComplaints = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on edit button");
-              navigate(
-                `/updatevendorBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
-              );
             }}
           >
             <IconEdit />
+          </ActionIcon>
+          <ActionIcon
+            onClick={() => {
+              console.log("Clicked on Delete button");
+              setVisible(true);
+              deleteVenueComplaint(row?._id);
+            }}
+          >
+            <IconTrash />
           </ActionIcon>
         </Group>
       </td>
@@ -90,34 +154,58 @@ const VenueComplaints = () => {
 
   const headerData = [
     "ID",
-    "Sub Venue Name",
-    "Event Type",
-    "Booking Lodged At",
-    "Event Date & Time",
-    "Booking Status",
-    "Payment Status",
-    "Guests",
-    "Action",
+    "Venue",
+    "Sub Venue",
+    "Complaint Type",
+    "Complaint Title",
+    "Complaint Date",
+    "Booking Date",
+    "Complaint Status",
+    "Complaint Details",
+    "Actions",
   ];
   const headers = (
     <tr>
       {headerData?.map((header, index) => {
-        return <th key={index}> {header}</th>;
+        return <th key={index}>{header}</th>;
       })}
     </tr>
   );
   return (
-    <div style={{ position: "relative" }}>
-      <CustomeLoadingOverlay visible={visible} />
+    <div>
       <Modal
-        size={matches500 ? "calc(100vw-30vw)" : "sm"}
-        radius="sm"
+        styles={{
+          close: {
+            color: "black",
+            backgroundColor: "#EAEAEA",
+            borderRadius: "50%",
+            "&:hover": {
+              transition: "50ms",
+              color: "white",
+              backgroundColor: "red",
+            },
+          },
+        }}
+        centered
         overlayOpacity={0.55}
         overlayBlur={3}
-        opened={viewBookingModal}
-        onClose={() => setViewBookingModal(!viewBookingModal)}
-      ></Modal>
-      <Table striped withBorder withColumnBorders>
+        size={matches800 ? "60%" : "lg"}
+        title={<Title>Venue Complaint</Title>}
+        opened={viewvenueComplaintModal}
+        onClose={() => {
+          setViewvenueComplaintModal(!viewvenueComplaintModal);
+        }}
+      >
+        <ViewVenueComplaintModal complaintView={viewComplaintData} />
+      </Modal>
+
+      <Table
+        style={{ position: "relative" }}
+        striped
+        withBorder
+        withColumnBorders
+      >
+        <CustomeLoadingOverlay visible={visible} />
         <thead>{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>

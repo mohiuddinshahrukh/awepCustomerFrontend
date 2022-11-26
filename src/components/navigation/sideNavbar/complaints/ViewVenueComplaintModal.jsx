@@ -10,9 +10,9 @@ import {
 import { RichTextEditor } from "@mantine/tiptap";
 import React from "react";
 
-const ViewVendorComplaintModal = ({ complaintView }) => {
+const ViewVenueComplaintModal = ({ complaintView }) => {
   return (
-    <>
+    <div>
       <Image
         radius="md"
         height={300}
@@ -37,7 +37,7 @@ const ViewVendorComplaintModal = ({ complaintView }) => {
                 <Text size="lg" weight="bold">
                   Customer Email:
                 </Text>
-                <Text size="lg">{complaintView.customerId?.email}</Text>
+                <Text size="lg">{complaintView?.customerId?.email}</Text>
               </Group>
             </Grid.Col>
             <Grid.Col span={12}>
@@ -45,7 +45,7 @@ const ViewVendorComplaintModal = ({ complaintView }) => {
                 <Text size="lg" weight="bold">
                   Customer Name:
                 </Text>
-                <Text size="lg">{complaintView.customerId?.name}</Text>
+                <Text size="lg">{complaintView?.customerId?.name}</Text>
               </Group>
             </Grid.Col>
             <Grid.Col span={12}>
@@ -54,49 +54,41 @@ const ViewVendorComplaintModal = ({ complaintView }) => {
                   Booking Date:
                 </Text>
                 <Text size="lg">
-                  {
-                    complaintView.vendorPackageBookingId?.bookingDate.split(
-                      "T"
-                    )[0]
-                  }
+                  {complaintView?.subVenueBookingId?.bookingDate.split("T")[0]}
                 </Text>
               </Group>
             </Grid.Col>
           </Grid>
         </Grid.Col>
         <Grid.Col sm={6} md={6} lg={6} xl={6}>
-          <Title order={2}>Vendor Information</Title>
+          <Title order={2}>Subvenue Information</Title>
           <Grid>
-            <Grid.Col span={12}>
+            <Grid.Col lg={12}>
               <Group mt="md">
                 <Text size="lg" weight="bold">
-                  Vendor Email :
+                  Venue Owner Email:
                 </Text>
-                <Text size="lg">{complaintView.vendorId?.email}</Text>
+                <Text size="lg">{complaintView?.venueOwnerId?.email}</Text>
               </Group>
               <Group>
                 <Text size="lg" weight="bold">
-                  Vendor Name:
+                  Venue Owner Name:
                 </Text>
-                <Text size="lg">{complaintView.vendorId?.name}</Text>
+                <Text size="lg">{complaintView?.venueOwnerId?.name}</Text>
               </Group>
             </Grid.Col>
             <Grid.Col span={12}>
               <Group>
                 <Text size="lg" weight="bold">
-                  Vendor Service Title:
+                  Venue Title:
                 </Text>
-                <Text size="lg">
-                  {complaintView.vendorServiceId?.vendorServiceTitle}
-                </Text>
+                <Text size="lg">{complaintView?.venueId?.venueName}</Text>
               </Group>
               <Group>
                 <Text size="lg" weight="bold">
-                  Vendor Package Title:
+                  Subvenue Title:
                 </Text>
-                <Text size="lg">
-                  {complaintView.vendorPackageId?.vendorPackageTitle}
-                </Text>
+                <Text size="lg">{complaintView?.subVenueId?.subVenueName}</Text>
               </Group>
             </Grid.Col>
           </Grid>
@@ -111,11 +103,11 @@ const ViewVendorComplaintModal = ({ complaintView }) => {
 
       <Text size="lg">
         <b>Title: </b>
-        {complaintView.complaintTitle}
+        {complaintView?.complaintTitle}
       </Text>
 
       <Text size="lg">
-        <b>Category: </b> {complaintView.complaintType}
+        <b>Category: </b> {complaintView?.complaintType}
       </Text>
 
       <Text size="lg">
@@ -135,17 +127,16 @@ const ViewVendorComplaintModal = ({ complaintView }) => {
       </Text>
 
       <Text size="lg">
-        <b>Date: </b> {complaintView.createdAt?.split("T")[0]}
+        <b>Date: </b> {complaintView?.createdAt?.split("T")[0]}
       </Text>
 
       <RichTextEditor
         style={{ textAlign: "justify", textJustify: "inter-word" }}
         readOnly
       >
-        {" "}
-        {complaintView.complaintDescription}
+        {complaintView?.complaintDescription}
       </RichTextEditor>
-      {complaintView?.vendorReply && (
+      {complaintView?.venueReply && (
         <>
           <Text size="lg" weight="bold">
             Reply To This Complaint
@@ -154,12 +145,12 @@ const ViewVendorComplaintModal = ({ complaintView }) => {
             style={{ textAlign: "justify", textJustify: "inter-word" }}
             readOnly
           >
-            {complaintView?.vendorReply}
+            {complaintView?.venueReply}
           </RichTextEditor>
         </>
       )}
-    </>
+    </div>
   );
 };
 
-export default ViewVendorComplaintModal;
+export default ViewVenueComplaintModal;

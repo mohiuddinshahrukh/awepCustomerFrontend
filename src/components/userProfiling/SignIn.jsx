@@ -212,7 +212,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
               showNotification({
                 title: "Successful Login",
                 color: "green",
-                message: "Login Successful, redirecting you to dashboard!",
+                message: "Login Successful",
               });
 
               setVisible(false);

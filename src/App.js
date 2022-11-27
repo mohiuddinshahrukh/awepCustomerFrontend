@@ -1,11 +1,13 @@
 // import logo from "./logo.svg";
 import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
+import InvalidRoutePage from "./components/brokenRoutesAndPages/404Page/InvalidRoutePage";
 import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
 import CustomerDashboard from "./components/customerDashbaord/CustomerDashboard";
 import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
@@ -37,82 +39,85 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Paper className="App">
-          <TopNavbar />
-          <Routes>
-            <Route path="/signIn" element={<SignIn />} />
-            <Route path="/signUp" element={<SignUp />} />
-            <Route
-              path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
-              element={<NewBookingFile />}
-            />
-            <Route
-              path="/updateVenueBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
-              element={<NewBookingFile />}
-            />
-            <Route
-              path="/updateVendorBooking/:eventType/:date/:time/:vendorId/:vendorPackageId/:bookingId"
-              element={<NewVendorBookingFile />}
-            />
-            <Route
-              path="/vendorBooking/:eventType/:date/:time/:vendorId"
-              element={<NewVendorBookingFile />}
-            />
-            <Route path="/" element={<LandingPageMain />} />
-            <Route path="/cardEditor" element={<CustomerCardEditor />} />
-            <Route path="/allVendors" element={<AllVendorsPage />} />
-            {/* <Route path="/allVenues/date/:date" element={<AllVenuesPage />} /> */}
-            {/* <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} /> */}
-            <Route path="/allVenues" element={<AllVenuesPage />} />
-            <Route
-              path="/allVenues/date/:date/time/:time/city/:city"
-              element={<AllVenuesPage />}
-            />
-            <Route
-              path="/allVenues/time/:time/city/:city"
-              element={<AllVenuesPage />}
-            />
-            <Route
-              path="/allVenues/date/:date/city/:city"
-              element={<AllVenuesPage />}
-            />
-            <Route
-              path="/allVenues/date/:date/time/:time"
-              element={<AllVenuesPage />}
-            />
-            <Route path="/allVenues/date/:date" element={<AllVenuesPage />} />
-            <Route path="/allVenues/time/:time" element={<AllVenuesPage />} />
-            <Route path="/allVenues/city/:city" element={<AllVenuesPage />} />
-            <Route
-              path="/specificVendor"
-              element={<SpecificVendorBusinessDetails />}
-            />
-            <Route
-              path="/specificVendor:id"
-              element={<SpecificVendorBusinessDetails />}
-            />
-            <Route
-              path="/specificVenue:id"
-              element={<SpecificVenueDetails />}
-            />
+        <NotificationsProvider>
+          <Paper className="App">
+            <TopNavbar />
+            <Routes>
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/signUp" element={<SignUp />} />
+              <Route
+                path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
+                element={<NewBookingFile />}
+              />
+              <Route
+                path="/updateVenueBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
+                element={<NewBookingFile />}
+              />
+              <Route
+                path="/updateVendorBooking/:eventType/:date/:time/:vendorId/:vendorPackageId/:bookingId"
+                element={<NewVendorBookingFile />}
+              />
+              <Route
+                path="/vendorBooking/:eventType/:date/:time/:vendorId"
+                element={<NewVendorBookingFile />}
+              />
+              <Route path="/" element={<LandingPageMain />} />
+              <Route path="/cardEditor" element={<CustomerCardEditor />} />
+              <Route path="/allVendors" element={<AllVendorsPage />} />
+              {/* <Route path="/allVenues/date/:date" element={<AllVenuesPage />} /> */}
+              {/* <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} /> */}
+              <Route path="/allVenues" element={<AllVenuesPage />} />
+              <Route
+                path="/allVenues/date/:date/time/:time/city/:city"
+                element={<AllVenuesPage />}
+              />
+              <Route
+                path="/allVenues/time/:time/city/:city"
+                element={<AllVenuesPage />}
+              />
+              <Route
+                path="/allVenues/date/:date/city/:city"
+                element={<AllVenuesPage />}
+              />
+              <Route
+                path="/allVenues/date/:date/time/:time"
+                element={<AllVenuesPage />}
+              />
+              <Route path="/allVenues/date/:date" element={<AllVenuesPage />} />
+              <Route path="/allVenues/time/:time" element={<AllVenuesPage />} />
+              <Route path="/allVenues/city/:city" element={<AllVenuesPage />} />
+              <Route
+                path="/specificVendor"
+                element={<SpecificVendorBusinessDetails />}
+              />
+              <Route
+                path="/specificVendor:id"
+                element={<SpecificVendorBusinessDetails />}
+              />
+              <Route
+                path="/specificVenue:id"
+                element={<SpecificVenueDetails />}
+              />
 
-            <Route path="/dashboard" element={<CustomerDashboard />}>
-              <Route path="bookings" element={<CustomerBookings />} />
-              <Route path="chats" element={<>CHATS</>} />
-              <Route path="weddingCards" element={<>WEDDING CARDS</>} />
-              <Route path="complaintsAndFeedback" element={<Complaints />} />
-              <Route path="payments" element={<CustomerPayments />} />
-              <Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
-              <Route path="invite" element={<>INVITE</>} />
-              <Route path="profile" element={<CustomerProfile />} />
-            </Route>
-            {/* <Route
+              <Route path="/dashboard" element={<CustomerDashboard />}>
+                <Route path="bookings" element={<CustomerBookings />} />
+                <Route path="chats" element={<>CHATS</>} />
+                <Route path="weddingCards" element={<>WEDDING CARDS</>} />
+                <Route path="complaintsAndFeedback" element={<Complaints />} />
+                <Route path="payments" element={<CustomerPayments />} />
+                {/*<Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
+             <Route path="invite" element={<>INVITE</>} />*/}
+                <Route path="profile" element={<CustomerProfile />} />
+              </Route>
+              {/* <Route
                 path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
                 element={<NewBookingFile />}
               /> */}
-          </Routes>
-        </Paper>
-        <BottomNavbar />
+              <Route path="*" element={<InvalidRoutePage />} />
+            </Routes>
+          </Paper>
+          <BottomNavbar />
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );

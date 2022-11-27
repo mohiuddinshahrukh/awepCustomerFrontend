@@ -1,21 +1,18 @@
 import { Select } from "@mantine/core";
 import React from "react";
 const allDurations = [
-  { label: "all", value: "all" },
-  {
-    value: "perHour",
-    label: "Per Hour",
-  },
-  {
-    value: "perEvent",
-    label: "Per Event",
-  },
+  { value: "1 Day", label: "1 Day" },
+  { value: "2 Days", label: "2 Days" },
+  { value: "3 Days", label: "3 Days" },
+  { value: "5 Days", label: "5 Days" },
 ];
-const AllVendorDuration = () => {
+const AllVendorDuration = ({ time, setTime }) => {
   return (
     <Select
       label="Duration Filter"
       defaultValue={"all"}
+      value={time}
+      onChange={setTime}
       data={allDurations}
       placeholder="Duration Filter"
     />

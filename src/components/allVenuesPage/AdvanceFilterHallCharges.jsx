@@ -3,7 +3,7 @@ import React from "react";
 
 const AdvanceFilterHallCharges = () => {
   return (
-    <Accordion>
+    <Accordion chevronPosition="left">
       <Accordion.Item value="venueCharges">
         <Accordion.Control>Hall Charges</Accordion.Control>
         <Accordion.Panel>

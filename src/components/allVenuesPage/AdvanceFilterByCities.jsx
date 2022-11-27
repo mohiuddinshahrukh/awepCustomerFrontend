@@ -28,10 +28,10 @@ const allCities = [
   },
 ];
 
-const AdvanceFilterVenueCities = ({ city, setCity }) => {
+const AdvanceFilterByCities = ({ city, setCity }) => {
   return (
     <Select
-      label="Cities Filter"
+      label="City"
       defaultValue={"all"}
       value={city}
       onChange={setCity}
@@ -41,4 +41,4 @@ const AdvanceFilterVenueCities = ({ city, setCity }) => {
   );
 };
 
-export default AdvanceFilterVenueCities;
+export default AdvanceFilterByCities;

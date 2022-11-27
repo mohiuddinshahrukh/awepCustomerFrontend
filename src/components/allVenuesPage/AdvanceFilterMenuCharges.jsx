@@ -23,7 +23,7 @@ const AdvanceFilterMenuCharges = ({
   }, [minPrice, maxPrice]);
 
   return (
-    <Accordion>
+    <Accordion chevronPosition="left" defaultValue="menuPrice">
       <Accordion.Item value="menuPrice">
         <Accordion.Control>Menu Budget</Accordion.Control>
         <Accordion.Panel>

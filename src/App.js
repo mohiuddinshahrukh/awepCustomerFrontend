@@ -5,6 +5,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import AddReview from "./components/AddReview/AddReview";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import InvalidRoutePage from "./components/brokenRoutesAndPages/404Page/InvalidRoutePage";

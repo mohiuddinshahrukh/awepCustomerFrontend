@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import AdvanceFilterHallCharges from "./AdvanceFilterHallCharges";
 import AdvanceFilterMenuCharges from "./AdvanceFilterMenuCharges";
 import AdvanceFilterVenueCapacity from "./AdvanceFilterVenueCapacity";
-import AdvanceFilterVenueCities from "./AdvanceFilterVenueCities";
+import AdvanceFilterByCities from "./AdvanceFilterByCities";
 import AdvanceFilterVenuePrice from "./AdvanceFilterVenuePrice";
 import AdvanceFilterVenueServices from "./AdvanceFilterVenueServices";
 import AdvanceSearchAndFilters from "./AdvanceFilterVenueType";
@@ -24,7 +24,7 @@ import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg"
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
-import AllVenuesRatingFilter from "./AllVenuesRatingFilter";
+import AllRatingFilter from "./AllRatingFilter";
 import moment from "moment";
 
 const AllVenuesPage = () => {
@@ -33,7 +33,8 @@ const AllVenuesPage = () => {
   const [city, setCity] = useState(params.city ? params.city : "");
   const [date, setDate] = useState(params.date ? new Date(params.date) : null);
   const [time, setTime] = useState(params.time ? params.time : "");
-  const [venueCapacity, setVenueCapacity] = useState();
+  const [venueCapacity, setVenueCapacity] = useState([]);
+  console.log(venueCapacity, "venueCapacity");
   const [rating, setRating] = useState(null);
   console.log("rating", rating);
   const [services, setServices] = useState([]);
@@ -155,6 +156,72 @@ const AllVenuesPage = () => {
       //     return false;
       //   }
       // }
+      //filter by venue capacity
+      //if venueCapacity includes 100, than filter venues which have at least 1 subVenue with capacity between 0 and 100. if venueCapacity includes 300, than filter venues which have at least 1 subVenue with capacity between 100 and 300.
+      //if venueCapacity includes 600, than filter venues which have at least 1 subVenue with capacity between 300 and 600. if venueCapacity includes 1000, than filter venues which have at least 1 subVenue with capacity between 600 and 1000.
+      //if venueCapacity includes 1500, than filter venues which have at least 1 subVenue with capacity between 1000 and 1500.
+      //if venueCapacity includes 1501, than filter venues which have at least 1 subVenue with capacity greater than 1500.
+      if (venueCapacity.length > 0) {
+        let venueCapacityMatch = false;
+        venueCapacity.forEach((capacity) => {
+          if (capacity === "100") {
+            if (
+              venue?.subVenues?.some(
+                (e) => e?.subVenueCapacity >= 0 && e?.subVenueCapacity <= 100
+              )
+            ) {
+              venueCapacityMatch = true;
+              return false;
+            }
+          } else if (capacity === "300") {
+            if (
+              venue?.subVenues?.some(
+                (e) => e?.subVenueCapacity >= 100 && e?.subVenueCapacity <= 300
+              )
+            ) {
+              venueCapacityMatch = true;
+              return false;
+            }
+          } else if (capacity === "600") {
+            if (
+              venue?.subVenues?.some(
+                (e) => e?.subVenueCapacity >= 300 && e?.subVenueCapacity <= 600
+              )
+            ) {
+              venueCapacityMatch = true;
+              return false;
+            }
+          } else if (capacity === "1000") {
+            if (
+              venue?.subVenues?.some(
+                (e) => e?.subVenueCapacity >= 600 && e?.subVenueCapacity <= 1000
+              )
+            ) {
+              venueCapacityMatch = true;
+              return false;
+            }
+          } else if (capacity === "1500") {
+            if (
+              venue?.subVenues?.some(
+                (e) =>
+                  e?.subVenueCapacity >= 1000 && e?.subVenueCapacity <= 1500
+              )
+            ) {
+              venueCapacityMatch = true;
+              return false;
+            }
+          } else if (capacity === "1501") {
+            if (venue?.subVenues?.some((e) => e?.subVenueCapacity > 1500)) {
+              venueCapacityMatch = true;
+              return false;
+            }
+          }
+        });
+        if (!venueCapacityMatch) {
+          return false;
+        }
+      }
+
       if (indeterminate || allChecked) {
         let venueTypeMatch = false;
         //make array of venue types only of checked values
@@ -364,27 +431,32 @@ const AllVenuesPage = () => {
         <Grid>
           <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
             <Stack spacing={"sm"}>
-              <Text size={"lg"} align="left" weight={500}>
-                Advance Filters
-              </Text>
-              <AdvanceFilterVenueCities city={city} setCity={setCity} />
-              <AdvanceSearchAndFilters
-                setVenueType={setVenueType}
-                venueType={venueType}
-                indeterminate={indeterminate}
-                allChecked={allChecked}
-              />
-              <AllVenuesRatingFilter rating={rating} setRating={setRating} />
-              {allServices.length > 0 && (
-                <AdvanceFilterVenueServices
-                  allServices={allServices}
-                  setFilteredServices={setFilteredServices}
-                  filteredServices={filteredServices}
-                />
-              )}
-              <AdvanceFilterVenuePrice />
-              <AdvanceFilterVenueCapacity />
-              <AdvanceFilterHallCharges />
+              <Group position="apart" noWrap>
+                <Text size={"lg"} align="left" weight={500}>
+                  Advance Filters
+                </Text>
+                {/* <Text
+                  size="md"
+                  align="right"
+                  color="red"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setCity("all");
+                    setDate(null);
+                    setTime("");
+                    setMinPriceFilter(minPrice);
+                    setMaxPriceFilter(maxPrice);
+                    setMinPrice(minPrice);
+                    setMaxPrice(maxPrice);
+                    setVenueType(initialValues);
+                  }}
+                >
+                  Clear All
+                </Text> */}
+              </Group>
+              <AdvanceFilterByCities city={city} setCity={setCity} />
               <AdvanceFilterMenuCharges
                 minPrice={minPrice}
                 setMinPrice={setMinPrice}
@@ -393,6 +465,26 @@ const AllVenuesPage = () => {
                 setMinPriceFilter={setMinPriceFilter}
                 setMaxPriceFilter={setMaxPriceFilter}
               />
+              <AdvanceSearchAndFilters
+                setVenueType={setVenueType}
+                venueType={venueType}
+                indeterminate={indeterminate}
+                allChecked={allChecked}
+              />
+              <AllRatingFilter rating={rating} setRating={setRating} />
+              {allServices.length > 0 && (
+                <AdvanceFilterVenueServices
+                  allServices={allServices}
+                  setFilteredServices={setFilteredServices}
+                  filteredServices={filteredServices}
+                />
+              )}
+              {/* <AdvanceFilterVenuePrice /> */}
+              <AdvanceFilterVenueCapacity
+                venueCapacity={venueCapacity}
+                setVenueCapacity={setVenueCapacity}
+              />
+              {/* <AdvanceFilterHallCharges /> */}
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>

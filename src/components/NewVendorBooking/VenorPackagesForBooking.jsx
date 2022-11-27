@@ -175,12 +175,7 @@ const VendorPackagesForBooking = ({
               return false;
             }
           }
-          // if (vendorCategory) {
-          //   console.log("@AFTER@filterObjects CATEGORY FILTER");
-          //   return vendorServicePackage.serviceCategories?.includes(
-          //     vendorCategory
-          //   );
-          // }
+
           return true;
         }
       );

@@ -55,6 +55,15 @@ const AllVenuesPage = () => {
 
   const [filteredServices, setFilteredServices] = useState([]);
   console.log("filteredServices we retrieved", filteredServices);
+  const [allMenus, setAllMenus] = useState([]);
+  const [minPrice, setMinPrice] = useState(0);
+  console.log("minPrice", minPrice);
+  const [maxPrice, setMaxPrice] = useState(100000);
+  console.log("maxPrice", maxPrice);
+  const [maxPriceFilter, setMaxPriceFilter] = useState(100000);
+  console.log("maxPriceFilter", maxPriceFilter);
+  const [minPriceFilter, setMinPriceFilter] = useState(0);
+  console.log("minPriceFilter", minPriceFilter);
   const [allServices, setAllServices] = useState([]);
   const fetchAllVenueServices = async () => {
     try {
@@ -90,6 +99,17 @@ const AllVenuesPage = () => {
       if (apiResponse.data.status === "success") {
         console.log("Successfully fetched all venues:", apiResponse.data.data);
         setFilteredVenues(apiResponse.data.data);
+        let menus = apiResponse.data.data?.map((venue) => venue.menus)?.flat();
+        console.log("Menus:", menus);
+        setAllMenus(menus);
+
+        //find minimum and maximum price of menus
+        let min = Math.min(...menus?.map((menu) => menu.price));
+        let max = Math.max(...menus?.map((menu) => menu.price));
+        console.log("min:", min);
+        console.log("max:", max);
+        setMinPrice(min);
+        setMaxPrice(max);
 
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
@@ -104,6 +124,7 @@ const AllVenuesPage = () => {
 
   const filterVenues = () => {
     console.log("Filtering venues", params.city);
+
     //filter venues according to the filter options
     let filteredVenues = allVenues.filter((venue) => {
       //filter by venue city
@@ -198,6 +219,25 @@ const AllVenuesPage = () => {
         }
       }
 
+      //filter venues which have at least one menu in the minPriceFilter and maxPriceFilter range and if a venue does not have any menus then it will also be shown
+
+      if (minPriceFilter !== 0 || maxPriceFilter !== 0) {
+        let priceMatch = false;
+        venue?.menus?.forEach((menu) => {
+          console.log("menus we kj   have", menu);
+
+          if (
+            (menu.price >= minPriceFilter && menu.price <= maxPriceFilter) ||
+            menu === undefined
+          ) {
+            priceMatch = true;
+          }
+        });
+        if (!priceMatch) {
+          return false;
+        }
+      }
+
       return true;
     });
     console.log("Filtered venues:", filteredVenues);
@@ -220,6 +260,8 @@ const AllVenuesPage = () => {
     menuPrices,
     venueType,
     filteredServices,
+    minPriceFilter,
+    maxPriceFilter,
   ]);
 
   const matches1026 = useMediaQuery("(max-width: 1026px)");
@@ -343,7 +385,14 @@ const AllVenuesPage = () => {
               <AdvanceFilterVenuePrice />
               <AdvanceFilterVenueCapacity />
               <AdvanceFilterHallCharges />
-              <AdvanceFilterMenuCharges />
+              <AdvanceFilterMenuCharges
+                minPrice={minPrice}
+                setMinPrice={setMinPrice}
+                maxPrice={maxPrice}
+                setMaxPrice={setMaxPrice}
+                setMinPriceFilter={setMinPriceFilter}
+                setMaxPriceFilter={setMaxPriceFilter}
+              />
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>

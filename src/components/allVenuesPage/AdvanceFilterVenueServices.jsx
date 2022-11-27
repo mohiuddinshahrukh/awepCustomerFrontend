@@ -53,7 +53,7 @@
 
 // export default AdvanceFilterVenueServices;
 import { useListState, randomId } from "@mantine/hooks";
-import { Checkbox, Input } from "@mantine/core";
+import { Checkbox, Input, Spoiler } from "@mantine/core";
 import { useEffect } from "react";
 
 const AdvanceFilterVenueServices = ({ allServices, setFilteredServices }) => {
@@ -91,22 +91,29 @@ const AdvanceFilterVenueServices = ({ allServices, setFilteredServices }) => {
   ));
 
   return (
-    <Input.Wrapper label="Filter By Services">
-      <Checkbox
-        mt="xs"
-        color="green"
-        checked={allChecked}
-        indeterminate={indeterminate}
-        label="Select All Services"
-        transitionDuration={0}
-        onChange={() =>
-          handlers.setState((current) =>
-            current.map((value) => ({ ...value, checked: !allChecked }))
-          )
-        }
-      />
-      {items}
-    </Input.Wrapper>
+    <Spoiler
+      maxHeight={165}
+      showLabel="Show More Services"
+      hideLabel="Show Less Services"
+      transitionDuration={0}
+    >
+      <Input.Wrapper label="Filter By Services">
+        <Checkbox
+          mt="xs"
+          color="green"
+          checked={allChecked}
+          indeterminate={indeterminate}
+          label="Select All Services"
+          transitionDuration={0}
+          onChange={() =>
+            handlers.setState((current) =>
+              current.map((value) => ({ ...value, checked: !allChecked }))
+            )
+          }
+        />
+        {items}
+      </Input.Wrapper>{" "}
+    </Spoiler>
   );
 };
 

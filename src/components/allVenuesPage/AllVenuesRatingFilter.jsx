@@ -2,37 +2,39 @@ import { Select } from "@mantine/core";
 import React from "react";
 const allRating = [
   {
-    value: "all",
-    label: "all",
+    value: null,
+    label: "All",
   },
   {
-    value: "1star",
+    value: 1,
     label: "1 Star",
   },
   {
-    value: "2star",
+    value: 2,
     label: "2 Star",
   },
   {
-    value: "3star",
+    value: 3,
     label: "3 Star",
   },
   {
-    value: "4star",
+    value: 4,
     label: "4 Star",
   },
   {
-    value: "5star",
+    value: 5,
     label: "5 Star",
   },
 ];
-const AllVenuesRatingFilter = () => {
+const AllVenuesRatingFilter = ({ rating, setRating }) => {
   return (
     <Select
-      label="Venue Ratings Filter"
+      label="Rating Filter"
       defaultValue={"all"}
+      value={rating}
+      onChange={setRating}
       data={allRating}
-      placeholder="Venue Ratings Filter"
+      placeholder="Rating Filter"
     />
   );
 };

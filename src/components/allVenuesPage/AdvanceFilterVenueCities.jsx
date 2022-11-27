@@ -4,7 +4,7 @@ import React from "react";
 const allCities = [
   {
     value: "all",
-    label: "all",
+    label: "All",
   },
   {
     value: "islamabad",
@@ -28,11 +28,13 @@ const allCities = [
   },
 ];
 
-const AdvanceFilterVenueCities = () => {
+const AdvanceFilterVenueCities = ({ city, setCity }) => {
   return (
     <Select
       label="Cities Filter"
       defaultValue={"all"}
+      value={city}
+      onChange={setCity}
       data={allCities}
       placeholder="Cities Filter"
     />

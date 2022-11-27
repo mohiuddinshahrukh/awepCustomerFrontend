@@ -1,26 +1,8 @@
-import {
-  Button,
-  createStyles,
-  NativeSelect,
-  NumberInput,
-  Paper,
-  Select,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, createStyles, Paper, Select, Text } from "@mantine/core";
 import React, { useState } from "react";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import axios from "axios";
-import InputMask from "react-input-mask";
-import {
-  IconCalendar,
-  IconClock,
-  IconConfetti,
-  IconMail,
-  IconPhone,
-  IconUsers,
-} from "@tabler/icons";
+import { IconCalendar, IconClock, IconConfetti, IconMail } from "@tabler/icons";
 import dayjs from "dayjs";
 import { DatePicker } from "@mantine/dates";
 import { useNavigate } from "react-router-dom";
@@ -40,19 +22,12 @@ const useStyles = createStyles(() => ({
 }));
 
 const BookVenueSideColumnsForVendor = ({
-  subVenue,
-  onClickFunction,
-  contactPhone,
-  setContactPhone,
-  contactEmail,
-  setContactEmail,
   eventType,
   setEventType,
   date,
   setDate,
   time,
   setTime,
-
   vendorId,
   setIsSignIn,
 }) => {

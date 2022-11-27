@@ -94,7 +94,7 @@ const Sidebar = () => {
       );
     }
   });
-  console.log("location", location);
+  // console.log("location", location);
   return (
     <div style={{ height: "100%", width: "300px", flexShrink: 0 }}>
       {sidebar}

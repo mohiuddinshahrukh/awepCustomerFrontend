@@ -25,7 +25,7 @@ const CustomerDashboard = () => {
       ].includes(currentLocation.pathname.toString()) &&
       localStorage.getItem("userToken")
     ) {
-      console.log("ALLOW USER ACCESS");
+      // console.log("ALLOW USER ACCESS");
       setAllowView(true);
     } else {
       showNotification({

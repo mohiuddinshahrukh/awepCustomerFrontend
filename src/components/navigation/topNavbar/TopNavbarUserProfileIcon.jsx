@@ -5,7 +5,7 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 const TopNavbarUserProfileIcon = () => {
   const currentLocation = useLocation();
   const navigate = useNavigate();
-  console.log("currentLocation", currentLocation);
+  // console.log("currentLocation", currentLocation);
   const [loggedInUserData, setLoggedInUserData] = useState(
     localStorage.getItem("userData")
       ? JSON.parse(localStorage.getItem("userData"))
@@ -25,7 +25,12 @@ const TopNavbarUserProfileIcon = () => {
           { title: "Profile", path: "dashboard/profile" },
         ].map((menuOption, index) => {
           return (
-            <Anchor component={Link} variant={"text"} to={menuOption.path}>
+            <Anchor
+              key={index}
+              component={Link}
+              variant={"text"}
+              to={menuOption.path}
+            >
               <Menu.Item key={index}>{menuOption.title}</Menu.Item>
             </Anchor>
           );
@@ -34,6 +39,7 @@ const TopNavbarUserProfileIcon = () => {
           onClick={() => {
             localStorage.removeItem("userData");
             localStorage.removeItem("userToken");
+            setLoggedInUserData({});
             console.log("CURRENT LOCAITON 123", currentLocation);
             if (
               [

@@ -26,7 +26,10 @@ import SpecificVendorBusinessDetails from "./components/SpecificVendorBusinessDe
 import SpecificVenueDetails from "./components/SpecificVenueDetails/SpecificVenueDetails";
 import SignIn from "./components/userProfiling/SignIn";
 import SignUp from "./components/userProfiling/SignUp";
-
+import {
+  socket,
+  socketContext as SocketContext,
+} from "./components/Socket/Socket";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -42,83 +45,97 @@ function App() {
         withNormalizeCSS
       >
         <NotificationsProvider>
-          <Paper className="App">
-            <TopNavbar />
-            <Routes>
-              <Route path="/signIn" element={<SignIn />} />
-              <Route path="/signUp" element={<SignUp />} />
-              <Route
-                path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
-                element={<NewBookingFile />}
-              />
-              <Route
-                path="/updateVenueBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
-                element={<NewBookingFile />}
-              />
-              <Route
-                path="/updateVendorBooking/:eventType/:date/:time/:vendorId/:vendorPackageId/:bookingId"
-                element={<NewVendorBookingFile />}
-              />
-              <Route
-                path="/vendorBooking/:eventType/:date/:time/:vendorId"
-                element={<NewVendorBookingFile />}
-              />
-              <Route path="/" element={<LandingPageMain />} />
-              <Route path="/cardEditor" element={<CustomerCardEditor />} />
-              <Route path="/allVendors" element={<AllVendorsPage />} />
-              {/* <Route path="/allVenues/date/:date" element={<AllVenuesPage />} /> */}
-              {/* <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} /> */}
-              <Route path="/allVenues" element={<AllVenuesPage />} />
-              <Route
-                path="/allVenues/date/:date/time/:time/city/:city"
-                element={<AllVenuesPage />}
-              />
-              <Route
-                path="/allVenues/time/:time/city/:city"
-                element={<AllVenuesPage />}
-              />
-              <Route
-                path="/allVenues/date/:date/city/:city"
-                element={<AllVenuesPage />}
-              />
-              <Route
-                path="/allVenues/date/:date/time/:time"
-                element={<AllVenuesPage />}
-              />
-              <Route path="/allVenues/date/:date" element={<AllVenuesPage />} />
-              <Route path="/allVenues/time/:time" element={<AllVenuesPage />} />
-              <Route path="/allVenues/city/:city" element={<AllVenuesPage />} />
-              <Route
-                path="/specificVendor"
-                element={<SpecificVendorBusinessDetails />}
-              />
-              <Route
-                path="/specificVendor:id"
-                element={<SpecificVendorBusinessDetails />}
-              />
-              <Route
-                path="/specificVenue:id"
-                element={<SpecificVenueDetails />}
-              />
+          <SocketContext.Provider value={socket}>
+            <Paper className="App">
+              <TopNavbar />
+              <Routes>
+                <Route path="/signIn" element={<SignIn />} />
+                <Route path="/signUp" element={<SignUp />} />
+                <Route
+                  path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
+                  element={<NewBookingFile />}
+                />
+                <Route
+                  path="/updateVenueBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
+                  element={<NewBookingFile />}
+                />
+                <Route
+                  path="/updateVendorBooking/:eventType/:date/:time/:vendorId/:vendorPackageId/:bookingId"
+                  element={<NewVendorBookingFile />}
+                />
+                <Route
+                  path="/vendorBooking/:eventType/:date/:time/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
+                <Route path="/" element={<LandingPageMain />} />
+                <Route path="/cardEditor" element={<CustomerCardEditor />} />
+                <Route path="/allVendors" element={<AllVendorsPage />} />
+                {/* <Route path="/allVenues/date/:date" element={<AllVenuesPage />} /> */}
+                {/* <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} /> */}
+                <Route path="/allVenues" element={<AllVenuesPage />} />
+                <Route
+                  path="/allVenues/date/:date/time/:time/city/:city"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/allVenues/time/:time/city/:city"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/allVenues/date/:date/city/:city"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/allVenues/date/:date/time/:time"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/allVenues/date/:date"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/allVenues/time/:time"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/allVenues/city/:city"
+                  element={<AllVenuesPage />}
+                />
+                <Route
+                  path="/specificVendor"
+                  element={<SpecificVendorBusinessDetails />}
+                />
+                <Route
+                  path="/specificVendor:id"
+                  element={<SpecificVendorBusinessDetails />}
+                />
+                <Route
+                  path="/specificVenue:id"
+                  element={<SpecificVenueDetails />}
+                />
 
-              <Route path="/dashboard" element={<CustomerDashboard />}>
-                <Route path="bookings" element={<CustomerBookings />} />
-                <Route path="chats" element={<ChatScreen />} />
-                <Route path="weddingCards" element={<>WEDDING CARDS</>} />
-                <Route path="complaintsAndFeedback" element={<Complaints />} />
-                <Route path="payments" element={<CustomerPayments />} />
-                {/*<Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
+                <Route path="/dashboard" element={<CustomerDashboard />}>
+                  <Route path="bookings" element={<CustomerBookings />} />
+                  <Route path="chats" element={<ChatScreen />} />
+                  <Route path="weddingCards" element={<>WEDDING CARDS</>} />
+                  <Route
+                    path="complaintsAndFeedback"
+                    element={<Complaints />}
+                  />
+                  <Route path="payments" element={<CustomerPayments />} />
+                  {/*<Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
              <Route path="invite" element={<>INVITE</>} />*/}
-                <Route path="profile" element={<CustomerProfile />} />
-              </Route>
-              {/* <Route
+                  <Route path="profile" element={<CustomerProfile />} />
+                </Route>
+                {/* <Route
                 path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
                 element={<NewBookingFile />}
               /> */}
-              <Route path="*" element={<InvalidRoutePage />} />
-            </Routes>
-          </Paper>
-          <BottomNavbar />
+                <Route path="*" element={<InvalidRoutePage />} />
+              </Routes>
+            </Paper>
+            <BottomNavbar />
+          </SocketContext.Provider>
         </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>

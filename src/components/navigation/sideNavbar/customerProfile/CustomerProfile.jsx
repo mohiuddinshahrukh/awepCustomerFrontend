@@ -212,7 +212,7 @@ const CustomerProfile = () => {
       // alert("IN2");
       const storageRef = ref(
         storage,
-        `/users/${image.name}+${Math.random(999999)}`
+        `/users/${image?.name}+${Math.random(999999)}`
       );
       const uploadTask = uploadBytesResumable(storageRef, image);
       uploadTask.on(

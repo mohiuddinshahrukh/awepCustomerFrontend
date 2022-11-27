@@ -1,17 +1,8 @@
-import { Container, Group } from "@mantine/core";
+import { Container } from "@mantine/core";
 import React from "react";
-import { Outlet } from "react-router-dom";
-import Sidebar from "../navigation/sideNavbar/bookings/Sidebar";
 
 const ShahrukhsDevTest = () => {
-  return (
-    <Container size={"xl"}>
-      <Group align={"flex-start"} noWrap>
-        <Sidebar />
-        <Outlet />
-      </Group>
-    </Container>
-  );
+  return <Container size={"xl"}></Container>;
 };
 
 export default ShahrukhsDevTest;

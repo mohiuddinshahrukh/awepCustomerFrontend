@@ -159,7 +159,9 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
           ? null
           : "Invalid email",
       password: (value) =>
-        /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(value)
+        /^(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(
+          value
+        )
           ? null
           : "Password must contain 1 upper case letter, 1 special & 1 digit",
     },

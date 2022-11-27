@@ -48,7 +48,7 @@ const SignUp = ({
   let navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState("customer");
 
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [blockedEmailField, setBlockEmailField] = useState(false);

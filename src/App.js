@@ -4,6 +4,7 @@ import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import AddReview from "./components/AddReview/AddReview";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
@@ -95,6 +96,7 @@ function App() {
               path="/specificVenue:id"
               element={<SpecificVenueDetails />}
             />
+            <Route path="/review" element={<AddReview />} />
 
             <Route path="/dashboard" element={<CustomerDashboard />}>
               <Route path="bookings" element={<CustomerBookings />} />

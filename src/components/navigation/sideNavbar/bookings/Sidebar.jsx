@@ -29,16 +29,16 @@ const data = [
     path: "payments",
     icon: <IconMessages />,
   },
-  {
-    title: "FAQ & Help",
-    path: "FAQsAndHelp",
-    icon: <IconMessages />,
-  },
-  {
-    title: "Invite",
-    path: "invite",
-    icon: <IconMessages />,
-  },
+  // {
+  //   title: "FAQ & Help",
+  //   path: "FAQsAndHelp",
+  //   icon: <IconMessages />,
+  // },
+  // {
+  //   title: "Invite",
+  //   path: "invite",
+  //   icon: <IconMessages />,
+  // },
   {
     title: "Profile",
     path: "profile",

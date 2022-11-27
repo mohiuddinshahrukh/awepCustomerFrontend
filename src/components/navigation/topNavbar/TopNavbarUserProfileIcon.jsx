@@ -32,8 +32,8 @@ const TopNavbarUserProfileIcon = () => {
         })}
         <Menu.Item
           onClick={() => {
-            // localStorage.removeItem("userData");
-            // localStorage.removeItem("userToken");
+            localStorage.removeItem("userData");
+            localStorage.removeItem("userToken");
             console.log("CURRENT LOCAITON 123", currentLocation);
             if (
               [
@@ -44,15 +44,15 @@ const TopNavbarUserProfileIcon = () => {
                 "/dashboard/complaintsAndFeedback",
                 "/dashboard/payments",
                 "/dashboard/complaints",
-                "/dashboard/FAQsAndHelp",
-                "/dashboard/invite",
+                // "/dashboard/FAQsAndHelp",
+                // "/dashboard/invite",
                 "/dashboard/profile",
               ].includes(currentLocation.pathname.toString())
             ) {
               console.log("CURRENT LOCATION AND PATH MATCHED");
-              // navigate({ pathname: "/" });
+              navigate({ pathname: "/" });
             } else {
-              // window.location.reload();
+              window.location.reload();
             }
           }}
         >

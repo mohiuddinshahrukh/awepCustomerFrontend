@@ -98,15 +98,15 @@ const TopNavbar = () => {
           )}
           <Group>
             <TopNavbarThemeToggle />
-            {matches1027 ? (
+            {localStorage.getItem("userToken") ? (
+              <TopNavbarUserProfileIcon />
+            ) : (
               <TopNavbarButtons
                 buttonsData={[
                   { title: "Sign In", path: "/signIn", variant: "filled" },
                   { title: "Sign Up", path: "/signUp", variant: "outline" },
                 ]}
               />
-            ) : (
-              <TopNavbarUserProfileIcon />
             )}
           </Group>
         </Group>
@@ -116,3 +116,13 @@ const TopNavbar = () => {
 };
 
 export default TopNavbar;
+// {matches1027 ? (
+//   <TopNavbarButtons
+// buttonsData={[
+//   { title: "Sign In", path: "/signIn", variant: "filled" },
+//   { title: "Sign Up", path: "/signUp", variant: "outline" },
+// ]}
+//   />
+// ) : (
+//   <TopNavbarUserProfileIcon />
+// )}

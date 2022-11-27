@@ -49,7 +49,7 @@ const data = [
 const Sidebar = () => {
   const location = useLocation();
   const sidebar = data?.map((option, index) => {
-    if (location.pathname === "/shahrukhTest/" + option.path) {
+    if (location.pathname === "/dashboard/" + option.path) {
       return (
         <Anchor component={Link} to={option.path} key={index} variant="text">
           <Box

@@ -7,6 +7,7 @@ import "./App.css";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
+import CustomerDashboard from "./components/customerDashbaord/CustomerDashboard";
 import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
@@ -82,7 +83,6 @@ function App() {
             <Route path="/allVenues/date/:date" element={<AllVenuesPage />} />
             <Route path="/allVenues/time/:time" element={<AllVenuesPage />} />
             <Route path="/allVenues/city/:city" element={<AllVenuesPage />} />
-
             <Route
               path="/specificVendor"
               element={<SpecificVendorBusinessDetails />}
@@ -95,7 +95,8 @@ function App() {
               path="/specificVenue:id"
               element={<SpecificVenueDetails />}
             />
-            <Route path="/shahrukhTest" element={<ShahrukhsDevTest />}>
+
+            <Route path="/dashboard" element={<CustomerDashboard />}>
               <Route path="bookings" element={<CustomerBookings />} />
               <Route path="chats" element={<>CHATS</>} />
               <Route path="weddingCards" element={<>WEDDING CARDS</>} />

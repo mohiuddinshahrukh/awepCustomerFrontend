@@ -43,6 +43,10 @@ const pictureBackground = [
   new URL("./imgs/3.jpg", import.meta.url),
   new URL("./imgs/4.jpg", import.meta.url),
   new URL("./imgs/5.jpg", import.meta.url),
+  // new URL("./imgs/6.jpeg", import.meta.url),
+  // new URL("./imgs/7.jpeg", import.meta.url),
+  new URL("./imgs/8.jpg", import.meta.url),
+  new URL("./imgs/9.jpg", import.meta.url),
 ];
 // COMPONENT
 const CustomerCardEditor = () => {
@@ -180,11 +184,11 @@ const CustomerCardEditor = () => {
     };
   });
   return (
-    <Container size={"xl"} style={{ position: "relative" }}>
+    <Container size={"xl"} style={{ position: "relative" }} mb="xl">
       <Title my={"lg"} align="center">
         Wedding Card Editor
       </Title>
-      <Grid style={{ border: "1px solid #eaeaea" }}>
+      <Grid style={{}}>
         <Grid.Col lg={12} style={{}}>
           <Grid>
             <Grid.Col>

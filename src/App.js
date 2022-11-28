@@ -33,7 +33,7 @@ import {
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
 import { ContactUs } from "./components/contactUs/ContactUs";
 import { AboutUs } from "./components/aboutUs/AboutUs";
-import SixCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
+import FiveCardsSkeleton from "./components/skeletons/FiveCardsSkeleton";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -122,7 +122,7 @@ function App() {
                 <Route path="/aboutUs" element={<AboutUs />} />
                 <Route
                   path="/skeletontest"
-                  element={<SixCardsSkeleton />}
+                  element={<FiveCardsSkeleton />}
                 />
                 <Route path="/addreview" element={<AddReview />} />
 

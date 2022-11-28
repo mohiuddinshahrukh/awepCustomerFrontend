@@ -38,12 +38,12 @@ const BottomNavbar = () => {
               {
                 title: "Information",
                 links: [
-                  { title: "Our Cities", path: "#" },
-                  { title: "Contact Us", path: "#" },
-                  { title: "About AWEP", path: "#" },
-                  { title: "Terms of Use", path: "#" },
-                  { title: "Prvacy Policy", path: "#" },
-                  { title: "Wedding Cards", path: "#" },
+                  { title: "Our Cities", path: "/allVenues" },
+                  { title: "Contact Us", path: "/contactUs" },
+                  { title: "About AWEP", path: "/aboutUs" },
+                  { title: "Terms of Use", path: "/aboutUs" },
+                  { title: "Prvacy Policy", path: "/aboutUs" },
+                  { title: "Wedding Cards", path: "/cardEditor" },
                 ],
               },
             ]}
@@ -53,12 +53,12 @@ const BottomNavbar = () => {
               {
                 title: "More Information",
                 links: [
-                  { title: "Cookies Policy", path: "#" },
-                  { title: "Featured Venues", path: "#" },
-                  { title: "Featured Vendors", path: "#" },
-                  { title: "Are You a Venue?", path: "#" },
-                  { title: "Are You a Vendor?", path: "#" },
-                  { title: "Customer Testimonials", path: "#" },
+                  { title: "Cookies Policy", path: "/contactUs" },
+                  { title: "Featured Venues", path: "/allVenues" },
+                  { title: "Featured Vendors", path: "/allVendors" },
+                  { title: "Are You a Venue?", path: "/signUp" },
+                  { title: "Are You a Vendor?", path: "/signUp" },
+                  { title: "Customer Testimonials", path: "/allVendors" },
                 ],
               },
             ]}
@@ -69,19 +69,19 @@ const BottomNavbar = () => {
           <BottomNavbarFollowUsOn
             followUsOnLinks={[
               {
-                path: "#",
+                path: "https://www.facebook.com/awep.pk/",
                 icon: <IconBrandFacebook fill="#6C6C6C" stroke={0} />,
               },
               {
-                path: "#",
+                path: "https://twitter.com/awep_pk",
                 icon: <IconBrandTwitter fill="#6C6C6C" stroke={0} />,
               },
               {
-                path: "#",
+                path: "https://www.instagram.com/awep.pk/",
                 icon: <IconBrandInstagram />,
               },
               {
-                path: "#",
+                path: "https://www.pinterest.com/awep.pk/",
                 icon: <IconBrandPinterest />,
               },
             ]}

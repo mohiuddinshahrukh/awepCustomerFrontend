@@ -47,8 +47,8 @@ const TopNavbar = () => {
               },
               { title: "Vendors", path: "/allVendors" },
               { title: "Card Editor", path: "/cardEditor" },
-              { title: "Contact Us", path: "#" },
-              { title: "About Us", path: "#" },
+              { title: "Contact Us", path: "/contactUs" },
+              { title: "About Us", path: "/aboutUs" },
             ]}
           />
         </Drawer>
@@ -77,8 +77,8 @@ const TopNavbar = () => {
                 { title: "Venues", path: "/allVenues" },
                 { title: "Vendors", path: "/allVendors" },
                 { title: "Card Editor", path: "/cardEditor" },
-                { title: "Contact Us", path: "#" },
-                { title: "About Us", path: "#" },
+                { title: "Contact Us", path: "/contactUs" },
+                { title: "About Us", path: "/aboutUs" },
               ]}
             />
           ) : (

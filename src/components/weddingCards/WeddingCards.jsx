@@ -11,13 +11,18 @@ const WeddingCards = () => {
         <Anchor
           weight={500}
           component={Link}
-          to="#"
+          to="cardEditor"
           variant="text"
           size={"1.5rem"}
         >
           Wedding Cards
         </Anchor>
-        <Button variant="outline" rightIcon={<IconArrowRight />}>
+        <Button
+          component={Link}
+          to="cardEditor"
+          variant="outline"
+          rightIcon={<IconArrowRight />}
+        >
           View All Wedding Cards
         </Button>
       </Group>

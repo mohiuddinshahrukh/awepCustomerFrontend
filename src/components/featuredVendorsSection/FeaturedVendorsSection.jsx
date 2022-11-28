@@ -17,7 +17,12 @@ const FeaturedVendorsSection = () => {
         >
           Wedding Vendors
         </Anchor>
-        <Button variant="outline" rightIcon={<IconArrowRight />}>
+        <Button
+          component={Link}
+          to="/allVendors"
+          variant="outline"
+          rightIcon={<IconArrowRight />}
+        >
           View All Vendors
         </Button>
       </Group>

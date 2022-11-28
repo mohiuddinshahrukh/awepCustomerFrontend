@@ -29,7 +29,7 @@ const FeaturedVendorsCard = ({ vendor }) => {
         transitionProperty: "box-shadow",
       }}
       component={Link}
-      to={"#"}
+      to={`/specificVendor${vendor._id}`}
       style={{ width: "302px" }}
     >
       <Card.Section style={{ height: "201px" }}>

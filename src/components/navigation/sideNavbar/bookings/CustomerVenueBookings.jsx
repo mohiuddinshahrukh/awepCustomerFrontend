@@ -89,7 +89,7 @@ const CustomerVenueBookings = () => {
             <ActionIcon
               onClick={() => {
                 console.log("Clicked on edit button");
-                navigate(`/addReview/${row._id}`);
+                navigate(`/addReview/${"venue"}/${row._id}`);
               }}
             >
               <IconMessage />

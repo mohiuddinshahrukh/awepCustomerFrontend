@@ -69,6 +69,11 @@ function App() {
                   element={<NewVendorBookingFile />}
                 />
                 <Route
+                  path="/addreview/provider/bookingId"
+                  element={<AddReview />}
+                />
+
+                <Route
                   path="/vendorBooking/:eventType/:date/:time/:vendorId"
                   element={<NewVendorBookingFile />}
                 />
@@ -122,7 +127,6 @@ function App() {
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
                 <Route path="/skeletontest" element={<FiveCardsSkeleton />} />
-                <Route path="/addreview" element={<AddReview />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>
                   <Route path="bookings" element={<CustomerBookings />} />

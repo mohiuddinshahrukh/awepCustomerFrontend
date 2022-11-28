@@ -8,11 +8,11 @@ const useStyles = createStyles(() => ({
     },
   },
 }));
-const CustomButton = ({ title, navigateTo }) => {
+const CustomButton = ({ title, onClick }) => {
   const { classes } = useStyles();
 
   return (
-    <Button className={classes.button} radius="md">
+    <Button className={classes.button} radius="md" onClick={() => onClick}>
       {title}
     </Button>
   );

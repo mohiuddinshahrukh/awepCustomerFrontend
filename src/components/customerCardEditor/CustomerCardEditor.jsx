@@ -5,6 +5,7 @@ import {
   Anchor,
   Button,
   Center,
+  ColorInput,
   Container,
   Group,
   //   Image as mantineImage,
@@ -298,7 +299,7 @@ const CustomerCardEditor = () => {
           </Grid>
           <Grid align="flex-end">
             <Grid.Col lg={12}>Alignment Options</Grid.Col>
-            <Grid.Col lg={12}>
+            <Grid.Col lg={3}>
               <Group>
                 <ActionIcon
                   onClick={() => {
@@ -322,6 +323,22 @@ const CustomerCardEditor = () => {
                   <IconAlignRight />
                 </ActionIcon>
               </Group>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NumberInput
+                label="Font size"
+                min={12}
+                value={getFontSize}
+                max={50}
+                onChange={setFontSize}
+              />
+            </Grid.Col>
+            <Grid.Col className="colorPicker" span={3}>
+              <ColorInput
+                label="Font Color"
+                value={color}
+                onChange={setColor}
+              />
             </Grid.Col>
 
             <Grid.Col lg={6}>
@@ -512,23 +529,6 @@ const CustomerCardEditor = () => {
                 max={getHeight}
                 setX={setEventRsvpNameY}
                 min={getFontSize}
-              />
-            </Grid.Col>
-            <Grid.Col>
-              <NumberInput
-                label="Enter Font size"
-                min={12}
-                value={getFontSize}
-                max={50}
-                onChange={setFontSize}
-              />
-            </Grid.Col>
-            <Grid.Col className="colorPicker">
-              <label>Change font color: </label>
-              <input
-                type="color"
-                value={color}
-                onChange={(event) => setColor(event.target.value)}
               />
             </Grid.Col>
           </Grid>

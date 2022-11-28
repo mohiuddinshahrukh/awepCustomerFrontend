@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel } from "@mantine/carousel";
 import FeaturedVenuesCard from "./FeaturedVenuesCard";
+import FiveCardsSkeleton from "../skeletons/FiveCardsSkeleton";
+import CardSkeleton from "../skeletons/CardSkeleton";
 const fetchVenuesMethod = async () => {
   try {
     const apiResponse = await axios.get(
@@ -26,14 +28,20 @@ const FeaturedVenuesCarousel = () => {
     fetchVenuesMethod().then(setLandingPageVenues);
     return () => {};
   }, []);
-
-  const carouselSlides = landingPageVenues?.map((venue, index) => {
-    return (
-      <Carousel.Slide key={index}>
-        <FeaturedVenuesCard venue={venue} />
-      </Carousel.Slide>
-    );
-  });
+  let carouselSlides =
+    landingPageVenues.length === 0
+      ? [...Array(5).keys()]?.map((key) => (
+          <Carousel.Slide key={key}>
+            <CardSkeleton />
+          </Carousel.Slide>
+        ))
+      : landingPageVenues?.map((venue, index) => {
+          return (
+            <Carousel.Slide key={index}>
+              <FeaturedVenuesCard venue={venue} />
+            </Carousel.Slide>
+          );
+        });
 
   return (
     <Carousel

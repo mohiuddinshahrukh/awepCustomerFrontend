@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel } from "@mantine/carousel";
 import FeaturedVendorsCard from "./FeaturedVendorsCard";
+import CardSkeleton from "../skeletons/CardSkeleton";
 const fetchVendorsMethod = async () => {
   try {
     const apiResponse = await axios.get(
@@ -27,13 +28,20 @@ const FeaturedVendorsCarousel = () => {
     return () => {};
   }, []);
 
-  const carouselSlides = landingPageVendors?.map((vendor, index) => {
-    return (
-      <Carousel.Slide key={index}>
-        <FeaturedVendorsCard vendor={vendor} />
-      </Carousel.Slide>
-    );
-  });
+  let carouselSlides =
+    landingPageVendors.length === 0
+      ? [...Array(5).keys()]?.map((key) => (
+          <Carousel.Slide key={key}>
+            <CardSkeleton />
+          </Carousel.Slide>
+        ))
+      : landingPageVendors?.map((vendor, index) => {
+          return (
+            <Carousel.Slide key={index}>
+              <FeaturedVendorsCard vendor={vendor} />
+            </Carousel.Slide>
+          );
+        });
 
   return (
     <Carousel

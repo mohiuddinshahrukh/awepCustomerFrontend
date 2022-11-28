@@ -11,7 +11,7 @@ import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import InvalidRoutePage from "./components/brokenRoutesAndPages/404Page/InvalidRoutePage";
 import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
 import CustomerDashboard from "./components/customerDashbaord/CustomerDashboard";
-import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
+// import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";
@@ -33,6 +33,7 @@ import {
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
 import { ContactUs } from "./components/contactUs/ContactUs";
 import { AboutUs } from "./components/aboutUs/AboutUs";
+import FiveCardsSkeleton from "./components/skeletons/FiveCardsSkeleton";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -119,7 +120,10 @@ function App() {
 
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
-
+                <Route
+                  path="/skeletontest"
+                  element={<FiveCardsSkeleton />}
+                />
                 <Route path="/addreview" element={<AddReview />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>

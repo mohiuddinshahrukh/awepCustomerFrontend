@@ -21,6 +21,9 @@ import CustomButton from "../CustomButton/CustomButton";
 import ReviewImage from "./image2.jpg";
 import { Button, createStyles } from "@mantine/core";
 import React from "react";
+import axios from "axios";
+import { showNotification } from "@mantine/notifications";
+import { useNavigate, useParams } from "react-router-dom";
 const useStyles = createStyles(() => ({
   button: {
     backgroundColor: "#775A97",
@@ -98,6 +101,9 @@ const starColor = (rating) => {
 };
 
 const AddReview = () => {
+  const params = useParams();
+  console.log("MY PARAMS: ", params);
+
   const { classes } = useStyles();
 
   const [quality, setQuality] = useState({ value: 0, hoverValue: -1 });
@@ -111,9 +117,64 @@ const AddReview = () => {
     hoverValue: -1,
   });
   const [flexibility, setFlexibility] = useState({ value: 0, hoverValue: -1 });
+  const [review, setReview] = useState("");
 
-  const handleSubmit = () => {
-    console.log("Submitted");
+  let navigate = useNavigate();
+  const handleSubmit = async () => {
+    console.log("MAKING THE BOOKING");
+    const body = {
+      subVenueBookingId: params.bookingId,
+      customerReview: review,
+      qualityOfService: quality.value,
+      responseTime: response.value,
+      professionalism: professionalism.value,
+      valueForMoney: valueForMoney.value,
+      flexibility: flexibility.value,
+    };
+
+    console.log("@@@body", body);
+
+    const headers = {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("userToken"),
+    };
+
+    var url = "";
+    if (params.provider === "venue") {
+      url = "https://a-wep.herokuapp.com/customer/addVenueFeedback";
+    } else if (params.provider === "vendor") {
+      url = "https://a-wep.herokuapp.com/customer/addVendorServiceFeedback";
+    }
+    console.log("URL: ", url);
+    try {
+      const response = await axios({
+        method: "post",
+        url: url,
+        data: body,
+        headers: headers,
+      });
+
+      console.log("THIS IS THE RESPONSE OBJECT:   ", response);
+
+      if (response.data.status === "error") {
+        showNotification({
+          title: `ERROR`,
+          color: "red",
+          message: `${response.data.error?.message || response.data.error}`,
+        });
+        console.log("error", response.data.error.message);
+        console.log("error", response.data.error);
+      } else {
+        showNotification({
+          color: "green",
+          title: `Successfully`,
+          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+        });
+        navigate("/dashboard/feedbacks");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -205,6 +266,8 @@ const AddReview = () => {
               py="xl"
               size="md"
               label="Write a Review"
+              value={review}
+              onChange={(e) => setReview(e.currentTarget.value)}
               placeholder="Write at least 25 characters about your experience. Include any details that will help other couples make their hiring decision."
               autosize
               minRows={3}

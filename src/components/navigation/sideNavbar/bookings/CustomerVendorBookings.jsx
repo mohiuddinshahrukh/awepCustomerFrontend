@@ -1,6 +1,6 @@
 import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconEdit, IconEye } from "@tabler/icons";
+import { IconEdit, IconEye, IconMessage } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -88,16 +88,27 @@ const CustomerVendorBookings = () => {
           >
             <IconEye />
           </ActionIcon>
-          <ActionIcon
-            onClick={() => {
-              console.log("Clicked on edit button");
-              navigate(
-                `/updateVendorBooking/${row.eventType}/${row.bookingDate}/${row.eventDuration}/${row.vendorBusinessId._id}/${row.vendorPackageId._id}/${row._id}`
-              );
-            }}
-          >
-            <IconEdit />
-          </ActionIcon>
+          {row.bookingStatus === "COMPLETED" ? (
+            <ActionIcon
+              onClick={() => {
+                console.log("Clicked on edit button");
+                navigate(`/addReview/${"vendor"}/${row._id}`);
+              }}
+            >
+              <IconMessage />
+            </ActionIcon>
+          ) : (
+            <ActionIcon
+              onClick={() => {
+                console.log("Clicked on edit button");
+                navigate(
+                  `/updateVendorBooking/${row.eventType}/${row.bookingDate}/${row.eventDuration}/${row.vendorBusinessId._id}/${row.vendorPackageId._id}/${row._id}`
+                );
+              }}
+            >
+              <IconEdit />
+            </ActionIcon>
+          )}
         </Group>
       </td>
     </tr>

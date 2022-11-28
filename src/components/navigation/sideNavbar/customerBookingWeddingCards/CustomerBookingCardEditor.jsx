@@ -49,21 +49,53 @@ const pictureBackground = [
   new URL("./imgs/9.jpg", import.meta.url),
 ];
 // COMPONENT
-const CustomerBookingCardEditor = () => {
+let id = "";
+const CustomerBookingCardEditor = ({ selectedBooking }) => {
   const canvas = useRef(null);
   const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
   // HOOKS
   const [image, setImage] = useState(pictureBackground[0]);
-  const [eventType, setEventType] = useState("Enter Event Name");
+  const [eventType, setEventType] = useState(
+    selectedBooking.eventType !== undefined
+      ? selectedBooking.eventType
+      : "Enter Event Type"
+  );
   const [invitationName, setInvitationName] = useState(
-    "Enter Invitation from Name"
+    selectedBooking.customerName !== undefined
+      ? selectedBooking.customerName
+      : "Enter Invitation Name"
   );
   const [groomName, setGroomName] = useState("Enter Groom Name");
   const [brideName, setBrideName] = useState("Enter Bride Name");
-  const [eventTime, setEventTime] = useState("Enter Event Time");
-  const [eventDate, setEventDate] = useState("Enter Event Date");
+  const [eventTime, setEventTime] = useState(
+    selectedBooking.bookingTime !== undefined
+      ? selectedBooking.bookingTime
+      : "Enter Event Time"
+  );
+  const [eventDate, setEventDate] = useState(
+    selectedBooking.bookingDate !== undefined
+      ? selectedBooking.bookingDate.split("T")[0]
+      : "Enter Booking Date"
+  );
   const [eventRsvpName, setEventRsvpName] = useState("Enter RSVP Name");
-  const [venueName, setVenueName] = useState("Enter Venue Name");
+  const [venueName, setVenueName] = useState(
+    selectedBooking.venueName !== undefined
+      ? selectedBooking.venueName + " " + selectedBooking.venueId.venueAddress
+      : "Enter Venue Name"
+  );
+
+  //
+  //
+  //
+  //  Y AXIS VALUES
+  const [eventTypeY, setEventTypeY] = useState(100);
+  const [invitationFromY, setInvitationFromY] = useState(150);
+  const [groomNameY, setGroomNameY] = useState(200);
+  const [brideNameY, setBrideNameY] = useState(250);
+  const [eventTimeY, setEventTimeY] = useState(300);
+  const [eventDateY, setEventDateY] = useState(350);
+  const [venueNameY, setVenueNameY] = useState(400);
+  const [eventRsvpNameY, setEventRsvpNameY] = useState(450);
 
   // const [rsvpName, setRsvpName] = useState("Enter RSVP Name");
   const [color, setColor] = useState("#000000");
@@ -117,15 +149,6 @@ const CustomerBookingCardEditor = () => {
   const [eventDateX, setEventDateX] = useState(getWidth / 2);
   const [eventRsvpNameX, setEventRsvpNameX] = useState(getWidth / 2);
   const [venueNameX, setVenueNameX] = useState(getWidth / 2);
-  //  Y AXIS VALUES
-  const [eventTypeY, setEventTypeY] = useState(100);
-  const [invitationFromY, setInvitationFromY] = useState(150);
-  const [groomNameY, setGroomNameY] = useState(200);
-  const [brideNameY, setBrideNameY] = useState(250);
-  const [eventTimeY, setEventTimeY] = useState(300);
-  const [eventDateY, setEventDateY] = useState(350);
-  const [venueNameY, setVenueNameY] = useState(400);
-  const [eventRsvpNameY, setEventRsvpNameY] = useState(450);
   CanvasRenderingContext2D.prototype.wrapText = function (
     text,
     x,
@@ -176,13 +199,44 @@ const CustomerBookingCardEditor = () => {
       ctx.wrapText(`${eventDate}`, eventDateX, eventDateY, 500, 40);
       ctx.wrapText(`${venueName}`, venueNameX, venueNameY, 500, 40);
       ctx.wrapText(`${eventRsvpName}`, eventRsvpNameX, eventRsvpNameY, 500, 40);
-      console.log("DOWNLOAD IMAGE URL: ", canvas.current.toDataURL());
       url = "";
       url += canvas.current.toDataURL();
-      console.log("TALHA URL: ", canvas.current.toDataURL());
       setDownload(canvas.current.toDataURL());
     };
-  });
+  }, [
+    canvasAllTextAlign,
+    color,
+    eventType,
+    eventTypeX,
+    eventTypeY,
+    eventDate,
+    eventDateX,
+    eventDateY,
+    eventRsvpName,
+    eventRsvpNameX,
+    eventRsvpNameY,
+    eventTime,
+    eventTimeX,
+    eventTimeY,
+    getWidth,
+    getHeight,
+    getFontSize,
+    invitationName,
+    invitationFromX,
+    invitationFromY,
+    venueName,
+    venueNameX,
+    venueNameY,
+    brideName,
+    brideNameX,
+    brideNameY,
+    groomName,
+    groomNameX,
+    groomNameY,
+    image,
+    selectedBooking?._id,
+  ]);
+
   return (
     <Container size={"xl"} style={{ position: "relative" }} mb="xl">
       <Title my={"lg"} align="center">
@@ -230,7 +284,9 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 label="Event Name"
                 value={eventType}
-                onChange={(event) => setEventType(event.target.value)}
+                onChange={(event) => {
+                  setEventType(event.target.value);
+                }}
               />
             </Grid.Col>
             <Grid.Col lg={6}>
@@ -238,7 +294,9 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 label="Invitaiton From"
                 value={invitationName}
-                onChange={(event) => setInvitationName(event.target.value)}
+                onChange={(event) => {
+                  setInvitationName(event.target.value);
+                }}
               />
             </Grid.Col>
 
@@ -247,7 +305,9 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 label="Groom Name"
                 value={groomName}
-                onChange={(event) => setGroomName(event.target.value)}
+                onChange={(event) => {
+                  setGroomName(event.target.value);
+                }}
               />
             </Grid.Col>
             <Grid.Col lg={6}>
@@ -255,7 +315,9 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 label="Bride Name"
                 value={brideName}
-                onChange={(event) => setBrideName(event.target.value)}
+                onChange={(event) => {
+                  setBrideName(event.target.value);
+                }}
               />
             </Grid.Col>
             <Grid.Col lg={6}>
@@ -263,15 +325,19 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 label="Time"
                 value={eventTime}
-                onChange={(event) => setEventTime(event.target.value)}
+                onChange={(event) => {
+                  setEventTime(event.target.value);
+                }}
               />
             </Grid.Col>
             <Grid.Col lg={6}>
               <TextInput
                 styles={{ input: { textAlign: "center" } }}
-                label="Event Date & Time"
+                label="Event Date"
                 value={eventDate}
-                onChange={(event) => setEventDate(event.target.value)}
+                onChange={(event) => {
+                  setEventDate(event.target.value);
+                }}
               />
             </Grid.Col>
 
@@ -280,7 +346,9 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 label="Venue Name"
                 value={venueName}
-                onChange={(event) => setVenueName(event.target.value)}
+                onChange={(event) => {
+                  setVenueName(event.target.value);
+                }}
               />
             </Grid.Col>
             <Grid.Col lg={6}>
@@ -344,7 +412,6 @@ const CustomerBookingCardEditor = () => {
               <Slider
                 label="Adjust All X Axis Values"
                 onChange={(e) => {
-                  console.log("VALUE CHANGED: ", e);
                   setEventTypeX(eventTypeX + e);
                   setInvitationFromX(invitationFromX + e);
                   setGroomNameX(groomNameX + e);
@@ -439,7 +506,6 @@ const CustomerBookingCardEditor = () => {
               <Slider
                 label="Adjust All Y Axis Values"
                 onChange={(e) => {
-                  console.log("VALUE CHANGED: ", e);
                   setEventTypeY(eventTypeY + e);
                   setInvitationFromY(invitationFromY + e);
                   setGroomNameY(groomNameY + e);

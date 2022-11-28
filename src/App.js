@@ -120,6 +120,8 @@ function App() {
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
 
+                <Route path="/addreview" element={<AddReview />} />
+
                 <Route path="/dashboard" element={<CustomerDashboard />}>
                   <Route path="bookings" element={<CustomerBookings />} />
                   <Route path="chats" element={<ChatScreen />} />

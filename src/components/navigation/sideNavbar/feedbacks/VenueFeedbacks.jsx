@@ -53,7 +53,7 @@ const VenueFeedbacks = () => {
     try {
       const apiResponse = await axios({
         method: "delete",
-        url: `https://a-wep.herokuapp.com/customer//deleteSubVenueBookingComplaint/${id}`,
+        url: `https://a-wep.herokuapp.com/customer/deleteSubVenueBookingComplaint/${id}`,
         headers: {
           token: localStorage.getItem("userToken"),
         },

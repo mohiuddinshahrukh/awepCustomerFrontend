@@ -53,10 +53,11 @@ const VendorFeedbacks = () => {
   const [viewReviewData, setViewReviewData] = useState({});
   const [vendorBookings, setVendorBookings] = useState([]);
   const deleteVendorComplaint = async (id) => {
+    console.log("ID: ", id);
     try {
       const apiResponse = await axios({
         method: "delete",
-        url: `https://a-wep.herokuapp.com/customer/deleteVendorPackageBookingComplaint/${id}`,
+        url: `https://a-wep.herokuapp.com/customer/deleteVendorServiceFeedback/${id}`,
         headers: {
           token: localStorage.getItem("userToken"),
         },

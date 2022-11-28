@@ -31,6 +31,8 @@ import {
   socketContext as SocketContext,
 } from "./components/Socket/Socket";
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
+import { ContactUs } from "./components/contactUs/ContactUs";
+import { AboutUs } from "./components/aboutUs/AboutUs";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -114,6 +116,9 @@ function App() {
                   path="/specificVenue:id"
                   element={<SpecificVenueDetails />}
                 />
+
+                <Route path="/contactUs" element={<ContactUs />} />
+                <Route path="/aboutUs" element={<AboutUs />} />
 
                 <Route path="/addreview" element={<AddReview />} />
 

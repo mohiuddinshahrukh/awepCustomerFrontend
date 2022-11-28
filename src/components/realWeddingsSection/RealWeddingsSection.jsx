@@ -10,15 +10,20 @@ const RealWeddingsSection = () => {
     <Container size={"xl"} my="xl">
       <Group position="apart">
         <Anchor
-          component={Link}
           weight={500}
-          to="#"
+          component={Link}
+          to="/allVenues"
           variant="text"
           size={"1.5rem"}
         >
           Real Weddings
         </Anchor>
-        <Button variant="outline" rightIcon={<IconArrowRight />}>
+        <Button
+          component={Link}
+          to="/allVenues"
+          variant="outline"
+          rightIcon={<IconArrowRight />}
+        >
           View More Real Weddings
         </Button>
       </Group>

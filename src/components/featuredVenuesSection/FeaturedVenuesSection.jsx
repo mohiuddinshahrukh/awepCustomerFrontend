@@ -17,7 +17,12 @@ const FeaturedVenuesSection = () => {
         >
           Wedding Venues
         </Anchor>
-        <Button variant="outline" rightIcon={<IconArrowRight />}>
+        <Button
+          component={Link}
+          to="/allVenues"
+          variant="outline"
+          rightIcon={<IconArrowRight />}
+        >
           View All Venues
         </Button>
       </Group>

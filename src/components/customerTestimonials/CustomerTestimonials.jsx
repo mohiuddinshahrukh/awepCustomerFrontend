@@ -11,13 +11,18 @@ const CustomerTestimonials = () => {
         <Anchor
           weight={500}
           component={Link}
-          to="#"
+          to="/allVendors"
           variant="text"
           size={"1.5rem"}
         >
           Customer Testimonials
         </Anchor>
-        <Button variant="outline" rightIcon={<IconArrowRight />}>
+        <Button
+          component={Link}
+          to="/allVendors"
+          variant="outline"
+          rightIcon={<IconArrowRight />}
+        >
           View All Testimonials
         </Button>
       </Group>

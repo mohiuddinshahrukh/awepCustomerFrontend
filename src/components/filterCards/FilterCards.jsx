@@ -28,7 +28,7 @@ const FilterCards = () => {
               {
                 cardTitle: "Easily Plan Your Wedding",
                 cardLinkTitle: "Get Started",
-                cardLinkPath: "/",
+                cardLinkPath: "/allVenues",
                 cardLinkIcon: <IconChevronRight color="#775A97" />,
               },
             ]}
@@ -47,22 +47,22 @@ const FilterCards = () => {
               },
               {
                 cardTitle: "Featured",
-                cardLinkPath: "/",
+                cardLinkPath: "/allVenues",
                 cardLinkIcon: <IconStars size={50} color="#775A97" />,
               },
               {
                 cardTitle: "Top Viewed",
-                cardLinkPath: "/",
+                cardLinkPath: "/allVenues",
                 cardLinkIcon: <IconEye size={50} color="#775A97" />,
               },
               {
                 cardTitle: "Cards",
-                cardLinkPath: "/",
+                cardLinkPath: "/cardEditor",
                 cardLinkIcon: <IconLayoutCards size={50} color="#775A97" />,
               },
               {
                 cardTitle: "Cities",
-                cardLinkPath: "/",
+                cardLinkPath: "/allVenues",
                 cardLinkIcon: (
                   <IconBuildingSkyscraper size={50} color="#775A97" />
                 ),

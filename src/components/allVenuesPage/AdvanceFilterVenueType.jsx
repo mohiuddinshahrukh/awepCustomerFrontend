@@ -54,10 +54,11 @@ const AdvanceFilterVenueType = ({
 
   const items = venueType.map((value, index) => (
     <Checkbox
+      key={index}
       // ml={}
       label={value.label}
       color="blue"
-      key={value.key}
+      // key={value.key}
       checked={value.checked}
       onChange={(event) =>
         setVenueType.setItemProp(index, "checked", event.currentTarget.checked)

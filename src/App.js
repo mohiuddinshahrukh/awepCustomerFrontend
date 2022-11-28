@@ -33,7 +33,7 @@ import {
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
 import { ContactUs } from "./components/contactUs/ContactUs";
 import { AboutUs } from "./components/aboutUs/AboutUs";
-import FiveCardsSkeleton from "./components/skeletons/FiveCardsSkeleton";
+import FiveCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>

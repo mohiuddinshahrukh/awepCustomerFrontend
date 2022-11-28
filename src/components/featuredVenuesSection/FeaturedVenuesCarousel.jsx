@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel } from "@mantine/carousel";
 import FeaturedVenuesCard from "./FeaturedVenuesCard";
-import FiveCardsSkeleton from "../skeletons/FiveCardsSkeleton";
+import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import CardSkeleton from "../skeletons/CardSkeleton";
 const fetchVenuesMethod = async () => {
   try {

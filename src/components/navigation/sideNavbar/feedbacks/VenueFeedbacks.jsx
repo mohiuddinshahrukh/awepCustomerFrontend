@@ -3,6 +3,7 @@ import {
   Badge,
   Group,
   Modal,
+  Rating,
   Table,
   Text,
   Title,
@@ -13,12 +14,13 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import VenueFeedbackModal from "./VenueFeedbackModal";
 
 const fetchAllvenueFeedbacks = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getMySubVenueBookingComplaints",
+      url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
       headers: {
         token: localStorage.getItem("userToken"),
       },
@@ -42,12 +44,12 @@ const fetchAllvenueFeedbacks = async () => {
 };
 
 const VenueFeedbacks = () => {
-  const [viewvenueComplaintModal, setViewvenueComplaintModal] = useState(false);
+  const [viewVenueReviewModal, setViewVenueReviewModal] = useState(false);
   const matches500 = useMediaQuery("(min-width: 500px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
   const [visible, setVisible] = useState(true);
   const [refresh, setRefresh] = useState(false);
-  const [viewComplaintData, setViewComplaintData] = useState({});
+  const [viewFeedbackData, setViewFeedbackData] = useState({});
   const [venueBookings, setVenueBookings] = useState([]);
   const deleteVenueComplaint = async (id) => {
     try {
@@ -90,42 +92,28 @@ const VenueFeedbacks = () => {
       <td align="center">{index + 1}</td>
       <td>{row?.venueId?.venueName}</td>
       <td>{row?.subVenueId?.subVenueName}</td>
-      <td>{row?.complaintType}</td>
-      <td>{row?.complaintTitle}</td>
-      <td>{row?.createdAt?.split("T")[0]}</td>
+      <td>
+        {" "}
+        <Rating value={row?.rating} readOnly />
+      </td>
+      <td>
+        <Text lineClamp={1}>{row?.customerReview}</Text>
+      </td>
+
       <td>
         {row?.subVenueBookingId?.bookingDate?.split("T")[0] +
           " " +
           row?.subVenueBookingId?.bookingTime}
       </td>
-      <td align="center">
-        <Badge
-          color={
-            row?.status === "in progress"
-              ? "blue"
-              : row?.status === "resolved"
-              ? "green"
-              : row?.status === "pending"
-              ? "yellow"
-              : row?.status === "rejected"
-              ? "red"
-              : "default"
-          }
-        >
-          {row?.status}
-        </Badge>
-      </td>
-      <td align="center">
-        <Text lineClamp={1}>{row?.complaintDescription}</Text>
-      </td>
+      <td>{row?.createdAt?.split("T")[0]}</td>
 
       <td align="center">
         <Group spacing={0} noWrap align={"center"} position="center">
           <ActionIcon
             onClick={() => {
               console.log("Clicked on view button");
-              setViewComplaintData(row);
-              setViewvenueComplaintModal(true);
+              setViewFeedbackData(row);
+              setViewVenueReviewModal(true);
             }}
           >
             <IconEye />
@@ -155,12 +143,10 @@ const VenueFeedbacks = () => {
     "ID",
     "Venue",
     "Sub Venue",
-    "Complaint Type",
-    "Complaint Title",
-    "Complaint Date",
+    "Rating",
+    "Review",
     "Booking Date",
-    "Complaint Status",
-    "Complaint Details",
+    "Feedback Date",
     "Actions",
   ];
   const headers = (
@@ -190,12 +176,12 @@ const VenueFeedbacks = () => {
         overlayBlur={3}
         size={matches800 ? "60%" : "lg"}
         title={<Title>Venue Complaint</Title>}
-        opened={viewvenueComplaintModal}
+        opened={viewVenueReviewModal}
         onClose={() => {
-          setViewvenueComplaintModal(!viewvenueComplaintModal);
+          setViewVenueReviewModal(!viewVenueReviewModal);
         }}
       >
-        {/*<ViewVenueComplaintModal complaintView={viewComplaintData} />*/}
+        <VenueFeedbackModal viewFeedbackData={viewFeedbackData} />
       </Modal>
 
       <Table
@@ -204,9 +190,11 @@ const VenueFeedbacks = () => {
         withBorder
         withColumnBorders
       >
-        <CustomeLoadingOverlay visible={visible} />
         <thead>{headers}</thead>
-        <tbody>{rows}</tbody>
+        <tbody>
+          <CustomeLoadingOverlay visible={visible} />
+          {rows}
+        </tbody>
       </Table>
     </div>
   );

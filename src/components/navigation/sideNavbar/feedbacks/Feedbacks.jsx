@@ -26,7 +26,7 @@ const Feedbacks = () => {
       <Tabs.Panel value="venueFeedbacks" pt="xs">
         {" "}
         {/*<VenueComplaints />*/}
-        {/*<VenueFeedbacks />*/}
+        <VenueFeedbacks />
       </Tabs.Panel>
 
       <Tabs.Panel value="vendorFeedbacks" pt="xs">

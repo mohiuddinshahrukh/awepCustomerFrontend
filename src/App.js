@@ -115,6 +115,8 @@ function App() {
                   element={<SpecificVenueDetails />}
                 />
 
+                <Route path="/addreview" element={<AddReview />} />
+
                 <Route path="/dashboard" element={<CustomerDashboard />}>
                   <Route path="bookings" element={<CustomerBookings />} />
                   <Route path="chats" element={<ChatScreen />} />

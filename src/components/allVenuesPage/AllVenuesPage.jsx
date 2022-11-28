@@ -286,8 +286,6 @@ const AllVenuesPage = () => {
         }
       }
 
-      //filter venues which have at least one menu in the minPriceFilter and maxPriceFilter range and if a venue does not have any menus then it will also be shown
-
       if (minPriceFilter !== 0 || maxPriceFilter !== 0) {
         let priceMatch = false;
         venue?.menus?.forEach((menu) => {

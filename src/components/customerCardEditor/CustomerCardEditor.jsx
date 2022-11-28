@@ -181,15 +181,6 @@ const CustomerCardEditor = () => {
   });
   return (
     <Container size={"xl"} style={{ position: "relative" }}>
-      {console.log("TALHA: ", url)}
-      {}
-      <Button
-        component={Anchor}
-        href={`https://web.whatsapp.com/send?text=${url}&app_absent=0`}
-        target="_blank"
-      >
-        Click
-      </Button>
       <Title my={"lg"} align="center">
         Wedding Card Editor
       </Title>

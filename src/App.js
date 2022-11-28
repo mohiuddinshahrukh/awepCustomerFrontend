@@ -30,6 +30,7 @@ import {
   socket,
   socketContext as SocketContext,
 } from "./components/Socket/Socket";
+import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -118,10 +119,8 @@ function App() {
                   <Route path="bookings" element={<CustomerBookings />} />
                   <Route path="chats" element={<ChatScreen />} />
                   <Route path="weddingCards" element={<>WEDDING CARDS</>} />
-                  <Route
-                    path="complaintsAndFeedback"
-                    element={<Complaints />}
-                  />
+                  <Route path="complaints" element={<Complaints />} />
+                  <Route path="feedbacks" element={<Feedbacks />} />
                   <Route path="payments" element={<CustomerPayments />} />
                   {/*<Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
              <Route path="invite" element={<>INVITE</>} />*/}

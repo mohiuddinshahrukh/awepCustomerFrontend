@@ -20,8 +20,13 @@ const data = [
     icon: <IconMessages />,
   },
   {
-    title: "Complaints & Feedback",
-    path: "complaintsAndFeedback",
+    title: "Complaints",
+    path: "complaints",
+    icon: <IconMessages />,
+  },
+  {
+    title: "Feedbacks",
+    path: "feedbacks",
     icon: <IconMessages />,
   },
   {

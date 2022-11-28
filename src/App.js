@@ -11,7 +11,7 @@ import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import InvalidRoutePage from "./components/brokenRoutesAndPages/404Page/InvalidRoutePage";
 import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
 import CustomerDashboard from "./components/customerDashbaord/CustomerDashboard";
-import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
+// import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
 import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";

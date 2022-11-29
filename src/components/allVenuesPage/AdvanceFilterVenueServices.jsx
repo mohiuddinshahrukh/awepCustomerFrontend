@@ -79,10 +79,11 @@ const AdvanceFilterVenueServices = ({ allServices, setFilteredServices }) => {
 
   const items = values.map((value, index) => (
     <Checkbox
+      key={value.value}
       // mt="xs"
       // ml={33}
       label={value.label}
-      key={value.key}
+      // key={value.key}
       checked={value.checked}
       onChange={(event) =>
         handlers.setItemProp(index, "checked", event.currentTarget.checked)

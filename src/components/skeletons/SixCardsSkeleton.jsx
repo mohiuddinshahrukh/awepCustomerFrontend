@@ -24,7 +24,20 @@ const FiveCardsSkeleton = () => {
     return <CardSkeleton key={index} />;
   });
 
-  return venues;
+  return (
+    <SimpleGrid
+      cols={3}
+      breakpoints={[
+        { maxWidth: "xs", cols: 1 },
+        { maxWidth: "sm", cols: 2 },
+        { maxWidth: "md", cols: 2 },
+        { maxWidth: "lg", cols: 3 },
+        { maxWidth: "xl", cols: 3 },
+      ]}
+    >
+      {venues}
+    </SimpleGrid>
+  );
 };
 
 export default FiveCardsSkeleton;

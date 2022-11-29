@@ -33,7 +33,7 @@ import {
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
 import ContactUs from "./components/contactUs/ContactUs.jsx";
 import AboutUs from "./components/aboutUs/AboutUs";
-import FiveCardsSkeleton from "./components/skeletons/FiveCardsSkeleton";
+import FiveCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
 import CustomerBookingWEddingCards from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingWeddingCards";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");

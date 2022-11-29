@@ -26,6 +26,7 @@ import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
 import AllRatingFilter from "./AllRatingFilter";
 import moment from "moment";
+import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 
 const AllVenuesPage = () => {
   const params = useParams();
@@ -486,7 +487,11 @@ const AllVenuesPage = () => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
-            <AllVenuesGrid allVenues={filteredVenues} />
+            {allVenues.length > 0 ? (
+              <AllVenuesGrid allVenues={filteredVenues} />
+            ) : (
+              <FiveCardsSkeleton />
+            )}
           </Grid.Col>
         </Grid>
       </Container>

@@ -26,6 +26,7 @@ import AllVendorsCustomerBudget from "./AllVendorsCustomerBudget";
 import AllVendorRatingFilter from "./AllVendorRatingFilter";
 import AdvanceFilterByCities from "../allVenuesPage/AdvanceFilterByCities";
 import AllRatingFilter from "../allVenuesPage/AllRatingFilter";
+import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 
 const AllVendorsPage = () => {
   const params = useParams();
@@ -262,7 +263,11 @@ const AllVendorsPage = () => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
-            <AllVendorsGrid allVendors={filteredVendors} />
+            {allVendors.length > 0 ? (
+              <AllVendorsGrid allVendors={filteredVendors} />
+            ) : (
+              <FiveCardsSkeleton />
+            )}
           </Grid.Col>
         </Grid>
       </Container>

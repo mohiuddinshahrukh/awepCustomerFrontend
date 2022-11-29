@@ -31,8 +31,8 @@ import {
   socketContext as SocketContext,
 } from "./components/Socket/Socket";
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
-import { ContactUs } from "./components/contactUs/ContactUs";
-import { AboutUs } from "./components/aboutUs/AboutUs";
+import ContactUs from "./components/contactUs/ContactUs.jsx";
+import AboutUs from "./components/aboutUs/AboutUs";
 import FiveCardsSkeleton from "./components/skeletons/FiveCardsSkeleton";
 import CustomerBookingWEddingCards from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingWeddingCards";
 function App() {
@@ -121,10 +121,7 @@ function App() {
 
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
-                <Route
-                  path="/skeletontest"
-                  element={<FiveCardsSkeleton />}
-                />
+                <Route path="/skeletontest" element={<FiveCardsSkeleton />} />
                 <Route path="/addreview" element={<AddReview />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>

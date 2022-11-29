@@ -69,7 +69,7 @@ function App() {
                   element={<NewVendorBookingFile />}
                 />
                 <Route
-                  path="/addreview/provider/bookingId"
+                  path="/addreview/:provider/:bookingId"
                   element={<AddReview />}
                 />
 

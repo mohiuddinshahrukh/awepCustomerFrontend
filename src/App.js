@@ -31,9 +31,10 @@ import {
   socketContext as SocketContext,
 } from "./components/Socket/Socket";
 import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
-import { ContactUs } from "./components/contactUs/ContactUs";
-import { AboutUs } from "./components/aboutUs/AboutUs";
+import ContactUs from "./components/contactUs/ContactUs.jsx";
+import AboutUs from "./components/aboutUs/AboutUs";
 import FiveCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
+import CustomerBookingWEddingCards from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingWeddingCards";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -120,16 +121,16 @@ function App() {
 
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
-                <Route
-                  path="/skeletontest"
-                  element={<FiveCardsSkeleton />}
-                />
+                <Route path="/skeletontest" element={<FiveCardsSkeleton />} />
                 <Route path="/addreview" element={<AddReview />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>
                   <Route path="bookings" element={<CustomerBookings />} />
                   <Route path="chats" element={<ChatScreen />} />
-                  <Route path="weddingCards" element={<>WEDDING CARDS</>} />
+                  <Route
+                    path="weddingCards"
+                    element={<CustomerBookingWEddingCards />}
+                  />
                   <Route path="complaints" element={<Complaints />} />
                   <Route path="feedbacks" element={<Feedbacks />} />
                   <Route path="payments" element={<CustomerPayments />} />

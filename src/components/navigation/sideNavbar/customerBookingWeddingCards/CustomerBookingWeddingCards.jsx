@@ -1,12 +1,21 @@
-import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Group,
+  Modal,
+  Paper,
+  ScrollArea,
+  Table,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconEdit, IconEye, IconMessage } from "@tabler/icons";
+import { IconCheck, IconEdit, IconEye } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
-import BookingViewAllBookings from "./BookingViewAllBookings";
+// import BookingViewAllBookings from "./BookingViewAllBookings";
 import moment from "moment";
+import CustomerBookingCardEditor from "./CustomerBookingCardEditor";
 
 const fetchAllVenues = async () => {
   try {
@@ -31,16 +40,21 @@ const fetchAllVenues = async () => {
     console.log("ERROR in fetching all venues:", e);
   }
 };
-const CustomerVenueBookings = () => {
+
+const CustomerBookingWEddingCards = () => {
   let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
   const [visible, setVisible] = useState(true);
   const [singleInvoice, setSingleInvoice] = useState([]);
+  const [selectedBooking, setSelectedBooking] = useState({});
+
   const [viewBookingModal, setViewBookingModal] = useState(false);
   const [venueBookings, setVenueBookings] = useState([]);
+
   useEffect(() => {
     fetchAllVenues().then(setVenueBookings).then(setVisible(false));
   }, []);
+
   console.log("venueBookings", venueBookings);
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
@@ -72,35 +86,27 @@ const CustomerVenueBookings = () => {
       <td align="center">
         <Group spacing={0} noWrap align={"center"} position="center">
           <ActionIcon
+            variant="filled"
+            color={selectedBooking._id === row._id ? "green" : "red"}
             onClick={() => {
               console.log("Clicked on view button");
-              setSingleInvoice(row);
-              setViewBookingModal(true);
+              setSelectedBooking(row);
+              // setSingleInvoice(row);
+              //   setViewBookingModal(true);
             }}
           >
-            <IconEye />
+            <IconCheck />
           </ActionIcon>
-          {row.bookingStatus === "COMPLETED" ? (
-            <ActionIcon
-              onClick={() => {
-                console.log("Clicked on edit button");
-                navigate(`/addReview/${row._id}`);
-              }}
-            >
-              <IconMessage />
-            </ActionIcon>
-          ) : (
-            <ActionIcon
-              onClick={() => {
-                console.log("Clicked on edit button");
-                navigate(
-                  `/updateVenueBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
-                );
-              }}
-            >
-              <IconEdit />
-            </ActionIcon>
-          )}
+          {/* <ActionIcon
+            onClick={() => {
+              console.log("Clicked on edit button");
+              navigate(
+                `/updateVenueBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
+              );
+            }}
+          >
+            <IconEdit />
+          </ActionIcon>*/}
         </Group>
       </td>
     </tr>
@@ -135,14 +141,18 @@ const CustomerVenueBookings = () => {
         opened={viewBookingModal}
         onClose={() => setViewBookingModal(!viewBookingModal)}
       >
-        <BookingViewAllBookings singleInvoice={singleInvoice} />
+        {/*<BookingViewAllBookings singleInvoice={singleInvoice} />*/}
       </Modal>
-      <Table striped withBorder withColumnBorders>
-        <thead>{headers}</thead>
-        <tbody>{rows}</tbody>
-      </Table>
+      <Paper component={ScrollArea} h={"30vh"} withBorder>
+        {" "}
+        <Table striped withBorder withColumnBorders>
+          <thead>{headers}</thead>
+          <tbody>{rows}</tbody>
+        </Table>
+      </Paper>
+      <CustomerBookingCardEditor selectedBooking={selectedBooking} />
     </div>
   );
 };
 
-export default CustomerVenueBookings;
+export default CustomerBookingWEddingCards;

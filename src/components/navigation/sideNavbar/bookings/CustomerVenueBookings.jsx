@@ -47,13 +47,14 @@ const CustomerVenueBookings = () => {
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
   const [viewPaymentModal, setViewPaymentModal] = useState(false);
-  const [amountPayable, setAmountPayable] = useState(0);
+  const [amountPayable, setAmountPayable] = useState({});
   const [confirmBooking, setConfirmBooking] = useState(false);
   const [paidSuccessfully, setPaidSuccessfully] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [venueBookings, setVenueBookings] = useState([]);
   useEffect(() => {
     fetchAllVenues().then(setVenueBookings).then(setVisible(false));
-  }, []);
+  }, [refresh]);
 
   const makeCompletePayment = async () => {
     console.log("$AMOUNT PAYABLE", amountPayable);
@@ -78,7 +79,8 @@ const CustomerVenueBookings = () => {
       if (apiResponse.data.status === "success") {
         console.log("Successfully fetched all venues:", apiResponse.data.data);
         setViewPaymentModal(false);
-        window.location.reload();
+        setRefresh(!refresh);
+        setPaidSuccessfully(false);
       } else if (apiResponse.data.status === "error") {
         console.log("Error while fetching all venues");
       } else {
@@ -87,13 +89,10 @@ const CustomerVenueBookings = () => {
     } catch (e) {
       console.log("ERROR in fetching all venues:", e);
     }
-    // setViewPaymentModal(false);
-    // window.location.reload();
   };
   useEffect(() => {
     if (paidSuccessfully) {
       console.log("DO THE AXIOS CALL HERE MY FRIEND");
-      // makeVenueBooking();
       makeCompletePayment();
     }
   }, [paidSuccessfully]);

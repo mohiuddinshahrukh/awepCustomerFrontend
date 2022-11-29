@@ -72,6 +72,10 @@ function App() {
                   path="/addreview/:provider/:bookingId"
                   element={<AddReview />}
                 />
+                <Route
+                  path="/updateReview/:provider/:feedbackId"
+                  element={<AddReview />}
+                />
 
                 <Route
                   path="/vendorBooking/:eventType/:date/:time/:vendorId"

@@ -24,6 +24,8 @@ import React from "react";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
+
 const useStyles = createStyles(() => ({
   button: {
     backgroundColor: "#775A97",
@@ -101,6 +103,8 @@ const starColor = (rating) => {
 };
 
 const AddReview = () => {
+  const matches1200 = useMediaQuery("(min-width: 1200px)");
+  const matches800 = useMediaQuery("(min-width: 800px)");
   const params = useParams();
   console.log("MY PARAMS: ", params);
 
@@ -122,15 +126,28 @@ const AddReview = () => {
   let navigate = useNavigate();
   const handleSubmit = async () => {
     console.log("MAKING THE BOOKING");
-    const body = {
-      subVenueBookingId: params.bookingId,
-      customerReview: review,
-      qualityOfService: quality.value,
-      responseTime: response.value,
-      professionalism: professionalism.value,
-      valueForMoney: valueForMoney.value,
-      flexibility: flexibility.value,
-    };
+    let body;
+    if (params.provider === "venue") {
+      body = {
+        subVenueBookingId: params.bookingId,
+        customerReview: review,
+        qualityOfService: quality.value,
+        responseTime: response.value,
+        professionalism: professionalism.value,
+        valueForMoney: valueForMoney.value,
+        flexibility: flexibility.value,
+      };
+    } else {
+      body = {
+        vendorPackageBookingId: params.bookingId,
+        customerReview: review,
+        qualityOfService: quality.value,
+        responseTime: response.value,
+        professionalism: professionalism.value,
+        valueForMoney: valueForMoney.value,
+        flexibility: flexibility.value,
+      };
+    }
 
     console.log("@@@body", body);
 
@@ -178,114 +195,140 @@ const AddReview = () => {
   };
 
   return (
-    <Modal
-      opened={true}
-      // onClose={() => setOpened(false)}
-      withCloseButton={false}
-      fullScreen
-      // size="100%"
-    >
-      <Grid
+    // <Modal
+    //   styles={{
+    //     body: { border: "1px solid red", margin: "0px", padding: "0px" },
+    //     inner: { margin: "0px", padding: "0px" },
+    //     root: { margin: "0px", padding: "0px" },
+    //     modal: { margin: "0px", padding: "0px" },
+    //   }}
+    //   opened={true}
+    //   // onClose={() => setOpened(false)}
+    //   withCloseButton={false}
+    //   fullScreen
+    //   // size="100%"
+    // ></Modal>
+    <Grid
+      style={{
+        position: "absolute",
+        top: 0,
+        zIndex: 20,
+        backgroundColor: "white",
+        boxSizing: "border-box",
+        margin: 0,
+        padding: 0,
+      }}
       // style={{
-      //   // boxSizing: "border-box",
-      //   margin: "0px",
-      //   padding: "0px",
+      // boxSizing: "border-box",
+      // margin: "0px",
+      // padding: "0px",
       // }}
+    >
+      {/* <Image src={ReviewImage} /> */}
+      <Grid.Col
+        style={{ boxSizing: "border-box", margin: 0, padding: 0 }}
+        lg={6}
       >
-        {/* <Image src={ReviewImage} /> */}
-        <Grid.Col lg={6}>
-          <Paper
-            sx={{
-              // backgroundImage: `url("https://images.unsplash.com/photo-1485178075098-49f78b4b43b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
-              backgroundImage: `url(${ReviewImage})`,
-              // width: "100%",
-              height: "100vh",
-            }}
-            style={{
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Stack px={60}>
-              <Text size={30} weight="bold" color="red" pr={150}>
-                Review You Wedding Supplier
-              </Text>
-
-              <Text size={20} color="red" pr={100}>
-                Sharing your experience by writing a review helps other couples
-                choose their supplier.
-              </Text>
-            </Stack>
-
-            {/* </Center> */}
-          </Paper>
-        </Grid.Col>
-        <Grid.Col lg={6}>
-          <Container size="xl" px="xl" pt="xl">
-            <Text size={70} pb="xl">
-              AWEP
+        <Paper
+          radius={0}
+          sx={{
+            // backgroundImage: `url("https://images.unsplash.com/photo-1485178075098-49f78b4b43b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
+            backgroundImage: `url(${ReviewImage})`,
+            // width: "100%",
+            height: matches1200 ? "100%" : "50vh",
+          }}
+          style={{
+            boxSizing: "border-box",
+            margin: 0,
+            padding: 0,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Stack px={matches800 ? 60 : "md"}>
+            <Text
+              size={30}
+              weight="bold"
+              color="white"
+              pr={matches800 ? 150 : "md"}
+            >
+              Review You Wedding Supplier
             </Text>
-            <Text size={25} pb="xl">
-              Share your experience! Your review helps other Users choose their
-              suppliers.
-            </Text>
-            {/* <Input.Wrapper label="Step" size="md" pb="lg">
-              <Progress value={50} mt="sm" size="sm" />
-            </Input.Wrapper> */}
 
-            <RatingComponent
-              title="Service Quality"
-              rating={quality}
-              setRating={setQuality}
-            />
-            <RatingComponent
-              title="Responsiveness"
-              rating={response}
-              setRating={setResponse}
-            />
-            <RatingComponent
-              title="Professionalism"
-              rating={professionalism}
-              setRating={setProfessionalism}
-            />
-            <RatingComponent
-              title="
-              Value For Money"
-              rating={valueForMoney}
-              setRating={setValueForMoney}
-            />
-            <RatingComponent
-              title="Flexibility"
-              rating={flexibility}
-              setRating={setFlexibility}
-            />
-            <Textarea
-              py="xl"
-              size="md"
-              label="Write a Review"
-              value={review}
-              onChange={(e) => setReview(e.currentTarget.value)}
-              placeholder="Write at least 25 characters about your experience. Include any details that will help other couples make their hiring decision."
-              autosize
-              minRows={3}
-              maxRows={4}
-            />
-            <Group position="right">
-              <Button
-                className={classes.button}
-                radius="md"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            </Group>
-          </Container>
-        </Grid.Col>
-      </Grid>
-    </Modal>
+            <Text size={20} color="white" pr={matches800 ? 100 : "md"}>
+              Sharing your experience by writing a review helps other couples
+              choose their supplier.
+            </Text>
+          </Stack>
+
+          {/* </Center> */}
+        </Paper>
+      </Grid.Col>
+      <Grid.Col lg={6}>
+        <Container size="xl" px={matches800 ? "xl" : "sm"} pt="sm">
+          <Text size={70} pb="md">
+            AWEP
+          </Text>
+          <Text size={25} pb="md">
+            Share your experience! Your review helps other Users choose their
+            suppliers.
+          </Text>
+          {/* <Input.Wrapper label="Step" size="md" pb="lg">
+            <Progress value={50} mt="sm" size="sm" />
+          </Input.Wrapper> */}
+
+          <RatingComponent
+            title="Service Quality"
+            rating={quality}
+            setRating={setQuality}
+          />
+          <RatingComponent
+            title="Responsiveness"
+            rating={response}
+            setRating={setResponse}
+          />
+          <RatingComponent
+            title="Professionalism"
+            rating={professionalism}
+            setRating={setProfessionalism}
+          />
+          <RatingComponent
+            title="
+            Value For Money"
+            rating={valueForMoney}
+            setRating={setValueForMoney}
+          />
+          <RatingComponent
+            title="Flexibility"
+            rating={flexibility}
+            setRating={setFlexibility}
+          />
+          <Textarea
+            py="xl"
+            size="md"
+            label="Write a Review"
+            value={review}
+            onChange={(e) => setReview(e.currentTarget.value)}
+            placeholder="Write at least 25 characters about your experience. Include any details that will help other couples make their hiring decision."
+            autosize
+            minRows={3}
+            maxRows={4}
+          />
+          <Group position="right">
+            <Button
+              className={classes.button}
+              radius="md"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </Group>
+        </Container>
+      </Grid.Col>
+    </Grid>
   );
 };
 

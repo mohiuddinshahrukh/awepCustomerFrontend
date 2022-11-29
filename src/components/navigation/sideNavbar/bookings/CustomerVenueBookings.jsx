@@ -1,4 +1,12 @@
-import { ActionIcon, Badge, Group, Modal, Table, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Group,
+  Modal,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconBrandStripe, IconEdit, IconEye, IconMessage } from "@tabler/icons";
 import axios from "axios";
@@ -46,6 +54,50 @@ const CustomerVenueBookings = () => {
   useEffect(() => {
     fetchAllVenues().then(setVenueBookings).then(setVisible(false));
   }, []);
+
+  const makeCompletePayment = async () => {
+    console.log("$AMOUNT PAYABLE", amountPayable);
+    console.log("$AMOUNT PAYABLE ID", amountPayable._id);
+    console.log("$AMOUNT PAYABLE AMOUNT", amountPayable.price.remainingAmount);
+
+    try {
+      const apiResponse = await axios({
+        url: "https://a-wep.herokuapp.com/customer/payRemainderSubVenueBooking",
+        method: "post",
+        data: {
+          paymentMethod: "Stripe",
+          subVenueBookingId: amountPayable._id,
+          paymentAmount: amountPayable.price.remainingAmount,
+        },
+        headers: {
+          token: localStorage.getItem("userToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log("Successfully fetched all venues:", apiResponse.data.data);
+        setViewPaymentModal(false);
+        window.location.reload();
+      } else if (apiResponse.data.status === "error") {
+        console.log("Error while fetching all venues");
+      } else {
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      console.log("ERROR in fetching all venues:", e);
+    }
+    // setViewPaymentModal(false);
+    // window.location.reload();
+  };
+  useEffect(() => {
+    if (paidSuccessfully) {
+      console.log("DO THE AXIOS CALL HERE MY FRIEND");
+      // makeVenueBooking();
+      makeCompletePayment();
+    }
+  }, [paidSuccessfully]);
+
   console.log("venueBookings", venueBookings);
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
@@ -64,12 +116,27 @@ const CustomerVenueBookings = () => {
           row.bookingTime}
       </td>
       <td align="center">
-        <Badge color={row.bookingStatus === "IN PROGRESS" ? "blue" : "red"}>
+        <Badge
+          color={
+            row.bookingStatus === "IN PROGRESS"
+              ? "blue"
+              : row.bookingStatus === "COMPLETED"
+              ? "green"
+              : "red"
+          }
+        >
           {row.bookingStatus}
         </Badge>
       </td>
       <td align="center">
-        <Badge color={row.paymentStatus === "ADVANCE PAID" ? "yellow" : "blue"}>
+        <Badge
+          color={
+            row.paymentStatus === "ADVANCE PAID" &&
+            row.price.remainingAmount > 0
+              ? "yellow"
+              : "green"
+          }
+        >
           {row.paymentStatus}
         </Badge>
       </td>
@@ -108,10 +175,26 @@ const CustomerVenueBookings = () => {
           )}
 
           <ActionIcon
+            color={
+              row.bookingStatus === "CANCELLED"
+                ? "red"
+                : row?.paymentStatus === "ADVANCE PAID" &&
+                  row?.price?.remainingAmount > 0
+                ? "yellow"
+                : "green"
+            }
             onClick={() => {
-              console.log("LAUNCHING PAYMENT");
-              setViewPaymentModal(true);
-              setAmountPayable(row.price.remainingAmount);
+              if (
+                row.paymentStatus === "ADVANCE PAID" &&
+                row.price.remainingAmount > 0 &&
+                row.bookingStatus !== "CANCELLED"
+              ) {
+                console.log("LAUNCHING PAYMENT");
+                setViewPaymentModal(true);
+                setAmountPayable(row);
+              } else {
+                console.log("Amount Has been paid");
+              }
             }}
           >
             <IconBrandStripe />
@@ -133,9 +216,13 @@ const CustomerVenueBookings = () => {
     "Action",
   ];
   const headers = (
-    <tr>
+    <tr className="bgColor">
       {headerData?.map((header, index) => {
-        return <th key={index}> {header}</th>;
+        return (
+          <th key={index}>
+            <span className="fgColor">{header}</span>
+          </th>
+        );
       })}
     </tr>
   );
@@ -154,7 +241,7 @@ const CustomerVenueBookings = () => {
           paidSuccessfully={paidSuccessfully}
           setPaidSuccessfully={setPaidSuccessfully}
           setConfirmBooking={setConfirmBooking}
-          amountPayable={amountPayable}
+          amountPayable={amountPayable?.price?.remainingAmount}
         />
       </Modal>
       <CustomeLoadingOverlay visible={visible} />

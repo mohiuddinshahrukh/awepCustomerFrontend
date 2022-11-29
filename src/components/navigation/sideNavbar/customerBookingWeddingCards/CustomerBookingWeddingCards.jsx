@@ -59,6 +59,7 @@ const CustomerBookingWEddingCards = () => {
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
       <td align="center">{index + 1}</td>
+
       <td>{row.subVenueName}</td>
       <td>{row.eventType}</td>
       <td>

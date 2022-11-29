@@ -56,9 +56,13 @@ const fetchAllVendorBookings = async () => {
 const MakePaymentScreen = () => {
   const [allVenueBookings, setAllVenueBookings] = useState([]);
   const [allVendorBookings, setAllVendorBookings] = useState([]);
+  const [allVendorBookingsWithPaymentDue, setAllVendorBookingsWithPaymentDue] =
+    useState([]);
+  const [allVenuesBookingsWithPaymentDue, setAllVenuesBookingsWithPaymentDue] =
+    useState([]);
   const [paymentFor, setPaymentFor] = useState("venue");
   useEffect(() => {
-    fetchAllVenueBookings().then(setAllVenueBookings);
+    fetchAllVenueBookings().then((data) => {});
     fetchAllVendorBookings().then(setAllVendorBookings);
   }, []);
   const venueRows = allVenueBookings?.map((row, index) => (
@@ -220,6 +224,17 @@ const MakePaymentScreen = () => {
       })}
     </tr>
   );
+
+  const allVenuesWithPayments = allVenueBookings?.filter((booking) => {
+    return booking.paymentStatus === "ADVANCE PAID";
+  });
+
+  const allVendorsWithPayments = allVendorBookings?.filter((booking) => {
+    return booking.paymentStatus === "ADVANCE PAID";
+  });
+
+  console.log("All venues With ", allVenuesWithPayments);
+  console.log("All venues With ", allVendorsWithPayments);
   return (
     <div>
       <Select

@@ -56,9 +56,9 @@ const CustomerPayments = () => {
         <Tabs.Tab value="vendorPayments" icon={<IconBuildingStore size={14} />}>
           Vendor Payments
         </Tabs.Tab>
-        <Tabs.Tab value="makePayment" icon={<IconBrandStripe size={14} />}>
+        {/*        <Tabs.Tab value="makePayment" icon={<IconBrandStripe size={14} />}>
           Make Payment
-        </Tabs.Tab>
+        </Tabs.Tab>*/}
       </Tabs.List>
 
       <Tabs.Panel value="subvenuePayments" pt="xs">
@@ -68,9 +68,9 @@ const CustomerPayments = () => {
       <Tabs.Panel value="vendorPayments" pt="xs">
         <VendorPayments vendorBookings={venueBookings.vendorPayments} />
       </Tabs.Panel>
-      <Tabs.Panel value="makePayment" pt="xs">
+      {/*      <Tabs.Panel value="makePayment" pt="xs">
         <MakePaymentScreen />
-      </Tabs.Panel>
+      </Tabs.Panel>*/}
     </Tabs>
   );
 };

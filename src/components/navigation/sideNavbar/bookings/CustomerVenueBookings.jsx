@@ -1,12 +1,13 @@
 import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconEdit, IconEye, IconMessage } from "@tabler/icons";
+import { IconBrandStripe, IconEdit, IconEye, IconMessage } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import BookingViewAllBookings from "./BookingViewAllBookings";
 import moment from "moment";
+import StripePromise from "./stripe/StripePromise";
 
 const fetchAllVenues = async () => {
   try {
@@ -37,6 +38,9 @@ const CustomerVenueBookings = () => {
   const [visible, setVisible] = useState(true);
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
+  const [viewPaymentModal, setViewPaymentModal] = useState(false);
+  const [confirmBooking, setConfirmBooking] = useState(false);
+  const [paidSuccessfully, setPaidSuccessfully] = useState(false);
   const [venueBookings, setVenueBookings] = useState([]);
   useEffect(() => {
     fetchAllVenues().then(setVenueBookings).then(setVisible(false));
@@ -101,6 +105,15 @@ const CustomerVenueBookings = () => {
               <IconEdit />
             </ActionIcon>
           )}
+
+          <ActionIcon
+            onClick={() => {
+              console.log("LAUNCHING PAYMENT");
+              setViewPaymentModal(true);
+            }}
+          >
+            <IconBrandStripe />
+          </ActionIcon>
         </Group>
       </td>
     </tr>
@@ -126,6 +139,54 @@ const CustomerVenueBookings = () => {
   );
   return (
     <div style={{ position: "relative" }}>
+      <Modal
+        size={matches500 ? "calc(100vw-30vw)" : "sm"}
+        radius="sm"
+        overlayOpacity={0.55}
+        overlayBlur={3}
+        opened={viewPaymentModal}
+        onClose={() => setViewPaymentModal(false)}
+      >
+        <StripePromise
+          paidSuccessfully={paidSuccessfully}
+          setPaidSuccessfully={setPaidSuccessfully}
+          setConfirmBooking={setConfirmBooking}
+          // start={start}
+          amountPayable={2000}
+          // amountPayable={
+          //   (hallCharges +
+          //     selectedVenueServiceObject
+          //       ?.map(
+          //         (service) =>
+          //           service.servicePrice *
+          //           (service.duration === "Per Event" ? 1 : 3)
+          //       )
+          //       .reduce((a, b) => a + b, 0) +
+          //     (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests -
+          //     (hallCharges +
+          //       selectedVenueServiceObject
+          //         ?.map(
+          //           (service) =>
+          //             service.servicePrice *
+          //             (service.duration === "Per Event" ? 1 : 3)
+          //         )
+          //         .reduce((a, b) => a + b, 0) +
+          //       (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
+          //       0.25 +
+          //     (hallCharges +
+          //       selectedVenueServiceObject
+          //         ?.map(
+          //           (service) =>
+          //             service.servicePrice *
+          //             (service.duration === "Per Event" ? 1 : 3)
+          //         )
+          //         .reduce((a, b) => a + b, 0) +
+          //       (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
+          //       0.17) *
+          //   0.25
+          // }
+        />
+      </Modal>
       <CustomeLoadingOverlay visible={visible} />
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}

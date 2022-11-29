@@ -13,6 +13,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import VenueFeedbackModal from "./VenueFeedbackModal";
 
@@ -44,6 +45,7 @@ const fetchAllvenueFeedbacks = async () => {
 };
 
 const VenueFeedbacks = () => {
+  const navigate = useNavigate();
   const [viewVenueReviewModal, setViewVenueReviewModal] = useState(false);
   const matches500 = useMediaQuery("(min-width: 500px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
@@ -121,6 +123,7 @@ const VenueFeedbacks = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on edit button");
+              navigate(`/updateReview/${"venue"}/${row._id}`);
             }}
           >
             <IconEdit />

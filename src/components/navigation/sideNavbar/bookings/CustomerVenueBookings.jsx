@@ -39,6 +39,7 @@ const CustomerVenueBookings = () => {
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
   const [viewPaymentModal, setViewPaymentModal] = useState(false);
+  const [amountPayable, setAmountPayable] = useState(0);
   const [confirmBooking, setConfirmBooking] = useState(false);
   const [paidSuccessfully, setPaidSuccessfully] = useState(false);
   const [venueBookings, setVenueBookings] = useState([]);
@@ -110,6 +111,7 @@ const CustomerVenueBookings = () => {
             onClick={() => {
               console.log("LAUNCHING PAYMENT");
               setViewPaymentModal(true);
+              setAmountPayable(row.price.remainingAmount);
             }}
           >
             <IconBrandStripe />
@@ -151,8 +153,8 @@ const CustomerVenueBookings = () => {
           paidSuccessfully={paidSuccessfully}
           setPaidSuccessfully={setPaidSuccessfully}
           setConfirmBooking={setConfirmBooking}
+          amountPayable={amountPayable}
           // start={start}
-          amountPayable={2000}
           // amountPayable={
           //   (hallCharges +
           //     selectedVenueServiceObject

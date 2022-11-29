@@ -4,9 +4,9 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { Button, Grid, Group, LoadingOverlay, Paper } from "@mantine/core";
+import { Button, Grid, LoadingOverlay, Paper } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { IconArrowLeft } from "@tabler/icons";
+// import { IconArrowLeft } from "@tabler/icons";
 // import { ArrowLeft } from "tabler-icons-react";
 
 export default function CheckoutForm({
@@ -132,7 +132,7 @@ export default function CheckoutForm({
         <PaymentElement id="payment-element" />
         {!paid ? (
           <Grid>
-            <Grid.Col xs={6}>
+            {/*<Grid.Col xs={6}>
               <Button
                 leftIcon={<IconArrowLeft />}
                 color="red"
@@ -156,8 +156,8 @@ export default function CheckoutForm({
               >
                 <span id="button-text">BACK</span>
               </Button>
-            </Grid.Col>
-            <Grid.Col xs={6}>
+            </Grid.Col>*/}
+            <Grid.Col span={12}>
               <Button
                 color="#ffffff"
                 fullWidth

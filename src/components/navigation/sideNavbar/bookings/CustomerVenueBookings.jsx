@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
+import { ActionIcon, Badge, Group, Modal, Table, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconBrandStripe, IconEdit, IconEye, IconMessage } from "@tabler/icons";
 import axios from "axios";
@@ -142,7 +142,8 @@ const CustomerVenueBookings = () => {
   return (
     <div style={{ position: "relative" }}>
       <Modal
-        size={matches500 ? "calc(100vw-30vw)" : "sm"}
+        title={<Title order={2}>Complete Payment</Title>}
+        size={"lg"}
         radius="sm"
         overlayOpacity={0.55}
         overlayBlur={3}
@@ -154,39 +155,6 @@ const CustomerVenueBookings = () => {
           setPaidSuccessfully={setPaidSuccessfully}
           setConfirmBooking={setConfirmBooking}
           amountPayable={amountPayable}
-          // start={start}
-          // amountPayable={
-          //   (hallCharges +
-          //     selectedVenueServiceObject
-          //       ?.map(
-          //         (service) =>
-          //           service.servicePrice *
-          //           (service.duration === "Per Event" ? 1 : 3)
-          //       )
-          //       .reduce((a, b) => a + b, 0) +
-          //     (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests -
-          //     (hallCharges +
-          //       selectedVenueServiceObject
-          //         ?.map(
-          //           (service) =>
-          //             service.servicePrice *
-          //             (service.duration === "Per Event" ? 1 : 3)
-          //         )
-          //         .reduce((a, b) => a + b, 0) +
-          //       (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-          //       0.25 +
-          //     (hallCharges +
-          //       selectedVenueServiceObject
-          //         ?.map(
-          //           (service) =>
-          //             service.servicePrice *
-          //             (service.duration === "Per Event" ? 1 : 3)
-          //         )
-          //         .reduce((a, b) => a + b, 0) +
-          //       (selectedMenu?.price ? selectedMenu.price : 0) * noOfGuests) *
-          //       0.17) *
-          //   0.25
-          // }
         />
       </Modal>
       <CustomeLoadingOverlay visible={visible} />

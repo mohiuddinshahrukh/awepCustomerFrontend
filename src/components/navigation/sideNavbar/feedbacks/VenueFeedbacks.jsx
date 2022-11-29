@@ -99,7 +99,9 @@ const VenueFeedbacks = () => {
         <Rating value={row?.rating} readOnly />
       </td>
       <td>
-        <Text lineClamp={1}>{row?.customerReview}</Text>
+        <Text style={{ wordBreak: "break-all" }} lineClamp={1}>
+          {row?.customerReview}
+        </Text>
       </td>
 
       <td>

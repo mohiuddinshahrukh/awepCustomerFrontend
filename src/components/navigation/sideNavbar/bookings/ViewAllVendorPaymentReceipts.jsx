@@ -356,7 +356,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                       {(
                         singleInvoice?.price?.discountPercentage *
                         singleInvoice?.price?.totalPrice
-                      ).toLocaleString()}
+                      )?.toLocaleString()}
                     </b>
                   </td>
                 </tr>
@@ -370,7 +370,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                       {(
                         singleInvoice?.price?.taxPercentage *
                         singleInvoice?.price?.totalPrice
-                      ).toLocaleString()}
+                      )?.toLocaleString()}
                     </b>
                   </td>
                 </tr>
@@ -378,7 +378,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                   <td align="left">Total </td>
                   <td align="right">
                     <b>
-                      {(singleInvoice?.price?.totalPriceAfterTaxAndDiscount).toLocaleString()}
+                      {singleInvoice?.price?.totalPriceAfterTaxAndDiscount?.toLocaleString()}
                     </b>
                   </td>
                 </tr>
@@ -387,7 +387,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                     Deposit <b>PAID</b>{" "}
                   </td>
                   <td align="right">
-                    <b>{singleInvoice?.price?.paidAmount.toLocaleString()}</b>
+                    <b>{singleInvoice?.price?.paidAmount?.toLocaleString()}</b>
                   </td>
                 </tr>
                 <tr>
@@ -396,7 +396,7 @@ const ViewAllVendorPaymentReceipts = ({ singleInvoice }) => {
                   </td>
                   <td align="right">
                     <b>
-                      {(singleInvoice?.price?.remainingAmount).toLocaleString()}
+                      {singleInvoice?.price?.remainingAmount?.toLocaleString()}
                     </b>
                   </td>
                 </tr>

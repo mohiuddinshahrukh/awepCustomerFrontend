@@ -76,6 +76,7 @@ const VendorFeedbacks = () => {
         });
 
         setRefresh(!refresh);
+        setVisible(true);
         return apiResponse.data.status;
       } else if (apiResponse.data.status === "error") {
         console.log("Error while fetching all vendor bookings");
@@ -100,7 +101,9 @@ const VendorFeedbacks = () => {
         <Rating value={row?.rating} readOnly />
       </td>
       <td>
-        <Text lineClamp={1}>{row?.customerReview}</Text>
+        <Text style={{ wordBreak: "break-all" }} lineClamp={1}>
+          {row?.customerReview}
+        </Text>
       </td>
       <td>{row?.vendorPackageBookingId?.bookingDate?.split("T")[0]}</td>
       <td>{row?.createdAt?.split("T")[0]}</td>

@@ -16,7 +16,7 @@ import {
   Title,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../CustomButton/CustomButton";
 import ReviewImage from "./image2.jpg";
 import { Button, createStyles } from "@mantine/core";
@@ -103,6 +103,36 @@ const starColor = (rating) => {
 };
 
 const AddReview = () => {
+  const [feedbackDetails, setFeedbackDetails] = useState({});
+  console.log("deererere", feedbackDetails);
+  const fetchReviewDetails = async () => {
+    try {
+      const apiResponse = await axios.get(
+        "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks"
+      );
+      console.log("API Response", apiResponse);
+      if (apiResponse.data.status === "success") {
+        let retrievedData = apiResponse.data.data;
+        let specificVendorReview = retrievedData.filter((review) => {
+          return review._id === params.feedbackId;
+        });
+        return specificVendorReview;
+      } else if (apiResponse.data.status === "error") {
+        console.log(
+          "Error while fetching all venue services",
+          apiResponse.data.error
+        );
+      } else {
+        console.log("Unknown Error: ", apiResponse.data.error);
+      }
+    } catch (error) {
+      console.log("Error in fetchAllVenueServices catch block", error);
+    }
+  };
+  useEffect(() => {
+    fetchReviewDetails().then(setFeedbackDetails);
+    console.count();
+  }, []);
   const matches1200 = useMediaQuery("(min-width: 1200px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
   const params = useParams();

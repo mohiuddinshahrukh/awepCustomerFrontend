@@ -42,9 +42,9 @@ const LandingPageMain = () => {
       <FilterCards />
       <FeaturedVenuesSection />
       <FeaturedVendorsSection />
-      <RealWeddingsSection />
-      <CustomerTestimonials />
+      {/* <RealWeddingsSection />*/}
       <WeddingCards />
+      <CustomerTestimonials />
       <RegisteredCities />
     </Paper>
   );

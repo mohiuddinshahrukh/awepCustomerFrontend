@@ -1,6 +1,5 @@
 import { Carousel } from "@mantine/carousel";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import WeddingCardsCard from "./WeddingCardsCard";
 const landingPageWeddingCards = [
   {

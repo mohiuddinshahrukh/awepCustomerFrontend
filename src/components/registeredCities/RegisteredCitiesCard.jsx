@@ -6,6 +6,7 @@ const RegisteredCitiesCard = ({ citiesCard }) => {
   return (
     <Card
       p={0}
+      className="border"
       sx={{
         boxSizing: "border-box",
         ":hover": {

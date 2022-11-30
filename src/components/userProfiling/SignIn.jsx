@@ -1,5 +1,5 @@
 // IMPORTS
-import { Anchor, Stepper, Container } from "@mantine/core";
+import { Stepper, Container } from "@mantine/core";
 
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -46,6 +46,7 @@ import {
   IconShieldLock,
   IconUserX,
 } from "@tabler/icons";
+import GoogleSignUpButon from "./GoogleSignUpButon";
 
 const pictureBackground = [
   new URL("./customerIMG1.png", import.meta.url),
@@ -1041,7 +1042,9 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
                     position="center"
                     id="signInDiv"
                     style={{ height: "50", width: "400" }}
-                  ></Group>
+                  >
+                    <GoogleSignUpButon />
+                  </Group>
                 </Grid.Col>
                 <Grid.Col>
                   <div

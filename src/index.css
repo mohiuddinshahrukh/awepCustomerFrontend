@@ -18,6 +18,32 @@ code {
 .bgColor {
   background-color: #e60084;
 }
+.fgColorF {
+  color: #e60084;
+}
 .fgColor {
+  color: white;
+}
+.border {
+  border: 1px solid #e60084;
+}
+.hover:hover {
+  background-color: #c1006d;
+  color: white;
+}
+
+.button {
+  background-color: #e60084;
+}
+.button:hover {
+  background-color: #c1006d;
+  color: white;
+}
+.buttonOutline {
+  border: 1px solid #e60084;
+  color: #e60084;
+}
+.buttonOutline:hover {
+  background-color: #e60084;
   color: white;
 }

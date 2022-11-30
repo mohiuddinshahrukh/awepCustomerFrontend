@@ -5,6 +5,7 @@ const CustomerTestimonialsCard = ({ testimonial }) => {
   return (
     <div>
       <Card
+        className="border"
         sx={{
           height: "206px",
           width: "267px",

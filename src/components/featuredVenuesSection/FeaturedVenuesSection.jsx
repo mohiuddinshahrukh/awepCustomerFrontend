@@ -15,13 +15,14 @@ const FeaturedVenuesSection = () => {
           size={"1.5rem"}
           weight={500}
         >
-          Wedding Venues
+          Top Rated Halls
         </Anchor>
         <Button
           component={Link}
           to="/allVenues"
           variant="outline"
           rightIcon={<IconArrowRight />}
+          className="buttonOutline"
         >
           View All Venues
         </Button>

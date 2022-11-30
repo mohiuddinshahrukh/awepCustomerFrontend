@@ -29,7 +29,7 @@ const FilterCards = () => {
                 cardTitle: "Easily Plan Your Wedding",
                 cardLinkTitle: "Get Started",
                 cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconChevronRight color="#775A97" />,
+                cardLinkIcon: <IconChevronRight className="fgColorF" />,
               },
             ]}
           />
@@ -38,33 +38,33 @@ const FilterCards = () => {
               {
                 cardTitle: "Venues",
                 cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconSearch size={50} color="#775A97" />,
+                cardLinkIcon: <IconSearch size={50} className="fgColorF" />,
               },
               {
                 cardTitle: "Vendors",
                 cardLinkPath: "/allVendors",
-                cardLinkIcon: <IconUsers size={50} color="#775A97" />,
+                cardLinkIcon: <IconUsers size={50} className="fgColorF" />,
               },
               {
                 cardTitle: "Featured",
                 cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconStars size={50} color="#775A97" />,
+                cardLinkIcon: <IconStars size={50} className="fgColorF" />,
               },
               {
                 cardTitle: "Viewed",
                 cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconEye size={50} color="#775A97" />,
+                cardLinkIcon: <IconEye size={50} className="fgColorF" />,
               },
               {
                 cardTitle: "Cards",
                 cardLinkPath: "/cardEditor",
-                cardLinkIcon: <IconLayoutCards size={50} color="#775A97" />,
+                cardLinkIcon: <IconLayoutCards size={50} className="fgColorF" />,
               },
               {
                 cardTitle: "Cities",
                 cardLinkPath: "/allVenues",
                 cardLinkIcon: (
-                  <IconBuildingSkyscraper size={50} color="#775A97" />
+                  <IconBuildingSkyscraper size={50} className="fgColorF" />
                 ),
               },
             ]}

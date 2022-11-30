@@ -18,6 +18,7 @@ const CustomerTestimonials = () => {
           Customer Testimonials
         </Anchor>
         <Button
+          className="buttonOutline"
           component={Link}
           to="/allVendors"
           variant="outline"

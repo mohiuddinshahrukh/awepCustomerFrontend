@@ -33,7 +33,7 @@ const EasilyPlanYourWeddingCard = ({ cardData }) => {
           {card.cardTitle}
         </Text>
         <Group mt={"md"}>
-          <Text weight={475} style={{ color: "#775A97" }} size={"lg"}>
+          <Text weight={475} size={"lg"}>
             {card.cardLinkTitle}
           </Text>
           {card.cardLinkIcon}

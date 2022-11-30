@@ -6,6 +6,9 @@ const TopNavbarButtons = ({ buttonsData }) => {
   const buttons = buttonsData?.map((button, index) => {
     return (
       <Button
+        className={
+          button.variant !== "outline" ? "bgColor hover" : "border fgColorF"
+        }
         key={index}
         variant={button.variant}
         component={Link}

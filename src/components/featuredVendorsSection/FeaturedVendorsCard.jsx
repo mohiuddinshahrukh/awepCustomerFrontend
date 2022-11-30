@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 const FeaturedVendorsCard = ({ vendor }) => {
   const card = (
     <Card
+      className="border"
       radius={"md"}
       sx={{
         borderRadius: "0.5rem",

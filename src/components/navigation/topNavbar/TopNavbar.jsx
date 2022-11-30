@@ -1,7 +1,7 @@
 import { Anchor, Container, Drawer, Group, Paper } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TopNavbarButtons from "./TopNavbarButtons";
 import TopNavbarDrawer from "./TopNavbarDrawer";
 import TopNavbarHamburger from "./TopNavbarHamburger";
@@ -10,7 +10,6 @@ import TopNavbarThemeToggle from "./TopNavbarThemeToggle";
 import TopNavbarUserProfileIcon from "./TopNavbarUserProfileIcon";
 
 const TopNavbar = () => {
-  let currentLocation = useLocation();
   const [drawerState, setDrawerState] = useState(false);
   const matches1027 = useMediaQuery("(min-width: 1027px)");
   return (
@@ -19,10 +18,6 @@ const TopNavbar = () => {
       m={0}
       style={{
         borderBottom: "1px solid #eaeaea",
-        // position: "sticky",
-        // top: 0,
-        // zIndex: 2,
-        // width: "100%",
       }}
     >
       {" "}
@@ -55,10 +50,6 @@ const TopNavbar = () => {
         <Group position="apart">
           {matches1027 ? (
             <Anchor
-              style={{
-                borderBottom:
-                  currentLocation.pathname === "/" ? "2.5px solid red" : "none",
-              }}
               size={"2rem"}
               weight={"bold"}
               variant="text"
@@ -74,6 +65,7 @@ const TopNavbar = () => {
           {matches1027 ? (
             <TopNavbarLinks
               linksData={[
+                { title: "Home", path: "/" },
                 { title: "Venues", path: "/allVenues" },
                 { title: "Vendors", path: "/allVendors" },
                 { title: "Card Editor", path: "/cardEditor" },
@@ -83,10 +75,6 @@ const TopNavbar = () => {
             />
           ) : (
             <Anchor
-              style={{
-                borderBottom:
-                  currentLocation.pathname === "/" ? "2.5px solid red" : "none",
-              }}
               size={"2rem"}
               weight={"bold"}
               variant="text"
@@ -114,15 +102,4 @@ const TopNavbar = () => {
     </Paper>
   );
 };
-
 export default TopNavbar;
-// {matches1027 ? (
-//   <TopNavbarButtons
-// buttonsData={[
-//   { title: "Sign In", path: "/signIn", variant: "filled" },
-//   { title: "Sign Up", path: "/signUp", variant: "outline" },
-// ]}
-//   />
-// ) : (
-//   <TopNavbarUserProfileIcon />
-// )}

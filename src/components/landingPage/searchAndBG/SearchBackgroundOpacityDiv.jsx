@@ -4,7 +4,7 @@ const SearchBackgroundOpacityDiv = () => {
   return (
     <div
       style={{
-        opacity: "25%",
+        opacity: "55%",
         zIndex: 2,
         backgroundColor: "black",
         height: "100%",

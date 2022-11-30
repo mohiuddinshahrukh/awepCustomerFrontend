@@ -155,7 +155,7 @@ const SearchBackground = ({ carouselImages }) => {
                 }${city ? "/city/" + city : ""}`
               : `/allVendors`
           }
-          style={{ backgroundColor: "#775A97" }}
+          className="button"
         >
           Search
         </Button>

@@ -15,9 +15,10 @@ const WeddingCards = () => {
           variant="text"
           size={"1.5rem"}
         >
-          Wedding Cards
+          Card Editor
         </Anchor>
         <Button
+          className="buttonOutline"
           component={Link}
           to="cardEditor"
           variant="outline"

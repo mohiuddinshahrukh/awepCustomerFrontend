@@ -18,6 +18,7 @@ const RegisteredCities = () => {
           Our Cities
         </Anchor>
         <Button
+          className="buttonOutline"
           component={Link}
           to="/allVendors"
           variant="outline"

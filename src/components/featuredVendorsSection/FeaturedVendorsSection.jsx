@@ -15,13 +15,14 @@ const FeaturedVendorsSection = () => {
           size={"1.5rem"}
           weight={500}
         >
-          Wedding Vendors
+          Top Rated Vendors
         </Anchor>
         <Button
           component={Link}
           to="/allVendors"
           variant="outline"
           rightIcon={<IconArrowRight />}
+          className="buttonOutline"
         >
           View All Vendors
         </Button>

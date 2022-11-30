@@ -34,6 +34,7 @@ import {
   IconUser,
   IconX,
 } from "@tabler/icons";
+import GoogleSignUpButon from "./GoogleSignUpButon";
 
 // NAVIGATION
 
@@ -323,7 +324,9 @@ const SignUp = ({
                     id="signInDiv"
                     hidden={hiddenButton}
                     style={{ transition: "2s", minHeight: "40px" }}
-                  ></Group>
+                  >
+                    <GoogleSignUpButon />
+                  </Group>
                 </Grid.Col>
 
                 <Grid.Col>

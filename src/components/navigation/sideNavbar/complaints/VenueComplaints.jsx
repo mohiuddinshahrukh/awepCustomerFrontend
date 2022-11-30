@@ -117,7 +117,9 @@ const VenueComplaints = () => {
         </Badge>
       </td>
       <td align="center">
-        <Text lineClamp={1}>{row?.complaintDescription}</Text>
+        <Text style={{ wordBreak: "break-all" }} lineClamp={1}>
+          {row?.complaintDescription}
+        </Text>
       </td>
 
       <td align="center">
@@ -167,7 +169,11 @@ const VenueComplaints = () => {
   const headers = (
     <tr>
       {headerData?.map((header, index) => {
-        return <th key={index}>{header}</th>;
+        return (
+          <th key={index}>
+            <span className="fgColor">{header}</span>
+          </th>
+        );
       })}
     </tr>
   );
@@ -206,7 +212,7 @@ const VenueComplaints = () => {
         withColumnBorders
       >
         <CustomeLoadingOverlay visible={visible} />
-        <thead>{headers}</thead>
+        <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
     </div>

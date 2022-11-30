@@ -153,7 +153,11 @@ const VendorFeedbacks = () => {
   const headers = (
     <tr>
       {headerData?.map((header, index) => {
-        return <th key={index}>{header}</th>;
+        return (
+          <th key={index}>
+            <span className="fgColor">{header}</span>
+          </th>
+        );
       })}
     </tr>
   );
@@ -193,7 +197,7 @@ const VendorFeedbacks = () => {
         withColumnBorders
       >
         <CustomeLoadingOverlay visible={visible} />
-        <thead>{headers}</thead>
+        <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
     </div>

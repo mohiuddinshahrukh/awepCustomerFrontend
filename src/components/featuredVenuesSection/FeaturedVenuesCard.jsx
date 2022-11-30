@@ -20,7 +20,6 @@ const FeaturedVenuesCard = ({ venue }) => {
           // transform: "scale(1.005)",
         },
         boxShadow: "0 2px 8px #00000026",
-
         transition: "box-shadow .2s",
         transitionDuration: "0.2s",
         transitionTimingFunction: "ease",
@@ -40,7 +39,7 @@ const FeaturedVenuesCard = ({ venue }) => {
         />
       </Card.Section>
       <Card.Section style={{ height: "154px" }}>
-        <Paper p={"lg"}>
+        <Paper p={"md"}>
           <Text lineClamp={1} weight={500} size={"lg"}>
             {venue?.venueName}
           </Text>

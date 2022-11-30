@@ -56,7 +56,11 @@ const VendorPayments = ({ vendorBookings }) => {
   const headers = (
     <tr>
       {headerData?.map((header, index) => {
-        return <th key={index}> {header}</th>;
+        return (
+          <th key={index}>
+            <span className="fgColor">{header}</span>
+          </th>
+        );
       })}
     </tr>
   );
@@ -73,7 +77,7 @@ const VendorPayments = ({ vendorBookings }) => {
         <ViewAllVendorPaymentReceipts singleInvoice={singleInvoice} />
       </Modal>
       <Table striped withBorder withColumnBorders>
-        <thead>{headers}</thead>
+        <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
     </div>

@@ -157,7 +157,11 @@ const VenueFeedbacks = () => {
   const headers = (
     <tr>
       {headerData?.map((header, index) => {
-        return <th key={index}>{header}</th>;
+        return (
+          <th key={index}>
+            <span className="fgColor">{header}</span>
+          </th>
+        );
       })}
     </tr>
   );
@@ -195,7 +199,7 @@ const VenueFeedbacks = () => {
         withBorder
         withColumnBorders
       >
-        <thead>{headers}</thead>
+        <thead className="bgColor">{headers}</thead>
         <tbody>
           <CustomeLoadingOverlay visible={visible} />
           {rows}

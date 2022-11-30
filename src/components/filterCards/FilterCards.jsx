@@ -51,7 +51,7 @@ const FilterCards = () => {
                 cardLinkIcon: <IconStars size={50} color="#775A97" />,
               },
               {
-                cardTitle: "Top Viewed",
+                cardTitle: "Viewed",
                 cardLinkPath: "/allVenues",
                 cardLinkIcon: <IconEye size={50} color="#775A97" />,
               },

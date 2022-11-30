@@ -13,7 +13,7 @@ const Carousal = ({ images }) => {
       }}
       withIndicators
       height="501px"
-      slideSize="80%"
+      slideSize="100%"
       slideGap={2}
       breakpoints={[
         { maxWidth: "md", slideSize: "50%" },

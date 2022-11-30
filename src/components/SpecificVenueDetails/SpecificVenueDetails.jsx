@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Pannellum } from "pannellum-react";
 import {
   Anchor,
+  Button,
   Container,
   createStyles,
   Divider,
@@ -15,6 +17,7 @@ import {
 import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
+
 import RatingStars from "../RatingStars/RatingStars";
 import Carousal from "../Carousal/Carousal";
 import AboutVenue from "../AboutVenue/AboutVenue";
@@ -56,6 +59,7 @@ const SpecificVenueDetails = () => {
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [idOfSpecificSubVenue, setIdOfSpecificSubVenue] = useState("");
+  const [viewPanorama, setViewPanorama] = useState(false);
   console.log("venueDetails are", venueDetails);
   const [open, setOpen] = useState(false);
   const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.id}`;
@@ -128,12 +132,32 @@ const SpecificVenueDetails = () => {
           setIsSignUp={setIsSignUp}
         />
       </Modal>
+
       <Modal opened={isSignUp} onClose={() => setIsSignUp(false)} fullScreen>
         <SignUp
           closeModal={true}
           setIsSignUp={setIsSignUp}
           setIsSignIn={setIsSignIn}
         />
+      </Modal>
+      <Modal
+        opened={viewPanorama}
+        onClose={() => setViewPanorama(false)}
+        fullScreen
+      >
+        <Pannellum
+          width="100%"
+          height="280px"
+          image={venueDetails?.panorama}
+          pitch={10}
+          yaw={50}
+          hfov={1000}
+          autoLoad
+          showZoomCtrl={true}
+          onLoad={() => {
+            console.log("panorama loaded");
+          }}
+        ></Pannellum>
       </Modal>
 
       <BreadCrumbs />
@@ -168,7 +192,13 @@ const SpecificVenueDetails = () => {
           alignItems: "center",
         }}
       >
-        <CustomButton title="Book Now" />
+        <Button
+          className={classes.button}
+          radius="md"
+          onClick={() => setViewPanorama(true)}
+        >
+          View Panorama
+        </Button>
         <Group spacing={0}>
           <RatingStars
             rating={venueDetails?.rating ? venueDetails?.rating : 5}

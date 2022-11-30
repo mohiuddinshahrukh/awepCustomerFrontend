@@ -35,6 +35,7 @@ const CustomerTestimonialsCarousel = () => {
   });
   return (
     <Carousel
+      draggable={false}
       styles={{ viewport: { padding: "20px 5px" } }}
       slideSize={"25% "}
       slideGap={"md"}

@@ -41,7 +41,7 @@ const FeaturedVendorsCard = ({ vendor }) => {
         />
       </Card.Section>
       <Card.Section>
-        <Paper p={"lg"}>
+        <Paper p={"md"}>
           <Text lineClamp={1} weight={500} size={"lg"}>
             {vendor?.vendorBusinessTitle}
           </Text>

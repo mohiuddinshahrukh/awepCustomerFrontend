@@ -12,6 +12,9 @@ code {
     monospace;
 } */
 
+* {
+  font-family: "Poppins", sans-serif;
+}
 .bgColor {
   background-color: #e60084;
 }

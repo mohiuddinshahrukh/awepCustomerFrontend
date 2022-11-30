@@ -45,7 +45,10 @@ function App() {
       toggleColorScheme={toggleColorScheme}
     >
       <MantineProvider
-        theme={{ colorScheme }}
+        theme={{
+          colorScheme,
+          fontFamily: "Poppins, sans-serif",
+        }}
         withGlobalStyles
         withNormalizeCSS
       >

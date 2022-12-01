@@ -10,6 +10,7 @@ import {
   Group,
   //   Image as mantineImage,
   NumberInput,
+  Select,
   Slider,
   //   Slider,
   Text,
@@ -35,6 +36,8 @@ import {
 } from "@tabler/icons";
 // import { AlignCenter, AlignLeft, AlignRight } from "tabler-icons-react";
 import QRCode from "react-qr-code";
+import { DatePicker } from "@mantine/dates";
+import moment from "moment";
 let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
@@ -59,11 +62,13 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
   const [eventType, setEventType] = useState(
     selectedBooking.eventType !== undefined ? selectedBooking.eventType : ""
   );
+  const [eventTypeOther, setEventTypeOther] = useState("");
   const [invitationName, setInvitationName] = useState(
     selectedBooking.customerName !== undefined
       ? selectedBooking.customerName
       : ""
   );
+  const [eventTimeDuration, setEventTimeDuration] = useState("LUNCH");
   const [groomName, setGroomName] = useState("");
   const [brideName, setBrideName] = useState("");
   const [eventTime, setEventTime] = useState(
@@ -72,7 +77,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
   const [eventDate, setEventDate] = useState(
     selectedBooking.bookingDate !== undefined
       ? selectedBooking.bookingDate.split("T")[0]
-      : ""
+      : Date.now()
   );
   const [eventRsvpName, setEventRsvpName] = useState("");
   const [venueName, setVenueName] = useState(
@@ -87,6 +92,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
   //  Y AXIS VALUES
   const [eventTypeY, setEventTypeY] = useState(100);
   const [invitationFromY, setInvitationFromY] = useState(150);
+  const [eventTimeDurationY, setEventTimeDurationY] = useState(175);
   const [groomNameY, setGroomNameY] = useState(200);
   const [brideNameY, setBrideNameY] = useState(250);
   const [eventTimeY, setEventTimeY] = useState(300);
@@ -115,6 +121,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       setEventDateX(getWidth - getWidth);
       setEventRsvpNameX(getWidth - getWidth);
       setVenueNameX(getWidth - getWidth);
+      setEventTimeDurationX(getWidth - getWidth);
     } else if (position === "center") {
       setCanvasAllTextAlign("center");
       setEventTypeX(getWidth / 2);
@@ -125,6 +132,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       setEventDateX(getWidth / 2);
       setEventRsvpNameX(getWidth / 2);
       setVenueNameX(getWidth / 2);
+      setEventTimeDurationX(getWidth / 2);
     } else {
       setCanvasAllTextAlign("right");
       setEventTypeX(getWidth);
@@ -135,17 +143,21 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       setEventDateX(getWidth);
       setEventRsvpNameX(getWidth);
       setVenueNameX(getWidth);
+      setEventTimeDurationX(getWidth);
     }
   };
   // X AXIS VALUES
   const [eventTypeX, setEventTypeX] = useState(getWidth / 2);
   const [invitationFromX, setInvitationFromX] = useState(getWidth / 2);
+  const [eventTimeDurationX, setEventTimeDurationX] = useState(getWidth / 2);
+
   const [groomNameX, setGroomNameX] = useState(getWidth / 2);
   const [brideNameX, setBrideNameX] = useState(getWidth / 2);
   const [eventTimeX, setEventTimeX] = useState(getWidth / 2);
   const [eventDateX, setEventDateX] = useState(getWidth / 2);
   const [eventRsvpNameX, setEventRsvpNameX] = useState(getWidth / 2);
   const [venueNameX, setVenueNameX] = useState(getWidth / 2);
+
   CanvasRenderingContext2D.prototype.wrapText = function (
     text,
     x,
@@ -182,7 +194,13 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       ctx.drawImage(img, 0, 0, getWidth, getHeight);
       ctx.font = `${getFontSize}px Poppins`;
       ctx.fillStyle = color;
-      ctx.wrapText(`${eventType}`, eventTypeX, eventTypeY, 500, 40);
+      ctx.wrapText(
+        `${eventType !== "OTHER" ? eventType : eventTypeOther}`,
+        eventTypeX,
+        eventTypeY,
+        500,
+        40
+      );
       ctx.wrapText(
         `${invitationName}`,
         invitationFromX,
@@ -190,10 +208,27 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
         500,
         40
       );
+      ctx.wrapText(
+        `${
+          eventTimeDuration === "LUNCH"
+            ? eventTimeDuration + " (3pm - 5pm)"
+            : eventTimeDuration + " 7PM - 10PM"
+        }`,
+        eventTimeDurationX,
+        eventTimeDurationY,
+        500,
+        40
+      );
       ctx.wrapText(`${groomName}`, groomNameX, groomNameY, 500, 40);
       ctx.wrapText(`${brideName}`, brideNameX, brideNameY, 500, 40);
       ctx.wrapText(`${eventTime}`, eventTimeX, eventTimeY, 500, 40);
-      ctx.wrapText(`${eventDate}`, eventDateX, eventDateY, 500, 40);
+      ctx.wrapText(
+        `${moment(new Date(eventDate)).format("DD-MMMM-YYYY")}`,
+        eventDateX,
+        eventDateY,
+        500,
+        40
+      );
       ctx.wrapText(`${venueName}`, venueNameX, venueNameY, 500, 40);
       ctx.wrapText(`${eventRsvpName}`, eventRsvpNameX, eventRsvpNameY, 500, 40);
 
@@ -204,6 +239,10 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
   }, [
     canvasAllTextAlign,
     color,
+    eventTimeDuration,
+    eventTimeDurationX,
+    eventTimeDurationY,
+    eventTypeOther,
     eventType,
     eventTypeX,
     eventTypeY,
@@ -240,10 +279,17 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       <Title my={"lg"} align="center">
         Wedding Card Editor
       </Title>
-      <Grid style={{}}>
+      <Grid
+        align={"center"}
+        className="border"
+        // style={{ border: "1px solid #eaeaea" }}
+      >
         <Grid.Col lg={12} style={{}}>
           <Grid>
-            <Grid.Col>
+            <Grid.Col
+              className="border"
+              // style={{ border: "1px solid #eaeaea" }}
+            >
               <Group position="right" align={"flex-end"}>
                 <Text>Download Card</Text>
                 <Anchor variant="text" href={downloadLink} download>
@@ -271,7 +317,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
           </Grid>
         </Grid.Col>
         <Grid.Col lg={6}>
-          <Group position="center" mt={"lg"}>
+          <Group align={"center"} position="center" mt={"lg"}>
             <div style={{ position: "relative" }}>
               <canvas ref={canvas} width={getWidth} height={670} />
               <div
@@ -297,14 +343,66 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
         <Grid.Col lg={6} style={{ borderLeft: "1px solid #eaeaea" }}>
           <Grid>
             <Grid.Col lg={6}>
-              <TextInput
+              <Select
+                data={[
+                  {
+                    value: "MEHNDI",
+                    label: "MEHNDI",
+                  },
+                  {
+                    value: "BARAT",
+                    label: "BARAT",
+                  },
+                  {
+                    value: "WALIMA",
+                    label: "WALIMA",
+                  },
+                  {
+                    value: "SEMINAR",
+                    label: "SEMINAR",
+                  },
+                  {
+                    value: "OTHER",
+                    label: "OTHER",
+                  },
+                ]}
                 styles={{ input: { textAlign: "center" } }}
                 placeholder="Enter Event Type"
                 label="Event Name"
                 value={eventType}
-                onChange={(event) => {
-                  setEventType(event.target.value);
+                onChange={setEventType}
+              />
+            </Grid.Col>
+            <Grid.Col lg={6}>
+              <TextInput
+                disabled={eventType === "OTHER" ? false : true}
+                styles={{ input: { textAlign: "center" } }}
+                placeholder="Enter Event Type"
+                label="Event Name "
+                value={eventTypeOther}
+                onChange={(e) => {
+                  setEventTypeOther(e.target.value);
                 }}
+              />
+            </Grid.Col>
+            <Grid.Col lg={6}>
+              <Select
+                data={[
+                  {
+                    value: "LUNCH",
+                    label: "Lunch",
+                  },
+                  {
+                    value: "DINNER",
+                    label: "Dinner",
+                  },
+                ]}
+                placeholder="Select Event Time"
+                styles={{ input: { textAlign: "center" } }}
+                label="Event Time"
+                defaultValue={eventTimeDuration}
+                value={eventTimeDuration}
+                onChange={setEventTimeDuration}
               />
             </Grid.Col>
             <Grid.Col lg={6}>
@@ -341,7 +439,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 }}
               />
             </Grid.Col>
-            <Grid.Col lg={6}>
+            {/*            <Grid.Col lg={6}>
               <TextInput
                 placeholder="Enter Event Time"
                 styles={{ input: { textAlign: "center" } }}
@@ -351,16 +449,14 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                   setEventTime(event.target.value);
                 }}
               />
-            </Grid.Col>
-            <Grid.Col lg={6}>
-              <TextInput
+            </Grid.Col>*/}
+            <Grid.Col lg={12}>
+              <DatePicker
                 placeholder="Enter Event Date"
                 styles={{ input: { textAlign: "center" } }}
                 label="Event Date"
                 value={eventDate}
-                onChange={(event) => {
-                  setEventDate(event.target.value);
-                }}
+                onChange={setEventDate}
               />
             </Grid.Col>
 
@@ -466,6 +562,15 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 min={getFontSize}
               />
               <SliderComponent
+                text="Adjust Event Time X Axis"
+                color="grape"
+                label="Set Event Time X Axis"
+                value={eventTimeDurationX}
+                max={getHeight}
+                setX={setEventTimeDurationX}
+                min={getFontSize}
+              />
+              <SliderComponent
                 text="Adjust Invitation From X Axis"
                 color="grape"
                 label="Set Invitation From X Axis"
@@ -493,7 +598,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 min={getFontSize}
               />
 
-              <SliderComponent
+              {/*              <SliderComponent
                 text="Adjust your EVENT TIME X Axis"
                 color="grape"
                 label="Set EVENT TIME X Axis"
@@ -501,7 +606,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 max={getWidth}
                 setX={setEventTimeX}
                 min={getFontSize}
-              />
+              />*/}
 
               <SliderComponent
                 text="Adjust your EVENT DATE X Axis"
@@ -560,6 +665,15 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 min={getFontSize}
               />
               <SliderComponent
+                text="Adjust Event Time Y Axis"
+                color="grape"
+                label="Set Event Time Y Axis"
+                value={eventTimeDurationY}
+                max={getHeight}
+                setX={setEventTimeDurationY}
+                min={getFontSize}
+              />
+              <SliderComponent
                 text="Adjust Invitation From Y Axis"
                 color="grape"
                 label="Set Invitation From Y Axis"
@@ -587,7 +701,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 min={getFontSize}
               />
 
-              <SliderComponent
+              {/*              <SliderComponent
                 text="Adjust your EVENT TIME Y Axis"
                 color="grape"
                 label="Set EVENT TIME Y Axis"
@@ -596,7 +710,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 setX={setEventTimeY}
                 min={getFontSize}
               />
-
+*/}
               <SliderComponent
                 text="Adjust your EVENT DATE Y Axis"
                 color="grape"

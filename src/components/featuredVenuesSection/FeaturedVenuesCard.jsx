@@ -1,14 +1,15 @@
-import { Card, Group, Image, Paper, Text } from "@mantine/core";
+import { Button, Card, Group, Image, Paper, Text } from "@mantine/core";
 import {
   IconBuildingFortress,
   IconCash,
   IconStar,
   IconUsers,
 } from "@tabler/icons";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const FeaturedVenuesCard = ({ venue }) => {
+  const currentLocation = useLocation();
   const card = (
     <Card
       className="border"
@@ -31,15 +32,43 @@ const FeaturedVenuesCard = ({ venue }) => {
       to={`/specificVenue${venue._id}`}
       style={{ width: "302px" }}
     >
-      <Card.Section style={{ height: "201px" }}>
-        <Image
-          height={"201px"}
-          width={"100%"}
-          fit={"cover"}
-          src={venue?.coverImage}
-        />
+      <Card.Section style={{ height: "201px", position: "relative" }}>
+        {currentLocation.pathname !== "/" && venue?.videos?.length > 0 ? (
+          <video
+            onMouseLeave={(e) => {
+              e.target.pause();
+            }}
+            onMouseEnter={(e) => {
+              e.target.play();
+            }}
+            style={{
+              objectFit: "cover",
+            }}
+            height={"201px"}
+            width={"100%"}
+            muted="muted"
+            src={venue?.videos[0]}
+          />
+        ) : (
+          <Image
+            height={"201px"}
+            width={"100%"}
+            fit={"cover"}
+            src={venue?.coverImage}
+          />
+        )}
+        <div style={{ position: "absolute", bottom: 0, right: 0, margin: 8 }}>
+          <Button
+            component={Link}
+            to={`/venueBooking/${venue._id}`}
+            className="button"
+            uppercase
+          >
+            Book Now
+          </Button>
+        </div>
       </Card.Section>
-      <Card.Section style={{ height: "154px" }}>
+      <Card.Section>
         <Paper p={"md"}>
           <Text lineClamp={1} weight={500} size={"lg"}>
             {venue?.venueName}

@@ -57,10 +57,15 @@ function App() {
             <Paper className="App">
               <TopNavbar />
               <Routes>
+                <Route path="/feedbacks" element={<>FEEDBACKS</>} />
                 <Route path="/signIn" element={<SignIn />} />
                 <Route path="/signUp" element={<SignUp />} />
                 <Route
                   path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
+                  element={<NewBookingFile />}
+                />
+                <Route
+                  path="/venueBooking/:venueId"
                   element={<NewBookingFile />}
                 />
                 <Route

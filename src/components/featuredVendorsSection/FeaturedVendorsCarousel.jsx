@@ -29,7 +29,7 @@ const FeaturedVendorsCarousel = () => {
   }, []);
 
   let carouselSlides =
-    landingPageVendors.length === 0
+    landingPageVendors?.length === 0
       ? [...Array(5).keys()]?.map((key) => (
           <Carousel.Slide key={key}>
             <CardSkeleton />

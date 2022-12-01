@@ -26,7 +26,7 @@ const CustomerTestimonialsCarousel = () => {
     fetchTestimonialsMehtod().then(setLandingPageTestimonials);
     return () => {};
   }, []);
-  const carouselSlides = landingPageTestimonials.map((testimonial, index) => {
+  const carouselSlides = landingPageTestimonials?.map((testimonial, index) => {
     return (
       <Carousel.Slide key={index}>
         <CustomerTestimonialsCard testimonial={testimonial} />

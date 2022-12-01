@@ -9,12 +9,12 @@ const TopNavbarThemeToggle = () => {
   return (
     <ActionIcon
       variant="outline"
-      size={"lg"}
-      color={dark ? "yellow" : "blue"}
+      className={dark ? "themeToggleDay" : "themeToggleNight"}
+      size={43}
       onClick={() => toggleColorScheme()}
       title="Toggle color scheme"
     >
-      {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+      {dark ? <IconSun size={25} /> : <IconMoonStars size={25} />}
     </ActionIcon>
   );
 };

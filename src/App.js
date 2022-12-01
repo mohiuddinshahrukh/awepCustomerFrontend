@@ -2,7 +2,7 @@
 import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddReview from "./components/AddReview/AddReview";
@@ -48,6 +48,10 @@ function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+  //
+
+  //
   return (
     <ColorSchemeProvider
       colorScheme={colorScheme}

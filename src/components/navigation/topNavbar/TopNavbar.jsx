@@ -8,7 +8,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TopNavbarButtons from "./TopNavbarButtons";
 import TopNavbarDrawer from "./TopNavbarDrawer";
@@ -17,10 +17,48 @@ import TopNavbarLinks from "./TopNavbarLinks";
 import TopNavbarThemeToggle from "./TopNavbarThemeToggle";
 import TopNavbarUserProfileIcon from "./TopNavbarUserProfileIcon";
 import logo from "../../../assets/awepLogo/3a.png";
+
+import NotificaitonsTab from "./NotificationsTab";
+import { socket } from "../../Socket/Socket";
 const TopNavbar = () => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
   const matches1027 = useMediaQuery("(min-width: 1027px)");
+  const [count, setCount] = useState(0);
+  const [allNotifications, setAllNotificaitons] = useState([]);
+  const [refreshNotifications, setRefreshNotifications] = useState(false);
+  useEffect(() => {
+    console.count("@USE EFFECT TRIGGERED");
+    const error = socket.on("error", (data) => {
+      console.log("ERROR", data);
+    });
+    console.log("SOCKET ERROR:", error);
+
+    socket.on("newConnection", (data) => {
+      console.log("@NC", data);
+      console.log("Just notifications", data?.Notificaiton);
+      setAllNotificaitons(data?.Notifications);
+    });
+    socket.on("receiveNotifications", (data) => {
+      let unreadCount = 0;
+      console.log("receiveNotification1");
+      if (data.userId === JSON.parse(localStorage.getItem("userData")).id) {
+        let newNotifications = data.notifications.filter((e, index) => {
+          if (!e.read && e.userId.toString() === data.userId.toString()) {
+            console.log("count 0:::", e, index);
+            unreadCount++;
+          }
+          return e.userId.toString() === data.userId.toString();
+        });
+        setAllNotificaitons(newNotifications);
+        setCount(unreadCount);
+
+        console.log("COUNt1", unreadCount);
+
+        console.log("receiveNotification1", newNotifications);
+      }
+    });
+  }, [socket, refreshNotifications, allNotifications]);
   return (
     <Paper
       sx={(theme) => ({
@@ -106,6 +144,12 @@ const TopNavbar = () => {
             </Anchor>
           )}
           <Group spacing={"xl"}>
+            <NotificaitonsTab
+              unreadCount={count}
+              allNotifications={allNotifications}
+              refreshNotifications={refreshNotifications}
+              setRefreshNotifications={setRefreshNotifications}
+            />
             <TopNavbarThemeToggle />
             {localStorage.getItem("userToken") ? (
               <TopNavbarUserProfileIcon />

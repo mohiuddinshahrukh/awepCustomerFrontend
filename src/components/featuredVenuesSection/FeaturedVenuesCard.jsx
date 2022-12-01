@@ -4,6 +4,7 @@ import {
   IconCash,
   IconStar,
   IconUsers,
+  IconVideo,
 } from "@tabler/icons";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -58,6 +59,23 @@ const FeaturedVenuesCard = ({ venue }) => {
             src={venue?.coverImage}
           />
         )}
+        {currentLocation.pathname !== "/" && venue?.videos?.length > 0 ? (
+          <Group
+            px={4}
+            align={"center"}
+            style={{
+              backgroundColor: "rgba(230,0,132,0.75)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              margin: 8,
+              borderRadius: "5px",
+            }}
+          >
+            <IconVideo color="white" />
+          </Group>
+        ) : null}
+
         <div style={{ position: "absolute", bottom: 0, right: 0, margin: 8 }}>
           <Button
             component={Link}

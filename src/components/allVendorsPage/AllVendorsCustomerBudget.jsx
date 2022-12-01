@@ -71,7 +71,6 @@ const AllVendorsCustomerBudget = ({
         />
       </Group>
       <Divider />
-
     </>
     //     </Accordion.Panel>
     //   </Accordion.Item>

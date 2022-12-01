@@ -82,6 +82,7 @@ const AdvanceFilterVenueServices = ({ allServices, setFilteredServices }) => {
       key={value.value}
       // mt="xs"
       // ml={33}
+      className="checkbox"
       label={value.label}
       // key={value.key}
       checked={value.checked}
@@ -101,7 +102,7 @@ const AdvanceFilterVenueServices = ({ allServices, setFilteredServices }) => {
       <Input.Wrapper label="Filter By Services">
         <Checkbox
           mt="xs"
-          color="green"
+          className="checkbox"
           checked={allChecked}
           indeterminate={indeterminate}
           label="Select All Services"

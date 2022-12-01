@@ -10,6 +10,7 @@ const AdvanceFilterVenueCapacity = ({ venueCapacity, setVenueCapacity }) => {
     <Checkbox.Group
       value={venueCapacity}
       onChange={setVenueCapacity}
+      className="checkbox"
       defaultValue={[]}
       orientation="vertical"
       label="Number of Guests"

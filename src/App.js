@@ -75,6 +75,7 @@ function App() {
                   path="/addreview/:provider/:bookingId"
                   element={<AddReview />}
                 />
+                <Route path="/addreview/:provider" element={<AddReview />} />
                 <Route
                   path="/updateReview/:provider/:feedbackId"
                   element={<AddReview />}

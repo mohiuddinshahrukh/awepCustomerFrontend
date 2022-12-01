@@ -245,7 +245,7 @@ const SpecificVenueDetails = () => {
           />
           <Tabs defaultValue="About" py="xl" color="grape" keepMounted={false}>
             <Paper className={classes.stickySThings}>
-              <Tabs.List py="md">
+            <Tabs.List py="md">
                 <Tabs.Tab icon={<IconMessageCircle size={14} />} value="About">
                   About
                 </Tabs.Tab>

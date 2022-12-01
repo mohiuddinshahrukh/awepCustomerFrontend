@@ -13,6 +13,7 @@ import {
   Tabs,
   Text,
   Title,
+  Skeleton,
 } from "@mantine/core";
 import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
@@ -30,7 +31,12 @@ import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
 import { useParams } from "react-router-dom";
 import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
-import { IconMessageCircle, IconSettings } from "@tabler/icons";
+import {
+  IconMessageCircle,
+  IconSettings,
+  IconPhoto,
+  IconMap2,
+} from "@tabler/icons";
 import SignIn from "../userProfiling/SignIn";
 import SignUp from "../userProfiling/SignUp";
 const useStyles = createStyles(() => ({
@@ -171,8 +177,29 @@ const SpecificVenueDetails = () => {
           alignItems: "center",
         }}
       >
-        <Text color="dimmed">{venueDetails?.venueCity}, Pakistan</Text>
-        <Text underline>View Map</Text>
+        <Anchor
+          href={`https://maps.google.com/?q=${venueDetails?.pinLocation?.lat},${venueDetails?.pinLocation?.lng}`}
+          target="_blank"
+          color="dimmed"
+        >
+          <Group>
+            <IconMap2 />
+            {venueDetails ? (
+              <Text color="dimmed">
+                {`${venueDetails?.venueAddress?.concat(":") || ""} ${
+                  venueDetails?.venueCity?.toUpperCase()
+                    ? venueDetails?.venueCity
+                        ?.toUpperCase()
+                        ?.concat(", Pakistan")
+                    : ""
+                }`}
+              </Text>
+            ) : (
+              <Skeleton height={8} mt={6} radius="xl" />
+            )}
+          </Group>
+        </Anchor>
+        {/* <Text underline>View Map</Text>
         <Text underline>Phone Number</Text>
         <Anchor
           // component={Link}
@@ -182,70 +209,98 @@ const SpecificVenueDetails = () => {
           underline
         >
           Visit Website
-        </Anchor>
+        </Anchor> */}
       </Group>
-      <Group
-        spacing="md"
-        pt="sm"
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          className={classes.button}
-          radius="md"
-          onClick={() => setViewPanorama(true)}
-        >
-          View Panorama
-        </Button>
-        <Group spacing={0}>
-          <RatingStars
-            rating={venueDetails?.rating ? venueDetails?.rating : 5}
-            ratingCount={
-              venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
-            }
-          />
-        </Group>
-        <Text color="dimmed" underline>
-          {venueDetails?.ratingCount ? venueDetails?.ratingCount : 0}{" "}
-          {venueDetails?.ratingCount === 1 ? "Review" : "Reviews"}
-        </Text>
-        <Text>
-          Menus From{" "}
-          <b>
-            Rs.{" "}
-            {Math.min.apply(
-              Math,
-              venueDetails?.menus?.map((e) => e.price)
-            )}
-          </b>
-        </Text>
-        <Text>
-          Guests {""}
-          <b>
-            {Math.min.apply(
-              Math,
-              venueDetails?.subVenues?.map((e) => e.subVenueMinCapacity)
-            )}
-          </b>{" "}
-          to{" "}
-          <b>
-            {Math.max.apply(
-              Math,
-              venueDetails?.subVenues?.map((e) => e.subVenueCapacity)
-            )}
-          </b>
-        </Text>
-      </Group>
+
       <Grid pt="md">
+        <Grid.Col hidden={true}>
+          <Tabs defaultValue="gallery">
+            <Tabs.List>
+              <Tabs.Tab value="gallery" icon={<IconPhoto size={14} />}>
+                Gallery
+              </Tabs.Tab>
+              <Tabs.Tab value="messages" icon={<IconMessageCircle size={14} />}>
+                Messages
+              </Tabs.Tab>
+              <Tabs.Tab value="settings" icon={<IconSettings size={14} />}>
+                Settings
+              </Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel value="gallery" pt="xs">
+              Gallery tab content
+            </Tabs.Panel>
+
+            <Tabs.Panel value="messages" pt="xs">
+              Messages tab content
+            </Tabs.Panel>
+
+            <Tabs.Panel value="settings" pt="xs">
+              Settings tab content
+            </Tabs.Panel>
+          </Tabs>
+        </Grid.Col>
         <Grid.Col lg={9}>
           <Carousal
             images={venueDetails?.images ? venueDetails?.images : ["", ""]}
           />
+          <Group
+            spacing="md"
+            pt="sm"
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              className={classes.button}
+              radius="md"
+              onClick={() => setViewPanorama(true)}
+            >
+              View Panorama
+            </Button>
+            <Group spacing={0}>
+              <RatingStars
+                rating={venueDetails?.rating ? venueDetails?.rating : 5}
+                ratingCount={
+                  venueDetails?.ratingCount ? venueDetails?.ratingCount : 0
+                }
+              />
+            </Group>
+            <Text color="dimmed" underline>
+              {venueDetails?.ratingCount ? venueDetails?.ratingCount : 0}{" "}
+              {venueDetails?.ratingCount === 1 ? "Review" : "Reviews"}
+            </Text>
+            <Text>
+              Menus From{" "}
+              <b>
+                Rs.{" "}
+                {Math.min.apply(
+                  Math,
+                  venueDetails?.menus?.map((e) => e.price)
+                )}
+              </b>
+            </Text>
+            <Text>
+              Guests {""}
+              <b>
+                {Math.min.apply(
+                  Math,
+                  venueDetails?.subVenues?.map((e) => e.subVenueMinCapacity)
+                )}
+              </b>{" "}
+              to{" "}
+              <b>
+                {Math.max.apply(
+                  Math,
+                  venueDetails?.subVenues?.map((e) => e.subVenueCapacity)
+                )}
+              </b>
+            </Text>
+          </Group>
           <Tabs defaultValue="About" py="xl" color="grape" keepMounted={false}>
             <Paper className={classes.stickySThings}>
-            <Tabs.List py="md">
+              <Tabs.List py="md">
                 <Tabs.Tab icon={<IconMessageCircle size={14} />} value="About">
                   About
                 </Tabs.Tab>
@@ -379,9 +434,7 @@ const SpecificVenueDetails = () => {
                         lng: 70,
                       }
                 }
-                address={
-                  venueDetails?.venueAddress ? venueDetails?.venueAddress : ""
-                }
+                address={venueDetails?.venueAddress || ""}
                 pinGeoLocation={"null"}
               />
             </Tabs.Panel>

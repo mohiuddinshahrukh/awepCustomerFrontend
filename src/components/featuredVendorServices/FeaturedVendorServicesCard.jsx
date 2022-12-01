@@ -20,11 +20,6 @@ import {
 import React from "react";
 
 const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor:
-      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-  },
-
   title: {
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
   },
@@ -41,7 +36,7 @@ const FeaturedVendorServicesCard = ({ service }) => {
   const { classes, theme } = useStyles();
   console.log("#VENDOR SERVICES", service);
   return (
-    <Card withBorder p="lg" radius="md" className={classes.card}>
+    <Card p="lg" radius="md" className="border">
       <Card.Section mb="sm">
         <Image
           src={service.coverImage}

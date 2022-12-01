@@ -10,7 +10,7 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
       <Group position="apart">
         <Anchor
           component={Link}
-          to="/allVenues"
+          to="/allVendors"
           variant="text"
           size={"1.5rem"}
           weight={500}
@@ -19,7 +19,7 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
         </Anchor>
         <Button
           component={Link}
-          to="/allVenues"
+          to="/allVendors"
           variant="outline"
           rightIcon={<IconArrowRight />}
           className="buttonOutline"

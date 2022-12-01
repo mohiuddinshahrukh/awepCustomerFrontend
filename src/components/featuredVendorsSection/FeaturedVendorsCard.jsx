@@ -1,4 +1,4 @@
-import { Card, Group, Image, Paper, Text } from "@mantine/core";
+import { Button, Card, Group, Image, Paper, Text } from "@mantine/core";
 import {
   IconBuildingStore,
   IconCash,
@@ -33,13 +33,23 @@ const FeaturedVendorsCard = ({ vendor }) => {
       to={`/specificVendor${vendor._id}`}
       style={{ width: "302px" }}
     >
-      <Card.Section style={{ height: "201px" }}>
+      <Card.Section style={{ height: "201px", position: "relative" }}>
         <Image
           height={"201px"}
           width={"100%"}
           fit={"cover"}
           src={vendor?.coverImage}
         />
+        <div style={{ position: "absolute", bottom: 0, right: 0, margin: 8 }}>
+          <Button
+            component={Link}
+            to={`/vendorBooking/vendorId/${vendor._id}`}
+            className="button"
+            uppercase
+          >
+            Book Now
+          </Button>
+        </div>
       </Card.Section>
       <Card.Section>
         <Paper p={"md"}>

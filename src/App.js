@@ -99,6 +99,10 @@ function App() {
                   path="/vendorBooking/:eventType/:date/:time/:vendorId"
                   element={<NewVendorBookingFile />}
                 />
+                <Route
+                  path="/vendorBooking/vendorId/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
                 <Route path="/" element={<LandingPageMain />} />
                 <Route path="/cardEditor" element={<CustomerCardEditor />} />
                 <Route path="/allVendors" element={<AllVendorsPage />} />

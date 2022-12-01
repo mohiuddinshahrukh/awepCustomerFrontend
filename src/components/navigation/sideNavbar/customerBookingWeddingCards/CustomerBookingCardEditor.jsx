@@ -56,32 +56,28 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
   // HOOKS
   const [image, setImage] = useState(pictureBackground[0]);
   const [eventType, setEventType] = useState(
-    selectedBooking.eventType !== undefined
-      ? selectedBooking.eventType
-      : "Enter Event Type"
+    selectedBooking.eventType !== undefined ? selectedBooking.eventType : ""
   );
   const [invitationName, setInvitationName] = useState(
     selectedBooking.customerName !== undefined
       ? selectedBooking.customerName
-      : "Enter Invitation Name"
+      : ""
   );
-  const [groomName, setGroomName] = useState("Enter Groom Name");
-  const [brideName, setBrideName] = useState("Enter Bride Name");
+  const [groomName, setGroomName] = useState("");
+  const [brideName, setBrideName] = useState("");
   const [eventTime, setEventTime] = useState(
-    selectedBooking.bookingTime !== undefined
-      ? selectedBooking.bookingTime
-      : "Enter Event Time"
+    selectedBooking.bookingTime !== undefined ? selectedBooking.bookingTime : ""
   );
   const [eventDate, setEventDate] = useState(
     selectedBooking.bookingDate !== undefined
       ? selectedBooking.bookingDate.split("T")[0]
-      : "Enter Booking Date"
+      : ""
   );
-  const [eventRsvpName, setEventRsvpName] = useState("Enter RSVP Name");
+  const [eventRsvpName, setEventRsvpName] = useState("");
   const [venueName, setVenueName] = useState(
     selectedBooking.venueName !== undefined
       ? selectedBooking.venueName + " " + selectedBooking.venueId.venueAddress
-      : "Enter Venue Name"
+      : ""
   );
 
   //
@@ -282,6 +278,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
             <Grid.Col lg={6}>
               <TextInput
                 styles={{ input: { textAlign: "center" } }}
+                placeholder="Enter Event Type"
                 label="Event Name"
                 value={eventType}
                 onChange={(event) => {
@@ -291,6 +288,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
             </Grid.Col>
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Invitation From"
                 styles={{ input: { textAlign: "center" } }}
                 label="Invitaiton From"
                 value={invitationName}
@@ -302,6 +300,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
 
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Groom Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="Groom Name"
                 value={groomName}
@@ -312,6 +311,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
             </Grid.Col>
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Bride Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="Bride Name"
                 value={brideName}
@@ -322,6 +322,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
             </Grid.Col>
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Event Time"
                 styles={{ input: { textAlign: "center" } }}
                 label="Time"
                 value={eventTime}
@@ -332,6 +333,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
             </Grid.Col>
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Event Date"
                 styles={{ input: { textAlign: "center" } }}
                 label="Event Date"
                 value={eventDate}
@@ -343,6 +345,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
 
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Venue Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="Venue Name"
                 value={venueName}
@@ -353,6 +356,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
             </Grid.Col>
             <Grid.Col lg={6}>
               <TextInput
+                placeholder="Enter Rsvp Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="RSVP"
                 value={eventRsvpName}

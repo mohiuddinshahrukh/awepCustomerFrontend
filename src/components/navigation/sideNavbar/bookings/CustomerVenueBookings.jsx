@@ -174,6 +174,14 @@ const CustomerVenueBookings = () => {
           )}
 
           <ActionIcon
+            disabled={
+              row.bookingStatus === "CANCELLED"
+                ? true
+                : row?.paymentStatus === "ADVANCE PAID" &&
+                  row?.price?.remainingAmount > 0
+                ? false
+                : true
+            }
             color={
               row.bookingStatus === "CANCELLED"
                 ? "red"

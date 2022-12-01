@@ -11,13 +11,13 @@ const RegisteredCities = () => {
         <Anchor
           weight={500}
           component={Link}
-          to="/allVendors"
+          to="/allVenues"
           variant="text"
           size={"1.5rem"}
         >
           Our Cities
         </Anchor>
-        <Button
+        {/* <Button
           className="buttonOutline"
           component={Link}
           to="/allVendors"
@@ -25,7 +25,7 @@ const RegisteredCities = () => {
           rightIcon={<IconArrowRight />}
         >
           View All Cities
-        </Button>
+        </Button>*/}
       </Group>
 
       <RegisteredCitiesCarousel />

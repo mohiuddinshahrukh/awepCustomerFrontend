@@ -1,10 +1,13 @@
 import { Card, Group, Image, Text } from "@mantine/core";
 import { IconBuildingFortress, IconMap, IconUser } from "@tabler/icons";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const RegisteredCitiesCard = ({ citiesCard }) => {
   return (
     <Card
+      component={Link}
+      to={`/allVenues/city/${citiesCard?.city?.toLowerCase()}`}
       p={0}
       className="border"
       sx={{

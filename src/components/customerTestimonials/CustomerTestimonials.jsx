@@ -11,7 +11,7 @@ const CustomerTestimonials = ({ landingPageTestimonials }) => {
         <Anchor
           weight={500}
           component={Link}
-          to="/allVendors"
+          to="#"
           variant="text"
           size={"1.5rem"}
         >
@@ -20,11 +20,11 @@ const CustomerTestimonials = ({ landingPageTestimonials }) => {
         <Button
           className="buttonOutline"
           component={Link}
-          to="/allVendors"
+          to="/addreview/admin"
           variant="outline"
           rightIcon={<IconArrowRight />}
         >
-          View All Testimonials
+          Add Your Testimonial
         </Button>
       </Group>
 

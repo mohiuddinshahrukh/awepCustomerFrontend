@@ -47,3 +47,12 @@ code {
   background-color: #e60084;
   color: white;
 }
+
+.themeToggleNight {
+  border: 1px solid #e60084;
+  color: #e60084;
+}
+.themeToggleDay {
+  border: 1px solid #e60084;
+  color: orange;
+}

@@ -61,7 +61,19 @@ const SearchBackground = ({ carouselImages }) => {
           color="white"
           style={{ fontVariant: "small-caps" }}
         >
-          Making Your Event A Memorable One
+          <b className="fgColorF">Making</b> Your Event A Memorable{" "}
+          <b className="fgColorF">One</b>
+        </Text>
+        <Text
+          size={"2.5vw"}
+          weight="bold"
+          align="center"
+          color="white"
+          style={{ fontVariant: "small-caps" }}
+        >
+          <b className="fgColorF">F</b>ind The Best{" "}
+          <b className="fgColorF">N</b>earest To <b className="fgColorF">Y</b>
+          our Imagination<b className="fgColorF">!</b>
         </Text>
       </div>
       <SearchBackgroundOpacityDiv />
@@ -156,6 +168,7 @@ const SearchBackground = ({ carouselImages }) => {
               : `/allVendors`
           }
           className="button"
+          uppercase
         >
           Search
         </Button>

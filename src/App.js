@@ -35,6 +35,7 @@ import ContactUs from "./components/contactUs/ContactUs.jsx";
 import AboutUs from "./components/aboutUs/AboutUs";
 import FiveCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
 import CustomerBookingWEddingCards from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingWeddingCards";
+import TopNavbarStrip from "./components/navigation/topNavbarStrip/TopNavbarStrip";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -55,6 +56,7 @@ function App() {
         <NotificationsProvider>
           <SocketContext.Provider value={socket}>
             <Paper className="App">
+              <TopNavbarStrip />
               <TopNavbar />
               <Routes>
                 <Route path="/signIn" element={<SignIn />} />

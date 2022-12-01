@@ -283,6 +283,7 @@ const AddReview = () => {
     }
 
     console.log("@@@body Update", body);
+    console.log("PARAMS: ", params);
 
     const headers = {
       "Content-Type": "application/json",

@@ -105,7 +105,7 @@ const AllVendorsPage = () => {
     console.log("Filtering vendors", params.city);
 
     //filter vendors according to the filter options
-    let filteredVendor = allVendors.filter((vendor) => {
+    let filteredVendor = allVendors?.filter((vendor) => {
       //filter by vendor city
 
       if (city !== "" && city !== "all") {
@@ -154,6 +154,20 @@ const AllVendorsPage = () => {
           }
         });
         if (!priceMatch) {
+          return false;
+        }
+      }
+
+      //filter vendors according to the selected categories
+      console.log("categories", categories);
+      if (categories?.length > 0) {
+        let categoryMatch = false;
+        vendor?.vendorCategories?.forEach((cat) => {
+          if (categories.includes(cat.categoryTitle)) {
+            categoryMatch = true;
+          }
+        });
+        if (!categoryMatch) {
           return false;
         }
       }
@@ -245,9 +259,12 @@ const AllVendorsPage = () => {
                 Advance Filters
               </Text>
               <AdvanceFilterByCities city={city} setCity={setCity} />
-              <AllVendorDuration time={time} setTime={setTime} />
+              <AllVendorCategories
+                categories={categories}
+                setCategories={setCategories}
+              />
+              {/* <AllVendorDuration time={time} setTime={setTime} /> */}
 
-              <AllRatingFilter rating={rating} setRating={setRating} />
               <AllVendorsCustomerBudget
                 minPrice={minPrice}
                 setMinPrice={setMinPrice}
@@ -256,14 +273,11 @@ const AllVendorsPage = () => {
                 setMinPriceFilter={setMinPriceFilter}
                 setMaxPriceFilter={setMaxPriceFilter}
               />
-              {/* <AllVendorCategories
-                categories={categories}
-                setCategories={setCategories}
-              /> */}
+              <AllRatingFilter rating={rating} setRating={setRating} />
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
-            {allVendors.length > 0 ? (
+            {allVendors?.length > 0 ? (
               <AllVendorsGrid allVendors={filteredVendors} />
             ) : (
               <FiveCardsSkeleton />

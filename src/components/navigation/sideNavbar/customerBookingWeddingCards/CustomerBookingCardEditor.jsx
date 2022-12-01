@@ -34,7 +34,7 @@ import {
   IconDownload,
 } from "@tabler/icons";
 // import { AlignCenter, AlignLeft, AlignRight } from "tabler-icons-react";
-
+import QRCode from "react-qr-code";
 let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
@@ -51,6 +51,7 @@ const pictureBackground = [
 // COMPONENT
 let id = "";
 const CustomerBookingCardEditor = ({ selectedBooking }) => {
+  const [qrCode, setQrCode] = useState("");
   const canvas = useRef(null);
   const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
   // HOOKS
@@ -195,6 +196,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       ctx.wrapText(`${eventDate}`, eventDateX, eventDateY, 500, 40);
       ctx.wrapText(`${venueName}`, venueNameX, venueNameY, 500, 40);
       ctx.wrapText(`${eventRsvpName}`, eventRsvpNameX, eventRsvpNameY, 500, 40);
+
       url = "";
       url += canvas.current.toDataURL();
       setDownload(canvas.current.toDataURL());
@@ -270,7 +272,26 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
         </Grid.Col>
         <Grid.Col lg={6}>
           <Group position="center" mt={"lg"}>
-            <canvas ref={canvas} width={getWidth} height={670} />
+            <div style={{ position: "relative" }}>
+              <canvas ref={canvas} width={getWidth} height={670} />
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  height: "auto",
+                  maxWidth: 75,
+                  width: "100%",
+                }}
+              >
+                <QRCode
+                  size={256}
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  value={qrCode}
+                  viewBox={`0 0 256 256`}
+                />
+              </div>
+            </div>
           </Group>
         </Grid.Col>
         <Grid.Col lg={6} style={{ borderLeft: "1px solid #eaeaea" }}>
@@ -361,6 +382,15 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 label="RSVP"
                 value={eventRsvpName}
                 onChange={(event) => setEventRsvpName(event.target.value)}
+              />
+            </Grid.Col>
+            <Grid.Col lg={12}>
+              <TextInput
+                placeholder="Enter Location For QR Code"
+                styles={{ input: { textAlign: "center" } }}
+                label="URL"
+                value={qrCode}
+                onChange={(event) => setQrCode(event.target.value)}
               />
             </Grid.Col>
           </Grid>

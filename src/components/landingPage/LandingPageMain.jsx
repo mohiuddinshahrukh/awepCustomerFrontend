@@ -12,10 +12,10 @@ import img8 from "../../assets/searchBackgroundCarouselImages/8.jpg";
 import img9 from "../../assets/searchBackgroundCarouselImages/9.jpg";
 import img10 from "../../assets/searchBackgroundCarouselImages/10.jpg";
 import img11 from "../../assets/searchBackgroundCarouselImages/11.jpg";
-import img12 from "../../assets/searchBackgroundCarouselImages/11.jpg";
-import img13 from "../../assets/searchBackgroundCarouselImages/11.jpg";
-import img14 from "../../assets/searchBackgroundCarouselImages/11.jpg";
-import img15 from "../../assets/searchBackgroundCarouselImages/11.jpg";
+import img12 from "../../assets/searchBackgroundCarouselImages/12.jpg";
+import img13 from "../../assets/searchBackgroundCarouselImages/13.jpg";
+import img14 from "../../assets/searchBackgroundCarouselImages/14.jpg";
+import img15 from "../../assets/searchBackgroundCarouselImages/15.jpg";
 
 import FilterCards from "../filterCards/FilterCards";
 import FeaturedVenuesSection from "../featuredVenuesSection/FeaturedVenuesSection";

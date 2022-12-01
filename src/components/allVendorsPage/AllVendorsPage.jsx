@@ -4,6 +4,7 @@ import {
   Container,
   Grid,
   Group,
+  Image,
   Paper,
   Select,
   Stack,
@@ -11,9 +12,24 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import moment from "moment";
-
+import img1 from "../../assets/searchBackgroundCarouselImages/1.jpg";
+import img2 from "../../assets/searchBackgroundCarouselImages/2.jpg";
+import img3 from "../../assets/searchBackgroundCarouselImages/3.jpg";
+import img4 from "../../assets/searchBackgroundCarouselImages/4.jpg";
+import img5 from "../../assets/searchBackgroundCarouselImages/5.jpg";
+import img6 from "../../assets/searchBackgroundCarouselImages/6.jpg";
+import img7 from "../../assets/searchBackgroundCarouselImages/7.jpg";
+import img8 from "../../assets/searchBackgroundCarouselImages/8.jpg";
+import img9 from "../../assets/searchBackgroundCarouselImages/9.jpg";
+import img10 from "../../assets/searchBackgroundCarouselImages/10.jpg";
+import img11 from "../../assets/searchBackgroundCarouselImages/11.jpg";
+import img12 from "../../assets/searchBackgroundCarouselImages/12.jpg";
+import img13 from "../../assets/searchBackgroundCarouselImages/13.jpg";
+import img14 from "../../assets/searchBackgroundCarouselImages/14.jpg";
+import img15 from "../../assets/searchBackgroundCarouselImages/15.jpg";
 import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg";
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
@@ -27,6 +43,8 @@ import AllVendorRatingFilter from "./AllVendorRatingFilter";
 import AdvanceFilterByCities from "../allVenuesPage/AdvanceFilterByCities";
 import AllRatingFilter from "../allVenuesPage/AllRatingFilter";
 import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
+import SearchBackgroundOpacityDiv from "../landingPage/searchAndBG/SearchBackgroundOpacityDiv";
+import { Carousel } from "@mantine/carousel";
 
 const AllVendorsPage = () => {
   const params = useParams();
@@ -177,27 +195,64 @@ const AllVendorsPage = () => {
     console.log("Filtered vendors:", filteredVendor);
     setFilteredVendors(filteredVendor);
   };
+  const autoplay = useRef(Autoplay({ delay: 10000 }));
+
   const matches1026 = useMediaQuery("(max-width: 1026px)");
   return (
     <Paper>
       <Paper
         withBorder
         style={{
-          backgroundImage: `url(${searchBackground})`,
-          // backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
           height: "35vh",
           position: "relative",
         }}
       >
+        <Carousel
+          style={{ position: "absolute", width: "100%" }}
+          loop
+          align="start"
+          height={"35vh"}
+          orientation="vertical"
+          draggable={false}
+          withControls={false}
+          plugins={[autoplay.current]}
+          //   onMouseEnter={autoplay.current.stop}
+          //   onMouseLeave={autoplay.current.play}
+
+          //   slideGap="md"
+        >
+          {[
+            { src: img1 },
+            { src: img2 },
+            { src: img3 },
+            { src: img4 },
+            { src: img5 },
+            { src: img6 },
+            { src: img7 },
+            { src: img8 },
+            { src: img9 },
+            { src: img10 },
+            { src: img11 },
+            { src: img12 },
+            { src: img13 },
+            { src: img14 },
+            { src: img15 },
+          ]?.map((image, index) => {
+            return (
+              <Carousel.Slide key={index}>
+                <Image height={"35vh"} src={image.src} />
+              </Carousel.Slide>
+            );
+          })}
+        </Carousel>
+        <SearchBackgroundOpacityDiv />
         <Center style={{ width: "100%", height: "100%" }}>
           <Group
             style={{ width: "100%", height: "100%" }}
             noWrap
             position="center"
           >
-            <Group align={"flex-end"}>
+            <Group style={{ zIndex: 10 }} align={"flex-end"}>
               <Select
                 size={"lg"}
                 styles={{ label: { color: "white" } }}
@@ -240,10 +295,11 @@ const AllVendorsPage = () => {
                 ]}
               />
               <Button
+                className="button"
+                uppercase
                 size={"lg"}
                 component={Link}
                 // to={searchSupplier === "vendor" ? "/allVenues" : "/allVendors"}
-                style={{ backgroundColor: "#775A97" }}
               >
                 Search
               </Button>

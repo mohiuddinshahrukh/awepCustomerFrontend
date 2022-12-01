@@ -26,6 +26,7 @@ import WeddingCards from "../weddingCards/WeddingCards";
 import RegisteredCities from "../registeredCities/RegisteredCities";
 import axios from "axios";
 import FeaturedVendorServicesSection from "../featuredVendorServices/FeaturedVendorServicesSection";
+import FeaturedMenus from "../featuredMenusSection/FeaturedMenus";
 
 const fetchVenuesMethod = async () => {
   try {
@@ -74,14 +75,22 @@ const LandingPageMain = () => {
       />
 
       <FilterCards />
-      <FeaturedVenuesSection />
-      <FeaturedVendorsSection />
+      <FeaturedVenuesSection
+        landingPageVenues={allData?.data?.topRatedVenues}
+      />
+      <FeaturedVendorsSection
+        landingPageVendors={allData?.data?.topRatedVendors}
+      />
       <FeaturedVendorServicesSection
         vendorServices={allData?.data?.mostBookedVendorPackages}
       />
+
+      <FeaturedMenus landingPageMenus={allData?.data?.mostBookedMenus} />
       {/* <RealWeddingsSection />*/}
       <WeddingCards />
-      <CustomerTestimonials />
+      <CustomerTestimonials
+        landingPageTestimonials={allData?.data?.testimonials}
+      />
       <RegisteredCities />
     </Paper>
   );

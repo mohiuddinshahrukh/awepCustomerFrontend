@@ -4,44 +4,21 @@ import { Carousel } from "@mantine/carousel";
 import FeaturedVenuesCard from "./FeaturedVenuesCard";
 import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import CardSkeleton from "../skeletons/CardSkeleton";
-const fetchVenuesMethod = async () => {
-  try {
-    const apiResponse = await axios.get(
-      "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
-    );
-    if (apiResponse.data.status === "success") {
-      console.log("API RESPONSE SUCCESS: ", apiResponse);
-      return apiResponse.data.data.topRatedVenues;
-    } else if (apiResponse.data.status === "error") {
-      console.log("API RESPONSE SUCCESS: ", apiResponse);
-    } else {
-      console.log("DONT KNOW THE ERROR, THIS SHOULDNT PRINT!");
-    }
-  } catch (error) {
-    console.log("fetchVenuesMethod API CALLING ERROR:", error);
-  }
-};
 
-const FeaturedVenuesCarousel = () => {
-  const [landingPageVenues, setLandingPageVenues] = useState([]);
-  useEffect(() => {
-    fetchVenuesMethod().then(setLandingPageVenues);
-    return () => {};
-  }, []);
-  let carouselSlides =
-    landingPageVenues?.length === 0
-      ? [...Array(5).keys()]?.map((key) => (
-          <Carousel.Slide key={key}>
-            <CardSkeleton />
+const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
+  let carouselSlides = !landingPageVenues
+    ? [...Array(5).keys()]?.map((key) => (
+        <Carousel.Slide key={key}>
+          <CardSkeleton />
+        </Carousel.Slide>
+      ))
+    : landingPageVenues?.map((venue, index) => {
+        return (
+          <Carousel.Slide key={index}>
+            <FeaturedVenuesCard venue={venue} />
           </Carousel.Slide>
-        ))
-      : landingPageVenues?.map((venue, index) => {
-          return (
-            <Carousel.Slide key={index}>
-              <FeaturedVenuesCard venue={venue} />
-            </Carousel.Slide>
-          );
-        });
+        );
+      });
 
   return (
     <Carousel

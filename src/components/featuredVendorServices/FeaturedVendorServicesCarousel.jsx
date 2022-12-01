@@ -4,7 +4,6 @@ import CardSkeleton from "../skeletons/CardSkeleton";
 import FeaturedVendorServicesCard from "./FeaturedVendorServicesCard";
 
 const FeaturedVendorServicesCarousel = ({ vendorServices }) => {
-  console.log("$VENDOR SERVICES", vendorServices);
   let carouselSlides =
     vendorServices?.length === 0
       ? [...Array(5).keys()]?.map((key) => (

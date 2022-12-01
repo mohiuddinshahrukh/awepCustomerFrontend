@@ -34,9 +34,24 @@ const useStyles = createStyles((theme) => ({
 }));
 const FeaturedVendorServicesCard = ({ service }) => {
   const { classes, theme } = useStyles();
-  console.log("#VENDOR SERVICES", service);
   return (
-    <Card p="lg" radius="md" className="border">
+    <Card
+      p="lg"
+      radius="md"
+      className="border"
+      sx={{
+        borderRadius: "0.5rem",
+        ":hover": {
+          boxShadow: "0 5px 12px #0003",
+        },
+        boxShadow: "0 2px 8px #00000026",
+        transition: "box-shadow .2s",
+        transitionDuration: "0.2s",
+        transitionTimingFunction: "ease",
+        transitionDelay: "0s",
+        transitionProperty: "box-shadow",
+      }}
+    >
       <Card.Section mb="sm">
         <Image
           src={service.coverImage}
@@ -54,10 +69,12 @@ const FeaturedVendorServicesCard = ({ service }) => {
         {service.vendorBusiness.city}
       </Text>
 
-      <Group mt={"xs"}>
+      <Group mt={"xs"} noWrap>
         <Avatar src={service.vendorBusiness.coverImage} radius="sm" />
         <div>
-          <Text weight={500}>{service.vendorBusiness.vendorBusinessTitle}</Text>
+          <Text weight={500} lineClamp={1}>
+            {service.vendorBusiness.vendorBusinessTitle}
+          </Text>
           <Text size="xs" color="dimmed">
             Member since{" " + service.createdAt.split("T")[0]}
           </Text>

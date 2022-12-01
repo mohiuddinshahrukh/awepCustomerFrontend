@@ -22,20 +22,24 @@ const CustomerTestimonialsCard = ({ testimonial }) => {
       >
         <Card.Section p={"lg"}>
           <Text lineClamp={1} size={"lg"} weight={500}>
-            {testimonial.venueName}
+            {testimonial.feedbackType}
           </Text>
         </Card.Section>
         <Card.Section px={"lg"}>
           <Text color={"dimmed"} lineClamp={4} size={"md"}>
-            {testimonial.venueDescription}
+            {testimonial.feedback}
           </Text>
         </Card.Section>
       </Card>
       <Group noWrap mt={"md"}>
-        <Avatar size={"lg"} radius={"xl"} src={testimonial.coverImage} />
+        <Avatar
+          size={"lg"}
+          radius={"xl"}
+          src={testimonial.user[0].profileImage}
+        />
         <Stack spacing={0}>
           <Text lineClamp={1} weight={500}>
-            {testimonial.infoEmail.split("@")[0]}
+            {testimonial.user[0].name}
           </Text>
           <Text color={"dimmed"} lineClamp={1}>
             {testimonial.createdAt.split("T")[0]}

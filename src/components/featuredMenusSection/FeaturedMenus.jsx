@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FeaturedMenusCarousel from "./FeaturedMenusCarousel";
 
-const FeaturedMenus = () => {
+const FeaturedMenus = ({ landingPageMenus }) => {
   return (
     <Container size={"xl"} my="xl">
       <Group position="apart">
@@ -28,7 +28,7 @@ const FeaturedMenus = () => {
           View All Menus
         </Button>
       </Group>
-      <FeaturedMenusCarousel />
+      <FeaturedMenusCarousel landingPageMenus={landingPageMenus} />
     </Container>
   );
 };

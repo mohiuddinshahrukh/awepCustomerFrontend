@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVendorsCarousel from "./FeaturedVendorsCarousel";
 
-const FeaturedVendorsSection = () => {
+const FeaturedVendorsSection = ({ landingPageVendors }) => {
   return (
     <Container size={"xl"} my="xl">
       <Group position="apart">
@@ -28,7 +28,7 @@ const FeaturedVendorsSection = () => {
         </Button>
       </Group>
 
-      <FeaturedVendorsCarousel />
+      <FeaturedVendorsCarousel landingPageVendors={landingPageVendors} />
     </Container>
   );
 };

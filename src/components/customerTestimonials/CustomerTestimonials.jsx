@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import CustomerTestimonialsCarousel from "./CustomerTestimonialsCarousel";
 
-const CustomerTestimonials = () => {
+const CustomerTestimonials = ({ landingPageTestimonials }) => {
   return (
     <Container size={"xl"} my="xl">
       <Group position="apart">
@@ -28,7 +28,9 @@ const CustomerTestimonials = () => {
         </Button>
       </Group>
 
-      <CustomerTestimonialsCarousel />
+      <CustomerTestimonialsCarousel
+        landingPageTestimonials={landingPageTestimonials}
+      />
     </Container>
   );
 };

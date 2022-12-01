@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVenuesCarousel from "./FeaturedVenuesCarousel";
 
-const FeaturedVenuesSection = () => {
+const FeaturedVenuesSection = ({ landingPageVenues }) => {
   return (
     <Container size={"xl"} my="xl">
       <Group position="apart">
@@ -27,7 +27,7 @@ const FeaturedVenuesSection = () => {
           View All Venues
         </Button>
       </Group>
-      <FeaturedVenuesCarousel />
+      <FeaturedVenuesCarousel landingPageVenues={landingPageVenues} />
     </Container>
   );
 };

@@ -2,42 +2,20 @@ import { Carousel } from "@mantine/carousel";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import FeaturedMenus from "./FeaturedMenus";
-const fetchVenuesMethod = async () => {
-  try {
-    const apiResponse = await axios.get(
-      "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
-    );
-    if (apiResponse.data.status === "success") {
-      console.log("API RESPONSE SUCCESS: ", apiResponse);
-      return apiResponse.data.venueData;
-    } else if (apiResponse.data.status === "error") {
-      console.log("API RESPONSE SUCCESS: ", apiResponse);
-    } else {
-      console.log("DONT KNOW THE ERROR, THIS SHOULDNT PRINT!");
-    }
-  } catch (error) {
-    console.log("fetchVenuesMethod API CALLING ERROR:", error);
-  }
-};
+import FeaturedMenusCard from "./FeaturedMenusCard";
 
-const FeaturedMenusCarousel = () => {
-  const [landingPageVenues, setLandingPageVenues] = useState([]);
-  useEffect(() => {
-    fetchVenuesMethod().then(setLandingPageVenues);
-    return () => {};
-  }, []);
-  let carouselSlides =
-    landingPageVenues.length === 0
-      ? [...Array(5).keys()]?.map((key) => (
-          <Carousel.Slide key={key}>{/* <CardSkeleton />*/}</Carousel.Slide>
-        ))
-      : landingPageVenues?.map((venue, index) => {
-          return (
-            <Carousel.Slide key={index}>
-              <FeaturedMenusCarousel venue={venue} />
-            </Carousel.Slide>
-          );
-        });
+const FeaturedMenusCarousel = ({ landingPageMenus }) => {
+  let carouselSlides = !landingPageMenus
+    ? [...Array(5).keys()]?.map((key) => (
+        <Carousel.Slide key={key}>{/* <CardSkeleton />*/}</Carousel.Slide>
+      ))
+    : landingPageMenus?.map((menu, index) => {
+        return (
+          <Carousel.Slide key={index}>
+            <FeaturedMenusCard menu={menu} />
+          </Carousel.Slide>
+        );
+      });
   return (
     <Carousel
       styles={{ viewport: { padding: "20px 5px" } }}

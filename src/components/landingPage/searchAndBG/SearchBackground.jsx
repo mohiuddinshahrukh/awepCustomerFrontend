@@ -23,7 +23,6 @@ const SearchBackground = ({ carouselImages }) => {
   const [date, setDate] = useState("");
   const [city, setCity] = useState("");
   const [time, setTime] = useState("");
-  console.log(date, "haha");
 
   const searchBackgroundCarousel = (
     <Carousel

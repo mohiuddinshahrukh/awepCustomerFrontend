@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import FeaturedVendorServicesCarousel from "./FeaturedVendorServicesCarousel";
 
 const FeaturedVendorServicesSection = ({ vendorServices }) => {
-  console.log("@VENDOR SERVICES", vendorServices);
   return (
     <Container size={"xl"} my="xl">
       <Group position="apart">

@@ -25,6 +25,7 @@ import CustomerTestimonials from "../customerTestimonials/CustomerTestimonials";
 import WeddingCards from "../weddingCards/WeddingCards";
 import RegisteredCities from "../registeredCities/RegisteredCities";
 import axios from "axios";
+import FeaturedVendorServicesSection from "../featuredVendorServices/FeaturedVendorServicesSection";
 
 const fetchVenuesMethod = async () => {
   try {
@@ -32,8 +33,8 @@ const fetchVenuesMethod = async () => {
       "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
     );
     if (apiResponse.data.status === "success") {
-      console.log("API RESPONSE SUCCESS: ", apiResponse);
-      return apiResponse.data.venueData;
+      console.log("12345 API RESPONSE SUCCESS: ", apiResponse);
+      return apiResponse.data;
     } else if (apiResponse.data.status === "error") {
       console.log("API RESPONSE SUCCESS: ", apiResponse);
     } else {
@@ -75,6 +76,9 @@ const LandingPageMain = () => {
       <FilterCards />
       <FeaturedVenuesSection />
       <FeaturedVendorsSection />
+      <FeaturedVendorServicesSection
+        vendorServices={allData?.data?.mostBookedVendorPackages}
+      />
       {/* <RealWeddingsSection />*/}
       <WeddingCards />
       <CustomerTestimonials />

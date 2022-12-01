@@ -8,7 +8,14 @@ const Feedbacks = () => {
   // FETCH ALL VENUES
 
   return (
-    <Tabs mt={"lg"} defaultValue="venueFeedbacks" variant="default">
+    <Tabs
+      mt={"lg"}
+      defaultValue="venueFeedbacks"
+      variant="default"
+      style={{
+        width: "100%",
+      }}
+    >
       <Tabs.List>
         <Tabs.Tab
           value="venueFeedbacks"

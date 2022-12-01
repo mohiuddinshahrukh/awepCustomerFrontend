@@ -36,6 +36,14 @@ import AboutUs from "./components/aboutUs/AboutUs";
 import FiveCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
 import CustomerBookingWEddingCards from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingWeddingCards";
 import TopNavbarStrip from "./components/navigation/topNavbarStrip/TopNavbarStrip";
+import VenueComplaints from "./components/navigation/sideNavbar/complaints/VenueComplaints";
+import VendorComplaints from "./components/navigation/sideNavbar/complaints/VendorComplaints";
+import CustomerVenueBookings from "./components/navigation/sideNavbar/bookings/CustomerVenueBookings";
+import CustomerVendorBookings from "./components/navigation/sideNavbar/bookings/CustomerVendorBookings";
+import VenuePayments from "./components/navigation/sideNavbar/payments/VenuePayments";
+import VendorPayments from "./components/navigation/sideNavbar/payments/VendorPayments";
+import VendorFeedbacks from "./components/navigation/sideNavbar/feedbacks/VendorFeedbacks";
+import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFeedbacks";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const toggleColorScheme = (value) =>
@@ -143,15 +151,29 @@ function App() {
                 <Route path="/skeletontest" element={<FiveCardsSkeleton />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>
-                  <Route path="bookings" element={<CustomerBookings />} />
+                  <Route
+                    path="venueBookings"
+                    element={<CustomerVenueBookings />}
+                  />
+                  <Route
+                    path="vendorBookings"
+                    element={<CustomerVendorBookings />}
+                  />
                   <Route path="chats" element={<ChatScreen />} />
                   <Route
                     path="weddingCards"
                     element={<CustomerBookingWEddingCards />}
                   />
-                  <Route path="complaints" element={<Complaints />} />
-                  <Route path="feedbacks" element={<Feedbacks />} />
-                  <Route path="payments" element={<CustomerPayments />} />
+                  {/* <Route path="complaints" element={<Complaints />} /> */}
+                  <Route path="venueComplaints" element={<VenueComplaints />} />
+                  <Route
+                    path="vendorComplaints"
+                    element={<VendorComplaints />}
+                  />
+                  <Route path="vendorFeedbacks" element={<VendorFeedbacks />} />
+                  <Route path="venueFeedbacks" element={<VenueFeedbacks />} />
+                  <Route path="venuePayments" element={<VenuePayments />} />
+                  <Route path="vendorPayments" element={<VendorPayments />} />
                   {/*<Route path="FAQsAndHelp" element={<>FAQ & HELP</>} />
              <Route path="invite" element={<>INVITE</>} />*/}
                   <Route path="profile" element={<CustomerProfile />} />

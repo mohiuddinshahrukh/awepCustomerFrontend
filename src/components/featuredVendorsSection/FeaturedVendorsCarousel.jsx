@@ -10,7 +10,7 @@ const fetchVendorsMethod = async () => {
     );
     if (apiResponse.data.status === "success") {
       console.log("API RESPONSE SUCCESS: ", apiResponse);
-      return apiResponse.data.vendorData;
+      return apiResponse.data.data.topRatedVendors;
     } else if (apiResponse.data.status === "error") {
       console.log("API RESPONSE SUCCESS: ", apiResponse);
     } else {

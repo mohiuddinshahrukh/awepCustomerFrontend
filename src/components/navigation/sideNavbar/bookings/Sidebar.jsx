@@ -1,110 +1,138 @@
-import { Anchor, Box, Group, Text } from "@mantine/core";
-import { IconMessages, IconNotebook, IconSettings } from "@tabler/icons";
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import {
+  IconGauge,
+  IconFingerprint,
+  IconActivity,
+  IconChevronRight,
+} from "@tabler/icons";
+import { Box, NavLink, Paper } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 const data = [
+  { icon: IconGauge, label: "Dashboard", description: "Item with description" },
   {
-    title: "Bookings",
-    path: "bookings",
-    icon: <IconNotebook />,
+    icon: IconFingerprint,
+    label: "Bookings",
+    rightSection: <IconChevronRight size={14} stroke={1.5} />,
+    path: "#",
+    subNav: [
+      {
+        icon: IconActivity,
+        label: "Venue Bookings",
+        path: "venueBookings",
+      },
+      {
+        icon: IconActivity,
+        label: "Vendor Bookings",
+        path: "vendorBookings",
+      },
+    ],
+  },
+  { icon: IconActivity, label: "Chats", path: "chats" },
+  { icon: IconActivity, label: "My Cards", path: "weddingCards" },
+  {
+    icon: IconFingerprint,
+    label: "Payments",
+    rightSection: <IconChevronRight size={14} stroke={1.5} />,
+    path: "#",
+
+    subNav: [
+      {
+        icon: IconActivity,
+        label: "Venue Payments",
+        path: "venuePayments",
+      },
+      {
+        icon: IconActivity,
+        label: "Vendor Payments",
+        path: "vendorPayments",
+      },
+    ],
   },
   {
-    title: "Chats",
-    path: "chats",
-    icon: <IconMessages />,
+    icon: IconFingerprint,
+    label: "Feedbacks",
+    rightSection: <IconChevronRight size={14} stroke={1.5} />,
+    path: "#",
+
+    subNav: [
+      {
+        icon: IconActivity,
+        label: "Venue Feedbacks",
+        path: "venueFeedbacks",
+      },
+      {
+        icon: IconActivity,
+        label: "Vendor Feedbacks",
+        path: "vendorFeedbacks",
+      },
+    ],
   },
   {
-    title: "Wedding Cards",
-    path: "weddingCards",
-    icon: <IconMessages />,
+    icon: IconFingerprint,
+    label: "Complaints",
+    rightSection: <IconChevronRight size={14} stroke={1.5} />,
+    path: "#",
+
+    subNav: [
+      {
+        icon: IconActivity,
+        label: "Venue Complaints",
+        path: "venueComplaints",
+      },
+      {
+        icon: IconActivity,
+        label: "Vendor Complaints",
+        path: "vendorComplaints",
+      },
+    ],
   },
-  {
-    title: "Complaints",
-    path: "complaints",
-    icon: <IconMessages />,
-  },
-  {
-    title: "Feedbacks",
-    path: "feedbacks",
-    icon: <IconMessages />,
-  },
-  {
-    title: "Payments",
-    path: "payments",
-    icon: <IconMessages />,
-  },
-  // {
-  //   title: "FAQ & Help",
-  //   path: "FAQsAndHelp",
-  //   icon: <IconMessages />,
-  // },
-  // {
-  //   title: "Invite",
-  //   path: "invite",
-  //   icon: <IconMessages />,
-  // },
-  {
-    title: "Profile",
-    path: "profile",
-    icon: <IconSettings />,
-  },
+  { icon: IconActivity, label: "Profile", path: "profile", path: "#" },
 ];
 
-const Sidebar = () => {
-  const location = useLocation();
-  const sidebar = data?.map((option, index) => {
-    if (location.pathname === "/dashboard/" + option.path) {
-      return (
-        <Anchor component={Link} to={option.path} key={index} variant="text">
-          <Box
-            sx={(theme) => ({
-              ":hover": { backgroundColor: theme.colors.blue[6] },
-              backgroundColor: theme.colors.blue[5],
-              color: theme.white,
-              borderRadius: theme.radius.sm,
-            })}
-            p={"md"}
-            style={{ border: "1px solid #eaeaea" }}
-          >
-            <Group noWrap style={{ flexShrink: 0 }}>
-              {option.icon}
-              <Text>{option.title}</Text>
-            </Group>
-          </Box>
-        </Anchor>
-      );
-    } else {
-      return (
-        <Anchor component={Link} to={option.path} key={index} variant="text">
-          <Box
-            sx={(theme) => ({
-              ":hover": {
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[4]
-                    : theme.colors.gray[1],
-              },
-              borderRadius: theme.radius.sm,
-            })}
-            p={"md"}
-            style={{ border: "1px solid #eaeaea" }}
-          >
-            <Group noWrap style={{ flexShrink: 0 }}>
-              {option.icon}
-              <Text>{option.title}</Text>
-            </Group>
-          </Box>
-        </Anchor>
-      );
-    }
-  });
-  // console.log("location", location);
+const SideBar = () => {
+  const [active, setActive] = useState(0);
+  const [subActive, setSubActive] = useState(0);
+
+  const items = data.map((item, index) => (
+    <NavLink
+      key={item.label}
+      active={!item.subNav && active === index}
+      label={item.label}
+      description={item.description}
+      rightSection={item.rightSection}
+      icon={<item.icon size={16} stroke={1.5} />}
+      component={Link}
+      to={item.path}
+      onClick={() => {
+        setActive(index);
+        setSubActive(null);
+      }}
+    >
+      {item.subNav &&
+        item.subNav.map((subItem, i) => (
+          <NavLink
+            styles={{ label: { fontSize: "1rem" } }}
+            active={active === index && subActive === i}
+            key={subItem.label}
+            label={subItem.label}
+            icon={<subItem.icon size={16} stroke={1.5} />}
+            component={Link}
+            to={subItem.path}
+            onClick={() => {
+              setSubActive(i);
+              setActive(index);
+            }}
+          />
+        ))}
+    </NavLink>
+  ));
+
   return (
-    <div style={{ height: "100%", width: "300px", flexShrink: 0 }}>
-      {sidebar}
-    </div>
+    <Paper w={"15vw"} withBorder>
+      <Box sx={{ width: "100%" }}>{items}</Box>
+    </Paper>
   );
 };
 
-export default Sidebar;
+export default SideBar;

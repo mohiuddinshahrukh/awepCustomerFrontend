@@ -36,6 +36,7 @@ const AllVendorCategories = ({ categories, setCategories }) => {
     <Checkbox.Group
       value={categories}
       onChange={setCategories}
+      className="checkbox"
       orientation="vertical"
       label="Categories"
       spacing={0}

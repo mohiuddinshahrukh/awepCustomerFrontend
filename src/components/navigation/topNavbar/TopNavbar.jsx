@@ -71,6 +71,7 @@ const TopNavbar = () => {
                 { title: "Card Editor", path: "/cardEditor" },
                 { title: "Contact Us", path: "/contactUs" },
                 { title: "About Us", path: "/aboutUs" },
+                { title: "Feedbacks", path: "/feedbacks" },
               ]}
             />
           ) : (

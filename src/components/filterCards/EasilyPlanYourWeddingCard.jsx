@@ -7,6 +7,7 @@ const EasilyPlanYourWeddingCard = ({ cardData }) => {
   const card = cardData?.map((card, index) => {
     return (
       <Paper
+        className="border"
         sx={{
           borderRadius: "0.5rem",
           ":hover": {

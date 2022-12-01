@@ -31,7 +31,6 @@ const SearchBackground = ({ carouselImages }) => {
       align="start"
       height={"75vh"}
       orientation="vertical"
-      withIndicators
       draggable={false}
       withControls={false}
       plugins={[autoplay.current]}
@@ -89,12 +88,14 @@ const SearchBackground = ({ carouselImages }) => {
           // border: "1px solid red",
           position: "absolute",
           bottom: "20%",
-          zIndex: 10,
+          zIndex: 8,
         }}
       >
         <Select
           size={"lg"}
-          styles={{ label: { color: "white" } }}
+          styles={{
+            label: { color: "white" },
+          }}
           label="Supplier"
           placeholder="Select A Supplier"
           onChange={setSearchSupplier}

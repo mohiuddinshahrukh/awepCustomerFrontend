@@ -6,6 +6,7 @@ const OtherFilterCards = ({ cardsData }) => {
   const cards = cardsData?.map((card, index) => {
     return (
       <Paper
+        className="border"
         sx={{
           borderRadius: "0.5rem",
           ":hover": {

@@ -1,4 +1,11 @@
-import { Anchor, Container, Drawer, Group, Paper } from "@mantine/core";
+import {
+  Anchor,
+  Container,
+  Drawer,
+  Group,
+  Paper,
+  useMantineTheme,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -11,13 +18,22 @@ import TopNavbarUserProfileIcon from "./TopNavbarUserProfileIcon";
 
 const TopNavbar = () => {
   const [drawerState, setDrawerState] = useState(false);
+  const theme = useMantineTheme();
   const matches1027 = useMediaQuery("(min-width: 1027px)");
   return (
     <Paper
+      sx={(theme) => ({
+        backgroundColor:
+          theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+      })}
       p={0}
       m={0}
+      withBorder
       style={{
-        borderBottom: "1px solid #eaeaea",
+        position: "-webkit-sticky",
+        position: "sticky",
+        top: 0,
+        zIndex: 20,
       }}
     >
       {" "}
@@ -88,7 +104,7 @@ const TopNavbar = () => {
               AWEP
             </Anchor>
           )}
-          <Group>
+          <Group spacing={"xl"}>
             <TopNavbarThemeToggle />
             {localStorage.getItem("userToken") ? (
               <TopNavbarUserProfileIcon />

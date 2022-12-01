@@ -1,6 +1,6 @@
 import { ActionIcon, Anchor, Avatar, Menu } from "@mantine/core";
 import React, { useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const TopNavbarUserProfileIcon = () => {
   const currentLocation = useLocation();
@@ -16,7 +16,7 @@ const TopNavbarUserProfileIcon = () => {
     <Menu>
       <Menu.Target>
         <ActionIcon>
-          <Avatar radius={"xl"} src={loggedInUserData.profileImage} />
+          <Avatar size={43} src={loggedInUserData.profileImage} />
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>

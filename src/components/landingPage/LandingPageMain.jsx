@@ -1,5 +1,5 @@
 import { Paper } from "@mantine/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchBackground from "./searchAndBG/SearchBackground";
 import img1 from "../../assets/searchBackgroundCarouselImages/1.jpg";
 import img2 from "../../assets/searchBackgroundCarouselImages/2.jpg";
@@ -12,6 +12,10 @@ import img8 from "../../assets/searchBackgroundCarouselImages/8.jpg";
 import img9 from "../../assets/searchBackgroundCarouselImages/9.jpg";
 import img10 from "../../assets/searchBackgroundCarouselImages/10.jpg";
 import img11 from "../../assets/searchBackgroundCarouselImages/11.jpg";
+import img12 from "../../assets/searchBackgroundCarouselImages/11.jpg";
+import img13 from "../../assets/searchBackgroundCarouselImages/11.jpg";
+import img14 from "../../assets/searchBackgroundCarouselImages/11.jpg";
+import img15 from "../../assets/searchBackgroundCarouselImages/11.jpg";
 
 import FilterCards from "../filterCards/FilterCards";
 import FeaturedVenuesSection from "../featuredVenuesSection/FeaturedVenuesSection";
@@ -20,7 +24,32 @@ import RealWeddingsSection from "../realWeddingsSection/RealWeddingsSection";
 import CustomerTestimonials from "../customerTestimonials/CustomerTestimonials";
 import WeddingCards from "../weddingCards/WeddingCards";
 import RegisteredCities from "../registeredCities/RegisteredCities";
+import axios from "axios";
+
+const fetchVenuesMethod = async () => {
+  try {
+    const apiResponse = await axios.get(
+      "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
+    );
+    if (apiResponse.data.status === "success") {
+      console.log("API RESPONSE SUCCESS: ", apiResponse);
+      return apiResponse.data.venueData;
+    } else if (apiResponse.data.status === "error") {
+      console.log("API RESPONSE SUCCESS: ", apiResponse);
+    } else {
+      console.log("DONT KNOW THE ERROR, THIS SHOULDNT PRINT!");
+    }
+  } catch (error) {
+    console.log("fetchVenuesMethod API CALLING ERROR:", error);
+  }
+};
+
 const LandingPageMain = () => {
+  const [allData, setAllData] = useState([]);
+  useEffect(() => {
+    fetchVenuesMethod().then(setAllData);
+  }, []);
+
   return (
     <Paper>
       <SearchBackground
@@ -36,6 +65,10 @@ const LandingPageMain = () => {
           { src: img9 },
           { src: img10 },
           { src: img11 },
+          { src: img12 },
+          { src: img13 },
+          { src: img14 },
+          { src: img15 },
         ]}
       />
 

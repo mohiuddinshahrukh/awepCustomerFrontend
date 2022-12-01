@@ -107,16 +107,18 @@ const AddReview = () => {
   console.log("deererere", feedbackDetails);
   const fetchReviewDetails = async () => {
     try {
-      const apiResponse = await axios.get(
-        "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks"
-      );
+      const apiResponse = await axios({
+        url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
+        method: "GET",
+        headers: { token: localStorage.getItem("userToken") },
+      });
       console.log("API Response", apiResponse);
       if (apiResponse.data.status === "success") {
         let retrievedData = apiResponse.data.data;
         let specificVendorReview = retrievedData.filter((review) => {
           return review._id === params.feedbackId;
         });
-        return specificVendorReview;
+        return specificVendorReview[0];
       } else if (apiResponse.data.status === "error") {
         console.log(
           "Error while fetching all venue services",
@@ -139,6 +141,32 @@ const AddReview = () => {
   console.log("MY PARAMS: ", params);
 
   const { classes } = useStyles();
+
+  useEffect(() => {
+    console.log("useEffect");
+    console.log("feedbackDetails", feedbackDetails);
+    setQuality({
+      value: feedbackDetails ? feedbackDetails.qualityOfService : 0,
+      hoverValue: feedbackDetails ? feedbackDetails.qualityOfService : -1,
+    });
+    setResponse({
+      value: feedbackDetails ? feedbackDetails.responseTime : 0,
+      hoverValue: feedbackDetails ? feedbackDetails.responseTime : -1,
+    });
+    setProfessionalism({
+      value: feedbackDetails ? feedbackDetails.professionalism : 0,
+      hoverValue: feedbackDetails ? feedbackDetails.professionalism : -1,
+    });
+    setValueForMoney({
+      value: feedbackDetails ? feedbackDetails.valueForMoney : 0,
+      hoverValue: feedbackDetails ? feedbackDetails.valueForMoney : -1,
+    });
+    setFlexibility({
+      value: feedbackDetails ? feedbackDetails.flexibility : 0,
+      hoverValue: feedbackDetails ? feedbackDetails.flexibility : -1,
+    });
+    setReview(feedbackDetails ? feedbackDetails.customerReview : "");
+  }, [feedbackDetails]);
 
   const [quality, setQuality] = useState({ value: 0, hoverValue: -1 });
   const [response, setResponse] = useState({ value: 0, hoverValue: -1 });
@@ -203,6 +231,74 @@ const AddReview = () => {
     try {
       const response = await axios({
         method: "post",
+        url: url,
+        data: body,
+        headers: headers,
+      });
+
+      console.log("THIS IS THE RESPONSE OBJECT:   ", response);
+
+      if (response.data.status === "error") {
+        showNotification({
+          title: `ERROR`,
+          color: "red",
+          message: `${response.data.error?.message || response.data.error}`,
+        });
+        console.log("error", response.data.error.message);
+        console.log("error", response.data.error);
+      } else {
+        showNotification({
+          color: "green",
+          title: `Successfully`,
+          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+        });
+        navigate("/dashboard/feedbacks");
+        console.log("success", response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleUpdate = async () => {
+    console.log("Handle Update Called");
+    let body;
+    if (params.provider === "venue") {
+      body = {
+        customerReview: review,
+        qualityOfService: quality.value,
+        responseTime: response.value,
+        professionalism: professionalism.value,
+        valueForMoney: valueForMoney.value,
+        flexibility: flexibility.value,
+      };
+    } else if (params.provider === "vendor") {
+      body = {
+        customerReview: review,
+        qualityOfService: quality.value,
+        responseTime: response.value,
+        professionalism: professionalism.value,
+        valueForMoney: valueForMoney.value,
+        flexibility: flexibility.value,
+      };
+    }
+
+    console.log("@@@body Update", body);
+
+    const headers = {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("userToken"),
+    };
+
+    var url = "";
+    if (params.provider === "venue") {
+      url = `https://a-wep.herokuapp.com/customer/updateVenueFeedback/${params.feedbackId}`;
+    } else if (params.provider === "vendor") {
+      url = `https://a-wep.herokuapp.com/customer/updateVendorServiceFeedback/${params.feedbackId}`;
+    }
+    console.log("URL: ", url);
+    try {
+      const response = await axios({
+        method: "patch",
         url: url,
         data: body,
         headers: headers,
@@ -364,7 +460,13 @@ const AddReview = () => {
             <Button
               className={classes.button}
               radius="md"
-              onClick={handleSubmit}
+              onClick={() => {
+                if (params.feedbackId) {
+                  handleUpdate();
+                } else {
+                  handleSubmit();
+                }
+              }}
             >
               Submit
             </Button>

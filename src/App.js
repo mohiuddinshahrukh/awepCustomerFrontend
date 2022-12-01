@@ -57,7 +57,6 @@ function App() {
             <Paper className="App">
               <TopNavbar />
               <Routes>
-                <Route path="/feedbacks" element={<>FEEDBACKS</>} />
                 <Route path="/signIn" element={<SignIn />} />
                 <Route path="/signUp" element={<SignUp />} />
                 <Route

@@ -120,22 +120,6 @@ const SystemFeedbacks = () => {
           >
             <IconEye />
           </ActionIcon>
-          <ActionIcon
-            onClick={() => {
-              console.log("Clicked on edit button");
-            }}
-          >
-            <IconEdit />
-          </ActionIcon>
-          <ActionIcon
-            onClick={() => {
-              console.log("Clicked on Delete button");
-              setVisible(true);
-              deleteVendorComplaint(row?._id);
-            }}
-          >
-            <IconTrash />
-          </ActionIcon>
         </Group>
       </td>
     </tr>

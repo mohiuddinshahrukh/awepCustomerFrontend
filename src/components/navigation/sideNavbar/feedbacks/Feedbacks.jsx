@@ -1,5 +1,6 @@
 import { Tabs } from "@mantine/core";
 import { IconBuildingFortress, IconBuildingStore } from "@tabler/icons";
+import SystemFeedbacks from "./SystemFeedbacks";
 import VendorFeedbacks from "./VendorFeedbacks";
 import VenueFeedbacks from "./VenueFeedbacks";
 
@@ -21,6 +22,12 @@ const Feedbacks = () => {
         >
           Vendor Feedbacks
         </Tabs.Tab>
+        <Tabs.Tab
+          value="systemFeedbacks"
+          icon={<IconBuildingStore size={14} />}
+        >
+          System Feedbacks
+        </Tabs.Tab>
       </Tabs.List>
 
       <Tabs.Panel value="venueFeedbacks" pt="xs">
@@ -32,6 +39,10 @@ const Feedbacks = () => {
       <Tabs.Panel value="vendorFeedbacks" pt="xs">
         {/*<VendorComplaints />*/}
         <VendorFeedbacks />
+      </Tabs.Panel>
+      <Tabs.Panel value="systemFeedbacks" pt="xs">
+        {/*<VendorComplaints />*/}
+        <SystemFeedbacks />
       </Tabs.Panel>
     </Tabs>
   );

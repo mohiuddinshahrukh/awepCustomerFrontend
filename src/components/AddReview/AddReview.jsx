@@ -167,7 +167,7 @@ const AddReview = () => {
         valueForMoney: valueForMoney.value,
         flexibility: flexibility.value,
       };
-    } else {
+    } else if (params.provider === "vendor") {
       body = {
         vendorPackageBookingId: params.bookingId,
         customerReview: review,
@@ -176,6 +176,11 @@ const AddReview = () => {
         professionalism: professionalism.value,
         valueForMoney: valueForMoney.value,
         flexibility: flexibility.value,
+      };
+    } else if (params.provider === "admin") {
+      body = {
+        feedback: review,
+        feedbackType: "feedback",
       };
     }
 
@@ -191,6 +196,8 @@ const AddReview = () => {
       url = "https://a-wep.herokuapp.com/customer/addVenueFeedback";
     } else if (params.provider === "vendor") {
       url = "https://a-wep.herokuapp.com/customer/addVendorServiceFeedback";
+    } else if (params.provider === "admin") {
+      url = "https://a-wep.herokuapp.com/auth/user/addSystemFeedback";
     }
     console.log("URL: ", url);
     try {
@@ -218,6 +225,7 @@ const AddReview = () => {
           message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
         });
         navigate("/dashboard/feedbacks");
+        console.log("success", response.data);
       }
     } catch (err) {
       console.log(err);
@@ -265,7 +273,7 @@ const AddReview = () => {
             // backgroundImage: `url("https://images.unsplash.com/photo-1485178075098-49f78b4b43b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
             backgroundImage: `url(${ReviewImage})`,
             // width: "100%",
-            height: matches1200 ? "100%" : "50vh",
+            height: matches1200 ? "100vh" : "50vh",
           }}
           style={{
             boxSizing: "border-box",
@@ -298,7 +306,7 @@ const AddReview = () => {
         </Paper>
       </Grid.Col>
       <Grid.Col lg={6}>
-        <Container size="xl" px={matches800 ? "xl" : "sm"} pt="sm">
+        <Container size="xl" px={matches800 ? 60 : "sm"} pt={60}>
           <Text size={70} pb="md">
             AWEP
           </Text>
@@ -310,42 +318,47 @@ const AddReview = () => {
             <Progress value={50} mt="sm" size="sm" />
           </Input.Wrapper> */}
 
-          <RatingComponent
-            title="Service Quality"
-            rating={quality}
-            setRating={setQuality}
-          />
-          <RatingComponent
-            title="Responsiveness"
-            rating={response}
-            setRating={setResponse}
-          />
-          <RatingComponent
-            title="Professionalism"
-            rating={professionalism}
-            setRating={setProfessionalism}
-          />
-          <RatingComponent
-            title="
-            Value For Money"
-            rating={valueForMoney}
-            setRating={setValueForMoney}
-          />
-          <RatingComponent
-            title="Flexibility"
-            rating={flexibility}
-            setRating={setFlexibility}
-          />
+          {params.provider !== "admin" && (
+            <>
+              <RatingComponent
+                title="Service Quality"
+                rating={quality}
+                setRating={setQuality}
+              />
+              <RatingComponent
+                title="Responsiveness"
+                rating={response}
+                setRating={setResponse}
+              />
+              <RatingComponent
+                title="Professionalism"
+                rating={professionalism}
+                setRating={setProfessionalism}
+              />
+              <RatingComponent
+                title="
+         Value For Money"
+                rating={valueForMoney}
+                setRating={setValueForMoney}
+              />
+              <RatingComponent
+                title="Flexibility"
+                rating={flexibility}
+                setRating={setFlexibility}
+              />
+            </>
+          )}
           <Textarea
             py="xl"
             size="md"
             label="Write a Review"
             value={review}
+            maxLength={400}
             onChange={(e) => setReview(e.currentTarget.value)}
             placeholder="Write at least 25 characters about your experience. Include any details that will help other couples make their hiring decision."
             autosize
-            minRows={3}
-            maxRows={4}
+            minRows={params.provider === "admin" ? 8 : 3}
+            maxRows={params.provider === "admin" ? 8 : 4}
           />
           <Group position="right">
             <Button

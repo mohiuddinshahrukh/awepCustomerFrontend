@@ -305,20 +305,24 @@ const AllVenuesPage = () => {
         }
       }
 
-      if (minPriceFilter !== 0 || maxPriceFilter !== 0) {
-        let priceMatch = false;
-        venue?.menus?.forEach((menu) => {
-          console.log("menus we kj   have", menu);
+      if (minPriceFilter === 0 && maxPriceFilter === 100000) {
+        return true;
+      } else {
+        if (minPriceFilter !== 0 || maxPriceFilter !== 0) {
+          let priceMatch = false;
+          venue?.menus?.forEach((menu) => {
+            console.log("menus we kj   have", menu);
 
-          if (
-            (menu.price >= minPriceFilter && menu.price <= maxPriceFilter) ||
-            menu === undefined
-          ) {
-            priceMatch = true;
+            if (
+              (menu.price >= minPriceFilter && menu.price <= maxPriceFilter) ||
+              menu === undefined
+            ) {
+              priceMatch = true;
+            }
+          });
+          if (!priceMatch) {
+            return false;
           }
-        });
-        if (!priceMatch) {
-          return false;
         }
       }
 
@@ -503,7 +507,10 @@ const AllVenuesPage = () => {
                 indeterminate={indeterminate}
                 allChecked={allChecked}
               />
-              <AllRatingFilter rating={rating} setRating={setRating} />
+              <AdvanceFilterVenueCapacity
+                venueCapacity={venueCapacity}
+                setVenueCapacity={setVenueCapacity}
+              />
               {allServices.length > 0 && (
                 <AdvanceFilterVenueServices
                   allServices={allServices}
@@ -511,11 +518,9 @@ const AllVenuesPage = () => {
                   filteredServices={filteredServices}
                 />
               )}
+              <AllRatingFilter rating={rating} setRating={setRating} />
               {/* <AdvanceFilterVenuePrice /> */}
-              <AdvanceFilterVenueCapacity
-                venueCapacity={venueCapacity}
-                setVenueCapacity={setVenueCapacity}
-              />
+
               {/* <AdvanceFilterHallCharges /> */}
             </Stack>
           </Grid.Col>

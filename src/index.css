@@ -56,3 +56,22 @@ code {
   border: 1px solid #e60084;
   color: orange;
 }
+.checkbox :checked {
+  background-color: #e60084;
+  border: 1px solid #e60084;
+}
+
+.mantine-Slider-bar {
+  background-color: #e60084;
+}
+
+.mantine-Slider-thumb {
+  background-color: white;
+  border: 3px solid #e60084;
+  /* padding: 5px; */
+  padding: 5px;
+}
+
+.mantine-Slider-label {
+  background-color: #e60084;
+}

@@ -56,3 +56,27 @@ code {
   border: 1px solid #e60084;
   color: orange;
 }
+
+/* .mantine-SegmentedControl-controlActive {
+  background-color: #e60084;
+  color: white;
+} */
+.mantine-SegmentedControl-active {
+  background-color: #e60084;
+  color: white;
+}
+.mantine-SegmentedControl-label {
+  color: black;
+}
+
+.mantine-SegmentedControl-labelActive {
+  color: white;
+}
+
+.mantine-SegmentedControl-labelActive:hover {
+  color: white;
+}
+.mantine-Select-item :checked {
+  background-color: #e60084;
+  color: white;
+}

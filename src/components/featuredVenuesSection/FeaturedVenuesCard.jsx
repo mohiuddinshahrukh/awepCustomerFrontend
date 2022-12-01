@@ -35,6 +35,7 @@ const FeaturedVenuesCard = ({ venue }) => {
       <Card.Section style={{ height: "201px", position: "relative" }}>
         {currentLocation.pathname !== "/" && venue?.videos?.length > 0 ? (
           <video
+            poster={venue?.coverImage}
             onMouseLeave={(e) => {
               e.target.pause();
             }}

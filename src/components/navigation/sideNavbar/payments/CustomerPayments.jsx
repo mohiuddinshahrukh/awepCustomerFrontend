@@ -45,7 +45,14 @@ const CustomerPayments = () => {
     fetchAllVenuePayments().then(setVenueBookings).then(setVisible(false));
   }, []);
   return (
-    <Tabs mt={"lg"} defaultValue="subvenuePayments" variant="default">
+    <Tabs
+      mt={"lg"}
+      defaultValue="subvenuePayments"
+      variant="default"
+      style={{
+        width: "100%",
+      }}
+    >
       <Tabs.List>
         <Tabs.Tab
           value="subvenuePayments"

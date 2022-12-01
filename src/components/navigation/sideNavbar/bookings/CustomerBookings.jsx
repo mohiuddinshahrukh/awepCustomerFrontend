@@ -8,7 +8,14 @@ const CustomerBookings = () => {
   // FETCH ALL VENUES
 
   return (
-    <Tabs mt={"lg"} defaultValue="subvenueBookings" variant="default">
+    <Tabs
+      mt={"lg"}
+      defaultValue="subvenueBookings"
+      variant="default"
+      style={{
+        width: "100%",
+      }}
+    >
       <Tabs.List>
         <Tabs.Tab
           value="subvenueBookings"

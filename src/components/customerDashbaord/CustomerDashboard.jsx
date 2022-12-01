@@ -13,13 +13,16 @@ const CustomerDashboard = () => {
     if (
       [
         "/dashboard",
-        "/dashboard/bookings",
+        "/dashboard/venueBookings",
+        "/dashboard/vendorBookings",
         "/dashboard/chats",
         "/dashboard/weddingCards",
-        "/dashboard/complaints",
-        "/dashboard/payments",
-        "/dashboard/complaints",
-        "/dashboard/feedbacks",
+        "/dashboard/venueComplaints",
+        "/dashboard/vendorComplaints",
+        "/dashboard/vendorPayments",
+        "/dashboard/venuePayments",
+        "/dashboard/venueFeedbacks",
+        "/dashboard/vendorFeedbacks",
         "/dashboard/FAQsAndHelp",
         "/dashboard/invite",
         "/dashboard/profile",
@@ -38,14 +41,16 @@ const CustomerDashboard = () => {
     }
   });
   return (
-    <Container size={"xl"}>
+    // <Container size={"xl"}>
+    <>
       {allowView && (
         <Group align={"flex-start"} noWrap>
           <Sidebar />
           <Outlet />
         </Group>
       )}
-    </Container>
+    </>
+    // </Container>
   );
 };
 

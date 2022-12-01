@@ -3,6 +3,7 @@ import {
   Container,
   Drawer,
   Group,
+  Image,
   Paper,
   useMantineTheme,
 } from "@mantine/core";
@@ -15,7 +16,7 @@ import TopNavbarHamburger from "./TopNavbarHamburger";
 import TopNavbarLinks from "./TopNavbarLinks";
 import TopNavbarThemeToggle from "./TopNavbarThemeToggle";
 import TopNavbarUserProfileIcon from "./TopNavbarUserProfileIcon";
-
+import logo from "../../../assets/awepLogo/3a.png";
 const TopNavbar = () => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
@@ -72,7 +73,7 @@ const TopNavbar = () => {
               component={Link}
               to="/"
             >
-              AWEP
+              <Image height={75} src={logo} />
             </Anchor>
           ) : (
             <TopNavbarHamburger setDrawerState={setDrawerState} />

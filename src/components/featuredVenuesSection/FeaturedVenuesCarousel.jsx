@@ -11,7 +11,7 @@ const fetchVenuesMethod = async () => {
     );
     if (apiResponse.data.status === "success") {
       console.log("API RESPONSE SUCCESS: ", apiResponse);
-      return apiResponse.data.venueData;
+      return apiResponse.data.data.topRatedVenues;
     } else if (apiResponse.data.status === "error") {
       console.log("API RESPONSE SUCCESS: ", apiResponse);
     } else {

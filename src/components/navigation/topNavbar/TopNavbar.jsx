@@ -144,15 +144,18 @@ const TopNavbar = () => {
             </Anchor>
           )}
           <Group spacing={"xl"}>
-            <NotificaitonsTab
-              unreadCount={count}
-              allNotifications={allNotifications}
-              refreshNotifications={refreshNotifications}
-              setRefreshNotifications={setRefreshNotifications}
-            />
             <TopNavbarThemeToggle />
             {localStorage.getItem("userToken") ? (
-              <TopNavbarUserProfileIcon />
+              <Group>
+                {" "}
+                <TopNavbarUserProfileIcon />
+                <NotificaitonsTab
+                  unreadCount={count}
+                  allNotifications={allNotifications}
+                  refreshNotifications={refreshNotifications}
+                  setRefreshNotifications={setRefreshNotifications}
+                />
+              </Group>
             ) : (
               <TopNavbarButtons
                 buttonsData={[

@@ -630,12 +630,18 @@ const NewBookingFile = () => {
         showNotification({
           color: "yellow",
           title: `${response.data.error}`,
-
           message: `${response.data.message}`,
         });
         setVisible(false);
+
         console.log(response.data.error);
       } else {
+        socket.emit("generateNotification", {
+          userId: JSON.parse(localStorage.getItem("userData")).id,
+          title: "Subvenue Booking Successful",
+          message: `Successfully Created a booking for ${email}`,
+          link: "https://awep-customer-frontend.vercel.app/dashboard/venueBookings",
+        });
         showNotification({
           color: "green",
           title: `Successfully`,

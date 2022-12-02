@@ -252,7 +252,7 @@ const AddReview = () => {
           title: `Successfully`,
           message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
         });
-        navigate("/dashboard/feedbacks");
+        navigate("/");
         console.log("success", response.data);
       }
     } catch (err) {
@@ -321,7 +321,7 @@ const AddReview = () => {
           title: `Successfully`,
           message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
         });
-        navigate("/dashboard/feedbacks");
+        navigate("/");
         console.log("success", response.data);
       }
     } catch (err) {

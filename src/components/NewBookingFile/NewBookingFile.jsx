@@ -649,7 +649,7 @@ const NewBookingFile = () => {
           message: `BOOKING DETAILS UPDATED!!`,
         });
         console.log("navigating");
-        navigate("/shahrukhTest/bookings");
+        navigate("/");
         // setOpened(true);
         console.log("navigated");
         // navigate(-1);
@@ -836,7 +836,7 @@ const NewBookingFile = () => {
           transitionTimingFunction="ease"
           onClose={() => {
             setConfirmBooking(false);
-            navigate("/shahrukhTest/bookings");
+            navigate("/");
           }}
         >
           <Stack>
@@ -1124,7 +1124,7 @@ const NewBookingFile = () => {
           <Group position="center">
             <Button
               component={Link}
-              to="/shahrukhTest/bookings"
+              to="/"
               mt="md"
               leftIcon={<IconX />}
               color="green"
@@ -1192,7 +1192,7 @@ const NewBookingFile = () => {
                   align="center"
                   color="red"
                   leftIcon={<IconTrash size={14} />}
-                  onClick={() => navigate("/shahrukhTest/bookings")}
+                  onClick={() => navigate("/")}
                 >
                   Yes, Cancel
                 </Button>

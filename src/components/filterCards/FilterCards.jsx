@@ -22,8 +22,8 @@ const FilterCards = () => {
         offsetScrollbars={-20}
       >
         {" "}
-        <Group m={"md"} noWrap spacing={"xs"}>
-          <EasilyPlanYourWeddingCard
+        <Group position="center" m={"md"} noWrap spacing={"xs"}>
+          {/* <EasilyPlanYourWeddingCard
             cardData={[
               {
                 cardTitle: "Easily Plan Your Wedding",
@@ -32,7 +32,7 @@ const FilterCards = () => {
                 cardLinkIcon: <IconChevronRight className="fgColorF" />,
               },
             ]}
-          />
+          />*/}
           <OtherFilterCards
             cardsData={[
               {
@@ -58,7 +58,9 @@ const FilterCards = () => {
               {
                 cardTitle: "Cards",
                 cardLinkPath: "/cardEditor",
-                cardLinkIcon: <IconLayoutCards size={50} className="fgColorF" />,
+                cardLinkIcon: (
+                  <IconLayoutCards size={50} className="fgColorF" />
+                ),
               },
               {
                 cardTitle: "Cities",

@@ -6,6 +6,7 @@ import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import CardSkeleton from "../skeletons/CardSkeleton";
 
 const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
+  console.log("LandingPageVenues: ", landingPageVenues);
   let carouselSlides = !landingPageVenues
     ? [...Array(5).keys()]?.map((key) => (
         <Carousel.Slide key={key}>
@@ -23,15 +24,14 @@ const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
   return (
     <Carousel
       styles={{ viewport: { padding: "20px 5px" } }}
-      slideSize={"25% "}
+      slideSize={"25%"}
       slideGap={"md"}
       align={"start"}
       slidesToScroll={"auto"}
       withControls={false}
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
-        { maxWidth: "sm", slideSize: "50%" },
-        { maxWidth: "xs", slideSize: "100%" },
+        { maxWidth: "sm", slideSize: "80%" },
       ]}
     >
       {carouselSlides}

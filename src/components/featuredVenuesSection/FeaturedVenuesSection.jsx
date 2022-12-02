@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import FeaturedVenuesCarousel from "./FeaturedVenuesCarousel";
 
 const FeaturedVenuesSection = ({ landingPageVenues }) => {
+  console.log("$LandingPageVenues: ", landingPageVenues);
   return (
     <Container size={"xl"} my="xl">
       <Group position="apart">

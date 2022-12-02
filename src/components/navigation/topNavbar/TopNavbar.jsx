@@ -146,14 +146,14 @@ const TopNavbar = () => {
           <Group>
             <TopNavbarThemeToggle />
             {localStorage.getItem("userToken") ? (
-              <Group>
-                <TopNavbarUserProfileIcon />
+              <Group spacing={"lg"}>
                 <NotificaitonsTab
                   unreadCount={count}
                   allNotifications={allNotifications}
                   refreshNotifications={refreshNotifications}
                   setRefreshNotifications={setRefreshNotifications}
                 />
+                <TopNavbarUserProfileIcon />
               </Group>
             ) : (
               matches1200 && (

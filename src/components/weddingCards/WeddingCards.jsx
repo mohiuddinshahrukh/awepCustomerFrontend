@@ -15,7 +15,7 @@ const WeddingCards = () => {
           variant="text"
           size={"1.5rem"}
         >
-          Card Editor
+          Cards
         </Anchor>
         <Button
           className="buttonOutline"

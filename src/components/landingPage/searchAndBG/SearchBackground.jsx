@@ -3,10 +3,12 @@ import { Carousel } from "@mantine/carousel";
 import {
   Button,
   Container,
+  Grid,
   Group,
   Image,
   Paper,
   Select,
+  Stack,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -16,8 +18,16 @@ import SearchAndFilter from "./SearchAndFilter";
 import { Link } from "react-router-dom";
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
+import { useMediaQuery } from "@mantine/hooks";
 
 const SearchBackground = ({ carouselImages }) => {
+  const matches600 = useMediaQuery("(min-width: 600px)");
+
+  // const [size, setSize] = useState("");
+  // const matches600 = useMediaQuery("(min-width: 600px)");
+  // const matches600 = useMediaQuery("(min-width: 600px)");
+  // const matches600 = useMediaQuery("(min-width: 600px)");
+
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const [searchSupplier, setSearchSupplier] = useState("venue");
   const [date, setDate] = useState("");
@@ -49,130 +59,149 @@ const SearchBackground = ({ carouselImages }) => {
   );
   return (
     <Paper withBorder style={{ backgroundColor: "#000", position: "relative" }}>
-      <div
-        style={{ position: "absolute", zIndex: 10, width: "100%", top: "25%" }}
+      <Stack
+        style={{ position: "absolute", height: "100%", width: "100%" }}
+        align="center"
+        justify={"center"}
       >
-        <Text
-          size={"4.5vw"}
-          weight="bold"
-          align="center"
-          color="white"
-          style={{ fontVariant: "small-caps" }}
-        >
-          <b className="fgColorF">Making</b> Your Event A Memorable{" "}
-          <b className="fgColorF">One</b>
-        </Text>
-        <Text
-          size={"2.5vw"}
-          weight="bold"
-          align="center"
-          color="white"
-          style={{ fontVariant: "small-caps" }}
-        >
-          <b className="fgColorF">F</b>ind The Best{" "}
-          <b className="fgColorF">N</b>earest To <b className="fgColorF">Y</b>
-          our Imagination<b className="fgColorF">!</b>
-        </Text>
-      </div>
-      <SearchBackgroundOpacityDiv />
-
-      <Group
-        noWrap
-        position="center"
-        align={"flex-end"}
-        style={{
-          width: "100%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          // border: "1px solid red",
-          position: "absolute",
-          bottom: "20%",
-          zIndex: 8,
-        }}
-      >
-        <Select
-          size={"lg"}
-          styles={{
-            label: { color: "white" },
+        {" "}
+        <div
+          style={{
+            // position: "absolute",
+            zIndex: 10,
+            width: "100%",
           }}
-          label="Supplier"
-          placeholder="Select A Supplier"
-          onChange={setSearchSupplier}
-          data={[
-            { value: "venue", label: "Venue" },
-            { value: "vendor", label: "Vendor" },
-          ]}
-        />
-        <Select
-          size={"lg"}
-          styles={{ label: { color: "white" } }}
-          label="City"
-          onChange={setCity}
-          placeholder="Select A City"
-          data={[
-            { value: "islamabad", label: "Islamabad" },
-            { value: "rawalpindi", label: "Rawalpindi" },
-            { value: "lahore", label: "Lahore" },
-            { value: "karachi", label: "Karachi" },
-          ]}
-        />
-        <DatePicker
-          size={"lg"}
-          styles={{ label: { color: "white" } }}
-          placeholder="Pick date"
-          label="Event date"
-          value={date}
-          onChange={setDate}
-          minDate={dayjs(new Date())
-            .startOf("month")
-            .add(new Date().getDate(), "days")
-            .toDate()}
-          maxDate={dayjs(new Date()).add(365, "days").toDate()}
-        />
-        {searchSupplier === "venue" ? (
-          <Select
-            size={"lg"}
-            styles={{ label: { color: "white" } }}
-            label="Time"
-            onChange={setTime}
-            placeholder="Select A Time"
-            data={[
-              { value: "LUNCH", label: "Lunch" },
-              { value: "DINNER", label: "Dinner" },
-            ]}
-          />
-        ) : (
-          <Select
-            size={"lg"}
-            styles={{ label: { color: "white" } }}
-            label="Duration"
-            onChange={setTime}
-            placeholder="Select Duration"
-            data={[
-              { value: "1 Day", label: "1 Day" },
-              { value: "2 Days", label: "2 Days" },
-              { value: "3 Days", label: "3 Days" },
-              { value: "4 Days", label: "4 Days" },
-            ]}
-          />
-        )}
-
-        <Button
-          size={"lg"}
-          component={Link}
-          to={
-            searchSupplier === "venue"
-              ? `/allVenues${date ? "/date/" + date : ""}${
-                  time ? "/time/" + time : ""
-                }${city ? "/city/" + city : ""}`
-              : `/allVendors`
-          }
-          className="button"
-          uppercase
         >
-          Search
-        </Button>
-      </Group>
+          <Text
+            size={matches600 ? "5vw" : "7vw"}
+            weight="bold"
+            align="center"
+            color="white"
+            style={{ fontVariant: "small-caps" }}
+          >
+            <b className="fgColorF">Making</b> Your Event{" "}
+            {!matches600 ? <br></br> : null}A Memorable{" "}
+            <b className="fgColorF">One</b>
+          </Text>
+        </div>
+        <Group position="center">
+          {" "}
+          <Grid
+            px={"5rem"}
+            columns={50}
+            align={"flex-end"}
+            style={{
+              // boxsizing: "border-box",
+              // width: "100%",
+              // left: "50%",
+              // transform: "translateX(-50%)",
+              // border: "1px solid red",
+              // position: "absolute",
+
+              zIndex: 8,
+            }}
+          >
+            <Grid.Col sm={25} md={25} lg={10}>
+              {" "}
+              <Select
+                size={matches600 ? "lg" : "md"}
+                styles={{
+                  label: { color: "white" },
+                }}
+                label="Supplier"
+                placeholder="Select A Supplier"
+                onChange={setSearchSupplier}
+                data={[
+                  { value: "venue", label: "Venue" },
+                  { value: "vendor", label: "Vendor" },
+                ]}
+              />
+            </Grid.Col>
+            <Grid.Col sm={25} md={25} lg={10}>
+              {" "}
+              <Select
+                size={matches600 ? "lg" : "md"}
+                styles={{ label: { color: "white" } }}
+                label="City"
+                onChange={setCity}
+                placeholder="Select A City"
+                data={[
+                  { value: "islamabad", label: "Islamabad" },
+                  { value: "rawalpindi", label: "Rawalpindi" },
+                  { value: "lahore", label: "Lahore" },
+                  { value: "karachi", label: "Karachi" },
+                ]}
+              />
+            </Grid.Col>
+            <Grid.Col sm={25} md={25} lg={10}>
+              {" "}
+              <DatePicker
+                size={matches600 ? "lg" : "md"}
+                styles={{ label: { color: "white" } }}
+                placeholder="Pick date"
+                label="Event date"
+                value={date}
+                onChange={setDate}
+                minDate={dayjs(new Date())
+                  .startOf("month")
+                  .add(new Date().getDate(), "days")
+                  .toDate()}
+                maxDate={dayjs(new Date()).add(365, "days").toDate()}
+              />
+            </Grid.Col>
+            <Grid.Col sm={25} md={25} lg={10}>
+              {" "}
+              {searchSupplier === "venue" ? (
+                <Select
+                  size={matches600 ? "lg" : "md"}
+                  styles={{ label: { color: "white" } }}
+                  label="Time"
+                  onChange={setTime}
+                  placeholder="Select A Time"
+                  data={[
+                    { value: "LUNCH", label: "Lunch" },
+                    { value: "DINNER", label: "Dinner" },
+                  ]}
+                />
+              ) : (
+                <Select
+                  size={matches600 ? "lg" : "md"}
+                  styles={{ label: { color: "white" } }}
+                  label="Duration"
+                  onChange={setTime}
+                  placeholder="Select Duration"
+                  data={[
+                    { value: "1 Day", label: "1 Day" },
+                    { value: "2 Days", label: "2 Days" },
+                    { value: "3 Days", label: "3 Days" },
+                    { value: "4 Days", label: "4 Days" },
+                  ]}
+                />
+              )}
+            </Grid.Col>
+            <Grid.Col sm={50} md={50} lg={10}>
+              {" "}
+              <Button
+                size={matches600 ? "lg" : "md"}
+                component={Link}
+                to={
+                  searchSupplier === "venue"
+                    ? `/allVenues${date ? "/date/" + date : ""}${
+                        time ? "/time/" + time : ""
+                      }${city ? "/city/" + city : ""}`
+                    : `/allVendors`
+                }
+                className="button"
+                fullWidth
+                uppercase
+              >
+                Search
+              </Button>
+            </Grid.Col>
+          </Grid>
+        </Group>
+      </Stack>
+      <SearchBackgroundOpacityDiv />
       {/*<Container><SearchAndFilter /></Container>*/}
       {searchBackgroundCarousel}
     </Paper>

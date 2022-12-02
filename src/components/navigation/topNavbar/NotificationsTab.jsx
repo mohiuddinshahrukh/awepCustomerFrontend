@@ -84,9 +84,9 @@ const NotificaitonsTab = ({ allNotifications, unreadCount }) => {
           dot={false}
           processing
         >
-          <ActionIcon size={30}>
+          <ActionIcon size={"xl"} className="border">
             {/* <Avatar size="lg" src="avatar.png" /> */}
-            <IconBell size={30} />
+            <IconBell size={30} color="#e60084" stroke={1.5} />
           </ActionIcon>
         </Indicator>
       </Menu.Target>{" "}

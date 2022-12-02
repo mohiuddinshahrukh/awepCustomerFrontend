@@ -15,7 +15,7 @@ const CustomerTestimonials = ({ landingPageTestimonials }) => {
           variant="text"
           size={"1.5rem"}
         >
-          Customer Testimonials
+          Testimonials
         </Anchor>
         <Button
           className="buttonOutline"
@@ -24,7 +24,7 @@ const CustomerTestimonials = ({ landingPageTestimonials }) => {
           variant="outline"
           rightIcon={<IconArrowRight />}
         >
-          Add Your Testimonial
+          Add Testimonial
         </Button>
       </Group>
 

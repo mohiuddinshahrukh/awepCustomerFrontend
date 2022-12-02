@@ -1,5 +1,10 @@
 // import logo from "./logo.svg";
-import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
+import {
+  ColorSchemeProvider,
+  MantineProvider,
+  Paper,
+  Text,
+} from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 
 import { useEffect, useState } from "react";
@@ -59,6 +64,14 @@ function App() {
     >
       <MantineProvider
         theme={{
+          components: {
+            Text: {
+              styles: {
+                root: {},
+              },
+            },
+          },
+          // fontSize: "var(--mantine-font-size-md-1)",
           colorScheme,
           fontFamily: "Poppins, sans-serif",
         }}

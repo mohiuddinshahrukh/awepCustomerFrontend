@@ -180,7 +180,7 @@ const AllVenuesPage = () => {
       //if venueCapacity includes 600, than filter venues which have at least 1 subVenue with capacity between 300 and 600. if venueCapacity includes 1000, than filter venues which have at least 1 subVenue with capacity between 600 and 1000.
       //if venueCapacity includes 1500, than filter venues which have at least 1 subVenue with capacity between 1000 and 1500.
       //if venueCapacity includes 1501, than filter venues which have at least 1 subVenue with capacity greater than 1500.
-      if (venueCapacity.length > 0) {
+      if (venueCapacity?.length > 0) {
         let venueCapacityMatch = false;
         venueCapacity.forEach((capacity) => {
           if (capacity === "100") {
@@ -252,7 +252,7 @@ const AllVenuesPage = () => {
           venueTypes.includes(value.subVenueType)
         );
         console.log("filteredArray", filteredArray);
-        if (filteredArray.length > 0) {
+        if (filteredArray?.length > 0) {
           console.log("MATCHED");
           venueTypeMatch = true;
         }
@@ -261,7 +261,7 @@ const AllVenuesPage = () => {
           return false;
         }
       }
-      if (filteredServices.length > 0) {
+      if (filteredServices?.length > 0) {
         //get all services of a venue in an array
         let serviceMatch = false;
 
@@ -509,7 +509,7 @@ const AllVenuesPage = () => {
                 venueCapacity={venueCapacity}
                 setVenueCapacity={setVenueCapacity}
               />
-              {allServices.length > 0 && (
+              {allServices?.length > 0 && (
                 <AdvanceFilterVenueServices
                   allServices={allServices}
                   setFilteredServices={setFilteredServices}
@@ -523,7 +523,7 @@ const AllVenuesPage = () => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
-            {allVenues.length > 0 ? (
+            {allVenues?.length > 0 ? (
               <AllVenuesGrid allVenues={filteredVenues} />
             ) : (
               <FiveCardsSkeleton />

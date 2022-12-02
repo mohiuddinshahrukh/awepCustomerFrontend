@@ -23,7 +23,7 @@ import { socket } from "../../Socket/Socket";
 const TopNavbar = () => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
-  const matches1027 = useMediaQuery("(min-width: 1027px)");
+  const matches1200 = useMediaQuery("(min-width: 1200px)");
   const [count, setCount] = useState(0);
   const [allNotifications, setAllNotificaitons] = useState([]);
   const [refreshNotifications, setRefreshNotifications] = useState(false);
@@ -76,7 +76,7 @@ const TopNavbar = () => {
       }}
     >
       {" "}
-      <Container py={"2rem"} size={"xl"}>
+      <Container py={"0.5rem"} size={"xl"}>
         <Drawer
           title={"AWEP MENU"}
           opened={drawerState}
@@ -103,7 +103,7 @@ const TopNavbar = () => {
           />
         </Drawer>
         <Group position="apart">
-          {matches1027 ? (
+          {matches1200 ? (
             <Anchor
               size={"2rem"}
               weight={"bold"}
@@ -117,15 +117,15 @@ const TopNavbar = () => {
             <TopNavbarHamburger setDrawerState={setDrawerState} />
           )}
 
-          {matches1027 ? (
+          {matches1200 ? (
             <TopNavbarLinks
               linksData={[
-                { title: "Home", path: "/" },
+                // { title: "Home", path: "/" },
                 { title: "Venues", path: "/allVenues" },
                 { title: "Vendors", path: "/allVendors" },
-                { title: "Card Editor", path: "/cardEditor" },
-                { title: "Contact Us", path: "/contactUs" },
-                { title: "About Us", path: "/aboutUs" },
+                { title: "Cards", path: "/cardEditor" },
+                { title: "Contact", path: "/contactUs" },
+                { title: "About", path: "/aboutUs" },
                 {
                   title: "Feedbacks",
                   path: `/addreview/${"admin"}`,
@@ -143,11 +143,10 @@ const TopNavbar = () => {
               AWEP
             </Anchor>
           )}
-          <Group spacing={"xl"}>
+          <Group>
             <TopNavbarThemeToggle />
             {localStorage.getItem("userToken") ? (
               <Group>
-                {" "}
                 <TopNavbarUserProfileIcon />
                 <NotificaitonsTab
                   unreadCount={count}
@@ -157,12 +156,14 @@ const TopNavbar = () => {
                 />
               </Group>
             ) : (
-              <TopNavbarButtons
-                buttonsData={[
-                  { title: "Sign In", path: "/signIn", variant: "filled" },
-                  { title: "Sign Up", path: "/signUp", variant: "outline" },
-                ]}
-              />
+              matches1200 && (
+                <TopNavbarButtons
+                  buttonsData={[
+                    { title: "Sign In", path: "/signIn", variant: "filled" },
+                    { title: "Sign Up", path: "/signUp", variant: "outline" },
+                  ]}
+                />
+              )
             )}
           </Group>
         </Group>

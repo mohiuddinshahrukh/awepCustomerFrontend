@@ -20,7 +20,7 @@ import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import CustomButton from "../CustomButton/CustomButton";
 
 import RatingStars from "../RatingStars/RatingStars";
-import Carousal from "../Carousal/Carousal";
+import Carousal_Images from "../Carousal/Carousal";
 import AboutVenue from "../AboutVenue/AboutVenue";
 import VenueServices from "../VenueServices/VenueServices";
 import CarouselOfSubVenues from "../SubVenuesOfSpecifcVenue/CarouselOfSubVenues";
@@ -39,6 +39,9 @@ import {
 } from "@tabler/icons";
 import SignIn from "../userProfiling/SignIn";
 import SignUp from "../userProfiling/SignUp";
+import Carousal_Videos from "../Carousal/Carousal_videos";
+import Carousal_Panorama from "../Carousal/Carousal_Panorama";
+import Carousal_Stage from "../Carousal/Carousal_Stage";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -213,37 +216,49 @@ const SpecificVenueDetails = () => {
       </Group>
 
       <Grid pt="md">
-        <Grid.Col hidden={true}>
-          <Tabs defaultValue="gallery">
-            <Tabs.List>
-              <Tabs.Tab value="gallery" icon={<IconPhoto size={14} />}>
-                Gallery
-              </Tabs.Tab>
-              <Tabs.Tab value="messages" icon={<IconMessageCircle size={14} />}>
-                Messages
-              </Tabs.Tab>
-              <Tabs.Tab value="settings" icon={<IconSettings size={14} />}>
-                Settings
-              </Tabs.Tab>
-            </Tabs.List>
-
-            <Tabs.Panel value="gallery" pt="xs">
-              Gallery tab content
-            </Tabs.Panel>
-
-            <Tabs.Panel value="messages" pt="xs">
-              Messages tab content
-            </Tabs.Panel>
-
-            <Tabs.Panel value="settings" pt="xs">
-              Settings tab content
-            </Tabs.Panel>
-          </Tabs>
-        </Grid.Col>
         <Grid.Col lg={9}>
-          <Carousal
-            images={venueDetails?.images ? venueDetails?.images : ["", ""]}
-          />
+          <Grid.Col>
+            <Tabs defaultValue="videos" keepMounted={false}>
+              <Tabs.List>
+                <Tabs.Tab value="videos" icon={<IconPhoto size={14} />}>
+                  Videos
+                </Tabs.Tab>
+                <Tabs.Tab value="photos" icon={<IconMessageCircle size={14} />}>
+                  Photos
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="panorama"
+                  icon={<IconSettings size={14} />}
+                  hidden={venueDetails?.panorama === undefined}
+                >
+                  Panorama
+                </Tabs.Tab>
+                <Tabs.Tab value="stage" icon={<IconSettings size={14} />}>
+                  Stage
+                </Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value="videos" pt="xs">
+                <Carousal_Videos videos={venueDetails?.videos} />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="photos" pt="xs">
+                <Carousal_Images images={venueDetails?.images} />
+              </Tabs.Panel>
+              {console.log("char images", venueDetails)}
+
+              <Tabs.Panel
+                value="panorama"
+                pt="xs"
+                hidden={venueDetails?.panorama === undefined}
+              >
+                <Carousal_Panorama panorama={venueDetails?.panorama} />
+              </Tabs.Panel>
+              <Tabs.Panel value="stage" pt="xs">
+                <Carousal_Stage />
+              </Tabs.Panel>
+            </Tabs>
+          </Grid.Col>
           <Group
             spacing="md"
             pt="sm"

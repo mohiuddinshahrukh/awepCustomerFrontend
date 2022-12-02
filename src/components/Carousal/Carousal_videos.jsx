@@ -2,9 +2,9 @@ import { Carousel } from "@mantine/carousel";
 import { Image, Skeleton } from "@mantine/core";
 import React from "react";
 
-const Carousal_Images = ({ images }) => {
-  let venueImages = images;
-  console.log("TU KHER BIYON", images);
+const Carousal_Videos = ({ videos }) => {
+  let venueVideos = videos;
+  console.log("TU KHER BIYON", videos);
   return (
     <Carousel
       styles={{
@@ -12,7 +12,7 @@ const Carousal_Images = ({ images }) => {
           borderRadius: "10px",
         },
       }}
-      withIndicators
+      // withIndicators
       height="501px"
       slideSize="100%"
       slideGap={2}
@@ -20,10 +20,16 @@ const Carousal_Images = ({ images }) => {
       align="start"
       control
     >
-      {venueImages !== [] && venueImages !== undefined ? (
-        venueImages.map((image, index) => (
+      {venueVideos !== [] && venueVideos !== undefined ? (
+        venueVideos.map((v, index) => (
           <Carousel.Slide key={index}>
-            <Image height="500px" width={"100%"} src={image} />
+            <video
+              style={{ objectFit: "cover" }}
+              height="500px"
+              width={"100%"}
+              src={v}
+              controls
+            ></video>
           </Carousel.Slide>
         ))
       ) : (
@@ -33,4 +39,4 @@ const Carousal_Images = ({ images }) => {
   );
 };
 
-export default Carousal_Images;
+export default Carousal_Videos;

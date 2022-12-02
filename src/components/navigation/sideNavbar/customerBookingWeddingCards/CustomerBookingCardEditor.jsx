@@ -86,9 +86,6 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
       : ""
   );
 
-  //
-  //
-  //
   //  Y AXIS VALUES
   const [eventTypeY, setEventTypeY] = useState(100);
   const [invitationFromY, setInvitationFromY] = useState(150);

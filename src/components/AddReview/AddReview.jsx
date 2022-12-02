@@ -319,7 +319,7 @@ const AddReview = () => {
         showNotification({
           color: "green",
           title: `Successfully`,
-          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+          message: `Feed Back Added!!`,
         });
         navigate("/");
         console.log("success", response.data);

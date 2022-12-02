@@ -32,7 +32,7 @@ class ErrorBoundary extends React.Component {
 export default function Stage3DView({ url }) {
   url =
     "https://firebasestorage.googleapis.com/v0/b/awep-92675.appspot.com/o/3D-Models%2Fretro_style_stage.glb?alt=media&token=76314b97-2727-4594-8533-9a75c2b223ad";
-  const failSafeUrl = "./sofa.glb";
+  const failSafeUrl = "./sofa2.glb";
   function Model(props) {
     const { scene } = useGLTF(url);
 

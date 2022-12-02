@@ -25,7 +25,7 @@ import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
-
+import logo from "../../assets/awepLogo/3a.png";
 const useStyles = createStyles(() => ({
   button: {
     backgroundColor: "#775A97",
@@ -404,9 +404,9 @@ const AddReview = () => {
       </Grid.Col>
       <Grid.Col lg={6}>
         <Container size="xl" px={matches800 ? 60 : "sm"} pt={60}>
-          <Text size={70} pb="md">
-            AWEP
-          </Text>
+          <Group my={"xl"} position="center">
+            <Image fit="contain" height={150} width={200} src={logo} />
+          </Group>
           <Text size={25} pb="md">
             Share your experience! Your review helps other Users choose their
             suppliers.

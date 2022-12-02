@@ -18,7 +18,7 @@ const Carousal_Images = ({ images }) => {
       slideGap={2}
       // loop
       align="start"
-      control
+      // control
     >
       {venueImages !== [] && venueImages !== undefined ? (
         venueImages.map((image, index) => (

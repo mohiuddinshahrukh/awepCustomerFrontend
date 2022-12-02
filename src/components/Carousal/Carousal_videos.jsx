@@ -3,7 +3,7 @@ import { Image, Skeleton } from "@mantine/core";
 import React from "react";
 
 const Carousal_Videos = ({ videos }) => {
-  let venueVideos = videos;
+  let venueVideos = videos || [];
   console.log("TU KHER BIYON", videos);
   return (
     <Carousel
@@ -20,7 +20,8 @@ const Carousal_Videos = ({ videos }) => {
       align="start"
       control
     >
-      {venueVideos !== [] && venueVideos !== undefined ? (
+      {console.log("venueVideos", venueVideos)}
+      {venueVideos !== [] ? (
         venueVideos.map((v, index) => (
           <Carousel.Slide key={index}>
             <video

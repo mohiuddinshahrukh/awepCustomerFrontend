@@ -218,14 +218,23 @@ const SpecificVenueDetails = () => {
       <Grid pt="md">
         <Grid.Col lg={9}>
           <Grid.Col>
-            <Tabs defaultValue="videos" keepMounted={false}>
+            <Tabs defaultValue={"photos"} keepMounted={false} variant="pills">
               <Tabs.List>
-                <Tabs.Tab value="videos" icon={<IconPhoto size={14} />}>
-                  Videos
-                </Tabs.Tab>
                 <Tabs.Tab value="photos" icon={<IconMessageCircle size={14} />}>
                   Photos
                 </Tabs.Tab>
+
+                <Tabs.Tab
+                  value="videos"
+                  icon={<IconPhoto size={14} />}
+                  hidden={
+                    venueDetails?.videos?.length === 0 ||
+                    venueDetails?.videos == undefined
+                  }
+                >
+                  Videos
+                </Tabs.Tab>
+
                 <Tabs.Tab
                   value="panorama"
                   icon={<IconSettings size={14} />}
@@ -238,7 +247,14 @@ const SpecificVenueDetails = () => {
                 </Tabs.Tab>
               </Tabs.List>
 
-              <Tabs.Panel value="videos" pt="xs">
+              <Tabs.Panel
+                value="videos"
+                pt="xs"
+                hidden={
+                  venueDetails?.videos?.length === 0 ||
+                  venueDetails?.videos === undefined
+                }
+              >
                 <Carousal_Videos videos={venueDetails?.videos} />
               </Tabs.Panel>
 

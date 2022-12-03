@@ -15,6 +15,7 @@ import {
   IconBrandInstagram,
   IconBrandPinterest,
   IconBrandTwitter,
+  IconBrandYoutube,
 } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -25,6 +26,7 @@ import BottomNavbarLinks from "./BottomNavbarLinks";
 
 const BottomNavbar = () => {
   const matches = useMediaQuery("(max-width: 600px)");
+  const matches700 = useMediaQuery("(max-width: 700px)");
   const theme = useMantineTheme();
   return (
     <Paper
@@ -68,32 +70,33 @@ const BottomNavbar = () => {
           <BottomNavbarHeadOffice
             data={{
               title: "Head Office",
-              address: "1234, 56th Street, New York, NY 10001",
-              phone: "+1 234 567 890",
-              email: "mohiuddinShahrukh@gmail.com",
+              address:
+                "Zaki Centre, Office #17, 2nd Floor, I-8 Markaz Islamabad, 46000",
+              phone: "+923455893337",
+              email: "automatedweddingeventplanner@gmail.com",
             }}
           />
-          {/* <BottomNavbarFollowUsOn
-            followUsOnLinks={[
-              {
-                path: "https://www.facebook.com/awep.pk/",
-                icon: <IconBrandFacebook fill="#6C6C6C" stroke={0} />,
-              },
-              {
-                path: "https://twitter.com/awep_pk",
-                icon: <IconBrandTwitter fill="#6C6C6C" stroke={0} />,
-              },
-              {
-                path: "https://www.instagram.com/awep.pk/",
-                icon: <IconBrandInstagram />,
-              },
-              {
-                path: "https://www.pinterest.com/awep.pk/",
-                icon: <IconBrandPinterest />,
-              },
-            ]}
-          /> */}
+          {!matches700 && (
+            <BottomNavbarFollowUsOn
+              alignment={matches ? "column" : "row"}
+              followUsOnLinks={[
+                {
+                  path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
+                  icon: <IconBrandFacebook fill="#6C6C6C" stroke={0} />,
+                },
+                {
+                  path: "https://www.instagram.com/awep.pk/",
+                  icon: <IconBrandInstagram />,
+                },
+                {
+                  path: "https://www.youtube.com/@teamawepsat",
+                  icon: <IconBrandYoutube />,
+                },
+              ]}
+            />
+          )}
         </Group>
+
         <Divider mt={"xl"} />
         <Group position="apart" mt={"xl"} align="center">
           <Anchor
@@ -105,6 +108,25 @@ const BottomNavbar = () => {
           >
             AWEP
           </Anchor>
+          {matches700 && (
+            <BottomNavbarFollowUsOn
+              alignment={matches700 ? "column" : "row"}
+              followUsOnLinks={[
+                {
+                  path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
+                  icon: <IconBrandFacebook fill="#6C6C6C" stroke={0} />,
+                },
+                {
+                  path: "https://www.instagram.com/awep.pk/",
+                  icon: <IconBrandInstagram />,
+                },
+                {
+                  path: "https://www.youtube.com/@teamawepsat",
+                  icon: <IconBrandYoutube />,
+                },
+              ]}
+            />
+          )}
           <Text color={"dimmed"}> &copy;{new Date().getFullYear()} AWEP</Text>
         </Group>
       </Container>

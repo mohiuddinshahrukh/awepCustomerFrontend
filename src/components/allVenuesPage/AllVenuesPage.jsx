@@ -62,6 +62,7 @@ const AllVenuesPage = () => {
   const [allVenues, setAllVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
   const [search, setSearch] = useState("");
+  console.log("search is", search);
   const [venueSort, setVenueSort] = useState("mostRelevant");
 
   console.log("All venues:", allVenues);
@@ -307,6 +308,27 @@ const AllVenuesPage = () => {
           return false;
         }
       }
+      if (search !== "") {
+        console.log("wea are in ifff", search);
+        let searchMatch = false;
+        if (venue?.venueName?.toLowerCase()?.includes(search?.toLowerCase())) {
+          searchMatch = true;
+        }
+        if (venue?.subVenues?.length > 0) {
+          venue?.subVenues?.forEach((subVenue) => {
+            if (
+              subVenue?.subVenueName
+                ?.toLowerCase()
+                ?.includes(search?.toLowerCase())
+            ) {
+              searchMatch = true;
+            }
+          });
+        }
+        if (!searchMatch) {
+          return false;
+        }
+      }
 
       if (minPriceFilter === 0 && maxPriceFilter === 100000) {
         return true;
@@ -328,6 +350,8 @@ const AllVenuesPage = () => {
           }
         }
       }
+
+      //filter venues which have venues and subVenues with name matching the search
 
       return true;
     });
@@ -353,6 +377,7 @@ const AllVenuesPage = () => {
     filteredServices,
     minPriceFilter,
     maxPriceFilter,
+    search,
   ]);
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");

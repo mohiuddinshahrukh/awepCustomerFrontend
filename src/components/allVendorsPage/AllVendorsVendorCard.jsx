@@ -2,6 +2,7 @@ import { Carousel } from "@mantine/carousel";
 import {
   Anchor,
   Card,
+  Center,
   Group,
   Image,
   Paper,
@@ -19,18 +20,21 @@ const AllVendorsVendorCard = ({ allVendors }) => {
     return <FeaturedVendorsCard key={index} vendor={vendor} />;
   });
   return (
-    <SimpleGrid
-      cols={3}
-      breakpoints={[
-        { maxWidth: "xs", cols: 1 },
-        { maxWidth: "sm", cols: 2 },
-        { maxWidth: "md", cols: 2 },
-        { maxWidth: "lg", cols: 3 },
-        { maxWidth: "xl", cols: 3 },
-      ]}
-    >
-      {vendors}{" "}
-    </SimpleGrid>
+    <Center>
+      {" "}
+      <SimpleGrid
+        cols={3}
+        breakpoints={[
+          { maxWidth: "xs", cols: 1 },
+          { maxWidth: "sm", cols: 2 },
+          { maxWidth: "md", cols: 3 },
+          { maxWidth: "lg", cols: 3 },
+          { maxWidth: "xl", cols: 3 },
+        ]}
+      >
+        {vendors}
+      </SimpleGrid>
+    </Center>
   );
 };
 

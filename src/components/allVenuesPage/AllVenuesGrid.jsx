@@ -32,7 +32,12 @@ const AllVenuesGrid = ({
         </Text>
 
         <Group>
-          <TextInput icon={<IconSearch size={22} />} placeholder="Search" />
+          <TextInput
+            icon={<IconSearch size={22} />}
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <Select
             defaultValue={venueSort}
             onChange={setVenueSort}

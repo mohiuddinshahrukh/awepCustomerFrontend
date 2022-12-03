@@ -322,37 +322,36 @@ const ChatScreen = () => {
 
   React.useEffect(() => {
     if (refresh) {
-      axios
-        .get("https://a-wep.herokuapp.com/superAdmin/getAllUsers")
-        .then((res) => {
-          console.log("ALL USERS FETCHED", res.data);
-          if (res.data.status === "success") {
-            setAllUsers(res.data.data);
-            setRefresh(false);
-            setVisibleConversations(false);
-          } else {
-            alert("Error");
-          }
-        });
-
-      axios
-        .get("https://a-wep.herokuapp.com/superAdmin/getAllVenues")
-        .then((res) => {
-          console.log("RES", res);
-          if (res.data.status === "success") {
-            console.log("RES>DATA>DATA", res.data.data);
-            setAllVenues(res.data.data);
-          }
-        });
-      axios
-        .get("https://a-wep.herokuapp.com/superAdmin/getVendorBusiness")
-        .then((res) => {
-          console.log("RES", res);
-          if (res.data.status === "success") {
-            console.log("RES>DATA>DATA", res.data.data);
-            setAllVendors(res.data.data);
-          }
-        });
+      // axios
+      //   .get("https://a-wep.herokuapp.com/superAdmin/getAllUsers")
+      //   .then((res) => {
+      //     console.log("ALL USERS FETCHED", res.data);
+      //     if (res.data.status === "success") {
+      //       setAllUsers(res.data.data);
+      //       setRefresh(false);
+      //       setVisibleConversations(false);
+      //     } else {
+      //       alert("Error");
+      //     }
+      //   });
+      // axios
+      //   .get("https://a-wep.herokuapp.com/superAdmin/getAllVenues")
+      //   .then((res) => {
+      //     console.log("RES", res);
+      //     if (res.data.status === "success") {
+      //       console.log("RES>DATA>DATA", res.data.data);
+      //       setAllVenues(res.data.data);
+      //     }
+      //   });
+      // axios
+      //   .get("https://a-wep.herokuapp.com/superAdmin/getVendorBusiness")
+      //   .then((res) => {
+      //     console.log("RES", res);
+      //     if (res.data.status === "success") {
+      //       console.log("RES>DATA>DATA", res.data.data);
+      //       setAllVendors(res.data.data);
+      //     }
+      //   });
     }
   }, [refresh]);
 
@@ -566,7 +565,8 @@ const ChatScreen = () => {
       <Grid justify="space-between" style={{ height: "85vh" }}>
         <Grid.Col lg={3} style={{ borderRight: "1px solid #EAEAEA" }}>
           <Grid>
-            <Grid.Col>
+            {/*
+                    <Grid.Col>
               <Button
                 fullWidth
                 uppercase
@@ -584,7 +584,7 @@ const ChatScreen = () => {
                 value={search}
                 onChange={(event) => setSearch(event.currentTarget.value)}
               />
-              {/*  
+            
               <Select
                 size="md"
                 label="Filter By User Type"
@@ -599,13 +599,15 @@ const ChatScreen = () => {
                 placeholder="All User Types"
                 onChange={setType}
               />
-              */}
-            </Grid.Col>
+              
+              </Grid.Col>
+        */}
+
             <Grid.Col
               component={ScrollArea}
               style={{ height: "75vh", position: "relative" }}
             >
-              <LoadingOverlay
+              {/*              <LoadingOverlay
                 visible={visibleVenues}
                 loaderProps={{
                   size: "xl",
@@ -613,7 +615,7 @@ const ChatScreen = () => {
                   variant: "bars",
                 }}
                 overlayOpacity={0.5}
-              />
+              />*/}
 
               {filterString.length > 0 ? (
                 filterString?.map((conversation) => {
@@ -832,7 +834,8 @@ const ChatScreen = () => {
                           <IconDotsVertical />
                         </ActionIcon>
                       </Menu.Target>
-                      <Menu.Dropdown>
+                      {/*
+                     <Menu.Dropdown>
                         <Menu.Label>Actions</Menu.Label>
                         <Menu.Divider></Menu.Divider>
                         <Menu.Item
@@ -862,6 +865,7 @@ const ChatScreen = () => {
                         </Menu.Item>
                         <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
                       </Menu.Dropdown>
+                    */}
                     </Menu>
                   ) : selectedChatDetails.venueOwnerId ? (
                     <Menu position="left-start" width={200} shadow="md">

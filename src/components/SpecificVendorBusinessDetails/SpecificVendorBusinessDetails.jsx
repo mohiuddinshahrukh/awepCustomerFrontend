@@ -95,7 +95,7 @@ const SpecificVendorBusinessDetails = () => {
 
   return (
     <Container size="xl">
-      <BreadCrumbs />
+      {/*<BreadCrumbs />*/}
       <Title pt="md" order={3}>
         {vendorDetails?.vendorBusinessTitle}
       </Title>

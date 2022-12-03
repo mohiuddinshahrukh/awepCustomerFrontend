@@ -65,6 +65,7 @@ const FeaturedMenusCard = ({ menu }) => {
         transitionDelay: "0s",
         transitionProperty: "box-shadow",
       }}
+      style={{ width: "302px" }}
       className="border"
     >
       <div>

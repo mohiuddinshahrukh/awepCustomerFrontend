@@ -6,14 +6,20 @@ import {
   SegmentedControl,
   Select,
   Text,
+  TextInput,
 } from "@mantine/core";
-import { IconLayoutCards, IconLayoutGrid } from "@tabler/icons";
+import { IconLayoutCards, IconLayoutGrid, IconSearch } from "@tabler/icons";
 import React, { useState } from "react";
 import AllVenuesVenueCard from "./AllVenuesVenueCard";
 import AllVenuesVenueList from "./AllVenuesVenueList";
 
-const AllVenuesGrid = ({ allVenues }) => {
-  const [venueSort, setVenueSort] = useState("mostRelevant");
+const AllVenuesGrid = ({
+  allVenues,
+  search,
+  setSearch,
+  venueSort,
+  setVenueSort,
+}) => {
   const [viewStyle, setViewStyle] = useState("card");
   console.log("Venue Sort Value", venueSort);
   return (
@@ -26,6 +32,7 @@ const AllVenuesGrid = ({ allVenues }) => {
         </Text>
 
         <Group>
+          <TextInput icon={<IconSearch size={22} />} placeholder="Search" />
           <Select
             defaultValue={venueSort}
             onChange={setVenueSort}

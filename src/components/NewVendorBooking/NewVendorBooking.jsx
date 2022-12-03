@@ -252,10 +252,10 @@ const NewVendorBookingFile = () => {
     // validateInputOnChange: true,
     initialValues: {
       // venue: "",
-      date: new Date(params.date),
+      date: params.date ? new Date(params.date) : null,
       // vendorCategory: "",
-      eventType: params.eventType,
-      time: params.time,
+      eventType: params.eventType ? params.eventType : "",
+      time: params.time ? params.time : "",
     },
 
     validate: {
@@ -452,7 +452,7 @@ const NewVendorBookingFile = () => {
     if (
       form1.values.eventType === "" ||
       form1.values.time === "" ||
-      form1.values.date === ""
+      form1.values.date === null
     ) {
       console.log("@TEST in if", form1.values);
       setHideSelectButton(true);

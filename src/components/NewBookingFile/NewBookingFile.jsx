@@ -303,10 +303,10 @@ const NewBookingFile = () => {
     // validateInputOnChange: true,
     initialValues: {
       // venue: "",
-      date: new Date(params.date),
-      noOfGuests: params.guests,
-      eventType: params.eventType,
-      time: params.time,
+      date: params.date ? new Date(params.date) : null,
+      noOfGuests: params.guests ? params.guests : "",
+      eventType: params.eventType ? params.eventType : "",
+      time: params.time ? params.time : "",
     },
 
     validate: {

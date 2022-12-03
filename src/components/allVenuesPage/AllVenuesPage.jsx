@@ -61,6 +61,9 @@ const AllVenuesPage = () => {
   // const [venueType, setVenueType] = useState("all");
   const [allVenues, setAllVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
+  const [search, setSearch] = useState("");
+  const [venueSort, setVenueSort] = useState("mostRelevant");
+
   console.log("All venues:", allVenues);
   console.log("Filtered venues:", filteredVenues);
   const initialValues = [
@@ -524,7 +527,13 @@ const AllVenuesPage = () => {
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
             {allVenues?.length > 0 ? (
-              <AllVenuesGrid allVenues={filteredVenues} />
+              <AllVenuesGrid
+                allVenues={filteredVenues}
+                search={search}
+                setSearch={setSearch}
+                venueSort={venueSort}
+                setVenueSort={setVenueSort}
+              />
             ) : (
               <FiveCardsSkeleton />
             )}

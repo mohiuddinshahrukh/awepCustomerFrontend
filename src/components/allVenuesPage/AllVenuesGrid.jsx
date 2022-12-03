@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconLayoutCards, IconLayoutGrid, IconSearch } from "@tabler/icons";
 import React, { useState } from "react";
 import AllVenuesVenueCard from "./AllVenuesVenueCard";
@@ -20,6 +21,7 @@ const AllVenuesGrid = ({
   venueSort,
   setVenueSort,
 }) => {
+  const matches1026 = useMediaQuery("(max-width: 1026px)");
   const [viewStyle, setViewStyle] = useState("card");
   console.log("Venue Sort Value", venueSort);
   return (
@@ -31,23 +33,27 @@ const AllVenuesGrid = ({
             : allVenues?.length + "Result"}
         </Text>
 
-        <Group>
-          <TextInput
-            icon={<IconSearch size={22} />}
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <Select
-            defaultValue={venueSort}
-            onChange={setVenueSort}
-            data={[
-              { value: "mostRelevant", label: "Most Relevant" },
-              { value: "views", label: "View Count" },
-              { value: "mostBooked", label: "Most Booked" },
-              { value: "recentlyAdded", label: "Recently Added" },
-            ]}
-          />
+        <Group noWrap>
+          {!matches1026 && (
+            <>
+              <TextInput
+                icon={<IconSearch size={22} />}
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Select
+                defaultValue={venueSort}
+                onChange={setVenueSort}
+                data={[
+                  { value: "mostRelevant", label: "Most Relevant" },
+                  { value: "views", label: "View Count" },
+                  { value: "mostBooked", label: "Most Booked" },
+                  { value: "recentlyAdded", label: "Recently Added" },
+                ]}
+              />
+            </>
+          )}
           <SegmentedControl
             data={[
               {

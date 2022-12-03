@@ -2,18 +2,14 @@ import {
   Anchor,
   Button,
   Card,
+  Center,
   Group,
   Image,
   Paper,
   SimpleGrid,
   Text,
 } from "@mantine/core";
-import {
-  IconBuildingFortress,
-  IconCash,
-  IconStar,
-  IconUsers,
-} from "@tabler/icons";
+
 import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVenuesCard from "../featuredVenuesSection/FeaturedVenuesCard";
@@ -25,18 +21,20 @@ const AllVenuesVenueCard = ({ allVenues }) => {
   });
 
   return (
-    <SimpleGrid
-      cols={3}
-      breakpoints={[
-        { maxWidth: "xs", cols: 1 },
-        { maxWidth: "sm", cols: 2 },
-        { maxWidth: "md", cols: 2 },
-        { maxWidth: "lg", cols: 3 },
-        { maxWidth: "xl", cols: 3 },
-      ]}
-    >
-      {venues}{" "}
-    </SimpleGrid>
+    <Center>
+      <SimpleGrid
+        cols={3}
+        breakpoints={[
+          { maxWidth: "xs", cols: 1 },
+          { maxWidth: "sm", cols: 2 },
+          { maxWidth: "md", cols: 2 },
+          { maxWidth: "lg", cols: 2 },
+          { maxWidth: "xl", cols: 3 },
+        ]}
+      >
+        {venues}
+      </SimpleGrid>
+    </Center>
   );
 };
 

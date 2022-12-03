@@ -1,15 +1,5 @@
 import { Carousel } from "@mantine/carousel";
-import {
-  Anchor,
-  Card,
-  Center,
-  Group,
-  Image,
-  Paper,
-  SimpleGrid,
-  Text,
-} from "@mantine/core";
-import { IconBuildingStore, IconCash, IconStar } from "@tabler/icons";
+import { Center, SimpleGrid } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVendorsCard from "../featuredVendorsSection/FeaturedVendorsCard";

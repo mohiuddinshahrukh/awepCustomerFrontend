@@ -321,7 +321,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                 style={{
                   position: "absolute",
                   right: 0,
-                  top: 0,
+                  bottom: 20,
                   height: "auto",
                   maxWidth: 75,
                   width: "100%",

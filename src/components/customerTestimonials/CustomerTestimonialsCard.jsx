@@ -21,9 +21,9 @@ const CustomerTestimonialsCard = ({ testimonial }) => {
         }}
       >
         <Card.Section p={"lg"}>
-          <Text lineClamp={1} size={"lg"} weight={500}>
+          {/* <Text lineClamp={1} size={"lg"} weight={500}>
             {testimonial.feedbackType}
-          </Text>
+          </Text> */}
         </Card.Section>
         <Card.Section px={"lg"}>
           <Text color={"dimmed"} lineClamp={4} size={"md"}>

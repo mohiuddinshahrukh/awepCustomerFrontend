@@ -9,6 +9,7 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -19,10 +20,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import BottomNavbarDownloadApp from "./BottomNavbarDownloadApp";
 import BottomNavbarFollowUsOn from "./BottomNavbarFollowUsOn";
+import BottomNavbarHeadOffice from "./BottomNavbarHeadOffice";
 import BottomNavbarLinks from "./BottomNavbarLinks";
-import BottomNavbarSelectCity from "./BottomNavbarSelectCity";
 
 const BottomNavbar = () => {
+  const matches = useMediaQuery("(max-width: 600px)");
   const theme = useMantineTheme();
   return (
     <Paper
@@ -32,24 +34,62 @@ const BottomNavbar = () => {
       }}
     >
       <Container size={"xl"} py={"xl"}>
-        <Group align={"flex-start"} position={"apart"}>
-          <BottomNavbarLinks
-            footerLinks={[
-              {
-                title: "Information",
-                links: [
-                  { title: "Our Cities", path: "/allVenues" },
-                  { title: "Contact Us", path: "/contactUs" },
-                  { title: "About AWEP", path: "/aboutUs" },
-                  { title: "Terms of Use", path: "/aboutUs" },
-                  { title: "Prvacy Policy", path: "/aboutUs" },
-                  { title: "Wedding Cards", path: "/cardEditor" },
-                ],
-              },
-            ]}
-          />
+        <Group align={"flex-start"} position={"apart"} noWrap>
+          {!matches ? (
+            <Group>
+              <BottomNavbarLinks
+                footerLinks={[
+                  {
+                    title: "Navigation",
+                    links: [
+                      { title: "Venues", path: "/allVenues" },
+                      { title: "Vendors", path: "/allVendors" },
+                      { title: "Card", path: "/cardEditor" },
+                    ],
+                  },
+                ]}
+              />
+              <BottomNavbarLinks
+                footerLinks={[
+                  {
+                    title: "Links",
+                    links: [
+                      { title: "Contact", path: "/contactUs" },
+                      { title: "About", path: "/aboutUs" },
+                      { title: "Feedback", path: "/addreview/admin" },
+                    ],
+                  },
+                ]}
+              />
+            </Group>
+          ) : (
+            <BottomNavbarLinks
+              footerLinks={[
+                {
+                  title: "Navigation",
+                  links: [
+                    { title: "Venues", path: "/allVenues" },
+                    { title: "Vendors", path: "/allVendors" },
+                    { title: "Card", path: "/cardEditor" },
+                    { title: "Contact", path: "/contactUs" },
+                    { title: "About", path: "/aboutUs" },
+                    { title: "Feedback", path: "/addreview/admin" },
+                  ],
+                },
+              ]}
+            />
+          )}
 
-          <BottomNavbarDownloadApp />
+          {/*<BottomNavbarDownloadApp />*/}
+
+          <BottomNavbarHeadOffice
+            data={{
+              title: "Head Office",
+              address: "1234, 56th Street, New York, NY 10001",
+              phone: "+1 234 567 890",
+              email: "mohiuddinShahrukh@gmail.com",
+            }}
+          />
           <BottomNavbarFollowUsOn
             followUsOnLinks={[
               {
@@ -70,12 +110,9 @@ const BottomNavbar = () => {
               },
             ]}
           />
-
-          <BottomNavbarSelectCity />
         </Group>
-
         <Divider mt={"xl"} />
-        <Group mt={"xl"} align="center">
+        <Group position="apart" mt={"xl"} align="center">
           <Anchor
             weight={500}
             size={"xl"}

@@ -21,6 +21,7 @@ const RegisteredCitiesCard = ({ citiesCard }) => {
         boxShadow: "0 2px 8px #00000026",
         borderRadius: "0.5rem",
       }}
+      style={{ width: "302px" }}
     >
       <Card.Section>
         <Image height={"350px"} src={citiesCard.img} />

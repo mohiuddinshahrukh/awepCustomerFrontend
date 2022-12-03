@@ -169,7 +169,7 @@ const SpecificVenueDetails = () => {
         ></Pannellum>
       </Modal>
 
-      <BreadCrumbs />
+      {/*<BreadCrumbs />*/}
       <Title pt="md" order={3}>
         {venueDetails?.venueName}
       </Title>

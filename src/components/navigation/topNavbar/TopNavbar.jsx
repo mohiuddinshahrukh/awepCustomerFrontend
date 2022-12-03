@@ -140,7 +140,7 @@ const TopNavbar = () => {
               component={Link}
               to="/"
             >
-              AWEP
+              <Image height={75} src={logo} />
             </Anchor>
           )}
           <Group>

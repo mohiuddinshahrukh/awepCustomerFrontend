@@ -20,14 +20,13 @@ const FeaturedMenusCarousel = ({ landingPageMenus }) => {
     <Carousel
       styles={{ viewport: { padding: "20px 5px" } }}
       slideSize={"25% "}
-      slideGap={"md"}
       align={"start"}
       slidesToScroll={"auto"}
       withControls={false}
+      loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
-        { maxWidth: "sm", slideSize: "50%" },
-        { maxWidth: "xs", slideSize: "100%" },
+        { maxWidth: "sm", slideSize: "75%" },
       ]}
     >
       {carouselSlides}

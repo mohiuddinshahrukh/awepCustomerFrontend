@@ -48,24 +48,8 @@ const BottomNavbar = () => {
               },
             ]}
           />
-          <BottomNavbarLinks
-            footerLinks={[
-              {
-                title: "More Information",
-                links: [
-                  { title: "Cookies Policy", path: "/contactUs" },
-                  { title: "Featured Venues", path: "/allVenues" },
-                  { title: "Featured Vendors", path: "/allVendors" },
-                  { title: "Are You a Venue?", path: "/signUp" },
-                  { title: "Are You a Vendor?", path: "/signUp" },
-                  { title: "Customer Testimonials", path: "/allVendors" },
-                ],
-              },
-            ]}
-          />
 
           <BottomNavbarDownloadApp />
-
           <BottomNavbarFollowUsOn
             followUsOnLinks={[
               {

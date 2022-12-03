@@ -51,11 +51,12 @@ const FeaturedVendorServicesCard = ({ service }) => {
         transitionDelay: "0s",
         transitionProperty: "box-shadow",
       }}
+      style={{ width: "302px" }}
     >
       <Card.Section mb="sm">
         <Image
-          src={service.coverImage}
-          alt={service.vendorPackageTitle}
+          src={service?.coverImage}
+          alt={service?.vendorPackageTitle}
           height={180}
         />
       </Card.Section>
@@ -63,20 +64,20 @@ const FeaturedVendorServicesCard = ({ service }) => {
       {/* <Badge>{category}</Badge>*/}
 
       <Text weight={500} lineClamp={1} className={classes.title} mt="xs">
-        {service.vendorPackageTitle}
+        {service?.vendorPackageTitle}
       </Text>
       <Text color={"dimmed"} lineClamp={1}>
-        {service.vendorBusiness.city}
+        {service?.vendorBusiness.city}
       </Text>
 
       <Group mt={"xs"} noWrap>
-        <Avatar src={service.vendorBusiness.coverImage} radius="sm" />
+        <Avatar src={service?.vendorBusiness.coverImage} radius="sm" />
         <div>
           <Text weight={500} lineClamp={1}>
-            {service.vendorBusiness.vendorBusinessTitle}
+            {service?.vendorBusiness.vendorBusinessTitle}
           </Text>
           <Text size="xs" color="dimmed">
-            Member since{" " + service.createdAt.split("T")[0]}
+            Member since{" " + service?.createdAt.split("T")[0]}
           </Text>
         </div>
       </Group>
@@ -86,7 +87,7 @@ const FeaturedVendorServicesCard = ({ service }) => {
           <Text size="sm" color="dimmed">
             Total{" "}
             <span style={{ color: "black" }}>
-              <b>{service.vendorPackageBookings}</b>
+              <b>{service?.vendorPackageBookings}</b>
             </span>{" "}
             Bookings
           </Text>
@@ -94,9 +95,9 @@ const FeaturedVendorServicesCard = ({ service }) => {
             <ActionIcon>
               <IconStar size={18} fill="#EDB100" stroke={0} />
             </ActionIcon>
-            <Text size={"sm"}> {service.rating.toFixed(1)}</Text>
+            <Text size={"sm"}> {service?.rating.toFixed(1)}</Text>
             <Text color={"dimmed"} size="sm">
-              ({service.ratingCount})
+              ({service?.ratingCount})
             </Text>
           </Group>
         </Group>

@@ -34,35 +34,9 @@ const BottomNavbar = () => {
       }}
     >
       <Container size={"xl"} py={"xl"}>
-        <Group align={"flex-start"} position={"apart"} noWrap>
-          {!matches ? (
-            <Group>
-              <BottomNavbarLinks
-                footerLinks={[
-                  {
-                    title: "Navigation",
-                    links: [
-                      { title: "Venues", path: "/allVenues" },
-                      { title: "Vendors", path: "/allVendors" },
-                      { title: "Card", path: "/cardEditor" },
-                    ],
-                  },
-                ]}
-              />
-              <BottomNavbarLinks
-                footerLinks={[
-                  {
-                    title: "Links",
-                    links: [
-                      { title: "Contact", path: "/contactUs" },
-                      { title: "About", path: "/aboutUs" },
-                      { title: "Feedback", path: "/addreview/admin" },
-                    ],
-                  },
-                ]}
-              />
-            </Group>
-          ) : (
+        <Group align={"flex-start"} position={"apart"}>
+          {/* {!matches ? ( */}
+          <Group>
             <BottomNavbarLinks
               footerLinks={[
                 {
@@ -71,6 +45,15 @@ const BottomNavbar = () => {
                     { title: "Venues", path: "/allVenues" },
                     { title: "Vendors", path: "/allVendors" },
                     { title: "Card", path: "/cardEditor" },
+                  ],
+                },
+              ]}
+            />
+            <BottomNavbarLinks
+              footerLinks={[
+                {
+                  title: "Links",
+                  links: [
                     { title: "Contact", path: "/contactUs" },
                     { title: "About", path: "/aboutUs" },
                     { title: "Feedback", path: "/addreview/admin" },
@@ -78,7 +61,7 @@ const BottomNavbar = () => {
                 },
               ]}
             />
-          )}
+          </Group>
 
           {/*<BottomNavbarDownloadApp />*/}
 
@@ -90,7 +73,7 @@ const BottomNavbar = () => {
               email: "mohiuddinShahrukh@gmail.com",
             }}
           />
-          <BottomNavbarFollowUsOn
+          {/* <BottomNavbarFollowUsOn
             followUsOnLinks={[
               {
                 path: "https://www.facebook.com/awep.pk/",
@@ -109,7 +92,7 @@ const BottomNavbar = () => {
                 icon: <IconBrandPinterest />,
               },
             ]}
-          />
+          /> */}
         </Group>
         <Divider mt={"xl"} />
         <Group position="apart" mt={"xl"} align="center">

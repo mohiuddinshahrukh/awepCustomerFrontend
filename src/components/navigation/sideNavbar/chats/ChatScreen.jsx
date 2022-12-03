@@ -827,91 +827,6 @@ const ChatScreen = () => {
                 <Group>
                   {/*<AgoraVoiceCall />*/}
 
-                  {selectedChatDetails.userType ? (
-                    <Menu position="left-start" width={200} shadow="md">
-                      <Menu.Target>
-                        <ActionIcon>
-                          <IconDotsVertical />
-                        </ActionIcon>
-                      </Menu.Target>
-                      {/*
-                     <Menu.Dropdown>
-                        <Menu.Label>Actions</Menu.Label>
-                        <Menu.Divider></Menu.Divider>
-                        <Menu.Item
-                          onClick={() => {
-                            setViewUserModal(!viewUserModal);
-                            console.log("clicked");
-                          }}
-                          icon={<IconEye />}
-                        >
-                          View User
-                        </Menu.Item>
-                        <Menu.Item
-                          icon={<IconMessageOff />}
-                          onClick={() => {
-                            console.log("BLOCKED CHAT");
-
-                            console.log(
-                              "currentConversation",
-                              currentConversation
-                            );
-                            socket.emit("blockChat", {
-                              conversationId: currentConversation,
-                            });
-                          }}
-                        >
-                          Block Chat
-                        </Menu.Item>
-                        <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
-                      </Menu.Dropdown>
-                    */}
-                    </Menu>
-                  ) : selectedChatDetails.venueOwnerId ? (
-                    <Menu position="left-start" width={200} shadow="md">
-                      <Menu.Target>
-                        <ActionIcon>
-                          <IconDotsVertical />
-                        </ActionIcon>
-                      </Menu.Target>
-                      <Menu.Dropdown>
-                        <Menu.Label>Actions</Menu.Label>
-                        <Menu.Divider></Menu.Divider>
-                        <Menu.Item
-                          onClick={() => {
-                            setViewModal(!viewModal);
-                          }}
-                          icon={<IconEye />}
-                        >
-                          View Venue
-                        </Menu.Item>
-                        <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
-                      </Menu.Dropdown>
-                    </Menu>
-                  ) : (
-                    <Menu position="left-start" width={200} shadow="md">
-                      <Menu.Target>
-                        <ActionIcon>
-                          <IconDotsVertical />
-                        </ActionIcon>
-                      </Menu.Target>
-                      <Menu.Dropdown>
-                        <Menu.Label>Actions</Menu.Label>
-                        <Menu.Divider></Menu.Divider>
-                        <Menu.Item
-                          onClick={() => {
-                            setViewVendorModal(!viewVendorModal);
-                            console.log("CLICKED");
-                          }}
-                          icon={<IconEye />}
-                        >
-                          View Vendor Business
-                        </Menu.Item>
-                        <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
-                      </Menu.Dropdown>
-                    </Menu>
-                  )}
-
                   <ActionIcon
                     radius="xl"
                     variant="filled"
@@ -1196,3 +1111,90 @@ const ChatScreen = () => {
 };
 
 export default ChatScreen;
+
+
+
+// {selectedChatDetails.userType ? (
+//   <Menu position="left-start" width={200} shadow="md">
+//     <Menu.Target>
+//       <ActionIcon>
+//         <IconDotsVertical />
+//       </ActionIcon>
+//     </Menu.Target>
+//     {/*
+//    <Menu.Dropdown>
+//       <Menu.Label>Actions</Menu.Label>
+//       <Menu.Divider></Menu.Divider>
+//       <Menu.Item
+//         onClick={() => {
+//           setViewUserModal(!viewUserModal);
+//           console.log("clicked");
+//         }}
+//         icon={<IconEye />}
+//       >
+//         View User
+//       </Menu.Item>
+//       <Menu.Item
+//         icon={<IconMessageOff />}
+//         onClick={() => {
+//           console.log("BLOCKED CHAT");
+
+//           console.log(
+//             "currentConversation",
+//             currentConversation
+//           );
+//           socket.emit("blockChat", {
+//             conversationId: currentConversation,
+//           });
+//         }}
+//       >
+//         Block Chat
+//       </Menu.Item>
+//       <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
+//     </Menu.Dropdown>
+//   */}
+//   </Menu>
+// ) : selectedChatDetails.venueOwnerId ? (
+//   <Menu position="left-start" width={200} shadow="md">
+//     <Menu.Target>
+//       <ActionIcon>
+//         <IconDotsVertical />
+//       </ActionIcon>
+//     </Menu.Target>
+//     <Menu.Dropdown>
+//       <Menu.Label>Actions</Menu.Label>
+//       <Menu.Divider></Menu.Divider>
+//       <Menu.Item
+//         onClick={() => {
+//           setViewModal(!viewModal);
+//         }}
+//         icon={<IconEye />}
+//       >
+//         View Venue
+//       </Menu.Item>
+//       <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
+//     </Menu.Dropdown>
+//   </Menu>
+// ) : (
+//   <Menu position="left-start" width={200} shadow="md">
+//     <Menu.Target>
+//       <ActionIcon>
+//         <IconDotsVertical />
+//       </ActionIcon>
+//     </Menu.Target>
+//     <Menu.Dropdown>
+//       <Menu.Label>Actions</Menu.Label>
+//       <Menu.Divider></Menu.Divider>
+//       <Menu.Item
+//         onClick={() => {
+//           setViewVendorModal(!viewVendorModal);
+//           console.log("CLICKED");
+//         }}
+//         icon={<IconEye />}
+//       >
+//         View Vendor Business
+//       </Menu.Item>
+//       <Menu.Item icon={<IconTrash />}>Delete Chat</Menu.Item>
+//     </Menu.Dropdown>
+//   </Menu>
+// )}

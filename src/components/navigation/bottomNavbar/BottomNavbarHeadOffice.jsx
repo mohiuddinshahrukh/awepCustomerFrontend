@@ -12,24 +12,37 @@ const BottomNavbarHeadOffice = ({ data }) => {
       <List spacing={10} listStyleType={"none"} mt={"md"}>
         <List.Item>
           <Anchor variant="text" component={Link} to={data.path} color="dimmed">
-            <Group>
+            <Group noWrap>
               <IconMap />
-              <Text> {data.address}</Text>
+              <Text
+                style={{
+                  wordBreak: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                {data.address}
+              </Text>
             </Group>
           </Anchor>
         </List.Item>
         <List.Item>
           <Anchor variant="text" component={Link} to={data.path} color="dimmed">
-            <Group>
+            <Group noWrap>
               <IconMail />
-              <Text> {data.email}</Text>
+              <Text
+                style={{
+                  wordBreak: "break-word",
+                  whiteSpace: "normal",
+                }}
+              >
+                {data.email}
+              </Text>
             </Group>
           </Anchor>
         </List.Item>
         <List.Item>
           <Anchor variant="text" component={Link} to={data.path} color="dimmed">
-            <Group>
-              {" "}
+            <Group noWrap>
               <IconDeviceMobile />
               <Text>{data.phone}</Text>
             </Group>

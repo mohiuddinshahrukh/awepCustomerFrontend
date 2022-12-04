@@ -1,14 +1,5 @@
 import { Carousel } from "@mantine/carousel";
-import {
-  Anchor,
-  Card,
-  Group,
-  Image,
-  Paper,
-  SimpleGrid,
-  Text,
-} from "@mantine/core";
-import { IconBuildingStore, IconCash, IconStar } from "@tabler/icons";
+import { Center, SimpleGrid } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVendorsCard from "../featuredVendorsSection/FeaturedVendorsCard";
@@ -19,18 +10,21 @@ const AllVendorsVendorCard = ({ allVendors }) => {
     return <FeaturedVendorsCard key={index} vendor={vendor} />;
   });
   return (
-    <SimpleGrid
-      cols={3}
-      breakpoints={[
-        { maxWidth: "xs", cols: 1 },
-        { maxWidth: "sm", cols: 2 },
-        { maxWidth: "md", cols: 2 },
-        { maxWidth: "lg", cols: 3 },
-        { maxWidth: "xl", cols: 3 },
-      ]}
-    >
-      {vendors}{" "}
-    </SimpleGrid>
+    <Center>
+      {" "}
+      <SimpleGrid
+        cols={3}
+        breakpoints={[
+          { maxWidth: "xs", cols: 1 },
+          { maxWidth: "sm", cols: 2 },
+          { maxWidth: "md", cols: 3 },
+          { maxWidth: "lg", cols: 3 },
+          { maxWidth: "xl", cols: 3 },
+        ]}
+      >
+        {vendors}
+      </SimpleGrid>
+    </Center>
   );
 };
 

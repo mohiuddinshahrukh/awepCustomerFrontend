@@ -14,6 +14,7 @@ import {
   IconBrandInstagram,
   IconBrandPinterest,
   IconBrandTwitter,
+  IconBrandYoutube,
   IconDeviceMobile,
   IconMail,
   IconPhone,
@@ -21,15 +22,15 @@ import {
 import React, { useState } from "react";
 
 const superAdminData = {
-  email: "awep@gmail.com",
+  email: "automatedweddingeventplanner@gmail.com",
   numbers: [
     {
       title: "Mobile Number",
-      mobileNumber: "+923368811125",
+      mobileNumber: "+923455893337",
     },
     {
       title: "Mobile Number",
-      mobileNumber: "+923368811125",
+      mobileNumber: "+923315333765",
     },
     {
       title: "Mobile Number",
@@ -39,7 +40,7 @@ const superAdminData = {
 };
 const TopNavbarStrip = () => {
   const [openCall, setOpenCall] = useState(false);
-  const matches904 = useMediaQuery("(min-width: 904px)");
+  const matches1000 = useMediaQuery("(min-width: 1050px)");
   return (
     <Paper p={"xs"} radius={0} className="bgColor fgColor">
       <Modal
@@ -80,13 +81,13 @@ const TopNavbarStrip = () => {
           );
         })}
       </Modal>
-      <Group position={matches904 ? "apart" : "center"}>
-        <Group hidden={matches904 ? false : true}>
+      <Group position={matches1000 ? "apart" : "center"}>
+        <Group hidden={matches1000 ? false : true}>
           <Anchor variant="text" href={`mailto:${superAdminData.email}`}>
             Email: {superAdminData.email}
           </Anchor>
-          <Group spacing={3} hidden={matches904 ? false : true}>
-            Mobile Number:{" "}
+          <Group spacing={3} hidden={matches1000 ? false : true}>
+            Mobile:{" "}
             {superAdminData.numbers.map((number, index) => {
               return (
                 <Anchor
@@ -101,7 +102,7 @@ const TopNavbarStrip = () => {
           </Group>
         </Group>
         <Group>
-          <Group hidden={!matches904 ? false : true}>
+          <Group hidden={!matches1000 ? false : true}>
             <ActionIcon
               variant="filled"
               className="button"
@@ -122,13 +123,28 @@ const TopNavbarStrip = () => {
           </Group>
 
           {[
-            { icon: <IconBrandFacebook color="white" />, path: "#" },
-            { icon: <IconBrandTwitter />, path: "#" },
-            { icon: <IconBrandInstagram />, path: "#" },
-            { icon: <IconBrandPinterest />, path: "#" },
+            {
+              path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
+              icon: <IconBrandFacebook />,
+            },
+            {
+              path: "https://www.instagram.com/awep.pk/",
+              icon: <IconBrandInstagram />,
+            },
+            {
+              path: "https://www.youtube.com/@teamawepsat",
+              icon: <IconBrandYoutube />,
+            },
           ].map((icon, index) => {
             return (
-              <ActionIcon variant="filled" className="button" key={index}>
+              <ActionIcon
+                variant="filled"
+                className="button"
+                key={index}
+                component={Anchor}
+                href={icon.path}
+                target="_blank"
+              >
                 {icon.icon}
               </ActionIcon>
             );

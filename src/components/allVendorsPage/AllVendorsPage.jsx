@@ -1,14 +1,17 @@
 import {
+  ActionIcon,
   Button,
   Center,
   Container,
   Grid,
   Group,
   Image,
+  Modal,
   Paper,
   Select,
   Stack,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
@@ -45,6 +48,7 @@ import AllRatingFilter from "../allVenuesPage/AllRatingFilter";
 import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import SearchBackgroundOpacityDiv from "../landingPage/searchAndBG/SearchBackgroundOpacityDiv";
 import { Carousel } from "@mantine/carousel";
+import { IconFilter, IconSearch } from "@tabler/icons";
 
 const AllVendorsPage = () => {
   const params = useParams();
@@ -65,6 +69,10 @@ const AllVendorsPage = () => {
   const [categories, setCategories] = useState([]);
   console.log("categories", categories);
   const [filteredVendors, setFilteredVendors] = useState([]);
+  const [search, setSearch] = useState("");
+  console.log("search is", search);
+  const [opened, setOpened] = useState(false);
+  const [vendorSort, setVendorSort] = useState("mostRelevant");
 
   const [allVendors, setAllVendors] = useState([]);
   const fetchAllVendors = async () => {
@@ -117,6 +125,7 @@ const AllVendorsPage = () => {
     minPriceFilter,
     maxPriceFilter,
     categories,
+    search,
   ]);
 
   const filterVendors = () => {
@@ -136,7 +145,32 @@ const AllVendorsPage = () => {
           return false;
         }
       }
-
+      //filter vendors with vendorBusinessTitle or vendorPackageTitle same as search
+      if (search !== "") {
+        console.log("wea are in ifff", search);
+        let searchMatch = false;
+        if (
+          vendor?.vendorBusinessTitle
+            ?.toLowerCase()
+            ?.includes(search?.toLowerCase())
+        ) {
+          searchMatch = true;
+        }
+        if (vendor?.vendorServicePackages?.length > 0) {
+          vendor?.vendorServicePackages?.forEach((vendorPackage) => {
+            if (
+              vendorPackage?.vendorPackageTitle
+                ?.toLowerCase()
+                ?.includes(search?.toLowerCase())
+            ) {
+              searchMatch = true;
+            }
+          });
+        }
+        if (!searchMatch) {
+          return false;
+        }
+      }
       //subVenues have a bookedOn object in which the date and time is concated and stored in key value pair. find the all the vendors which have at lease one sub vendor which is not booked on the selected date and time
       if (date !== null) {
         const bookedDateAndTime = moment(date).format().split("T")[0];
@@ -308,6 +342,62 @@ const AllVendorsPage = () => {
         </Center>
       </Paper>
       <Container size={"xl"} my={"md"}>
+        <Modal
+          hidden={!matches1026}
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Introduce yourself!"
+        >
+          <Stack spacing={"sm"}>
+            <Select
+              defaultValue={vendorSort}
+              onChange={setVendorSort}
+              data={[
+                { value: "mostRelevant", label: "Most Relevant" },
+                { value: "views", label: "View Count" },
+                { value: "mostBooked", label: "Most Booked" },
+                { value: "recentlyAdded", label: "Recently Added" },
+              ]}
+            />
+            <Text size={"lg"} align="left" weight={500}>
+              Advance Filters
+            </Text>
+            <AdvanceFilterByCities city={city} setCity={setCity} />
+            <AllVendorCategories
+              categories={categories}
+              setCategories={setCategories}
+            />
+            {/* <AllVendorDuration time={time} setTime={setTime} /> */}
+
+            <AllVendorsCustomerBudget
+              minPrice={minPrice}
+              setMinPrice={setMinPrice}
+              maxPrice={maxPrice}
+              setMaxPrice={setMaxPrice}
+              setMinPriceFilter={setMinPriceFilter}
+              setMaxPriceFilter={setMaxPriceFilter}
+            />
+            <AllRatingFilter rating={rating} setRating={setRating} />
+          </Stack>
+        </Modal>
+
+        <Group hidden={!matches1026} position="right" py="md" noWrap>
+          <TextInput
+            icon={<IconSearch size={22} />}
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ width: "100%" }}
+          />
+          <Button
+            className="border"
+            onClick={() => setOpened(true)}
+            variant="outline"
+          >
+            <Text className="fgColorF">Filter</Text>
+            <IconFilter size={30} color="#e60084" stroke={1.5} />
+          </Button>
+        </Group>
         <Grid>
           <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
             <Stack spacing={"sm"}>
@@ -334,7 +424,13 @@ const AllVendorsPage = () => {
           </Grid.Col>
           <Grid.Col span={matches1026 ? 12 : 9}>
             {allVendors?.length > 0 ? (
-              <AllVendorsGrid allVendors={filteredVendors} />
+              <AllVendorsGrid
+                allVendors={filteredVendors}
+                search={search}
+                setSearch={setSearch}
+                vendorSort={vendorSort}
+                setVendorSort={setVendorSort}
+              />
             ) : (
               <FiveCardsSkeleton />
             )}

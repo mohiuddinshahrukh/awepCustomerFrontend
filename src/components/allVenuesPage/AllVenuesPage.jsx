@@ -5,10 +5,12 @@ import {
   Grid,
   Group,
   Image,
+  Modal,
   Paper,
   Select,
   Stack,
   Text,
+  TextInput,
 } from "@mantine/core";
 import Autoplay from "embla-carousel-autoplay";
 import { useListState, useMediaQuery } from "@mantine/hooks";
@@ -46,6 +48,7 @@ import img12 from "../../assets/searchBackgroundCarouselImages/12.jpg";
 import img13 from "../../assets/searchBackgroundCarouselImages/13.jpg";
 import img14 from "../../assets/searchBackgroundCarouselImages/14.jpg";
 import img15 from "../../assets/searchBackgroundCarouselImages/15.jpg";
+import { IconFilter, IconSearch } from "@tabler/icons";
 const AllVenuesPage = () => {
   const params = useParams();
   console.log("PARAMS:", params);
@@ -61,8 +64,6 @@ const AllVenuesPage = () => {
   // const [venueType, setVenueType] = useState("all");
   const [allVenues, setAllVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
-  const [search, setSearch] = useState("");
-  const [venueSort, setVenueSort] = useState("mostRelevant");
 
   console.log("All venues:", allVenues);
   console.log("Filtered venues:", filteredVenues);
@@ -88,6 +89,13 @@ const AllVenuesPage = () => {
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   console.log("minPriceFilter", minPriceFilter);
   const [allServices, setAllServices] = useState([]);
+
+  const [search, setSearch] = useState("");
+  console.log("search is", search);
+  const [venueSort, setVenueSort] = useState("mostRelevant");
+
+  const [opened, setOpened] = useState(false);
+
   const fetchAllVenueServices = async () => {
     try {
       const apiResponse = await axios.get(
@@ -307,6 +315,27 @@ const AllVenuesPage = () => {
           return false;
         }
       }
+      if (search !== "") {
+        console.log("wea are in ifff", search);
+        let searchMatch = false;
+        if (venue?.venueName?.toLowerCase()?.includes(search?.toLowerCase())) {
+          searchMatch = true;
+        }
+        if (venue?.subVenues?.length > 0) {
+          venue?.subVenues?.forEach((subVenue) => {
+            if (
+              subVenue?.subVenueName
+                ?.toLowerCase()
+                ?.includes(search?.toLowerCase())
+            ) {
+              searchMatch = true;
+            }
+          });
+        }
+        if (!searchMatch) {
+          return false;
+        }
+      }
 
       if (minPriceFilter === 0 && maxPriceFilter === 100000) {
         return true;
@@ -328,6 +357,8 @@ const AllVenuesPage = () => {
           }
         }
       }
+
+      //filter venues which have venues and subVenues with name matching the search
 
       return true;
     });
@@ -353,6 +384,7 @@ const AllVenuesPage = () => {
     filteredServices,
     minPriceFilter,
     maxPriceFilter,
+    search,
   ]);
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");
@@ -465,6 +497,88 @@ const AllVenuesPage = () => {
         </Center>
       </Paper>
       <Container size={"xl"} my={"md"}>
+        <Modal
+          hidden={!matches1026}
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Introduce yourself!"
+        >
+          <Stack spacing={"sm"}>
+            <Group position="apart" noWrap>
+              <Text size={"lg"} align="left" weight={500}>
+                Advance Filters
+              </Text>
+              {/* <Text
+                  size="md"
+                  align="right"
+                  color="red"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setCity("all");
+                    setDate(null);
+                    setTime("");
+                    setMinPriceFilter(minPrice);
+                    setMaxPriceFilter(maxPrice);
+                    setMinPrice(minPrice);
+                    setMaxPrice(maxPrice);
+                    setVenueType(initialValues);
+                  }}
+                >
+                  Clear All
+                </Text> */}
+            </Group>
+            <AdvanceFilterByCities city={city} setCity={setCity} />
+            <AdvanceFilterMenuCharges
+              minPrice={minPrice}
+              setMinPrice={setMinPrice}
+              maxPrice={maxPrice}
+              setMaxPrice={setMaxPrice}
+              setMinPriceFilter={setMinPriceFilter}
+              setMaxPriceFilter={setMaxPriceFilter}
+            />
+            <AdvanceSearchAndFilters
+              setVenueType={setVenueType}
+              venueType={venueType}
+              indeterminate={indeterminate}
+              allChecked={allChecked}
+            />
+            <AdvanceFilterVenueCapacity
+              venueCapacity={venueCapacity}
+              setVenueCapacity={setVenueCapacity}
+            />
+            {allServices?.length > 0 && (
+              <AdvanceFilterVenueServices
+                allServices={allServices}
+                setFilteredServices={setFilteredServices}
+                filteredServices={filteredServices}
+              />
+            )}
+            <AllRatingFilter rating={rating} setRating={setRating} />
+            {/* <AdvanceFilterVenuePrice /> */}
+
+            {/* <AdvanceFilterHallCharges /> */}
+          </Stack>
+        </Modal>
+
+        <Group hidden={!matches1026} position="right" py="md" noWrap>
+          <TextInput
+            icon={<IconSearch size={22} />}
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ width: "100%" }}
+          />
+          <Button
+            className="border"
+            onClick={() => setOpened(true)}
+            variant="outline"
+          >
+            <Text className="fgColorF">Filter</Text>
+            <IconFilter size={30} color="#e60084" stroke={1.5} />
+          </Button>
+        </Group>
         <Grid>
           <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
             <Stack spacing={"sm"}>

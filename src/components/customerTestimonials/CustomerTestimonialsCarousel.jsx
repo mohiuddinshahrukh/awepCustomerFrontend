@@ -13,7 +13,15 @@ const CustomerTestimonialsCarousel = ({ landingPageTestimonials }) => {
   return (
     <Carousel
       draggable={false}
-      styles={{ viewport: { padding: "20px 5px" } }}
+      styles={{
+        viewport: { padding: "20px 5px" },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
+      }}
       slideSize={"25% "}
       align={"start"}
       slidesToScroll={"auto"}

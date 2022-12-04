@@ -108,7 +108,7 @@ const FeaturedVenuesCard = ({ venue }) => {
                 ({venue?.ratingCount})
               </Text>
             </Group>
-            <Text lineClamp={1}>{venue?.venueCity}</Text>
+            <Text lineClamp={1}>{venue?.venueCity?.toUpperCase()}</Text>
           </Group>
 
           <Group noWrap spacing={"lg"} align={"center"}>

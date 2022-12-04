@@ -401,7 +401,7 @@ const AllVenuesPage = () => {
       >
         <Carousel
           style={{ position: "absolute", width: "100%" }}
-          loop
+          
           align="start"
           height={"40vh"}
           orientation="vertical"

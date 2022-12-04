@@ -9,7 +9,12 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconLayoutCards, IconLayoutGrid, IconSearch } from "@tabler/icons";
+import {
+  IconLayoutCards,
+  IconLayoutGrid,
+  IconSearch,
+  IconX,
+} from "@tabler/icons";
 import React, { useState } from "react";
 import AllVendorsVendorCard from "./AllVendorsVendorCard";
 import AllVendorsVendorList from "./AllVendorsVendorList";
@@ -27,9 +32,9 @@ const AllVendorsGrid = ({
     <Paper>
       <Group position="apart" mb={"md"}>
         <Text weight={500} size={"lg"}>
-          {allVendors?.length > 1
-            ? allVendors?.length.toLocaleString() + " Results"
-            : allVendors?.length + "Result"}
+          {allVendors?.length === 1
+            ? allVendors?.length.toLocaleString() + " Result"
+            : allVendors?.length + " Results"}
         </Text>
 
         <Group noWrap>
@@ -40,8 +45,19 @@ const AllVendorsGrid = ({
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                rightSection={
+                  search !== "" && (
+                    <IconX
+                      style={{ cursor: "pointer" }}
+                      size={22}
+                      onClick={() => {
+                        setSearch("");
+                      }}
+                    />
+                  )
+                }
               />
-              <Select
+              {/* <Select
                 defaultValue={vendorSort}
                 onChange={setVendorSort}
                 data={[
@@ -50,7 +66,7 @@ const AllVendorsGrid = ({
                   { value: "mostBooked", label: "Most Booked" },
                   { value: "recentlyAdded", label: "Recently Added" },
                 ]}
-              />
+              /> */}
             </>
           )}
 

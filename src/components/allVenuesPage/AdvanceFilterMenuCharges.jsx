@@ -17,13 +17,9 @@ const AdvanceFilterMenuCharges = ({
   setMaxPrice,
   setMinPriceFilter,
   setMaxPriceFilter,
+  rangeValue,
+  setRangeValue,
 }) => {
-  const [rangeValue, setRangeValue] = useState([minPrice, maxPrice]);
-
-  useEffect(() => {
-    setRangeValue([minPrice, maxPrice]);
-  }, [minPrice, maxPrice]);
-
   return (
     // <Accordion chevronPosition="left" defaultValue="menuPrice">
     //   <Accordion.Item value="menuPrice">

@@ -23,13 +23,14 @@ const AllVenuesVenueCard = ({ allVenues }) => {
   return (
     <Center>
       <SimpleGrid
+        // spacing={2}
         cols={3}
         breakpoints={[
-          { maxWidth: "xs", cols: 1 },
-          { maxWidth: "sm", cols: 2 },
-          { maxWidth: "md", cols: 2 },
-          { maxWidth: "lg", cols: 2 },
-          { maxWidth: "xl", cols: 3 },
+          { maxWidth: 630, cols: 1 },
+          { maxWidth: 1250, cols: 2 },
+          // { minWidth: 1250, cols: 3 },
+          // { minWidth: "lg", cols: 2 },
+          // { minWidth: "xl", cols: 3 },
         ]}
       >
         {venues}

@@ -19,8 +19,6 @@ const CarouselOfPackages = ({
         setOpen={setOpen}
         vendorPackage={vendorPackage}
         setIdOfSpecificVendorPackage={setIdOfSpecificVendorPackage}
-
-
       />
     </Carousel.Slide>
   ));
@@ -30,8 +28,7 @@ const CarouselOfPackages = ({
         Vendor Packages
       </Text>
       <Carousel
-        withIndicators
-        // height={800}
+        mb="md"
         slideSize="50%"
         slideGap={2}
         breakpoints={[

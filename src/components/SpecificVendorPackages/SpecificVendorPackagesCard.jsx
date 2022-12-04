@@ -35,7 +35,6 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 }));
 
 const SpecificVendorPackageCard = ({
-  open,
   setOpen,
   vendorPackage,
   setIdOfSpecificVendorPackage,
@@ -44,7 +43,7 @@ const SpecificVendorPackageCard = ({
   const { classes } = useStyles();
 
   return (
-    <Card radius="md" withBorder p="xl">
+    <Card radius="md" withBorder>
       <Card.Section>
         <Image src={vendorPackageData?.coverImage} height={220} />
       </Card.Section>
@@ -72,7 +71,7 @@ const SpecificVendorPackageCard = ({
           </Group>
         </Group>
 
-        <Text size="sm" color="dimmed" mt="sm">
+        <Text size="sm" color="dimmed" mt="sm" lineClamp={1}>
           {vendorPackageData?.packageDescription
             ? vendorPackageData?.packageDescription.length > 100
               ? vendorPackageData?.packageDescription.substring(0, 100) + "..."
@@ -91,8 +90,9 @@ const SpecificVendorPackageCard = ({
             /package
           </Text>
         </div>
-
-        <CustomButton title="Book Now" />
+        <Button className="button" radius="md" size="md">
+          Book Now
+        </Button>{" "}
       </Group>
     </Card>
   );

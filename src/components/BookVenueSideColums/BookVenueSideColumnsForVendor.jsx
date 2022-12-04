@@ -8,16 +8,10 @@ import { DatePicker } from "@mantine/dates";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles(() => ({
-  button: {
-    backgroundColor: "#775A97",
-    ":hover": {
-      backgroundColor: "#56416D",
-    },
-  },
   stickySThings: {
     position: "-webkit-sticky",
     position: "sticky",
-    top: 20,
+    top: 100,
   },
 }));
 
@@ -181,8 +175,9 @@ const BookVenueSideColumnsForVendor = ({
         ]}
         // {...form.getInputProps("time")}
       />
+
       <Button
-        className={classes.button}
+        className="button"
         radius="md"
         // type="submit"
         onClick={() => handleSubmit({ eventType, date, time })}

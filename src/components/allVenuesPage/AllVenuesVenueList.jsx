@@ -40,7 +40,7 @@ const AllVenuesVenueList = ({ allVenues }) => {
           <Anchor
             variant="text"
             component={Link}
-            to={`/specificVenue${venue._id}`}
+            to={`/specificVenue/${venue._id}`}
           >
             <Paper py={"md"}>
               <Text weight={500} size={"lg"}>

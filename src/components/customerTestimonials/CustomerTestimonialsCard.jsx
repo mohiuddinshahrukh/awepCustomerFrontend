@@ -8,7 +8,7 @@ const CustomerTestimonialsCard = ({ testimonial }) => {
         className="border"
         sx={{
           height: "206px",
-          width: "267px",
+          width: "302px",
           boxSizing: "border-box",
           ":hover": {
             boxShadow: "0 5px 12px #0003",

@@ -20,11 +20,18 @@ const FeaturedVendorsCarousel = ({ landingPageVendors }) => {
 
   return (
     <Carousel
-      styles={{ viewport: { padding: "20px 5px" } }}
+      styles={{
+        viewport: { padding: "20px 5px" },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
+      }}
       slideSize={"25% "}
       align={"start"}
       slidesToScroll={"auto"}
-      loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
         { maxWidth: "sm", slideSize: "75%" },

@@ -25,13 +25,18 @@ const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
   return (
     <Carousel
       styles={{
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
         viewport: { padding: "20px 5px" },
       }}
       slideSize={"25%"}
       slideGap={0}
       align={"start"}
       slidesToScroll={"auto"}
-      loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
         { maxWidth: "sm", slideSize: "75%" },

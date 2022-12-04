@@ -91,7 +91,7 @@ const SearchBackground = ({ carouselImages }) => {
             align={"flex-end"}
             style={{
               // boxsizing: "border-box",
-              // width: "100%",
+              width: "100%",
               // left: "50%",
               // transform: "translateX(-50%)",
               // border: "1px solid red",

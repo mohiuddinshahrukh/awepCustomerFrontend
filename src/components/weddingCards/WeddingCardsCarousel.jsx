@@ -29,7 +29,15 @@ const WeddingCardsCarousel = () => {
   });
   return (
     <Carousel
-      styles={{ viewport: { padding: "20px 5px" } }}
+      styles={{
+        viewport: { padding: "20px 5px" },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
+      }}
       slideSize={"25% "}
       slideGap={"md"}
       align={"start"}

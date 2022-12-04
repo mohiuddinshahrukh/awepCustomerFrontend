@@ -20,11 +20,18 @@ const FeaturedVendorServicesCarousel = ({ vendorServices }) => {
 
   return (
     <Carousel
-      styles={{ viewport: { padding: "20px 5px" } }}
+      styles={{
+        viewport: { padding: "20px 5px" },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
+      }}
       align={"start"}
       slidesToScroll={"auto"}
       slideSize={"25% "}
-      loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
         { maxWidth: "sm", slideSize: "75%" },

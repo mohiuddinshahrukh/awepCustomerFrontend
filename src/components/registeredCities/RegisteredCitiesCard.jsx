@@ -4,6 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const RegisteredCitiesCard = ({ citiesCard }) => {
+  console.log("#$ citiesCard", citiesCard);
   return (
     <Card
       component={Link}

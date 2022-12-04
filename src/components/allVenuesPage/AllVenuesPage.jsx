@@ -748,6 +748,8 @@ const AllVenuesPage = () => {
           <Grid.Col span={matches1026 ? 12 : 9}>
             {allVenues?.length > 0 ? (
               <AllVenuesGrid
+                date={date}
+                time={time}
                 allVenues={filteredVenues}
                 search={search}
                 setSearch={setSearch}

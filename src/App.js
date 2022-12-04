@@ -158,9 +158,24 @@ function App() {
                   element={<SpecificVendorBusinessDetails />}
                 />
                 <Route
-                  path="/specificVenue:id"
+                  path="/specificVenue/:id"
                   element={<SpecificVenueDetails />}
                 />
+                <Route
+                  path="/specificVenue/:id/:time"
+                  element={<SpecificVenueDetails />}
+                />
+              
+                <Route
+                  path="/specificVenue/:id/:date/:time"
+                  element={<SpecificVenueDetails />}
+                />
+               
+                <Route
+                  path="/specificVenue/:id/:date"
+                  element={<SpecificVenueDetails />}
+                />
+               
 
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />

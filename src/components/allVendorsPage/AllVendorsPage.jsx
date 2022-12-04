@@ -463,9 +463,9 @@ const AllVendorsPage = () => {
         </Group>
         <Grid>
           <Grid.Col
-            mt={"sm"}
             hidden={matches1026 || refresh ? true : false}
             span={3}
+            mt={6}
           >
             <Stack spacing={"sm"}>
               <Group position="apart" noWrap>

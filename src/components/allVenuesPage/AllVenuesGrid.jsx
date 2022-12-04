@@ -15,7 +15,7 @@ import {
   IconSearch,
   IconX,
 } from "@tabler/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AllVenuesVenueCard from "./AllVenuesVenueCard";
 import AllVenuesVenueList from "./AllVenuesVenueList";
 
@@ -27,8 +27,19 @@ const AllVenuesGrid = ({
   setVenueSort,
 }) => {
   const matches1026 = useMediaQuery("(max-width: 1026px)");
+  const matches650 = useMediaQuery("(min-width: 650px)");
   const [viewStyle, setViewStyle] = useState("card");
+
   console.log("Venue Sort Value", venueSort);
+
+  // useEffect(() => {
+  //   if (!matches650 && viewStyle === "list") {
+  //     setViewStyle("card");
+  //     // setDisabled(true);
+  //   } else {
+  //     // setDisabled(false);
+  //   }
+  // }, [viewStyle, matches650]);
   return (
     <Paper>
       <Group position="apart" mb={"md"} align="center" noWrap>

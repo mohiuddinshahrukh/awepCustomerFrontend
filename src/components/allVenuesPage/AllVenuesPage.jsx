@@ -405,7 +405,6 @@ const AllVenuesPage = () => {
       >
         <Carousel
           style={{ position: "absolute", width: "100%" }}
-          
           align="start"
           height={"40vh"}
           orientation="vertical"
@@ -436,7 +435,7 @@ const AllVenuesPage = () => {
           ]?.map((image, index) => {
             return (
               <Carousel.Slide key={index}>
-                <Image height={"40vh"} src={image.src} />
+                <Image height={"40vh"} style={{}} src={image.src} />
               </Carousel.Slide>
             );
           })}

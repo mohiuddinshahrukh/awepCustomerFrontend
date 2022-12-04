@@ -46,7 +46,12 @@ const AllVenuesVenueList = ({ allVenues }) => {
               <Text weight={500} size={"lg"}>
                 {venue.venueName}
               </Text>
-              <Text lineClamp={1} color="dimmed" size={"md"}>
+              <Text
+                lineClamp={1}
+                style={{ wordBreak: "break-all" }}
+                color="dimmed"
+                size={"md"}
+              >
                 {venue.venueAddress}
               </Text>
 
@@ -125,7 +130,7 @@ const AllVenuesVenueList = ({ allVenues }) => {
                   </Text>
                 </Group>
               </Group>
-              <Text lineClamp={2}>{venue.venueDescription}</Text>
+              {/* <Text lineClamp={2}>{venue.venueDescription}</Text>*/}
             </Paper>
           </Anchor>
         </Group>

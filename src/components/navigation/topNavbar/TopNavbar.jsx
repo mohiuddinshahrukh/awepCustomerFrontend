@@ -78,22 +78,30 @@ const TopNavbar = () => {
       {" "}
       <Container py={"0.5rem"} size={"xl"}>
         <Drawer
-          title={"AWEP MENU"}
           opened={drawerState}
-          closeOnClickOutside={false}
           onClose={() => {
             setDrawerState(false);
           }}
         >
+          <Anchor
+            component={Link}
+            to={"/"}
+            onClick={() => {
+              setDrawerState(false);
+            }}
+          >
+            <Image height={"70px"} fit={"contain"} src={logo} />
+          </Anchor>
           <TopNavbarDrawer
+            setDrawerState={setDrawerState}
             linksData={[
+              {
+                title: "Home",
+                path: "/",
+              },
               {
                 title: "Venues",
                 path: "/allVenues",
-                list: [
-                  { listItem: "Featured Venues", listItemPath: "#" },
-                  { listItem: "Top Viewed Venues", listItemPath: "#" },
-                ],
               },
               { title: "Vendors", path: "/allVendors" },
               { title: "Card Editor", path: "/cardEditor" },
@@ -101,6 +109,16 @@ const TopNavbar = () => {
               { title: "About Us", path: "/aboutUs" },
             ]}
           />
+          {!localStorage.getItem("userToken") && (
+            <Group position="center">
+              <TopNavbarButtons
+                buttonsData={[
+                  { title: "Sign In", path: "/signIn", variant: "filled" },
+                  { title: "Sign Up", path: "/signUp", variant: "outline" },
+                ]}
+              />
+            </Group>
+          )}
         </Drawer>
         <Group position="apart">
           {matches1200 ? (

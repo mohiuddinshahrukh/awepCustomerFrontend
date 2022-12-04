@@ -24,7 +24,7 @@ const RegisteredCitiesCard = ({ citiesCard }) => {
       style={{ width: "302px" }}
     >
       <Card.Section>
-        <Image height={"350px"} src={citiesCard.img} />
+        <Image height={"300px"} src={citiesCard.img} />
 
         <div
           spacing={0}

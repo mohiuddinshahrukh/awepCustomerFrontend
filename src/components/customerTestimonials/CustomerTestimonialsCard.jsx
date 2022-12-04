@@ -1,4 +1,12 @@
-import { Avatar, Card, Group, Paper, Stack, Text } from "@mantine/core";
+import {
+  Avatar,
+  Blockquote,
+  Card,
+  Group,
+  Paper,
+  Stack,
+  Text,
+} from "@mantine/core";
 import React from "react";
 
 const CustomerTestimonialsCard = ({ testimonial }) => {
@@ -20,15 +28,12 @@ const CustomerTestimonialsCard = ({ testimonial }) => {
           borderRadius: "0.5rem",
         }}
       >
-        <Card.Section p={"lg"}>
-          {/* <Text lineClamp={1} size={"lg"} weight={500}>
-            {testimonial.feedbackType}
-          </Text> */}
-        </Card.Section>
-        <Card.Section px={"lg"}>
-          <Text color={"dimmed"} lineClamp={4} size={"md"}>
-            {testimonial.feedback}
-          </Text>
+        <Card.Section pt="md">
+          <Blockquote className="fgColorF">
+            <Text color={"dimmed"} lineClamp={4} size={"md"}>
+              {testimonial.feedback}
+            </Text>
+          </Blockquote>
         </Card.Section>
       </Card>
       <Group noWrap mt={"md"}>

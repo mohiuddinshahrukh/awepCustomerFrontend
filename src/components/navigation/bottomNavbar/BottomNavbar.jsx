@@ -5,7 +5,6 @@ import {
   Divider,
   Group,
   Paper,
-  Select,
   Text,
   useMantineTheme,
 } from "@mantine/core";
@@ -13,13 +12,10 @@ import { useMediaQuery } from "@mantine/hooks";
 import {
   IconBrandFacebook,
   IconBrandInstagram,
-  IconBrandPinterest,
-  IconBrandTwitter,
   IconBrandYoutube,
 } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
-import BottomNavbarDownloadApp from "./BottomNavbarDownloadApp";
 import BottomNavbarFollowUsOn from "./BottomNavbarFollowUsOn";
 import BottomNavbarHeadOffice from "./BottomNavbarHeadOffice";
 import BottomNavbarLinks from "./BottomNavbarLinks";
@@ -35,6 +31,7 @@ const BottomNavbar = () => {
         backgroundColor: theme.colorScheme === "light" ? "#EFEFEF" : null,
       }}
     >
+      <Divider />
       <Container size={"xl"} py={"xl"}>
         <Group align={"flex-start"} position={"apart"}>
           {/* {!matches ? ( */}

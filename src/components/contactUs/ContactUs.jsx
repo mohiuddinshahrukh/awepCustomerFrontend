@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => {
       boxSizing: "border-box",
       flex: 1,
       padding: theme.spacing.xl,
-      paddingLeft: theme.spacing.xl,
+      paddingLeft: theme.spacing.md,
       borderLeft: 0,
 
       [BREAKPOINT]: {
@@ -207,9 +207,8 @@ const ContactUs = () => {
           </Container>
         </div>
       </div>
-      <Container>
-        {" "}
-        <Paper shadow="sm" my="sm" withBorder pt="xl">
+      <Container size="xl">
+        <Paper shadow="sm" my="sm">
           <div className={classes.wrapper}>
             <div className={classes.contacts}>
               <Title
@@ -260,9 +259,9 @@ const ContactUs = () => {
 
                 <Group position="right" mt="md">
                   <Button
-                    variant="gradient"
-                    gradient={{ from: "#D61C1C", to: "#E62222" }}
-                    className={classes.control}
+                    // variant="gradient"
+                    // gradient={{ from: "#D61C1C", to: "#E62222" }}
+                    className="button"
                     type="submit"
                     uppercase
                   >

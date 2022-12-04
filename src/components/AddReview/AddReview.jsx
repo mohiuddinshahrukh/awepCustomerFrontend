@@ -1,23 +1,16 @@
 import {
-  Center,
   Container,
   Grid,
   Group,
   Image,
-  Input,
-  Modal,
   Paper,
-  Progress,
   Rating,
-  SimpleGrid,
   Stack,
   Text,
   Textarea,
-  Title,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { useEffect, useState } from "react";
-import CustomButton from "../CustomButton/CustomButton";
 import ReviewImage from "./image2.jpg";
 import { Button, createStyles } from "@mantine/core";
 import React from "react";
@@ -26,14 +19,6 @@ import { showNotification } from "@mantine/notifications";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 import logo from "../../assets/awepLogo/3a.png";
-const useStyles = createStyles(() => ({
-  button: {
-    backgroundColor: "#775A97",
-    ":hover": {
-      backgroundColor: "#56416D",
-    },
-  },
-}));
 
 const onSelect = (rating) => {
   if (rating.hoverValue > 0 && rating.value > 0) {
@@ -139,8 +124,6 @@ const AddReview = () => {
   const matches800 = useMediaQuery("(min-width: 800px)");
   const params = useParams();
   console.log("MY PARAMS: ", params);
-
-  const { classes } = useStyles();
 
   useEffect(() => {
     console.log("useEffect");
@@ -330,19 +313,6 @@ const AddReview = () => {
   };
 
   return (
-    // <Modal
-    //   styles={{
-    //     body: { border: "1px solid red", margin: "0px", padding: "0px" },
-    //     inner: { margin: "0px", padding: "0px" },
-    //     root: { margin: "0px", padding: "0px" },
-    //     modal: { margin: "0px", padding: "0px" },
-    //   }}
-    //   opened={true}
-    //   // onClose={() => setOpened(false)}
-    //   withCloseButton={false}
-    //   fullScreen
-    //   // size="100%"
-    // ></Modal>
     <Grid
       style={{
         position: "absolute",
@@ -353,13 +323,7 @@ const AddReview = () => {
         margin: 0,
         padding: 0,
       }}
-      // style={{
-      // boxSizing: "border-box",
-      // margin: "0px",
-      // padding: "0px",
-      // }}
     >
-      {/* <Image src={ReviewImage} /> */}
       <Grid.Col
         style={{ boxSizing: "border-box", margin: 0, padding: 0 }}
         lg={6}
@@ -367,9 +331,7 @@ const AddReview = () => {
         <Paper
           radius={0}
           sx={{
-            // backgroundImage: `url("https://images.unsplash.com/photo-1485178075098-49f78b4b43b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
             backgroundImage: `url(${ReviewImage})`,
-            // width: "100%",
             height: matches1200 ? "100vh" : "50vh",
           }}
           style={{
@@ -398,8 +360,6 @@ const AddReview = () => {
               choose their supplier.
             </Text>
           </Stack>
-
-          {/* </Center> */}
         </Paper>
       </Grid.Col>
       <Grid.Col lg={6}>
@@ -411,10 +371,6 @@ const AddReview = () => {
             Share your experience! Your review helps other Users choose their
             suppliers.
           </Text>
-          {/* <Input.Wrapper label="Step" size="md" pb="lg">
-            <Progress value={50} mt="sm" size="sm" />
-          </Input.Wrapper> */}
-
           {params.provider !== "admin" && (
             <>
               <RatingComponent
@@ -433,8 +389,7 @@ const AddReview = () => {
                 setRating={setProfessionalism}
               />
               <RatingComponent
-                title="
-         Value For Money"
+                title="Value For Money"
                 rating={valueForMoney}
                 setRating={setValueForMoney}
               />
@@ -459,8 +414,7 @@ const AddReview = () => {
           />
           <Group position="right">
             <Button
-              className={classes.button}
-              radius="md"
+              className="button"
               onClick={() => {
                 if (params.feedbackId) {
                   handleUpdate();
@@ -469,7 +423,7 @@ const AddReview = () => {
                 }
               }}
             >
-              Submit
+              {params.feedbackId ? "Update" : "Submit"}
             </Button>
           </Group>
         </Container>

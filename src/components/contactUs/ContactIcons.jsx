@@ -75,10 +75,16 @@ function ContactIcon({
 
 const MOCKDATA = [
   {
-    title: "Ali Hassan Zaidi",
-    description: "+923215379133",
+    title: "Tehseen Riaz Abbasi",
+    description: "+923455893337",
     icon: IconUser,
     email: "mohiuddinshahrukh@gmail.com",
+  },
+  {
+    title: "Syed Ali Hassan Zaidi",
+    description: "+923215379133",
+    icon: IconUser,
+    email: "hasanzaidi2896@gmail.com",
   },
   {
     title: "Shahrukh Mohiuddin",
@@ -90,16 +96,14 @@ const MOCKDATA = [
     title: "Muhammad Talha",
     description: "+923315333765",
     icon: IconUser,
-    email: "mohiuddinshahrukh@gmail.com",
+    email: "muhammadtalha517@gmail.com",
   },
   {
-    title: "Tehseen Riaz Abbasi",
-    description: "+923455893337",
-    icon: IconUser,
-    email: "mohiuddinshahrukh@gmail.com",
+    title: "Address",
+    description:
+      "Zaki Centre, Office #17, 2nd Floor, I-8 Markaz Islamabad, 46000",
+    icon: IconMapPin,
   },
-
-  { title: "Address", description: "COMSATS University ISB", icon: IconMapPin },
   { title: "Working hours", description: "24/7 available", icon: IconSun },
   {
     title: "Team AWEP SAT",

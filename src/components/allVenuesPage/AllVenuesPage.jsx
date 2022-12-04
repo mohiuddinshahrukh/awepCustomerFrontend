@@ -16,15 +16,12 @@ import Autoplay from "embla-carousel-autoplay";
 import { useListState, useMediaQuery } from "@mantine/hooks";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import AdvanceFilterHallCharges from "./AdvanceFilterHallCharges";
 import AdvanceFilterMenuCharges from "./AdvanceFilterMenuCharges";
 import AdvanceFilterVenueCapacity from "./AdvanceFilterVenueCapacity";
 import AdvanceFilterByCities from "./AdvanceFilterByCities";
-import AdvanceFilterVenuePrice from "./AdvanceFilterVenuePrice";
 import AdvanceFilterVenueServices from "./AdvanceFilterVenueServices";
 import AdvanceSearchAndFilters from "./AdvanceFilterVenueType";
 import AllVenuesGrid from "./AllVenuesGrid";
-import searchBackground from "../../assets/searchBackgroundCarouselImages/1.jpg";
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
@@ -48,7 +45,7 @@ import img12 from "../../assets/searchBackgroundCarouselImages/12.jpg";
 import img13 from "../../assets/searchBackgroundCarouselImages/13.jpg";
 import img14 from "../../assets/searchBackgroundCarouselImages/14.jpg";
 import img15 from "../../assets/searchBackgroundCarouselImages/15.jpg";
-import { IconFilter, IconSearch } from "@tabler/icons";
+import { IconFilter, IconSearch, IconX } from "@tabler/icons";
 const AllVenuesPage = () => {
   const params = useParams();
   console.log("PARAMS:", params);
@@ -67,7 +64,7 @@ const AllVenuesPage = () => {
 
   console.log("All venues:", allVenues);
   console.log("Filtered venues:", filteredVenues);
-  const initialValues = [
+  let initialValues = [
     { value: "HALL", label: "Halls", checked: true },
     { value: "MARQUEE", label: "Marquees", checked: true },
     { value: "OUTDOOR", label: "Out Doors", checked: true },
@@ -76,8 +73,10 @@ const AllVenuesPage = () => {
   console.log("values in check boxes", venueType);
   const allChecked = venueType.every((value) => value.checked);
   const indeterminate = venueType.some((value) => value.checked) && !allChecked;
+  const [refresh, setRefresh] = useState(true);
 
   const [filteredServices, setFilteredServices] = useState([]);
+  const [reset, setReset] = useState(false);
   console.log("filteredServices we retrieved", filteredServices);
   const [allMenus, setAllMenus] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
@@ -89,6 +88,7 @@ const AllVenuesPage = () => {
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   console.log("minPriceFilter", minPriceFilter);
   const [allServices, setAllServices] = useState([]);
+  const [rangeValue, setRangeValue] = useState([minPrice, maxPrice]);
 
   const [search, setSearch] = useState("");
   console.log("search is", search);
@@ -103,6 +103,7 @@ const AllVenuesPage = () => {
       );
       console.log("API Response", apiResponse);
       if (apiResponse.data.status === "success") {
+        setRefresh(false);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
         console.log(
@@ -141,6 +142,7 @@ const AllVenuesPage = () => {
         console.log("max:", max);
         setMinPrice(min);
         setMaxPrice(max);
+        setRangeValue([min, max]);
 
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
@@ -385,6 +387,8 @@ const AllVenuesPage = () => {
     minPriceFilter,
     maxPriceFilter,
     search,
+    minPrice,
+    maxPrice,
   ]);
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");
@@ -501,34 +505,13 @@ const AllVenuesPage = () => {
           hidden={!matches1026}
           opened={opened}
           onClose={() => setOpened(false)}
-          title="Introduce yourself!"
+          title={
+            <Text size={"lg"} align="left" weight={500}>
+              Advance Filters
+            </Text>
+          }
         >
           <Stack spacing={"sm"}>
-            <Group position="apart" noWrap>
-              <Text size={"lg"} align="left" weight={500}>
-                Advance Filters
-              </Text>
-              {/* <Text
-                  size="md"
-                  align="right"
-                  color="red"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setCity("all");
-                    setDate(null);
-                    setTime("");
-                    setMinPriceFilter(minPrice);
-                    setMaxPriceFilter(maxPrice);
-                    setMinPrice(minPrice);
-                    setMaxPrice(maxPrice);
-                    setVenueType(initialValues);
-                  }}
-                >
-                  Clear All
-                </Text> */}
-            </Group>
             <AdvanceFilterByCities city={city} setCity={setCity} />
             <AdvanceFilterMenuCharges
               minPrice={minPrice}
@@ -537,6 +520,8 @@ const AllVenuesPage = () => {
               setMaxPrice={setMaxPrice}
               setMinPriceFilter={setMinPriceFilter}
               setMaxPriceFilter={setMaxPriceFilter}
+              rangeValue={rangeValue}
+              setRangeValue={setRangeValue}
             />
             <AdvanceSearchAndFilters
               setVenueType={setVenueType}
@@ -553,18 +538,85 @@ const AllVenuesPage = () => {
                 allServices={allServices}
                 setFilteredServices={setFilteredServices}
                 filteredServices={filteredServices}
+                reset={reset}
+                setReset={setReset}
               />
             )}
             <AllRatingFilter rating={rating} setRating={setRating} />
             {/* <AdvanceFilterVenuePrice /> */}
 
             {/* <AdvanceFilterHallCharges /> */}
+            <Group position="center" noWrap>
+              {city !== "all" ||
+              date !== null ||
+              time !== "" ||
+              minPriceFilter !== 0 ||
+              maxPriceFilter !== 100000 ||
+              venueType === venueType.every((value) => value.checked) ||
+              indeterminate === venueType.some((value) => value.checked) ||
+              !allChecked ||
+              venueCapacity.length !== 0 ||
+              filteredServices.length !== 0 ||
+              rating !== 0 ? (
+                <Button
+                  variant="outline"
+                  className="buttonOutline"
+                  onClick={() => {
+                    setCity("all");
+                    setDate(null);
+                    setTime("");
+                    setRating(0);
+                    setVenueCapacity([]);
+
+                    let minPriceReset = minPrice;
+                    let maxPriceReset = maxPrice;
+                    console.log("minPriceReset", minPriceReset);
+                    console.log("maxPriceReset", maxPriceReset);
+                    setMinPriceFilter(0);
+                    setMaxPriceFilter(100000);
+                    setMinPrice(minPriceReset);
+                    setMaxPrice(maxPriceReset);
+                    setRangeValue([minPriceReset, maxPriceReset]);
+                    setVenueType.setState((current) =>
+                      current.map((value) => ({
+                        ...value,
+                        checked: true,
+                      }))
+                    );
+                    setReset(true);
+                    setFilteredServices([]);
+                    setOpened(false);
+                  }}
+                  fullWidth
+                >
+                  Reset
+                </Button>
+              ) : null}
+              <Button
+                className="button"
+                onClick={() => setOpened(false)}
+                fullWidth
+              >
+                Apply
+              </Button>
+            </Group>
           </Stack>
         </Modal>
 
-        <Group hidden={!matches1026} position="right" py="md" noWrap>
+        <Group hidden={!matches1026 || refresh} position="right" py="md" noWrap>
           <TextInput
             icon={<IconSearch size={22} />}
+            rightSection={
+              search !== "" && (
+                <IconX
+                  style={{ cursor: "pointer" }}
+                  size={22}
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                />
+              )
+            }
             placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -580,33 +632,65 @@ const AllVenuesPage = () => {
           </Button>
         </Group>
         <Grid>
-          <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
+          <Grid.Col
+            hidden={matches1026 || refresh ? true : false}
+            span={3}
+            mt={6}
+          >
             <Stack spacing={"sm"}>
               <Group position="apart" noWrap>
                 <Text size={"lg"} align="left" weight={500}>
                   Advance Filters
                 </Text>
-                {/* <Text
-                  size="md"
-                  align="right"
-                  color="red"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setCity("all");
-                    setDate(null);
-                    setTime("");
-                    setMinPriceFilter(minPrice);
-                    setMaxPriceFilter(maxPrice);
-                    setMinPrice(minPrice);
-                    setMaxPrice(maxPrice);
-                    setVenueType(initialValues);
-                  }}
-                >
-                  Clear All
-                </Text> */}
+                {city !== "" ||
+                date !== null ||
+                time !== "" ||
+                minPriceFilter !== 0 ||
+                maxPriceFilter !== 100000 ||
+                venueType === venueType.every((value) => value.checked) ||
+                indeterminate === venueType.some((value) => value.checked) ||
+                !allChecked ||
+                venueCapacity.length !== 0 ||
+                filteredServices.length !== 0 ||
+                rating !== null ? (
+                  <Text
+                    className="fgColorF"
+                    size="lg"
+                    align="right"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setCity("");
+                      setDate(null);
+                      setTime("");
+                      setRating(null);
+                      setVenueCapacity([]);
+
+                      let minPriceReset = minPrice;
+                      let maxPriceReset = maxPrice;
+                      console.log("minPriceReset", minPriceReset);
+                      console.log("maxPriceReset", maxPriceReset);
+                      setMinPriceFilter(0);
+                      setMaxPriceFilter(100000);
+                      setMinPrice(minPriceReset);
+                      setMaxPrice(maxPriceReset);
+                      setRangeValue([minPriceReset, maxPriceReset]);
+                      setVenueType.setState((current) =>
+                        current.map((value) => ({
+                          ...value,
+                          checked: true,
+                        }))
+                      );
+                      setReset(true);
+                      setFilteredServices([]);
+                    }}
+                  >
+                    Reset
+                  </Text>
+                ) : null}
               </Group>
+
               <AdvanceFilterByCities city={city} setCity={setCity} />
               <AdvanceFilterMenuCharges
                 minPrice={minPrice}
@@ -615,6 +699,8 @@ const AllVenuesPage = () => {
                 setMaxPrice={setMaxPrice}
                 setMinPriceFilter={setMinPriceFilter}
                 setMaxPriceFilter={setMaxPriceFilter}
+                rangeValue={rangeValue}
+                setRangeValue={setRangeValue}
               />
               <AdvanceSearchAndFilters
                 setVenueType={setVenueType}
@@ -631,6 +717,8 @@ const AllVenuesPage = () => {
                   allServices={allServices}
                   setFilteredServices={setFilteredServices}
                   filteredServices={filteredServices}
+                  reset={reset}
+                  setReset={setReset}
                 />
               )}
               <AllRatingFilter rating={rating} setRating={setRating} />

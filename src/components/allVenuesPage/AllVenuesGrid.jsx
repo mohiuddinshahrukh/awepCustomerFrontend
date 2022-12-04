@@ -9,7 +9,12 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconLayoutCards, IconLayoutGrid, IconSearch } from "@tabler/icons";
+import {
+  IconLayoutCards,
+  IconLayoutGrid,
+  IconSearch,
+  IconX,
+} from "@tabler/icons";
 import React, { useState } from "react";
 import AllVenuesVenueCard from "./AllVenuesVenueCard";
 import AllVenuesVenueList from "./AllVenuesVenueList";
@@ -26,12 +31,14 @@ const AllVenuesGrid = ({
   console.log("Venue Sort Value", venueSort);
   return (
     <Paper>
-      <Group position="apart" mb={"md"} align="flex-end">
-        <Text weight={500} size={"lg"}>
-          {allVenues?.length > 1
-            ? allVenues?.length.toLocaleString() + " Results"
-            : allVenues?.length + "Result"}
-        </Text>
+      <Group position="apart" mb={"md"} align="center" noWrap>
+        <Group noWrap spacing={0}>
+          <Text weight={500} size={"lg"}>
+            {allVenues?.length === 1
+              ? allVenues?.length.toLocaleString() + " Result"
+              : allVenues?.length + " Results"}
+          </Text>
+        </Group>
 
         <Group noWrap>
           {!matches1026 && (
@@ -41,8 +48,19 @@ const AllVenuesGrid = ({
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                rightSection={
+                  search !== "" && (
+                    <IconX
+                      style={{ cursor: "pointer" }}
+                      size={22}
+                      onClick={() => {
+                        setSearch("");
+                      }}
+                    />
+                  )
+                }
               />
-              <Select
+              {/* <Select
                 defaultValue={venueSort}
                 onChange={setVenueSort}
                 data={[
@@ -51,35 +69,37 @@ const AllVenuesGrid = ({
                   { value: "mostBooked", label: "Most Booked" },
                   { value: "recentlyAdded", label: "Recently Added" },
                 ]}
-              />
+              /> */}
             </>
           )}
-          <SegmentedControl
-            data={[
-              {
-                value: "card",
-                label: (
-                  <Center>
-                    <IconLayoutGrid size={16} />
-                    <Box ml={10}>Card</Box>
-                  </Center>
-                ),
-              },
-              {
-                value: "list",
-                label: (
-                  <Center>
-                    <IconLayoutCards size={16} />
-                    <Box ml={10}>List</Box>
-                  </Center>
-                ),
-              },
-            ]}
-            onChange={(value) => {
-              console.log(value);
-              setViewStyle(value);
-            }}
-          />
+          <Group>
+            <SegmentedControl
+              data={[
+                {
+                  value: "card",
+                  label: (
+                    <Center>
+                      <IconLayoutGrid size={16} />
+                      <Box ml={10}>Card</Box>
+                    </Center>
+                  ),
+                },
+                {
+                  value: "list",
+                  label: (
+                    <Center>
+                      <IconLayoutCards size={16} />
+                      <Box ml={10}>List</Box>
+                    </Center>
+                  ),
+                },
+              ]}
+              onChange={(value) => {
+                console.log(value);
+                setViewStyle(value);
+              }}
+            />
+          </Group>
         </Group>
       </Group>
 

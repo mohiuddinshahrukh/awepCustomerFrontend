@@ -48,7 +48,7 @@ import AllRatingFilter from "../allVenuesPage/AllRatingFilter";
 import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import SearchBackgroundOpacityDiv from "../landingPage/searchAndBG/SearchBackgroundOpacityDiv";
 import { Carousel } from "@mantine/carousel";
-import { IconFilter, IconSearch } from "@tabler/icons";
+import { IconFilter, IconSearch, IconX } from "@tabler/icons";
 
 const AllVendorsPage = () => {
   const params = useParams();
@@ -73,6 +73,8 @@ const AllVendorsPage = () => {
   console.log("search is", search);
   const [opened, setOpened] = useState(false);
   const [vendorSort, setVendorSort] = useState("mostRelevant");
+  const [refresh, setRefresh] = useState(true);
+  const [rangeValue, setRangeValue] = useState([minPrice, maxPrice]);
 
   const [allVendors, setAllVendors] = useState([]);
   const fetchAllVendors = async () => {
@@ -99,6 +101,8 @@ const AllVendorsPage = () => {
         console.log("max:", max);
         setMinPrice(min);
         setMaxPrice(max);
+        setRefresh(false);
+        setRangeValue([min, max]);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
         console.log("Error while fetching all vendors");
@@ -346,22 +350,13 @@ const AllVendorsPage = () => {
           hidden={!matches1026}
           opened={opened}
           onClose={() => setOpened(false)}
-          title="Introduce yourself!"
-        >
-          <Stack spacing={"sm"}>
-            <Select
-              defaultValue={vendorSort}
-              onChange={setVendorSort}
-              data={[
-                { value: "mostRelevant", label: "Most Relevant" },
-                { value: "views", label: "View Count" },
-                { value: "mostBooked", label: "Most Booked" },
-                { value: "recentlyAdded", label: "Recently Added" },
-              ]}
-            />
+          title={
             <Text size={"lg"} align="left" weight={500}>
               Advance Filters
             </Text>
+          }
+        >
+          <Stack spacing={"sm"}>
             <AdvanceFilterByCities city={city} setCity={setCity} />
             <AllVendorCategories
               categories={categories}
@@ -376,18 +371,72 @@ const AllVendorsPage = () => {
               setMaxPrice={setMaxPrice}
               setMinPriceFilter={setMinPriceFilter}
               setMaxPriceFilter={setMaxPriceFilter}
+              setRangeValue={setRangeValue}
+              rangeValue={rangeValue}
             />
             <AllRatingFilter rating={rating} setRating={setRating} />
+            <Group position="center" noWrap>
+              {city !== "" ||
+              date !== null ||
+              time !== "" ||
+              minPriceFilter !== 0 ||
+              maxPriceFilter !== 100000 ||
+              categories.length !== 0 ||
+              rating !== null ? (
+                <Button
+                  variant="outline"
+                  className="buttonOutline"
+                  onClick={() => {
+                    setCity("");
+                    setDate(null);
+                    setTime("");
+                    setRating(null);
+                    let minPriceReset = minPrice;
+                    let maxPriceReset = maxPrice;
+                    console.log("minPriceReset", minPriceReset);
+                    console.log("maxPriceReset", maxPriceReset);
+                    setMinPriceFilter(0);
+                    setMaxPriceFilter(100000);
+                    setMinPrice(minPriceReset);
+                    setMaxPrice(maxPriceReset);
+                    setRangeValue([minPriceReset, maxPriceReset]);
+                    setCategories([]);
+                    setOpened(false);
+                  }}
+                  fullWidth
+                >
+                  Reset
+                </Button>
+              ) : null}
+              <Button
+                className="button"
+                onClick={() => setOpened(false)}
+                fullWidth
+              >
+                Apply
+              </Button>
+            </Group>
           </Stack>
         </Modal>
 
-        <Group hidden={!matches1026} position="right" py="md" noWrap>
+        <Group hidden={!matches1026 || refresh} position="right" py="md" noWrap>
           <TextInput
             icon={<IconSearch size={22} />}
             placeholder="Search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
             style={{ width: "100%" }}
+            onChange={(e) => setSearch(e.target.value)}
+            rightSection={
+              search !== "" && (
+                <IconX
+                  style={{ cursor: "pointer" }}
+                  size={22}
+                  onClick={() => {
+                    setSearch("");
+                  }}
+                />
+              )
+            }
           />
           <Button
             className="border"
@@ -399,11 +448,52 @@ const AllVendorsPage = () => {
           </Button>
         </Group>
         <Grid>
-          <Grid.Col mt={"sm"} hidden={matches1026 ? true : false} span={3}>
+          <Grid.Col
+            mt={"sm"}
+            hidden={matches1026 || refresh ? true : false}
+            span={3}
+          >
             <Stack spacing={"sm"}>
-              <Text size={"lg"} align="left" weight={500}>
-                Advance Filters
-              </Text>
+              <Group position="apart" noWrap>
+                <Text size={"lg"} align="left" weight={500}>
+                  Advance Filters
+                </Text>
+                {city !== "" ||
+                date !== null ||
+                time !== "" ||
+                minPriceFilter !== 0 ||
+                maxPriceFilter !== 100000 ||
+                categories.length !== 0 ||
+                rating !== null ? (
+                  <Text
+                    className="fgColorF"
+                    size="lg"
+                    align="right"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setCity("");
+                      setDate(null);
+                      setTime("");
+                      setRating(null);
+                      let minPriceReset = minPrice;
+                      let maxPriceReset = maxPrice;
+                      console.log("minPriceReset", minPriceReset);
+                      console.log("maxPriceReset", maxPriceReset);
+                      setMinPriceFilter(0);
+                      setMaxPriceFilter(100000);
+                      setMinPrice(minPriceReset);
+                      setMaxPrice(maxPriceReset);
+                      setRangeValue([minPriceReset, maxPriceReset]);
+                      setCategories([]);
+                      setOpened(false);
+                    }}
+                  >
+                    Reset
+                  </Text>
+                ) : null}
+              </Group>
               <AdvanceFilterByCities city={city} setCity={setCity} />
               <AllVendorCategories
                 categories={categories}
@@ -418,6 +508,8 @@ const AllVendorsPage = () => {
                 setMaxPrice={setMaxPrice}
                 setMinPriceFilter={setMinPriceFilter}
                 setMaxPriceFilter={setMaxPriceFilter}
+                setRangeValue={setRangeValue}
+                rangeValue={rangeValue}
               />
               <AllRatingFilter rating={rating} setRating={setRating} />
             </Stack>

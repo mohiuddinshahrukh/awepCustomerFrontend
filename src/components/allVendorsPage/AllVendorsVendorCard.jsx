@@ -15,11 +15,13 @@ const AllVendorsVendorCard = ({ allVendors }) => {
       <SimpleGrid
         cols={3}
         breakpoints={[
-          { maxWidth: "xs", cols: 1 },
-          { maxWidth: "sm", cols: 2 },
-          { maxWidth: "md", cols: 3 },
-          { maxWidth: "lg", cols: 3 },
-          { maxWidth: "xl", cols: 3 },
+          { maxWidth: 630, cols: 1 },
+          { maxWidth: 1250, cols: 2 },
+          // { maxWidth: "xs", cols: 1 },
+          // { maxWidth: "sm", cols: 2 },
+          // { maxWidth: "md", cols: 3 },
+          // { maxWidth: "lg", cols: 3 },
+          // { maxWidth: "xl", cols: 3 },
         ]}
       >
         {vendors}

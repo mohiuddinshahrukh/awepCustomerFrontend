@@ -29,7 +29,13 @@ const CustomerTestimonialsCard = ({ testimonial }) => {
         }}
       >
         <Card.Section pt="md">
-          <Blockquote className="fgColorF">
+          <Blockquote
+            styles={{
+              icon: {
+                color: "#e60084",
+              },
+            }}
+          >
             <Text color={"dimmed"} lineClamp={4} size={"md"}>
               {testimonial.feedback}
             </Text>

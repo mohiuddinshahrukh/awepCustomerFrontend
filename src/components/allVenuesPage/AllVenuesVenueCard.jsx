@@ -15,9 +15,11 @@ import { Link } from "react-router-dom";
 import FeaturedVenuesCard from "../featuredVenuesSection/FeaturedVenuesCard";
 import AllVenuesVenueCardCarousel from "./AllVenuesVenueCardCarousel";
 
-const AllVenuesVenueCard = ({ allVenues }) => {
+const AllVenuesVenueCard = ({ allVenues, time, date }) => {
   const venues = allVenues?.map((venue, index) => {
-    return <FeaturedVenuesCard key={index} venue={venue} />;
+    return (
+      <FeaturedVenuesCard key={index} venue={venue} date={date} time={time} />
+    );
   });
 
   return (

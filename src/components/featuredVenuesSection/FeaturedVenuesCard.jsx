@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const FeaturedVenuesCard = ({ venue }) => {
+const FeaturedVenuesCard = ({ venue, date, time }) => {
   const currentLocation = useLocation();
   const card = (
     <Card
@@ -30,7 +30,15 @@ const FeaturedVenuesCard = ({ venue }) => {
         transitionProperty: "box-shadow",
       }}
       component={Link}
-      to={`/specificVenue${venue._id}`}
+      to={
+        date === null && time === null
+          ? `/specificVenue/${venue._id}`
+          : date === null && time !== null
+          ? `/specificVenue/${venue._id}/${time}`
+          : date !== null && time === null
+          ? `/specificVenue/${venue._id}/${date}`
+          : `/specificVenue/${venue._id}/${date}/${time}`
+      }
       style={{ width: "302px" }}
     >
       <Card.Section style={{ height: "201px", position: "relative" }}>

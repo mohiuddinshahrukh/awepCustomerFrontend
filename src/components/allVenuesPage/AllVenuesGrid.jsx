@@ -25,6 +25,8 @@ const AllVenuesGrid = ({
   setSearch,
   venueSort,
   setVenueSort,
+  time,
+  date,
 }) => {
   const matches1026 = useMediaQuery("(max-width: 1026px)");
   const matches650 = useMediaQuery("(min-width: 650px)");
@@ -115,7 +117,8 @@ const AllVenuesGrid = ({
       </Group>
 
       {viewStyle === "card" ? (
-        <AllVenuesVenueCard allVenues={allVenues} />
+        <AllVenuesVenueCard allVenues={allVenues}  date={date}
+        time={time} />
       ) : (
         <AllVenuesVenueList allVenues={allVenues} />
       )}

@@ -113,8 +113,6 @@ const RegisteredCitiesCarousel = () => {
       slideSize={"25% "}
       align={"start"}
       slidesToScroll={"auto"}
-      withControls={false}
-      loop
       breakpoints={[
         { maxWidth: "lg", slideSize: "33.33333333%" },
         { maxWidth: "md", slideSize: "33.33333333%" },

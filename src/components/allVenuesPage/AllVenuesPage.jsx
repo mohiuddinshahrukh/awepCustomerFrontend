@@ -392,12 +392,14 @@ const AllVenuesPage = () => {
   ]);
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");
+  const matches992 = useMediaQuery("(max-width: 992px)");
+
   return (
     <Paper>
       <Paper
         withBorder
         style={{
-          height: "35vh",
+          height: "40vh",
           position: "relative",
         }}
       >
@@ -405,7 +407,7 @@ const AllVenuesPage = () => {
           style={{ position: "absolute", width: "100%" }}
           loop
           align="start"
-          height={"35vh"}
+          height={"40vh"}
           orientation="vertical"
           draggable={false}
           withControls={false}
@@ -434,7 +436,7 @@ const AllVenuesPage = () => {
           ]?.map((image, index) => {
             return (
               <Carousel.Slide key={index}>
-                <Image height={"35vh"} src={image.src} />
+                <Image height={"40vh"} src={image.src} />
               </Carousel.Slide>
             );
           })}
@@ -446,56 +448,72 @@ const AllVenuesPage = () => {
             noWrap
             position="center"
           >
-            <Group style={{ zIndex: 10 }} align={"flex-end"}>
-              <Select
-                size={"lg"}
-                styles={{ label: { color: "white" } }}
-                label="City"
-                placeholder="Select A City"
-                value={city}
-                onChange={setCity}
-                data={[
-                  { value: "all", label: "All" },
-                  { value: "islamabad", label: "Islamabad" },
-                  { value: "rawalpindi", label: "Rawalpindi" },
-                  { value: "lahore", label: "Lahore" },
-                  { value: "karachi", label: "Karachi" },
-                ]}
-              />
-              <DatePicker
-                value={date}
-                onChange={setDate}
-                size={"lg"}
-                styles={{ label: { color: "white" } }}
-                placeholder="Pick date"
-                label="Event date"
-                minDate={dayjs(new Date())
-                  .startOf("month")
-                  .add(new Date().getDate(), "days")
-                  .toDate()}
-                maxDate={dayjs(new Date()).add(365, "days").toDate()}
-              />
-              <Select
-                size={"lg"}
-                value={time}
-                onChange={setTime}
-                styles={{ label: { color: "white" } }}
-                label="Time"
-                placeholder="Select A Time"
-                data={[
-                  { value: "LUNCH", label: "Lunch" },
-                  { value: "DINNER", label: "Dinner" },
-                ]}
-              />
-              <Button
-                className="button"
-                size={"lg"}
-                component={Link}
-                uppercase
-                // to={searchSupplier === "venue" ? "/allVenues" : "/allVendors"}
-              >
-                Search
-              </Button>
+            <Group
+              style={{ zIndex: 10 }}
+              align={"flex-end"}
+              px={matches992 ? "xl" : "lg"}
+            >
+              <Grid align={"flex-end"}>
+                <Grid.Col sm={12} md={4} lg={3}>
+                  {" "}
+                  <Select
+                    size={matches992 ? "md" : "lg"}
+                    styles={{ label: { color: "white" } }}
+                    label="City"
+                    placeholder="Select A City"
+                    value={city}
+                    onChange={setCity}
+                    data={[
+                      { value: "all", label: "All" },
+                      { value: "islamabad", label: "Islamabad" },
+                      { value: "rawalpindi", label: "Rawalpindi" },
+                      { value: "lahore", label: "Lahore" },
+                      { value: "karachi", label: "Karachi" },
+                    ]}
+                  />
+                </Grid.Col>
+                <Grid.Col sm={12} md={4} lg={3}>
+                  <DatePicker
+                    value={date}
+                    onChange={setDate}
+                    size={matches992 ? "md" : "lg"}
+                    styles={{ label: { color: "white" } }}
+                    placeholder="Pick date"
+                    label="Event date"
+                    minDate={dayjs(new Date())
+                      .startOf("month")
+                      .add(new Date().getDate(), "days")
+                      .toDate()}
+                    maxDate={dayjs(new Date()).add(365, "days").toDate()}
+                  />
+                </Grid.Col>
+                <Grid.Col sm={12} md={4} lg={3}>
+                  <Select
+                    size={matches992 ? "md" : "lg"}
+                    value={time}
+                    onChange={setTime}
+                    styles={{ label: { color: "white" } }}
+                    label="Time"
+                    placeholder="Select A Time"
+                    data={[
+                      { value: "LUNCH", label: "Lunch" },
+                      { value: "DINNER", label: "Dinner" },
+                    ]}
+                  />
+                </Grid.Col>
+                <Grid.Col sm={12} md={12} lg={3}>
+                  <Button
+                    className="button"
+                    size={matches992 ? "md" : "lg"}
+                    component={Link}
+                    uppercase
+                    fullWidth
+                    // to={searchSupplier === "venue" ? "/allVenues" : "/allVendors"}
+                  >
+                    Search
+                  </Button>
+                </Grid.Col>
+              </Grid>
             </Group>
           </Group>
         </Center>
@@ -639,7 +657,7 @@ const AllVenuesPage = () => {
           >
             <Stack spacing={"sm"}>
               <Group position="apart" noWrap>
-                <Text size={"lg"} align="left" weight={500}>
+                <Text size={matches992 ? "md" : "lg"} align="left" weight={500}>
                   Advance Filters
                 </Text>
                 {city !== "" ||

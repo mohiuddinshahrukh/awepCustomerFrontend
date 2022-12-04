@@ -18,6 +18,11 @@ const FeaturedVendorsSection = ({ landingPageVendors }) => {
         >
           Top Rated Vendors
         </Anchor>
+      </Group>
+
+      <FeaturedVendorsCarousel landingPageVendors={landingPageVendors} />
+
+      <Group position="right">
         <Button
           component={Link}
           to="/allVendors"
@@ -28,8 +33,6 @@ const FeaturedVendorsSection = ({ landingPageVendors }) => {
           View All Vendors
         </Button>
       </Group>
-
-      <FeaturedVendorsCarousel landingPageVendors={landingPageVendors} />
     </Container>
   );
 };

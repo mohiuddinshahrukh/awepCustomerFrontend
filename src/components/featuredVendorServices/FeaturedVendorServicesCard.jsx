@@ -33,6 +33,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 const FeaturedVendorServicesCard = ({ service }) => {
+  console.log("Service: ", service);
   const { classes, theme } = useStyles();
   return (
     <Card

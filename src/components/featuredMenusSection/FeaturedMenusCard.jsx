@@ -49,6 +49,7 @@ const FeaturedMenusCard = ({ menu }) => {
       sx={{
         backgroundImage: `url(${menu.image})`,
         height: 400,
+        width: 302,
         backgroundSize: "cover",
         backgroundPosition: "center",
 
@@ -65,14 +66,16 @@ const FeaturedMenusCard = ({ menu }) => {
         transitionDelay: "0s",
         transitionProperty: "box-shadow",
       }}
-      style={{ width: "302px" }}
       className="border"
     >
       <div>
-        <Title align="center" order={3} className={classes.title}>
+        <Title align="center" order={4}>
+          {menu?.venue?.venueName}
+        </Title>
+        <Title align="center" order={3}>
           {menuName}
         </Title>
-        <Title align="center" order={4}>
+        <Title align="center" color={"red"} order={5}>
           PKR: {menuPrice} PER HEAD
         </Title>
 

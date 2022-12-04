@@ -2,7 +2,6 @@ import Autoplay from "embla-carousel-autoplay";
 import { Carousel } from "@mantine/carousel";
 import {
   Button,
-  Container,
   Grid,
   Group,
   Image,
@@ -10,11 +9,9 @@ import {
   Select,
   Stack,
   Text,
-  TextInput,
 } from "@mantine/core";
 import React, { useRef, useState } from "react";
 import SearchBackgroundOpacityDiv from "./SearchBackgroundOpacityDiv";
-import SearchAndFilter from "./SearchAndFilter";
 import { Link } from "react-router-dom";
 import { DatePicker } from "@mantine/dates";
 import dayjs from "dayjs";
@@ -75,7 +72,7 @@ const SearchBackground = ({ carouselImages }) => {
           }}
         >
           <Text
-            size={matches600 ? "5vw" : "7vw"}
+            size={matches600 ? "5vw" : "10vw"}
             weight="bold"
             align="center"
             color="white"

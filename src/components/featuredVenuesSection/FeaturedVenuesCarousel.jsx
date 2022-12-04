@@ -4,6 +4,7 @@ import { Carousel } from "@mantine/carousel";
 import FeaturedVenuesCard from "./FeaturedVenuesCard";
 import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import CardSkeleton from "../skeletons/CardSkeleton";
+import { IconArrowRight, IconArrowRightBar } from "@tabler/icons";
 
 const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
   console.log("LandingPageVenues: ", landingPageVenues);
@@ -23,12 +24,13 @@ const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
 
   return (
     <Carousel
-      styles={{ viewport: { padding: "20px 5px" } }}
+      styles={{
+        viewport: { padding: "20px 5px" },
+      }}
       slideSize={"25%"}
       slideGap={0}
       align={"start"}
       slidesToScroll={"auto"}
-      withControls={false}
       loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },

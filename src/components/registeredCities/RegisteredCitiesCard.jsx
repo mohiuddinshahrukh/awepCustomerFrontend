@@ -4,6 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const RegisteredCitiesCard = ({ citiesCard }) => {
+  console.log("#$ citiesCard", citiesCard);
   return (
     <Card
       component={Link}
@@ -24,7 +25,7 @@ const RegisteredCitiesCard = ({ citiesCard }) => {
       style={{ width: "302px" }}
     >
       <Card.Section>
-        <Image height={"350px"} src={citiesCard.img} />
+        <Image height={"300px"} src={citiesCard.img} />
 
         <div
           spacing={0}

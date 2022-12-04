@@ -93,20 +93,22 @@ const FeaturedVenuesCard = ({ venue }) => {
             {venue?.venueName}
           </Text>
 
-          <Group spacing={3} noWrap>
-            <IconStar
-              size={20}
-              style={{ flexShrink: 0 }}
-              stroke={0}
-              fill={"#EDB100"}
-            />
-            <Text weight={500} size={"sm"}>
-              {venue?.rating.toFixed(1)}
-            </Text>
-            <Text color={"dimmed"} size={"sm"}>
-              ({venue?.ratingCount})
-            </Text>
-            <Text lineClamp={1}>{venue?.venueAddress}</Text>
+          <Group noWrap>
+            <Group spacing={3}>
+              <IconStar
+                size={20}
+                style={{ flexShrink: 0 }}
+                stroke={0}
+                fill={"#EDB100"}
+              />
+              <Text weight={500} size={"sm"}>
+                {venue?.rating.toFixed(1)}
+              </Text>
+              <Text color={"dimmed"} size={"sm"}>
+                ({venue?.ratingCount})
+              </Text>
+            </Group>
+            <Text lineClamp={1}>{venue?.venueCity}</Text>
           </Group>
 
           <Group noWrap spacing={"lg"} align={"center"}>

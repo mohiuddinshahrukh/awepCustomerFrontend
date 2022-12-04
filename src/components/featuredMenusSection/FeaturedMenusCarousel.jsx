@@ -22,8 +22,6 @@ const FeaturedMenusCarousel = ({ landingPageMenus }) => {
       slideSize={"25% "}
       align={"start"}
       slidesToScroll={"auto"}
-      withControls={false}
-      loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
         { maxWidth: "sm", slideSize: "75%" },

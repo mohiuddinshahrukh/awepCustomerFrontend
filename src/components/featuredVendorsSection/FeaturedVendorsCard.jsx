@@ -57,20 +57,22 @@ const FeaturedVendorsCard = ({ vendor }) => {
             {vendor?.vendorBusinessTitle}
           </Text>
 
-          <Group spacing={3} noWrap>
-            <IconStar
-              size={20}
-              style={{ flexShrink: 0 }}
-              stroke={0}
-              fill={"#EDB100"}
-            />
-            <Text weight={500} size={"sm"}>
-              {vendor?.rating.toFixed(1)}
-            </Text>
-            <Text color={"dimmed"} size={"sm"}>
-              ({vendor?.ratingCount})
-            </Text>
-            <Text lineClamp={1}>{vendor?.address}</Text>
+          <Group noWrap>
+            <Group spacing={3}>
+              <IconStar
+                size={20}
+                style={{ flexShrink: 0 }}
+                stroke={0}
+                fill={"#EDB100"}
+              />
+              <Text weight={500} size={"sm"}>
+                {vendor?.rating.toFixed(1)}
+              </Text>
+              <Text color={"dimmed"} size={"sm"}>
+                ({vendor?.ratingCount})
+              </Text>
+            </Group>
+            <Text lineClamp={1}>{vendor?.city}</Text>
           </Group>
 
           <Group noWrap spacing={"lg"} align={"center"}>

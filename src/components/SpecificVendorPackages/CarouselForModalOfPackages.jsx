@@ -1,9 +1,8 @@
 import { Carousel } from "@mantine/carousel";
-import { Grid, Text } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons";
-import React, { Children, useRef } from "react";
+import React from "react";
 import BookVenueSideColumnsForVendor from "../BookVenueSideColums/BookVenueSideColumnsForVendor";
-import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import SpecificPackageDetails from "./SpecificPackageDetails";
 const CarouselForModalOfPackages = ({
   vendorPackages,
@@ -20,8 +19,6 @@ const CarouselForModalOfPackages = ({
   isSignIn,
   setOpen,
   setIsSignIn,
-  setIsSignUp,
-  idOfSpecificVendorPackage,
 }) => {
   let vendorPackages2 = vendorPackages ? vendorPackages : [{}];
   const slides = vendorPackages2.map((vendorPackage, index) => (

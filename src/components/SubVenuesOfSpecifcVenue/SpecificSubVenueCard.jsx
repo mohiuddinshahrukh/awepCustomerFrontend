@@ -1,5 +1,5 @@
 import React from "react";
-import { createStyles, Image, Card, Text, Group } from "@mantine/core";
+import { createStyles, Image, Card, Text, Group, Button } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { IconStar } from "@tabler/icons";
 import CustomButton from "../CustomButton/CustomButton";
@@ -115,7 +115,9 @@ const SpecificSubVenue = ({
           </Text>
         </div>
 
-        <CustomButton title="Book Now" />
+        <Button className="button" size="md" radius="md">
+          Book Now
+        </Button>
       </Group>
     </Card>
   );

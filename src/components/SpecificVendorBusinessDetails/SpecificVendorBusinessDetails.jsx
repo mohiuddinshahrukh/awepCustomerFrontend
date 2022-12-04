@@ -141,7 +141,6 @@ const SpecificVendorBusinessDetails = () => {
           alignItems: "center",
         }}
       >
-        <CustomButton title="Book Now" />
         <Group spacing={0}>
           <RatingStars
             rating={vendorDetails?.rating ? vendorDetails?.rating : 5}

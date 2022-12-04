@@ -14,11 +14,9 @@ import {
   Text,
   Title,
   Skeleton,
+  ActionIcon,
 } from "@mantine/core";
 import axios from "axios";
-import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
-import CustomButton from "../CustomButton/CustomButton";
-
 import RatingStars from "../RatingStars/RatingStars";
 import Carousal_Images from "../Carousal/Carousal";
 import AboutVenue from "../AboutVenue/AboutVenue";
@@ -36,12 +34,16 @@ import {
   IconSettings,
   IconPhoto,
   IconMap2,
+  IconBrandWhatsapp,
+  IconPhone,
+  IconMail,
 } from "@tabler/icons";
 import SignIn from "../userProfiling/SignIn";
 import SignUp from "../userProfiling/SignUp";
 import Carousal_Videos from "../Carousal/Carousal_videos";
 import Carousal_Panorama from "../Carousal/Carousal_Panorama";
 import Carousal_Stage from "../Carousal/Carousal_Stage";
+import { useMediaQuery } from "@mantine/hooks";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -51,6 +53,7 @@ const useStyles = createStyles(() => ({
   },
 }));
 const SpecificVenueDetails = () => {
+  const matches = useMediaQuery("(min-width: 1200px)");
   let params = useParams();
   console.log("Route Params: ", params);
   const { classes } = useStyles();
@@ -94,7 +97,6 @@ const SpecificVenueDetails = () => {
 
   useEffect(() => {
     if (refresh) {
-      // setVisible(true);
       axios.get(url1).then((res) => {
         console.log(res.data);
         if (res.data.status === "success") {
@@ -112,7 +114,6 @@ const SpecificVenueDetails = () => {
 
   return (
     <Container size="xl" my="lg">
-      {console.log("BBBBBBBBBBBBB", isSignIn)}
       <ModalOfSubVenues
         contactPhone={contactPhone}
         setContactPhone={setContactPhone}
@@ -169,7 +170,6 @@ const SpecificVenueDetails = () => {
         ></Pannellum>
       </Modal>
 
-      {/*<BreadCrumbs />*/}
       <Title pt="md" order={3}>
         {venueDetails?.venueName}
       </Title>
@@ -275,6 +275,22 @@ const SpecificVenueDetails = () => {
               </Tabs.Panel>
             </Tabs>
           </Grid.Col>
+          <Grid.Col>
+            <Group position="apart">
+              <Button className="button">Book Now</Button>
+              <Group spacing={0}>
+                <ActionIcon size="xl" color="green">
+                  <IconBrandWhatsapp size={32} />
+                </ActionIcon>
+                <ActionIcon size="xl" color="blue">
+                  <IconPhone size={32} />
+                </ActionIcon>
+                <ActionIcon size="xl" color="red">
+                  <IconMail size={32} />
+                </ActionIcon>
+              </Group>
+            </Group>
+          </Grid.Col>
           <Group
             spacing="md"
             pt="sm"
@@ -283,13 +299,6 @@ const SpecificVenueDetails = () => {
               alignItems: "center",
             }}
           >
-            <Button
-              className={classes.button}
-              radius="md"
-              onClick={() => setViewPanorama(true)}
-            >
-              View Panorama
-            </Button>
             <Group spacing={0}>
               <RatingStars
                 rating={venueDetails?.rating ? venueDetails?.rating : 5}
@@ -302,16 +311,18 @@ const SpecificVenueDetails = () => {
               {venueDetails?.ratingCount ? venueDetails?.ratingCount : 0}{" "}
               {venueDetails?.ratingCount === 1 ? "Review" : "Reviews"}
             </Text>
-            <Text>
-              Menus From{" "}
-              <b>
-                Rs.{" "}
-                {Math.min.apply(
-                  Math,
-                  venueDetails?.menus?.map((e) => e.price)
-                )}
-              </b>
-            </Text>
+            {venueDetails?.menus?.length > 0 && (
+              <Text>
+                Menus From{" "}
+                <b>
+                  Rs.{" "}
+                  {Math.min.apply(
+                    Math,
+                    venueDetails?.menus?.map((e) => e.price)
+                  )}
+                </b>
+              </Text>
+            )}
             <Text>
               Guests {""}
               <b>
@@ -471,7 +482,7 @@ const SpecificVenueDetails = () => {
             </Tabs.Panel>
           </Tabs>
         </Grid.Col>
-        <Grid.Col lg={3} pl="xl">
+        <Grid.Col lg={3} pl="xl" hidden={matches ? false : true}>
           <BookVenueSideColums
             onClickFunction={() => {
               console.log("onClickFunction111");

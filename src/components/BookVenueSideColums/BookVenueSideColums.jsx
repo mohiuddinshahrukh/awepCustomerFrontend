@@ -1,52 +1,34 @@
 import {
   Button,
   createStyles,
-  NativeSelect,
   NumberInput,
   Paper,
   Select,
   Text,
-  TextInput,
 } from "@mantine/core";
 import React, { useState } from "react";
-import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import axios from "axios";
-import InputMask from "react-input-mask";
+
 import {
   IconCalendar,
   IconClock,
   IconConfetti,
   IconMail,
-  IconPhone,
   IconUsers,
 } from "@tabler/icons";
 import dayjs from "dayjs";
 import { DatePicker } from "@mantine/dates";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 
 const useStyles = createStyles(() => ({
-  button: {
-    backgroundColor: "#775A97",
-    ":hover": {
-      backgroundColor: "#56416D",
-    },
-  },
   stickySThings: {
     position: "-webkit-sticky",
     position: "sticky",
-    top: 20,
+    top: 100,
   },
 }));
 
 const BookVenueSideColums = ({
-  subVenue,
-  onClickFunction,
-  contactPhone,
-  setContactPhone,
-  contactEmail,
-  setContactEmail,
   eventType,
   setEventType,
   date,
@@ -56,35 +38,15 @@ const BookVenueSideColums = ({
   guests,
   setGuests,
   venueId,
-  isSignIn,
   setIsSignIn,
 }) => {
   const navigate = useNavigate();
-  console.log("AAAA", setIsSignIn);
-  // const signIn = setIsSignIn;
   const { classes } = useStyles();
-  // console.log(signIn);
-  // const form = useForm({
-  //   // validateInputOnChange: true,
-  //   initialValues: {
-  //     // email: contactEmail,
-  //     // phone: contactPhone,
-  //     date: date,
-  //     time: time,
-  //     guests: guests,
-  //   },
-  //   validate: {
-  //     guests: (value) =>
-  //       value > 50 && value <= 10000 ? null : "Estimated guest count",
-  //     time: (value) => (value !== "" ? null : "Please select a time"),
-  //     date: (value) => (value !== "" ? null : "Please select a date"),
-  //   },
-  // });
+
   const [error, setError] = useState({});
   const handleSubmit = async (event) => {
     var { eventType, date, time, guests } = event;
     console.log("onClickFunction 11");
-    //validation comes here
     const errorValues = {};
     if (date === "") {
       errorValues.date = "Please select a date";
@@ -234,7 +196,7 @@ const BookVenueSideColums = ({
         // {...form.getInputProps("time")}
       />
       <Button
-        className={classes.button}
+        className="button"
         radius="md"
         // type="submit"
         onClick={() => handleSubmit({ eventType, date, time, guests })}

@@ -230,14 +230,14 @@ const AllVendorsPage = () => {
     setFilteredVendors(filteredVendor);
   };
   const autoplay = useRef(Autoplay({ delay: 10000 }));
-
   const matches1026 = useMediaQuery("(max-width: 1026px)");
+  const matches992 = useMediaQuery("(max-width: 992px)");
   return (
     <Paper>
       <Paper
         withBorder
         style={{
-          height: "35vh",
+          height: "40vh",
           position: "relative",
         }}
       >
@@ -245,7 +245,7 @@ const AllVendorsPage = () => {
           style={{ position: "absolute", width: "100%" }}
           loop
           align="start"
-          height={"35vh"}
+          height={"40vh"}
           orientation="vertical"
           draggable={false}
           withControls={false}
@@ -274,7 +274,7 @@ const AllVendorsPage = () => {
           ]?.map((image, index) => {
             return (
               <Carousel.Slide key={index}>
-                <Image height={"35vh"} src={image.src} />
+                <Image height={"40vh"} src={image.src} />
               </Carousel.Slide>
             );
           })}
@@ -285,58 +285,72 @@ const AllVendorsPage = () => {
             style={{ width: "100%", height: "100%" }}
             noWrap
             position="center"
+            px={matches992 ? "xl" : "lg"}
           >
             <Group style={{ zIndex: 10 }} align={"flex-end"}>
-              <Select
-                size={"lg"}
-                styles={{ label: { color: "white" } }}
-                label="City"
-                placeholder="Select A City"
-                value={city}
-                onChange={setCity}
-                data={[
-                  { value: "islamabad", label: "Islamabad" },
-                  { value: "rawalpindi", label: "Rawalpindi" },
-                  { value: "lahore", label: "Lahore" },
-                  { value: "karachi", label: "Karachi" },
-                ]}
-              />
-              <DatePicker
-                value={date}
-                onChange={setDate}
-                size={"lg"}
-                styles={{ label: { color: "white" } }}
-                placeholder="Pick date"
-                label="Event date"
-                minDate={dayjs(new Date())
-                  .startOf("month")
-                  .add(new Date().getDate(), "days")
-                  .toDate()}
-                maxDate={dayjs(new Date()).add(365, "days").toDate()}
-              />
-              <Select
-                size={"lg"}
-                value={time}
-                onChange={setTime}
-                styles={{ label: { color: "white" } }}
-                label="Time"
-                placeholder="Select A Time"
-                data={[
-                  { value: "1 Day", label: "1 Day" },
-                  { value: "2 Days", label: "2 Days" },
-                  { value: "3 Days", label: "3 Days" },
-                  { value: "5 Days", label: "5 Days" },
-                ]}
-              />
-              <Button
-                className="button"
-                uppercase
-                size={"lg"}
-                component={Link}
-                // to={searchSupplier === "vendor" ? "/allVenues" : "/allVendors"}
-              >
-                Search
-              </Button>
+              <Grid align={"flex-end"}>
+                <Grid.Col sm={12} md={4} lg={3}>
+                  <Select
+                    size={matches992 ? "md" : "lg"}
+                    styles={{ label: { color: "white" } }}
+                    label="City"
+                    placeholder="Select A City"
+                    value={city}
+                    onChange={setCity}
+                    data={[
+                      { value: "islamabad", label: "Islamabad" },
+                      { value: "rawalpindi", label: "Rawalpindi" },
+                      { value: "lahore", label: "Lahore" },
+                      { value: "karachi", label: "Karachi" },
+                    ]}
+                  />
+                </Grid.Col>
+                <Grid.Col sm={12} md={4} lg={3}>
+                  {" "}
+                  <DatePicker
+                    value={date}
+                    onChange={setDate}
+                    size={matches992 ? "md" : "lg"}
+                    styles={{ label: { color: "white" } }}
+                    placeholder="Pick date"
+                    label="Event date"
+                    minDate={dayjs(new Date())
+                      .startOf("month")
+                      .add(new Date().getDate(), "days")
+                      .toDate()}
+                    maxDate={dayjs(new Date()).add(365, "days").toDate()}
+                  />
+                </Grid.Col>
+                <Grid.Col sm={12} md={4} lg={3}>
+                  {" "}
+                  <Select
+                    size={matches992 ? "md" : "lg"}
+                    value={time}
+                    onChange={setTime}
+                    styles={{ label: { color: "white" } }}
+                    label="Time"
+                    placeholder="Select A Time"
+                    data={[
+                      { value: "1 Day", label: "1 Day" },
+                      { value: "2 Days", label: "2 Days" },
+                      { value: "3 Days", label: "3 Days" },
+                      { value: "5 Days", label: "5 Days" },
+                    ]}
+                  />
+                </Grid.Col>
+                <Grid.Col sm={12} md={12} lg={3}>
+                  <Button
+                    className="button"
+                    uppercase
+                    size={matches992 ? "md" : "lg"}
+                    component={Link}
+                    fullWidth
+                    // to={searchSupplier === "vendor" ? "/allVenues" : "/allVendors"}
+                  >
+                    Search
+                  </Button>
+                </Grid.Col>
+              </Grid>
             </Group>
           </Group>
         </Center>

@@ -388,7 +388,6 @@ const AllVenuesPage = () => {
   ]);
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");
-  const matches1200 = useMediaQuery("(max-width: 1200px)");
   const matches992 = useMediaQuery("(max-width: 992px)");
 
   return (

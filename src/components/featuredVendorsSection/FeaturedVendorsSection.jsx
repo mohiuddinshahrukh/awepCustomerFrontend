@@ -1,4 +1,4 @@
-import { Anchor, Button, Container, Group } from "@mantine/core";
+import { Anchor, Button, Container, Divider, Group } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import FeaturedVendorsCarousel from "./FeaturedVendorsCarousel";
 const FeaturedVendorsSection = ({ landingPageVendors }) => {
   return (
     <Container size={"xl"} my="xl">
+      <Divider my="lg" />
       <Group position="apart">
         <Anchor
           component={Link}

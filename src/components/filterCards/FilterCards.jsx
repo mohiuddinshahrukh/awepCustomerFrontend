@@ -1,9 +1,15 @@
 import { Container, Group, Paper, ScrollArea } from "@mantine/core";
 import {
+  IconBuildingFortress,
   IconBuildingSkyscraper,
+  IconBuildingStore,
+  IconCards,
   IconChevronRight,
+  IconCornerUpLeftDouble,
   IconEye,
+  IconHeadset,
   IconLayoutCards,
+  IconQuestionMark,
   IconSearch,
   IconStars,
   IconUsers,
@@ -16,62 +22,72 @@ const FilterCards = () => {
   return (
     <Container size={"xl"} my={"xl"}>
       <Paper
+        px={0}
+        mx={0}
         component={ScrollArea}
         scrollbarSize={8}
         type={"hover"}
         offsetScrollbars={-20}
       >
         {" "}
-        <Group position="center" m={"md"} noWrap spacing={"xs"}>
-          {/* <EasilyPlanYourWeddingCard
-            cardData={[
-              {
-                cardTitle: "Easily Plan Your Wedding",
-                cardLinkTitle: "Get Started",
-                cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconChevronRight className="fgColorF" />,
-              },
-            ]}
-          />*/}
-          <OtherFilterCards
-            cardsData={[
-              {
-                cardTitle: "Venues",
-                cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconSearch size={50} className="fgColorF" />,
-              },
-              {
-                cardTitle: "Vendors",
-                cardLinkPath: "/allVendors",
-                cardLinkIcon: <IconUsers size={50} className="fgColorF" />,
-              },
-              {
-                cardTitle: "Featured",
-                cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconStars size={50} className="fgColorF" />,
-              },
-              {
-                cardTitle: "Viewed",
-                cardLinkPath: "/allVenues",
-                cardLinkIcon: <IconEye size={50} className="fgColorF" />,
-              },
-              {
-                cardTitle: "Cards",
-                cardLinkPath: "/cardEditor",
-                cardLinkIcon: (
-                  <IconLayoutCards size={50} className="fgColorF" />
-                ),
-              },
-              {
-                cardTitle: "Cities",
-                cardLinkPath: "/allVenues",
-                cardLinkIcon: (
-                  <IconBuildingSkyscraper size={50} className="fgColorF" />
-                ),
-              },
-            ]}
-          />
-        </Group>
+        <OtherFilterCards
+          cardsData={[
+            {
+              cardTitle: "Venues",
+              cardLinkPath: "/allVenues",
+              cardLinkIcon: (
+                <IconBuildingFortress
+                  size={70}
+                  stroke={1.5}
+                  className="fgColorF"
+                />
+              ),
+            },
+            {
+              cardTitle: "Vendors",
+              cardLinkPath: "/allVendors",
+              cardLinkIcon: (
+                <IconBuildingStore
+                  size={70}
+                  stroke={1.5}
+                  className="fgColorF"
+                />
+              ),
+            },
+            {
+              cardTitle: "Cards",
+              cardLinkPath: "/cardEditor",
+              cardLinkIcon: (
+                <IconCards size={70} stroke={1.5} className="fgColorF" />
+              ),
+            },
+            {
+              cardTitle: "Contact Us",
+              cardLinkPath: "/contactUs",
+              cardLinkIcon: (
+                <IconHeadset size={70} stroke={1.5} className="fgColorF" />
+              ),
+            },
+            {
+              cardTitle: "About Us",
+              cardLinkPath: "/aboutUs",
+              cardLinkIcon: (
+                <IconQuestionMark size={70} stroke={1.5} className="fgColorF" />
+              ),
+            },
+            {
+              cardTitle: "Feedbacks",
+              cardLinkPath: "/allVenues",
+              cardLinkIcon: (
+                <IconCornerUpLeftDouble
+                  size={70}
+                  stroke={1.5}
+                  className="fgColorF"
+                />
+              ),
+            },
+          ]}
+        />
       </Paper>
     </Container>
   );

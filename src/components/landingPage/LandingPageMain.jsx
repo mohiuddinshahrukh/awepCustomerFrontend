@@ -81,11 +81,11 @@ const LandingPageMain = () => {
       <FeaturedVendorsSection
         landingPageVendors={allData?.data?.topRatedVendors}
       />
+      <FeaturedMenus landingPageMenus={allData?.data?.mostBookedMenus} />
       <FeaturedVendorServicesSection
         vendorServices={allData?.data?.mostBookedVendorPackages}
       />
 
-      <FeaturedMenus landingPageMenus={allData?.data?.mostBookedMenus} />
       {/* <RealWeddingsSection />*/}
       <WeddingCards />
       <CustomerTestimonials

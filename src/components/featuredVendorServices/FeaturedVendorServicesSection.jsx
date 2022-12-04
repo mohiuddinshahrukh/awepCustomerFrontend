@@ -1,4 +1,4 @@
-import { Anchor, Button, Container, Group } from "@mantine/core";
+import { Anchor, Button, Container, Divider, Group } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import FeaturedVendorServicesCarousel from "./FeaturedVendorServicesCarousel";
 const FeaturedVendorServicesSection = ({ vendorServices }) => {
   return (
     <Container size={"xl"} my="xl">
+      <Divider my="lg" />
       <Group position="apart">
         <Anchor
           component={Link}
@@ -15,7 +16,7 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
           size={"1.5rem"}
           weight={500}
         >
-          Vendor Services
+          Top Booked Vendor Packages
         </Anchor>
         <Button
           component={Link}
@@ -24,7 +25,7 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
           rightIcon={<IconArrowRight />}
           className="buttonOutline"
         >
-          View All Vendor Services
+          All Vendor Packages
         </Button>
       </Group>
       <FeaturedVendorServicesCarousel vendorServices={vendorServices} />

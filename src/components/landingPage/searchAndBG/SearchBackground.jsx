@@ -36,6 +36,8 @@ const SearchBackground = ({ carouselImages }) => {
 
   const searchBackgroundCarousel = (
     <Carousel
+      styles={{ indicators: { zIndex: 10 } }}
+      withIndicators
       loop
       align="start"
       height={"75vh"}

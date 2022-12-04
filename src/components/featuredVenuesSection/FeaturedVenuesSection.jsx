@@ -1,4 +1,4 @@
-import { Anchor, Button, Container, Group } from "@mantine/core";
+import { Anchor, Button, Container, Divider, Group } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ const FeaturedVenuesSection = ({ landingPageVenues }) => {
   console.log("$LandingPageVenues: ", landingPageVenues);
   return (
     <Container size={"xl"} my="xl">
+      <Divider my="lg" />
       <Group position="apart">
         <Anchor
           component={Link}
@@ -16,7 +17,7 @@ const FeaturedVenuesSection = ({ landingPageVenues }) => {
           size={"1.5rem"}
           weight={500}
         >
-          Top Rated Halls
+          Top Rated Venues
         </Anchor>
         <Button
           component={Link}
@@ -25,7 +26,7 @@ const FeaturedVenuesSection = ({ landingPageVenues }) => {
           rightIcon={<IconArrowRight />}
           className="buttonOutline"
         >
-          View All Venues
+          All Venues
         </Button>
       </Group>
       <FeaturedVenuesCarousel landingPageVenues={landingPageVenues} />

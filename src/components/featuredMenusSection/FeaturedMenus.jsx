@@ -16,7 +16,7 @@ const FeaturedMenus = ({ landingPageMenus }) => {
           size={"1.5rem"}
           weight={500}
         >
-          Top Rated Menus
+          Top Booked Venue Menus
         </Anchor>
         <Button
           component={Link}

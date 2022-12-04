@@ -3,16 +3,20 @@ import React from "react";
 import WeddingCardsCard from "./WeddingCardsCard";
 const landingPageWeddingCards = [
   {
+    title: "Barat",
     img: "https://images.unsplash.com/photo-1634055980590-1a44e5a8b3e4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
   },
   {
+    title: "Walima",
     img: "https://images.unsplash.com/photo-1592347093417-0e95eb5851aa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80",
   },
   {
-    img: "https://images.unsplash.com/photo-1612619732485-1ae018b63c55?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+    title: "Mehndi",
+    img: "https://images.unsplash.com/photo-1612619733133-c53eacf97763?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1980&q=80",
   },
   {
-    img: "https://images.unsplash.com/photo-1612619733133-c53eacf97763?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1980&q=80",
+    title: "Seminar",
+    img: "https://images.unsplash.com/photo-1612619732485-1ae018b63c55?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
   },
 ];
 const WeddingCardsCarousel = () => {

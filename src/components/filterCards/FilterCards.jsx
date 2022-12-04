@@ -29,7 +29,6 @@ const FilterCards = () => {
         type={"hover"}
         offsetScrollbars={-20}
       >
-        {" "}
         <OtherFilterCards
           cardsData={[
             {
@@ -55,7 +54,7 @@ const FilterCards = () => {
               ),
             },
             {
-              cardTitle: "Cards",
+              cardTitle: "Wedding Cards",
               cardLinkPath: "/cardEditor",
               cardLinkIcon: (
                 <IconCards size={70} stroke={1.5} className="fgColorF" />

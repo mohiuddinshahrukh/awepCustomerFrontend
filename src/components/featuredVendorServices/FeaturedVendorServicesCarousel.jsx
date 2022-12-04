@@ -24,7 +24,6 @@ const FeaturedVendorServicesCarousel = ({ vendorServices }) => {
       align={"start"}
       slidesToScroll={"auto"}
       slideSize={"25% "}
-      withControls={false}
       loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },

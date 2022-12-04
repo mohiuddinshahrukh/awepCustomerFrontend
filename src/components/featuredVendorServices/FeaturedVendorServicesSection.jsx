@@ -16,8 +16,12 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
           size={"1.5rem"}
           weight={500}
         >
-          Top Booked Vendor Packages
+          Top Rated Vendor Packages
         </Anchor>
+      </Group>
+      <FeaturedVendorServicesCarousel vendorServices={vendorServices} />
+
+      <Group position="right">
         <Button
           component={Link}
           to="/allVendors"
@@ -28,7 +32,6 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
           All Vendor Packages
         </Button>
       </Group>
-      <FeaturedVendorServicesCarousel vendorServices={vendorServices} />
     </Container>
   );
 };

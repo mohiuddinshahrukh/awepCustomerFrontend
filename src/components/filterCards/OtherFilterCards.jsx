@@ -1,4 +1,4 @@
-import { Group, Paper, SimpleGrid, Text } from "@mantine/core";
+import { Group, Paper, ScrollArea, SimpleGrid, Text } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -24,7 +24,7 @@ const OtherFilterCards = ({ cardsData }) => {
         shadow={"sm"}
         p={"xl"}
         key={index}
-        style={{ height: "150px", width: "195px", boxSizing: "border-box" }}
+        style={{ height: "165px", width: "195px", boxSizing: "border-box" }}
         component={Link}
         to={card.cardLinkPath}
       >
@@ -36,9 +36,9 @@ const OtherFilterCards = ({ cardsData }) => {
     );
   });
   return (
-    <SimpleGrid cols={6} noWrap>
+    <Group p={0} m={0} noWrap position="apart">
       {cards}
-    </SimpleGrid>
+    </Group>
   );
 };
 

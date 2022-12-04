@@ -17,7 +17,6 @@ const CustomerTestimonialsCarousel = ({ landingPageTestimonials }) => {
       slideSize={"25% "}
       align={"start"}
       slidesToScroll={"auto"}
-      withControls={false}
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },
         { maxWidth: "sm", slideSize: "75%" },

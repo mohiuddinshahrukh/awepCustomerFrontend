@@ -30,7 +30,6 @@ const WeddingCardsCarousel = () => {
       slideGap={"md"}
       align={"start"}
       slidesToScroll={"auto"}
-      withControls={false}
       loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },

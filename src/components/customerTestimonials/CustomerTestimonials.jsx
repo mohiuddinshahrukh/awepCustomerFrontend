@@ -1,4 +1,4 @@
-import { Anchor, Button, Container, Group } from "@mantine/core";
+import { Anchor, Button, Container, Divider, Group } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import CustomerTestimonialsCarousel from "./CustomerTestimonialsCarousel";
 const CustomerTestimonials = ({ landingPageTestimonials }) => {
   return (
     <Container size={"xl"} my="xl">
+      <Divider my="lg" />
       <Group position="apart">
         <Anchor
           weight={500}
@@ -17,6 +18,13 @@ const CustomerTestimonials = ({ landingPageTestimonials }) => {
         >
           Testimonials
         </Anchor>
+      </Group>
+
+      <CustomerTestimonialsCarousel
+        landingPageTestimonials={landingPageTestimonials}
+      />
+
+      <Group position="right">
         <Button
           className="buttonOutline"
           component={Link}
@@ -27,10 +35,6 @@ const CustomerTestimonials = ({ landingPageTestimonials }) => {
           Add Testimonial
         </Button>
       </Group>
-
-      <CustomerTestimonialsCarousel
-        landingPageTestimonials={landingPageTestimonials}
-      />
     </Container>
   );
 };

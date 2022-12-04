@@ -1,13 +1,8 @@
 // import logo from "./logo.svg";
-import {
-  ColorSchemeProvider,
-  MantineProvider,
-  Paper,
-  Text,
-} from "@mantine/core";
+import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddReview from "./components/AddReview/AddReview";

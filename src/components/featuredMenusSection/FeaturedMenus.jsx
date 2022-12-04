@@ -1,13 +1,12 @@
-import { Anchor, Button, Container, Group } from "@mantine/core";
+import { Anchor, Button, Container, Divider, Group } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FeaturedMenusCarousel from "./FeaturedMenusCarousel";
 
 const FeaturedMenus = ({ landingPageMenus }) => {
   return (
     <Container size={"xl"} my="xl">
+      <Divider my="lg" />
       <Group position="apart">
         <Anchor
           component={Link}
@@ -16,8 +15,12 @@ const FeaturedMenus = ({ landingPageMenus }) => {
           size={"1.5rem"}
           weight={500}
         >
-          Top Booked Venue Menus
+          Top Rated Venue Menus
         </Anchor>
+      </Group>
+      <FeaturedMenusCarousel landingPageMenus={landingPageMenus} />
+
+      <Group position="right">
         <Button
           component={Link}
           to="/"
@@ -25,10 +28,9 @@ const FeaturedMenus = ({ landingPageMenus }) => {
           rightIcon={<IconArrowRight />}
           className="buttonOutline"
         >
-          View All Menus
+          All Menus
         </Button>
       </Group>
-      <FeaturedMenusCarousel landingPageMenus={landingPageMenus} />
     </Container>
   );
 };

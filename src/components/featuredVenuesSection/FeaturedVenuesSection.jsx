@@ -19,6 +19,9 @@ const FeaturedVenuesSection = ({ landingPageVenues }) => {
         >
           Top Rated Venues
         </Anchor>
+      </Group>
+      <FeaturedVenuesCarousel landingPageVenues={landingPageVenues} />
+      <Group position="right">
         <Button
           component={Link}
           to="/allVenues"
@@ -29,7 +32,6 @@ const FeaturedVenuesSection = ({ landingPageVenues }) => {
           All Venues
         </Button>
       </Group>
-      <FeaturedVenuesCarousel landingPageVenues={landingPageVenues} />
     </Container>
   );
 };

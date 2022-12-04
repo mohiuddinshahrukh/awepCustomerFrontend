@@ -24,7 +24,6 @@ const FeaturedVendorsCarousel = ({ landingPageVendors }) => {
       slideSize={"25% "}
       align={"start"}
       slidesToScroll={"auto"}
-      withControls={false}
       loop
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },

@@ -111,9 +111,33 @@ const SpecificVenueDetails = () => {
       });
     }
   }, [refresh]);
+  const [openBookNow, setOpenBookNow] = useState(false);
 
   return (
     <Container size="xl" my="lg">
+      <Modal opened={openBookNow} onClose={() => setOpenBookNow(false)}>
+        <BookVenueSideColums
+          onClickFunction={() => {
+            console.log("onClickFunction111");
+            setOpen(true);
+          }}
+          contactPhone={contactPhone}
+          setContactPhone={setContactPhone}
+          contactEmail={contactEmail}
+          setContactEmail={setContactEmail}
+          eventType={eventType}
+          setEventType={setEventType}
+          date={date}
+          setDate={setDate}
+          time={time}
+          setTime={setTime}
+          guests={guests}
+          setGuests={setGuests}
+          venueId={params.id}
+          isSignIn={isSignIn}
+          setIsSignIn={setIsSignIn}
+        />
+      </Modal>
       <ModalOfSubVenues
         contactPhone={contactPhone}
         setContactPhone={setContactPhone}
@@ -202,17 +226,6 @@ const SpecificVenueDetails = () => {
             )}
           </Group>
         </Anchor>
-        {/* <Text underline>View Map</Text>
-        <Text underline>Phone Number</Text>
-        <Anchor
-          // component={Link}
-
-          href={venueDetails?.websiteHandle}
-          color="dark"
-          underline
-        >
-          Visit Website
-        </Anchor> */}
       </Group>
 
       <Grid pt="md">
@@ -276,8 +289,12 @@ const SpecificVenueDetails = () => {
             </Tabs>
           </Grid.Col>
           <Grid.Col>
-            <Group position="apart">
-              <Button className="button">Book Now</Button>
+            <Group position={!matches ? "apart" : "right"}>
+              {!matches && (
+                <Button className="button" onClick={() => setOpenBookNow(true)}>
+                  Book Now
+                </Button>
+              )}
               <Group spacing={0}>
                 <ActionIcon size="xl" color="green">
                   <IconBrandWhatsapp size={32} />

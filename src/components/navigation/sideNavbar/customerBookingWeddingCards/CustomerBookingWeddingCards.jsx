@@ -132,7 +132,7 @@ const CustomerBookingWEddingCards = () => {
     </tr>
   );
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", width: "100%" }}>
       <CustomeLoadingOverlay visible={visible} />
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}

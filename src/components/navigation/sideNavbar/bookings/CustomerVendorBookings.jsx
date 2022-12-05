@@ -225,7 +225,7 @@ const CustomerVendorBookings = () => {
     </tr>
   );
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", width: "100%" }}>
       <Modal
         title={<Title order={2}>Complete Payment</Title>}
         size={"lg"}

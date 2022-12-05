@@ -65,7 +65,7 @@ const VendorPayments = ({ vendorBookings }) => {
     </tr>
   );
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ width: "100%" }}>
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"

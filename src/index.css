@@ -118,3 +118,21 @@ code {
 .mantine-Slider-label {
   background-color: #e60084;
 }
+
+.selectedChat {
+  background-color: #e60084;
+  color: white;
+}
+.selectedChat:hover {
+  background-color: #ca0273;
+  color: white;
+}
+.unSelectedChat {
+  border: 1px solid #e60084;
+  background-color: white;
+  color: black;
+}
+.unSelectedChat:hover {
+  background-color: rgb(230, 0, 130, 0.8);
+  color: white;
+}

@@ -42,7 +42,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
     socket.on("receiveNotifications", (data) => {
       let unreadCount = 0;
       console.log("receiveNotification1");
-      if (data.userId === JSON.parse(localStorage.getItem("userData")).id) {
+      if (data.userId === JSON.parse(localStorage.getItem("customerData")).id) {
         let newNotifications = data.notifications.filter((e, index) => {
           if (!e.read && e.userId.toString() === data.userId.toString()) {
             console.log("count 0:::", e, index);
@@ -109,7 +109,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
               { title: "About Us", path: "/aboutUs" },
             ]}
           />
-          {!localStorage.getItem("userToken") && (
+          {!localStorage.getItem("customerToken") && (
             <Group position="center">
               <TopNavbarButtons
                 buttonsData={[
@@ -163,7 +163,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
           )}
           <Group>
             <TopNavbarThemeToggle />
-            {localStorage.getItem("userToken") ? (
+            {localStorage.getItem("customerToken") ? (
               <Group spacing={"lg"}>
                 <NotificaitonsTab
                   unreadCount={count}

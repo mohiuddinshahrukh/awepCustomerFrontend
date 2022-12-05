@@ -318,9 +318,9 @@ const NewBookingFile = () => {
         value === "" ? "Please Select an Event Type" : null,
     },
   });
-  let userData = JSON.parse(localStorage.getItem("userData"));
-  let localCustomerEmail = userData?.email;
-  let localCustomerPhone = userData?.phone;
+  let customerData = JSON.parse(localStorage.getItem("customerData"));
+  let localCustomerEmail = customerData?.email;
+  let localCustomerPhone = customerData?.phone;
   const form = useForm({
     validateInputOnChange: ["phone", "email"],
     initialValues: {
@@ -396,7 +396,7 @@ const NewBookingFile = () => {
         if (params.bookingId) {
           const headers = {
             "Content-Type": "application/json",
-            token: localStorage.getItem("userToken"),
+            token: localStorage.getItem("customerToken"),
           };
           axios({
             method: "get",
@@ -613,7 +613,7 @@ const NewBookingFile = () => {
     console.log("bosyyyy in update", body);
     const headers = {
       "Content-Type": "application/json",
-      token: localStorage.getItem("userToken"),
+      token: localStorage.getItem("customerToken"),
     };
     try {
       const response = await axios({
@@ -637,7 +637,7 @@ const NewBookingFile = () => {
         console.log(response.data.error);
       } else {
         socket.emit("generateNotification", {
-          userId: JSON.parse(localStorage.getItem("userData")).id,
+          userId: JSON.parse(localStorage.getItem("customerData")).id,
           title: "Subvenue Booking Successful",
           message: `Successfully Created a booking for ${email}`,
           link: "https://awep-customer-frontend.vercel.app/dashboard/venueBookings",
@@ -728,7 +728,7 @@ const NewBookingFile = () => {
 
     const headers = {
       "Content-Type": "application/json",
-      token: localStorage.getItem("userToken"),
+      token: localStorage.getItem("customerToken"),
     };
     try {
       const response = await axios({
@@ -752,7 +752,7 @@ const NewBookingFile = () => {
         setLoading(false);
       } else {
         socket.emit("generateNotification", {
-          userId: JSON.parse(localStorage.getItem("userData")).id,
+          userId: JSON.parse(localStorage.getItem("customerData")).id,
           title: "Subvenue Booking Successful",
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",

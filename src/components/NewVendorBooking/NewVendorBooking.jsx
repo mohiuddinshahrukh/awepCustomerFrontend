@@ -267,10 +267,10 @@ const NewVendorBookingFile = () => {
         value === "" ? "Please Select an Event Type" : null,
     },
   });
-  let userData = JSON.parse(localStorage.getItem("userData"));
-  let customerName = userData?.name;
-  let customerEmail = userData?.email;
-  let customerPhone = userData?.phone;
+  let customerData = JSON.parse(localStorage.getItem("customerData"));
+  let customerName = customerData?.name;
+  let customerEmail = customerData?.email;
+  let customerPhone = customerData?.phone;
   const form = useForm({
     validateInputOnChange: ["phone", "email"],
     initialValues: {
@@ -342,7 +342,7 @@ const NewVendorBookingFile = () => {
       if (params.bookingId) {
         const headers = {
           "Content-Type": "application/json",
-          token: localStorage.getItem("userToken"),
+          token: localStorage.getItem("customerToken"),
         };
         axios({
           method: "get",
@@ -507,7 +507,7 @@ const NewVendorBookingFile = () => {
 
     const headers = {
       "Content-Type": "application/json",
-      token: localStorage.getItem("userToken"),
+      token: localStorage.getItem("customerToken"),
     };
     try {
       const response = await axios({
@@ -532,7 +532,7 @@ const NewVendorBookingFile = () => {
       } else {
         console.log("success response", response.data.data);
         socket.emit("generateNotification", {
-          userId: JSON.parse(localStorage.getItem("userData")).id,
+          userId: JSON.parse(localStorage.getItem("customerData")).id,
           title: "Subvenue Booking Successful",
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
@@ -589,7 +589,7 @@ const NewVendorBookingFile = () => {
 
     const headers = {
       "Content-Type": "application/json",
-      token: localStorage.getItem("userToken"),
+      token: localStorage.getItem("customerToken"),
     };
     try {
       const response = await axios({

@@ -66,7 +66,7 @@ import { socketContext } from "../../../Socket/Socket";
 // const socket = io("https://a-wep.herokuapp.com", {
 //   // const socket = io("http://localhost:8081", {
 //   auth: {
-//     token: localStorage.getItem("userToken"),
+//     token: localStorage.getItem("customerToken"),
 //   },
 // });
 
@@ -76,7 +76,7 @@ const ChatScreen = () => {
   const socket = React.useContext(socketContext);
 
   console.log("State: ", state);
-  let userData = JSON.parse(localStorage.getItem("userData"));
+  let userData = JSON.parse(localStorage.getItem("customerData"));
 
   // HOOKS
   // UPLOAD IMAGES

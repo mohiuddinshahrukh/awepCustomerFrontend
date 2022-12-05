@@ -242,13 +242,13 @@ const SignIn = ({
               );
               dispatch(setToken({ token: response.data.token }));
 
-              localStorage.setItem("userToken", response.data.token);
+              localStorage.setItem("customerToken", response.data.token);
               localStorage.setItem(
                 "navbarState",
                 JSON.stringify({ navbarState: true })
               );
               localStorage.setItem(
-                "userData",
+                "customerData",
                 JSON.stringify(response.data.data)
               );
               if (closeModal) {
@@ -634,8 +634,11 @@ const SignIn = ({
           );
           dispatch(setToken({ token: response.data.token }));
 
-          localStorage.setItem("userToken", response.data.token);
-          localStorage.setItem("userData", JSON.stringify(response.data.data));
+          localStorage.setItem("customerToken", response.data.token);
+          localStorage.setItem(
+            "customerData",
+            JSON.stringify(response.data.data)
+          );
 
           window.location = "/";
           // TOKEN SHIT HERE TOO!
@@ -691,7 +694,7 @@ const SignIn = ({
       //   setRefresh(false);
     }
 
-    let token = localStorage.getItem("userToken");
+    let token = localStorage.getItem("customerToken");
     if (token !== null && token !== "") {
       navigate("/");
     }

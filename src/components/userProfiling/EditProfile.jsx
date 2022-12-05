@@ -363,7 +363,7 @@ const UpdateUser = ({ setCurrentLocation }) => {
           profileImage: responses.profileImage,
         };
 
-        localStorage.setItem("userData", JSON.stringify(localStorageData));
+        localStorage.setItem("customerData", JSON.stringify(localStorageData));
         setVisible(false);
         navigate("/");
       } else {

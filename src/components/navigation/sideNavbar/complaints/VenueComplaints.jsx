@@ -21,7 +21,7 @@ const fetchAllvenueComplaints = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getMySubVenueBookingComplaints",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);
@@ -56,7 +56,7 @@ const VenueComplaints = () => {
         method: "delete",
         url: `https://a-wep.herokuapp.com/customer//deleteSubVenueBookingComplaint/${id}`,
         headers: {
-          token: localStorage.getItem("userToken"),
+          token: localStorage.getItem("customerToken"),
         },
       });
       console.log("API RESPONSE: ", apiResponse.data);

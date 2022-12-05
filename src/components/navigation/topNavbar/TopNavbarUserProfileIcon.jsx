@@ -14,8 +14,8 @@ const TopNavbarUserProfileIcon = ({ setSignedIn }) => {
   const navigate = useNavigate();
   // console.log("currentLocation", currentLocation);
   const [loggedInUserData, setLoggedInUserData] = useState(
-    localStorage.getItem("userData")
-      ? JSON.parse(localStorage.getItem("userData"))
+    localStorage.getItem("customerData")
+      ? JSON.parse(localStorage.getItem("customerData"))
       : {}
   );
 
@@ -44,7 +44,7 @@ const TopNavbarUserProfileIcon = ({ setSignedIn }) => {
         })}
         <Menu.Item
           onClick={() => {
-            localStorage.removeItem("userData");
+            localStorage.removeItem("customerData");
             localStorage.removeItem("userToken");
             setLoggedInUserData({});
             console.log("CURRENT LOCAITON 123", currentLocation);
@@ -166,7 +166,7 @@ export default TopNavbarUserProfileIcon;
 //       // dispatch(logout());
 //       // dispatch(forgetToken());
 //       localStorage.setItem("userToken", "");
-//       localStorage.setItem("userData", "");
+//       localStorage.setItem("customerData", "");
 //       localStorage.clear();
 //       navigate("/signin");
 //     }}

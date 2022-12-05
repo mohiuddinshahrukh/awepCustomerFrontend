@@ -95,7 +95,7 @@ const AddReview = () => {
       const apiResponse = await axios({
         url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
         method: "GET",
-        headers: { token: localStorage.getItem("userToken") },
+        headers: { token: localStorage.getItem("customerToken") },
       });
       console.log("API Response", apiResponse);
       if (apiResponse.data.status === "success") {
@@ -199,7 +199,7 @@ const AddReview = () => {
 
     const headers = {
       "Content-Type": "application/json",
-      token: localStorage.getItem("userToken"),
+      token: localStorage.getItem("customerToken"),
     };
 
     var url = "";
@@ -270,7 +270,7 @@ const AddReview = () => {
 
     const headers = {
       "Content-Type": "application/json",
-      token: localStorage.getItem("userToken"),
+      token: localStorage.getItem("customerToken"),
     };
 
     var url = "";

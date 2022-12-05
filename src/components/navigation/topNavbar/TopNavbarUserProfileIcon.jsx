@@ -45,7 +45,7 @@ const TopNavbarUserProfileIcon = ({ setSignedIn }) => {
         <Menu.Item
           onClick={() => {
             localStorage.removeItem("customerData");
-            localStorage.removeItem("userToken");
+            localStorage.removeItem("customerToken");
             setLoggedInUserData({});
             console.log("CURRENT LOCAITON 123", currentLocation);
             if (

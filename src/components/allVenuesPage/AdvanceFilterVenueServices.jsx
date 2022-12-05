@@ -107,11 +107,6 @@ const AdvanceFilterVenueServices = ({
 
   return (
     <Spoiler
-      styles={{
-        control: {
-          color: "#e60084",
-        },
-      }}
       maxHeight={165}
       showLabel="Show More Services"
       hideLabel="Show Less Services"

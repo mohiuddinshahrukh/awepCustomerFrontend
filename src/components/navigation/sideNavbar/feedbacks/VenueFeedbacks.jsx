@@ -166,7 +166,7 @@ const VenueFeedbacks = () => {
     </tr>
   );
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Modal
         styles={{
           close: {

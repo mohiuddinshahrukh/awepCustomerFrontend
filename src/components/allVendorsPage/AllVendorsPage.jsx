@@ -277,11 +277,7 @@ const AllVendorsPage = () => {
           ]?.map((image, index) => {
             return (
               <Carousel.Slide key={index}>
-                <Image
-                  style={{ objectPosition: "bottom" }}
-                  height={"40vh"}
-                  src={image.src}
-                />
+                <Image height={"40vh"} src={image.src} />
               </Carousel.Slide>
             );
           })}

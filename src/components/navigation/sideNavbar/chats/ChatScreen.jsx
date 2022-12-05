@@ -133,9 +133,6 @@ const ChatScreen = () => {
     const imageUrl = URL.createObjectURL(file);
     return (
       <Grid>
-        <Grid.Col span={8}>
-          <Paper style={{ width: "100%" }}></Paper>
-        </Grid.Col>
         <Grid.Col span={3}>
           <div>
             <Avatar
@@ -538,7 +535,7 @@ const ChatScreen = () => {
   // @123
 
   return (
-    <Paper style={{ height: "90vh" }}>
+    <Paper style={{ height: "100%", width: "100%" }}>
       <ChatStarterModal
         chatCreatorMethod={chatCreator}
         open={chatStarterModal}
@@ -562,7 +559,7 @@ const ChatScreen = () => {
         viewVendorModal={viewVendorModal}
         setViewVendorModal={setViewVendorModal}
       />
-      <Grid justify="space-between" style={{ height: "85vh" }}>
+      <Grid justify="space-between" style={{ height: "100%", width: "100% " }}>
         <Grid.Col lg={3} style={{ borderRight: "1px solid #EAEAEA" }}>
           <Grid>
             {/*
@@ -605,7 +602,7 @@ const ChatScreen = () => {
 
             <Grid.Col
               component={ScrollArea}
-              style={{ height: "75vh", position: "relative" }}
+              style={{ height: "100%", position: "relative" }}
             >
               {/*              <LoadingOverlay
                 visible={visibleVenues}
@@ -619,39 +616,26 @@ const ChatScreen = () => {
 
               {filterString.length > 0 ? (
                 filterString?.map((conversation) => {
+                  console.log("#$Selected Chat Head: ", selectedChatHead);
+                  console.log(
+                    "#$Selected conversation Chat Head: ",
+                    conversation?.chatHead1
+                  );
                   return (
                     <Box
                       key={conversation._id}
+                      className={
+                        selectedChatHead?.id === conversation?.chatHead1?.id
+                          ? "selectedChat"
+                          : "unSelectedChat"
+                      }
                       sx={(theme) => ({
-                        backgroundColor:
-                          selectedChatHead?.id === conversation?.chatHead2?.id
-                            ? theme.colorScheme === "dark"
-                              ? theme.colors.dark[6]
-                              : theme.colors.blue[5]
-                            : theme.colorScheme === "dark"
-                            ? theme.colors.dark[6]
-                            : theme.colors.gray[0],
-
-                        color:
-                          selectedChatHead?.id === conversation?.chatHead2?.id
-                            ? "white"
-                            : "black",
-
                         textAlign: "center",
                         padding: theme.spacing.sm,
                         marginTop: theme.spacing.xl,
                         marginBottom: theme.spacing.xl,
                         borderRadius: theme.radius.md,
                         cursor: "pointer",
-
-                        "&:hover": {
-                          backgroundColor:
-                            selectedChatHead?.id === conversation?.chatHead2?.id
-                              ? null
-                              : theme.colorScheme === "dark"
-                              ? theme.colors.dark[6]
-                              : theme.colors.gray[1],
-                        },
                       })}
                       onClick={() => {
                         if (conversation?.chatHead2?.id === currentUser?.id) {
@@ -846,7 +830,7 @@ const ChatScreen = () => {
             <div style={{}}>
               <div
                 style={{
-                  height: selectedChatHead !== "" ? "70vh" : "85vh",
+                  height: selectedChatHead !== "" ? "60vh" : "65vh",
                 }}
               >
                 {selectedChatHead !== "" ? (
@@ -872,8 +856,8 @@ const ChatScreen = () => {
                         >
                           {message.messageType === "text" && (
                             <Group
+                              className="bgColor"
                               style={{
-                                backgroundColor: "#228BE6",
                                 margin: "5px 0 5px 0",
                                 width: "fit-content",
                                 borderRadius: 5,
@@ -1111,8 +1095,6 @@ const ChatScreen = () => {
 };
 
 export default ChatScreen;
-
-
 
 // {selectedChatDetails.userType ? (
 //   <Menu position="left-start" width={200} shadow="md">

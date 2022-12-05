@@ -315,6 +315,7 @@ const AddReview = () => {
   return (
     <Grid
       style={{
+        width: "100%",
         position: "absolute",
         top: 0,
         zIndex: 20,

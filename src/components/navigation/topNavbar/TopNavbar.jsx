@@ -20,7 +20,7 @@ import logo from "../../../assets/awepLogo/3a.png";
 
 import NotificaitonsTab from "./NotificationsTab";
 import { socket } from "../../Socket/Socket";
-const TopNavbar = () => {
+const TopNavbar = ({ signedIn, setSignedIn }) => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
   const matches1200 = useMediaQuery("(min-width: 1200px)");
@@ -58,7 +58,7 @@ const TopNavbar = () => {
         console.log("receiveNotification1", newNotifications);
       }
     });
-  }, [socket, refreshNotifications, allNotifications]);
+  }, [socket, refreshNotifications, allNotifications, signedIn]);
   return (
     <Paper
       sx={(theme) => ({
@@ -171,7 +171,7 @@ const TopNavbar = () => {
                   refreshNotifications={refreshNotifications}
                   setRefreshNotifications={setRefreshNotifications}
                 />
-                <TopNavbarUserProfileIcon />
+                <TopNavbarUserProfileIcon setSignedIn={setSignedIn} />
               </Group>
             ) : (
               matches1200 && (

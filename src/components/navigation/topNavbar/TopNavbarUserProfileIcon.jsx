@@ -1,8 +1,15 @@
-import { ActionIcon, Anchor, Avatar, Menu } from "@mantine/core";
+import { ActionIcon, Anchor, Avatar, Group, Menu, Text } from "@mantine/core";
+import {
+  IconLogout,
+  IconPhoneCheck,
+  IconPhoneX,
+  IconUserCheck,
+  IconUserX,
+} from "@tabler/icons";
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const TopNavbarUserProfileIcon = () => {
+const TopNavbarUserProfileIcon = ({ setSignedIn }) => {
   const currentLocation = useLocation();
   const navigate = useNavigate();
   // console.log("currentLocation", currentLocation);
@@ -13,7 +20,7 @@ const TopNavbarUserProfileIcon = () => {
   );
 
   return (
-    <Menu>
+    <Menu withArrow width={350} position="bottom" transition="pop">
       <Menu.Target>
         <ActionIcon>
           <Avatar size={43} src={loggedInUserData.profileImage} />
@@ -58,7 +65,7 @@ const TopNavbarUserProfileIcon = () => {
               console.log("CURRENT LOCATION AND PATH MATCHED");
               navigate({ pathname: "/" });
             } else {
-              window.location.reload();
+              setSignedIn(false);
             }
           }}
         >
@@ -70,3 +77,103 @@ const TopNavbarUserProfileIcon = () => {
 };
 
 export default TopNavbarUserProfileIcon;
+//
+
+// <Menu withArrow width={350} position="bottom" transition="pop">
+// <Menu.Target>
+//   <ActionIcon>
+//     <Avatar radius="xl" src={loggedInUserData.profileImage} />
+//   </ActionIcon>
+// </Menu.Target>
+// <Menu.Dropdown>
+//   <Menu.Item onClick={() => navigate("/")}>
+//     <Group>
+//       <div>
+//         <Text weight={500}>{loggedInUserData.name}</Text>
+//         <Text size="xs" color="dimmed">
+//           {loggedInUserData.email}
+//         </Text>
+//         <Text size="xs" color="dimmed">
+//           {loggedInUserData.userType}
+//         </Text>
+//       </div>
+//     </Group>
+//   </Menu.Item>
+//   <Menu.Divider />
+//   <Menu.Label>Verification Status</Menu.Label>
+//   <Menu.Item closeMenuOnClick={false}>
+//     {loggedInUserData.isEmailVerified === true ? (
+//       <Group>
+//         <IconUserCheck color="green" />
+//         <Text>Email is verified</Text>
+//       </Group>
+//     ) : (
+//       <Group>
+//         <IconUserX color="red" />
+//         <Text>Email is unverified</Text>
+//       </Group>
+//     )}
+//   </Menu.Item>
+//   <Menu.Item closeMenuOnClick={false}>
+//     {loggedInUserData.isPhoneVerified === true ? (
+//       <Group>
+//         <IconPhoneCheck color="green" />
+//         <Text>Phone is verified</Text>
+//       </Group>
+//     ) : (
+//       <Group>
+//         <IconPhoneX color="red" />
+//         <Text>Phone is unverified</Text>
+//       </Group>
+//     )}
+//   </Menu.Item>
+//   <Menu.Divider />
+//   <Menu.Label>Settings</Menu.Label>
+//   <Menu.Item
+//   // icon={<Edit color="green" />}
+//   // onClick={() => {
+//   //   navigate("/editProfile", {
+//   //     state: {
+//   //       ID: loggedInUserData.id,
+//   //       NAME: loggedInUserData.name,
+//   //       EMAIL: loggedInUserData.email,
+//   //       USERTYPE: loggedInUserData.userType,
+//   //       PROFILEIMAGE: loggedInUserData.profileImage,
+//   //       ISEMAILVERIFIED: loggedInUserData.isEmailVerified,
+//   //       ISPHONEVERIFIED: loggedInUserData.isPhoneVerified,
+//   //       CNIC: loggedInUserData.CNIC,
+//   //       PHONE: loggedInUserData.phone,
+//   //       TOKEN: loggedInUserData.token,
+//   //     },
+//   //   });
+//   // }}
+//   >
+//     Edit Profile
+//   </Menu.Item>
+//   {/* As No More Settings, it has been commented. */}
+//   {/*
+// <Menu.Item
+// icon={<IconSettings />}
+// onClick={() => navigate("/settings")}
+// >
+// Account settings
+// </Menu.Item>
+// <Menu.Divider /> */}
+//   <Menu.Label>Danger zone</Menu.Label>
+//   <Menu.Item
+//     icon={<IconLogout />}
+//     onClick={() => {
+//       // dispatch(logout());
+//       // dispatch(forgetToken());
+//       localStorage.setItem("userToken", "");
+//       localStorage.setItem("userData", "");
+//       localStorage.clear();
+//       navigate("/signin");
+//     }}
+//   >
+//     Logout
+//   </Menu.Item>
+// </Menu.Dropdown>
+// </Menu>
+
+//

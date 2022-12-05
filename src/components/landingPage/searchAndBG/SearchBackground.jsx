@@ -83,7 +83,12 @@ const SearchBackground = ({ carouselImages }) => {
             <b className="fgColorF">One</b>
           </Text>
         </div>
-        <Group position="center">
+        <Group
+          position="center"
+          style={{
+            zIndex: 20,
+          }}
+        >
           {" "}
           <Grid
             px={"5rem"}
@@ -108,6 +113,7 @@ const SearchBackground = ({ carouselImages }) => {
                   label: { color: "white" },
                 }}
                 label="Supplier"
+                value={searchSupplier}
                 placeholder="Select A Supplier"
                 onChange={setSearchSupplier}
                 data={[

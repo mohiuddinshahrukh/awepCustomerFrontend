@@ -57,7 +57,14 @@ const pictureBackground = [
   //
 ];
 // NAVIGATION
-const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
+const SignIn = ({
+  email,
+  password,
+  closeModal,
+  setIsSignIn,
+  setIsSignUp,
+  setSignedIn,
+}) => {
   // DISPATCH
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -217,7 +224,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
                 color: "green",
                 message: "Login Successful",
               });
-
+              setSignedIn(true);
               setVisible(false);
               dispatch(
                 login({
@@ -251,7 +258,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
               }
             } else if (
               response.data.status === "success" &&
-              response.data.data.userType !== "superAdmin"
+              response.data.data.userType !== "customer"
             ) {
               console.log(
                 "NO LOGIN COS BLOODY USERTYPE IS: ",
@@ -630,8 +637,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
           localStorage.setItem("userToken", response.data.token);
           localStorage.setItem("userData", JSON.stringify(response.data.data));
 
-          navigate("/");
-
+          window.location = "/";
           // TOKEN SHIT HERE TOO!
         } else if (response.data.status === "error") {
           showNotification({

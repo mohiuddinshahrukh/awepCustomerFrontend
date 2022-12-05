@@ -507,6 +507,9 @@ const AllVenuesPage = () => {
                     component={Link}
                     uppercase
                     fullWidth
+                    onClick={() => {
+                      window.location.reload();
+                    }}
                     // to={searchSupplier === "venue" ? "/allVenues" : "/allVendors"}
                   >
                     Search

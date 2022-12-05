@@ -188,6 +188,8 @@ const AllVendorsPage = () => {
             if (bookingsOnDate < vendorServicePackage.noOfBookingsPerDay) {
               dateMatch = true;
             }
+          } else if (!vendorServicePackage.bookedOn) {
+            dateMatch = true;
           }
         });
         if (!dateMatch) {

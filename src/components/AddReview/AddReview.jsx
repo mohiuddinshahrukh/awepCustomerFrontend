@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
   Textarea,
+  useMantineTheme,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons";
 import { useEffect, useState } from "react";
@@ -311,7 +312,7 @@ const AddReview = () => {
       console.log(err);
     }
   };
-
+  const currentTheme = useMantineTheme();
   return (
     <Grid
       style={{
@@ -319,7 +320,10 @@ const AddReview = () => {
         position: "absolute",
         top: 0,
         zIndex: 20,
-        backgroundColor: "white",
+        backgroundColor:
+          currentTheme.colorScheme === "dark"
+            ? currentTheme.colors.dark[7]
+            : currentTheme.white,
         boxSizing: "border-box",
         margin: 0,
         padding: 0,

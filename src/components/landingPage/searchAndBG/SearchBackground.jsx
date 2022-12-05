@@ -86,7 +86,7 @@ const SearchBackground = ({ carouselImages }) => {
         <Group
           position="center"
           style={{
-            zIndex: 20,
+            zIndex: 10,
           }}
         >
           {" "}
@@ -141,6 +141,7 @@ const SearchBackground = ({ carouselImages }) => {
             <Grid.Col sm={25} md={25} lg={10}>
               {" "}
               <DatePicker
+                dropdownPosition="bottom"
                 size={matches600 ? "lg" : "md"}
                 styles={{ label: { color: "white" } }}
                 placeholder="Pick date"

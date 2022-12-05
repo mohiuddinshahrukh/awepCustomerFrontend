@@ -129,8 +129,8 @@ const SideBar = () => {
   ));
 
   return (
-    <Paper w={"15vw"} withBorder>
-      <Box sx={{ width: "100%" }}>{items}</Box>
+    <Paper style={{ width: "" }} withBorder>
+      <Box sx={{ width: "300px " }}>{items}</Box>
     </Paper>
   );
 };

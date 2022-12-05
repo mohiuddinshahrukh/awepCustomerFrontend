@@ -44,7 +44,7 @@ const CustomerDashboard = () => {
     // <Container size={"xl"}>
     <>
       {allowView && (
-        <Group align={"flex-start"} noWrap>
+        <Group align={"flex-start"} noWrap style={{ flexShrink: 0 }}>
           <Sidebar />
           <Outlet />
         </Group>

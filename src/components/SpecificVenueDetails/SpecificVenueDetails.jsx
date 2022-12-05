@@ -27,7 +27,7 @@ import ReviewsOfSpecificVenue from "../ReviewsOfSpecificVenue/ReviewsOfSpecificV
 import MapComponentView from "../MapViewComponent/MapComponentView";
 import BookVenueSideColums from "../BookVenueSideColums/BookVenueSideColums";
 import ModalOfSubVenues from "../SubVenuesOfSpecifcVenue/ModalOfSubVenues";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CarouselOfThemes from "../ThemesOfSpecificVenue/CarouselOfThemes";
 import {
   IconMessageCircle,
@@ -37,6 +37,7 @@ import {
   IconBrandWhatsapp,
   IconPhone,
   IconMail,
+  IconMessage2,
 } from "@tabler/icons";
 import SignIn from "../userProfiling/SignIn";
 import SignUp from "../userProfiling/SignUp";
@@ -44,6 +45,7 @@ import Carousal_Videos from "../Carousal/Carousal_videos";
 import Carousal_Panorama from "../Carousal/Carousal_Panorama";
 import Carousal_Stage from "../Carousal/Carousal_Stage";
 import { useMediaQuery } from "@mantine/hooks";
+import { socket } from "../Socket/Socket";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -112,6 +114,7 @@ const SpecificVenueDetails = () => {
     }
   }, [refresh]);
   const [openBookNow, setOpenBookNow] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Container size="xl" my="lg">
@@ -304,6 +307,23 @@ const SpecificVenueDetails = () => {
                 </ActionIcon>
                 <ActionIcon size="xl" color="red">
                   <IconMail size={32} />
+                </ActionIcon>
+                <ActionIcon
+                  size="xl"
+                  color="gray"
+                  onClick={() => {
+                    socket.emit("viewAllChatsOnStartConversation", {
+                      participant: {
+                        _id: venueDetails?._id,
+                        type: "venue",
+                      },
+                    });
+
+                    // navigate(`/dashboard/chat/${venueDetails?._id}`);
+                    navigate(`/dashboard/chats`);
+                  }}
+                >
+                  <IconMessage2 size={32} />
                 </ActionIcon>
               </Group>
             </Group>

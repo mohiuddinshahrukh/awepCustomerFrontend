@@ -188,7 +188,9 @@ const SearchBackground = ({ carouselImages }) => {
                     ? `/allVenues${date ? "/date/" + date : ""}${
                         time ? "/time/" + time : ""
                       }${city ? "/city/" + city : ""}`
-                    : `/allVendors`
+                    : `/allVendors${date ? "/date/" + date : ""}${
+                        time ? "/time/" + time : ""
+                      }${city ? "/city/" + city : ""}`
                 }
                 className="button"
                 fullWidth

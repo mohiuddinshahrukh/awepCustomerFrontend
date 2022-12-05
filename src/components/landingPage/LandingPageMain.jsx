@@ -77,6 +77,8 @@ const LandingPageMain = () => {
       <FilterCards />
       <FeaturedVenuesSection
         landingPageVenues={allData?.data?.topRatedVenues}
+        date={null}
+        time={null}
       />
       <FeaturedVendorsSection
         landingPageVendors={allData?.data?.topRatedVendors}

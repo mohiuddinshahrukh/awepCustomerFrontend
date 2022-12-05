@@ -670,9 +670,9 @@ const AllVenuesPage = () => {
                 venueCapacity.length !== 0 ||
                 filteredServices.length !== 0 ||
                 rating !== null ? (
-                  <Text
-                    className="fgColorF"
-                    size="lg"
+                  <Button
+                    className="button"
+                    size="sm"
                     align="right"
                     style={{
                       cursor: "pointer",
@@ -704,7 +704,7 @@ const AllVenuesPage = () => {
                     }}
                   >
                     Reset
-                  </Text>
+                  </Button>
                 ) : null}
               </Group>
 

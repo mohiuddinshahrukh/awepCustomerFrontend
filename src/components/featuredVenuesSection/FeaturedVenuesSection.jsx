@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVenuesCarousel from "./FeaturedVenuesCarousel";
 
-const FeaturedVenuesSection = ({ landingPageVenues }) => {
+const FeaturedVenuesSection = ({ landingPageVenues, date, time }) => {
   console.log("$LandingPageVenues: ", landingPageVenues);
   return (
     <Container size={"xl"} my="xl">
@@ -20,7 +20,11 @@ const FeaturedVenuesSection = ({ landingPageVenues }) => {
           Top Rated Venues
         </Anchor>
       </Group>
-      <FeaturedVenuesCarousel landingPageVenues={landingPageVenues} />
+      <FeaturedVenuesCarousel
+        landingPageVenues={landingPageVenues}
+        date={null}
+        time={null}
+      />
       <Group position="right">
         <Button
           component={Link}

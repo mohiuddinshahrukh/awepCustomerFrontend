@@ -7,9 +7,15 @@ import {
   IconVideo,
 } from "@tabler/icons";
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 const FeaturedVenuesCard = ({ venue, date, time }) => {
+  const params = useParams();
+
+  let paramDate = params.date;
+  let paramsTime = params.time;
+  console.log("params wali date and time", paramDate, paramsTime);
+
   const currentLocation = useLocation();
   const card = (
     <Card
@@ -37,7 +43,9 @@ const FeaturedVenuesCard = ({ venue, date, time }) => {
           ? `/specificVenue/${venue._id}/${time}`
           : date !== null && time === null
           ? `/specificVenue/${venue._id}/${date}`
-          : `/specificVenue/${venue._id}/${date}/${time}`
+          : date !== null && time !== null
+          ? `/specificVenue/${venue._id}/${date}/${time}`
+          : `/specificVenue/${venue._id}`
       }
       style={{ width: "302px" }}
     >
@@ -87,7 +95,15 @@ const FeaturedVenuesCard = ({ venue, date, time }) => {
         <div style={{ position: "absolute", bottom: 0, right: 0, margin: 8 }}>
           <Button
             component={Link}
-            to={`/venueBooking/${venue._id}`}
+            to={
+              params.date && params.time
+                ? `/venueBooking/${params.date}/${params.time}/${venue._id}`
+                : params.date && !params.time
+                ? `/venueBooking/${params.date}/${venue._id}`
+                : params.time && !params.date
+                ? `/venueBooking/${params.time}/${venue._id}`
+                : `/venueBooking/${venue._id}`
+            }
             className="button"
             uppercase
           >

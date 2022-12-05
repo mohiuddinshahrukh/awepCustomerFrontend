@@ -6,7 +6,7 @@ import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import CardSkeleton from "../skeletons/CardSkeleton";
 import { IconArrowRight, IconArrowRightBar } from "@tabler/icons";
 
-const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
+const FeaturedVenuesCarousel = ({ landingPageVenues, date, time }) => {
   console.log("LandingPageVenues: ", landingPageVenues);
   let carouselSlides = !landingPageVenues
     ? [...Array(5).keys()]?.map((key) => (
@@ -17,7 +17,7 @@ const FeaturedVenuesCarousel = ({ landingPageVenues }) => {
     : landingPageVenues?.map((venue, index) => {
         return (
           <Carousel.Slide key={index}>
-            <FeaturedVenuesCard venue={venue} />
+            <FeaturedVenuesCard venue={venue} date={null} time={null} />
           </Carousel.Slide>
         );
       });

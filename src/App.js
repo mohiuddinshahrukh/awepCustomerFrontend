@@ -86,6 +86,18 @@ function App() {
                   element={<NewBookingFile />}
                 />
                 <Route
+                  path="/venueBooking/:date/:time/:venueId"
+                  element={<NewBookingFile />}
+                />
+                <Route
+                  path="/venueBooking/:date/:venueId"
+                  element={<NewBookingFile />}
+                />
+                <Route
+                  path="/venueBooking/:time/:venueId"
+                  element={<NewBookingFile />}
+                />
+                <Route
                   path="/venueBooking/:venueId"
                   element={<NewBookingFile />}
                 />
@@ -150,6 +162,34 @@ function App() {
                   element={<AllVenuesPage />}
                 />
                 <Route
+                  path="/allVendors/date/:date/time/:time/city/:city"
+                  element={<AllVendorsPage />}
+                />
+                <Route
+                  path="/allVendors/time/:time/city/:city"
+                  element={<AllVendorsPage />}
+                />
+                <Route
+                  path="/allVendors/date/:date/city/:city"
+                  element={<AllVendorsPage />}
+                />
+                <Route
+                  path="/allVendors/date/:date/time/:time"
+                  element={<AllVendorsPage />}
+                />
+                <Route
+                  path="/allVendors/date/:date"
+                  element={<AllVendorsPage />}
+                />
+                <Route
+                  path="/allVendors/time/:time"
+                  element={<AllVendorsPage />}
+                />
+                <Route
+                  path="/allVendors/city/:city"
+                  element={<AllVendorsPage />}
+                />
+                <Route
                   path="/specificVendor"
                   element={<SpecificVendorBusinessDetails />}
                 />
@@ -165,17 +205,16 @@ function App() {
                   path="/specificVenue/:id/:time"
                   element={<SpecificVenueDetails />}
                 />
-              
+
                 <Route
                   path="/specificVenue/:id/:date/:time"
                   element={<SpecificVenueDetails />}
                 />
-               
+
                 <Route
                   path="/specificVenue/:id/:date"
                   element={<SpecificVenueDetails />}
                 />
-               
 
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />

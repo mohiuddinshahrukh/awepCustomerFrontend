@@ -482,13 +482,10 @@ const AllVendorsPage = () => {
                 maxPriceFilter !== 100000 ||
                 categories.length !== 0 ||
                 rating !== null ? (
-                  <Text
-                    className="fgColorF"
-                    size="lg"
+                  <Button
+                    className="button"
+                    size="sm"
                     align="right"
-                    style={{
-                      cursor: "pointer",
-                    }}
                     onClick={() => {
                       setCity("");
                       setDate(null);
@@ -508,7 +505,7 @@ const AllVendorsPage = () => {
                     }}
                   >
                     Reset
-                  </Text>
+                  </Button>
                 ) : null}
               </Group>
               <AdvanceFilterByCities city={city} setCity={setCity} />

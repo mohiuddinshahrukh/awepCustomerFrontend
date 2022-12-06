@@ -65,6 +65,7 @@ const SignIn = ({
   closeModal,
   setIsSignIn,
   setIsSignUp,
+  signedIn,
   setSignedIn,
 }) => {
   // DISPATCH
@@ -226,7 +227,7 @@ const SignIn = ({
                 color: "green",
                 message: "Login Successful",
               });
-              setSignedIn(true);
+              setSignedIn(!signedIn);
               setVisible(false);
               dispatch(
                 login({
@@ -265,11 +266,11 @@ const SignIn = ({
                 console.log("Socket ERROR: ", e);
               }
 
-              if (closeModal) {
-                setIsSignIn(false);
-              } else {
-                navigate("/");
-              }
+              // if (closeModal) {
+              // } else {
+              //   navigate("/");
+              // }
+              navigate("/dashboard");
             } else if (
               response.data.status === "success" &&
               response.data.data.userType !== "customer"

@@ -118,11 +118,12 @@ const SignUp = ({
           });
           setHookEmail(values.email);
           setHookPassword(values.password);
-          if (closeModal) {
-            setIsSignUp(false);
-          } else {
-            navigate("/signin");
-          }
+          navigate("/signin");
+          // if (closeModal) {
+          //   setIsSignUp(false);
+          // } else {
+          //   navigate("/signin");
+          // }
           // setInterval(() => {
           // }, 3000);
         } else if (response.data.status === "error") {

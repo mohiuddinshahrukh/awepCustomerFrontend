@@ -45,6 +45,7 @@ import VendorPayments from "./components/navigation/sideNavbar/payments/VendorPa
 import VendorFeedbacks from "./components/navigation/sideNavbar/feedbacks/VendorFeedbacks";
 import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFeedbacks";
 import AddComplaint from "./components/AddComplaint/AddComplaint";
+import DashboardStats from "./components/DashboardStats/DashboardStats";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const [signedIn, setSignedIn] = useState(false);
@@ -266,6 +267,7 @@ function App() {
                 <Route path="/skeletontest" element={<FiveCardsSkeleton />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>
+                  <Route path="/dashboard" element={<DashboardStats />} />
                   <Route
                     path="venueBookings"
                     element={<CustomerVenueBookings />}

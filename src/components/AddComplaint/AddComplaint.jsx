@@ -149,10 +149,14 @@ const AddComplaint = () => {
       } else {
         showNotification({
           color: "green",
-          title: `Successfully`,
-          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+          title: `SUCCESS`,
+          message: `COMPLAINT ADDED SUCCESSFULLY!!`,
         });
-        navigate("/");
+        params.provider === "venue"
+          ? navigate("/dashboard/venueComplaints")
+          : params.provider === "vendor"
+          ? navigate("/dashboard/vendorComplaints")
+          : navigate("/");
         console.log("success", response.data);
       }
     } catch (err) {
@@ -210,10 +214,14 @@ const AddComplaint = () => {
       } else {
         showNotification({
           color: "green",
-          title: `Successfully`,
-          message: `Feed Back Added!!`,
+          title: `SUCCESS`,
+          message: `FEEDBACK UPDATED SUCCESSDULLY`,
         });
-        navigate("/");
+        params.provider === "venue"
+          ? navigate("/dashboard/venueComplaints")
+          : params.provider === "vendor"
+          ? navigate("/dashboard/vendorComplaints")
+          : navigate("/");
         console.log("success", response.data);
       }
     } catch (err) {

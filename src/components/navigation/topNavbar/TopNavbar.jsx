@@ -6,6 +6,7 @@ import {
   Group,
   Image,
   Paper,
+  ScrollArea,
   useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -22,7 +23,18 @@ import NotificaitonsTab from "./NotificationsTab";
 import { socket as Socket } from "../../Socket/Socket";
 import TopNavbarUserProfileDrawer from "./TopNavbarUserProfileDrawer";
 import drawerBg from "../../../assets/Drawer/drawerBg.jpg";
-import { IconLayoutGrid, IconLogout, IconSettings } from "@tabler/icons";
+import {
+  IconBuildingFortress,
+  IconBuildingStore,
+  IconCards,
+  IconCornerUpLeftDouble,
+  IconHeadset,
+  IconHome,
+  IconLayoutGrid,
+  IconLogout,
+  IconQuestionMark,
+  IconSettings,
+} from "@tabler/icons";
 
 const TopNavbar = ({ signedIn, setSignedIn }) => {
   const [drawerState, setDrawerState] = useState(false);
@@ -102,6 +114,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
       {" "}
       <Container py={"0.5rem"} size={"xl"}>
         <Drawer
+          lockScroll
           styles={{
             header: { position: "absolute", zIndex: 2, right: 5, top: 5 },
             closeButton: {
@@ -140,66 +153,84 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
               <Image mt={"xl"} height={"70px"} fit={"contain"} src={logo} />
             </Anchor>
           )}
-          {[].map((buttonData, index) => {
-            return (
-              <Button
-                className="button"
-                leftIcon={buttonData.icon}
-                mb={"sm"}
-                component={Link}
-                to={buttonData.path}
-                onClick={() => {
-                  setDrawerState(false);
-                }}
-                uppercase
-                fullWidth
-                key={index}
-              >
-                {buttonData.title}
-              </Button>
-            );
-          })}
 
-          <TopNavbarDrawer
-            signedIn={signedIn}
-            setSignedIn={setSignedIn}
-            setDrawerState={setDrawerState}
-            linksData={[
-              {
-                title: "Dashboard",
-                path: "/dashboard",
-                icon: <IconLayoutGrid />,
-              },
-              {
-                title: "Home",
-                path: "/",
-              },
-              {
-                title: "Venues",
-                path: "/allVenues",
-              },
-              { title: "Vendors", path: "/allVendors" },
-              { title: "Card Editor", path: "/cardEditor" },
-              { title: "Contact Us", path: "/contactUs" },
-              { title: "About Us", path: "/aboutUs" },
-              {
-                title: "Settings",
-                path: "/dashboard/profile",
-                icon: <IconSettings />,
-              },
-              { title: "Signout", path: "/dashboard", icon: <IconLogout /> },
-            ]}
-          />
-          {!localStorage.getItem("customerToken") && (
-            <Group position="center">
-              <TopNavbarButtons
-                buttonsData={[
-                  { title: "Sign In", path: "/signIn", variant: "filled" },
-                  { title: "Sign Up", path: "/signUp", variant: "outline" },
-                ]}
-              />
-            </Group>
-          )}
+          <Paper
+            mt={"xl"}
+            component={ScrollArea}
+            type="never"
+            style={{
+              height: "70vh",
+            }}
+          >
+            <TopNavbarDrawer
+              signedIn={signedIn}
+              setSignedIn={setSignedIn}
+              setDrawerState={setDrawerState}
+              linksData={[
+                {
+                  title: "Dashboard",
+                  path: "/dashboard",
+                  icon: <IconLayoutGrid />,
+                },
+                {
+                  title: "Home",
+                  path: "/",
+                  icon: <IconHome />,
+                },
+                {
+                  title: "Venues",
+                  path: "/allVenues",
+                  icon: <IconBuildingFortress />,
+                },
+                {
+                  title: "Vendors",
+                  path: "/allVendors",
+                  icon: <IconBuildingStore />,
+                },
+                {
+                  title: "Card Editor",
+                  path: "/cardEditor",
+                  icon: <IconCards />,
+                },
+                {
+                  title: "Contact Us",
+                  path: "/contactUs",
+                  icon: <IconHeadset />,
+                },
+                {
+                  title: "About Us",
+                  path: "/aboutUs",
+                  icon: <IconQuestionMark />,
+                },
+                {
+                  title: "Feedbacks",
+                  path: "/addreview/admin",
+                  icon: <IconCornerUpLeftDouble />,
+                },
+                {
+                  title: "Settings",
+                  path: "/dashboard/profile",
+                  icon: <IconSettings />,
+                },
+                {
+                  title: "Signout",
+                  path: "/dashboard",
+                  icon: <IconLogout />,
+                  variant: "outline",
+                },
+              ]}
+            />
+            {!localStorage.getItem("customerToken") && (
+              <Group position="center">
+                <TopNavbarButtons
+                  buttonsData={[
+                    { title: "Sign In", path: "/signIn", variant: "filled" },
+                    { title: "Sign Up", path: "/signUp", variant: "outline" },
+                  ]}
+                />
+              </Group>
+            )}
+          </Paper>
         </Drawer>
         <Group position="apart">
           {matches1200 ? (

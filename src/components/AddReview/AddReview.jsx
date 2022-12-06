@@ -240,10 +240,14 @@ const AddReview = () => {
       } else {
         showNotification({
           color: "green",
-          title: `Successfully`,
-          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+          title: `SUCCESS`,
+          message: `FEEDBACK ADDED SUCCESSFULLY!!`,
         });
-        navigate("/");
+        params.provider === "venue"
+          ? navigate("/dashboard/venueFeedbacks")
+          : params.provider === "vendor"
+          ? navigate("/dashboard/vendorFeedbacks")
+          : navigate("/");
         console.log("success", response.data);
       }
     } catch (err) {
@@ -309,10 +313,14 @@ const AddReview = () => {
       } else {
         showNotification({
           color: "green",
-          title: `Successfully`,
-          message: `Feed Back Added!!`,
+          title: `SUCCESS`,
+          message: `FEEDBACK UPDATED SUCCSSFULLY!!`,
         });
-        navigate("/");
+        params.provider === "venue"
+          ? navigate("/dashboard/venueFeedbacks")
+          : params.provider === "vendor"
+          ? navigate("/dashboard/vendorFeedbacks")
+          : navigate("/");
         console.log("success", response.data);
       }
     } catch (err) {

@@ -7,9 +7,13 @@ import {
   IconUsers,
 } from "@tabler/icons";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-const FeaturedVendorsCard = ({ vendor }) => {
+const FeaturedVendorsCard = ({ vendor, date, time }) => {
+  const params = useParams();
+
+  let paramDate = params.date;
+  let paramsTime = params.time;
   const card = (
     <Card
       className="border"
@@ -43,7 +47,15 @@ const FeaturedVendorsCard = ({ vendor }) => {
         <div style={{ position: "absolute", bottom: 0, right: 0, margin: 8 }}>
           <Button
             component={Link}
-            to={`/vendorBooking/vendorId/${vendor._id}`}
+            to={
+              params.date && params.time
+                ? `/vendorBooking/${params.date}/${params.time}/${vendor._id}`
+                : params.date && !params.time
+                ? `/vendorBooking/${params.date}/${vendor._id}`
+                : params.time && !params.date
+                ? `/vendorBooking/${params.time}/${vendor._id}`
+                : `/vendorBooking/${vendor._id}`
+            }
             className="button"
             uppercase
           >

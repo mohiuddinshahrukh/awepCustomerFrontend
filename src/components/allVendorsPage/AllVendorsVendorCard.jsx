@@ -5,9 +5,16 @@ import { Link } from "react-router-dom";
 import FeaturedVendorsCard from "../featuredVendorsSection/FeaturedVendorsCard";
 import AllVendorsVendorImagesCarousel from "./AllVendorsVendorImagesCarousel";
 
-const AllVendorsVendorCard = ({ allVendors }) => {
+const AllVendorsVendorCard = ({ allVendors, time, date }) => {
   const vendors = allVendors.map((vendor, index) => {
-    return <FeaturedVendorsCard key={index} vendor={vendor} />;
+    return (
+      <FeaturedVendorsCard
+        key={index}
+        vendor={vendor}
+        date={date}
+        time={time}
+      />
+    );
   });
   return (
     <Center>

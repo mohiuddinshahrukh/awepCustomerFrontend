@@ -609,6 +609,9 @@ const NewBookingFile = () => {
       bookingDescription: description,
       numberOfGuests: noOfGuests,
     };
+    if (idOfSelectedMenu === "" || idOfSelectedMenu === undefined) {
+      delete body.selectedMenu;
+    }
     console.log("body");
     console.log("bosyyyy in update", body);
     const headers = {
@@ -723,7 +726,9 @@ const NewBookingFile = () => {
       numberOfGuests: noOfGuests,
       eventType: eventType,
     };
-
+    if (idOfSelectedMenu === "" || idOfSelectedMenu === undefined) {
+      delete body.selectedMenu;
+    }
     console.log("@@@body", body);
 
     const headers = {

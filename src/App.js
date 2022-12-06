@@ -110,6 +110,28 @@ function App() {
                   path="/updateVenueBooking/:eventType/:date/:time/:guests/:venueId/:subVenueId/:bookingId"
                   element={<NewBookingFile />}
                 />
+
+                <Route
+                  path="/vendorBooking/:eventType/:date/:time/:guests/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
+                <Route
+                  path="/vendorBooking/:date/:time/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
+                <Route
+                  path="/vendorBooking/:date/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
+                <Route
+                  path="/vendorBooking/:time/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
+                <Route
+                  path="/vendorBooking/:vendorId"
+                  element={<NewVendorBookingFile />}
+                />
+
                 <Route
                   path="/updateVendorBooking/:eventType/:date/:time/:vendorId/:vendorPackageId/:bookingId"
                   element={<NewVendorBookingFile />}
@@ -136,14 +158,6 @@ function App() {
                   element={<AddComplaint />}
                 />
 
-                <Route
-                  path="/vendorBooking/:eventType/:date/:time/:vendorId"
-                  element={<NewVendorBookingFile />}
-                />
-                <Route
-                  path="/vendorBooking/vendorId/:vendorId"
-                  element={<NewVendorBookingFile />}
-                />
                 <Route path="/" element={<LandingPageMain />} />
                 <Route path="/cardEditor" element={<CustomerCardEditor />} />
                 <Route path="/allVendors" element={<AllVendorsPage />} />

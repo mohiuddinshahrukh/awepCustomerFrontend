@@ -12,6 +12,7 @@ import { showNotification } from "@mantine/notifications";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import ViewVendorComplaintModal from "./ViewVendorComplaintModal";
 
@@ -43,6 +44,8 @@ const fetchAllVendorComplaints = async () => {
 };
 
 const VendorComplaints = () => {
+  const navigate = useNavigate();
+
   const [viewVendorComplaintModal, setViewVendorComplaintModal] =
     useState(false);
   const matches500 = useMediaQuery("(min-width: 500px)");
@@ -135,6 +138,7 @@ const VendorComplaints = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on edit button");
+              navigate(`/updatecomplaint/${"vendor"}/${row._id}`);
             }}
           >
             <IconEdit />

@@ -1,6 +1,12 @@
 import { ActionIcon, Badge, Group, Modal, Table, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconBrandStripe, IconEdit, IconEye, IconMessage } from "@tabler/icons";
+import {
+  IconBrandStripe,
+  IconEdit,
+  IconEye,
+  IconMessage,
+  IconUserExclamation,
+} from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -195,6 +201,15 @@ const CustomerVendorBookings = () => {
             }}
           >
             <IconBrandStripe />
+          </ActionIcon>
+          <ActionIcon
+            disabled={row.bookingStatus !== "COMPLETED"}
+            onClick={() => {
+              navigate(`/addComplaint/${"vendor"}/${row._id}`);
+            }}
+            color={row.bookingStatus === "COMPLETED" ? "red" : "green"}
+          >
+            <IconUserExclamation />
           </ActionIcon>
         </Group>
       </td>

@@ -44,6 +44,7 @@ import VenuePayments from "./components/navigation/sideNavbar/payments/VenuePaym
 import VendorPayments from "./components/navigation/sideNavbar/payments/VendorPayments";
 import VendorFeedbacks from "./components/navigation/sideNavbar/feedbacks/VendorFeedbacks";
 import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFeedbacks";
+import AddComplaint from "./components/AddComplaint/AddComplaint";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const [signedIn, setSignedIn] = useState(false);
@@ -121,6 +122,18 @@ function App() {
                 <Route
                   path="/updateReview/:provider/:feedbackId"
                   element={<AddReview />}
+                />
+                <Route
+                  path="/addcomplaint/:provider/:bookingId"
+                  element={<AddComplaint />}
+                />
+                <Route
+                  path="/addcomplaint/:provider"
+                  element={<AddComplaint />}
+                />
+                <Route
+                  path="/updatecomplaint/:provider/:complaintId"
+                  element={<AddComplaint />}
                 />
 
                 <Route

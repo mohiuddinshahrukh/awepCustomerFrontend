@@ -93,8 +93,15 @@ const AddReview = () => {
   console.log("deererere", feedbackDetails);
   const fetchReviewDetails = async () => {
     try {
+      let url;
+      if (params.provider === "vendor") {
+        url =
+          "https://a-wep.herokuapp.com/customer/getMyVendorServiceFeedbacks";
+      } else if (params.provider === "venue") {
+        url = "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks";
+      }
       const apiResponse = await axios({
-        url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
+        url: url,
         method: "GET",
         headers: { token: localStorage.getItem("customerToken") },
       });

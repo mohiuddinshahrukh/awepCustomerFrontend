@@ -295,6 +295,7 @@ const AddComplaint = () => {
           <TextInput
             size="md"
             label="Complaint Title"
+            disabled={params.complaintId ? true : false}
             placeholder="Enter Complaint Title"
             onChange={(e) => setComplaintTitle(e.target.value)}
             value={complaintTitle}

@@ -44,8 +44,8 @@ const SpecificVendorBusinessDetails = () => {
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [eventType, setEventType] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [date, setDate] = useState(params.date ? new Date(params.date) : null);
+  const [time, setTime] = useState(params.time ? params.time : "");
   const [guests, setGuests] = useState();
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);

@@ -25,6 +25,8 @@ const AllVendorsGrid = ({
   setSearch,
   vendorSort,
   setVendorSort,
+  time,
+  date,
 }) => {
   const matches1026 = useMediaQuery("(max-width:1026px)");
   const [viewStyle, setViewStyle] = useState("card");
@@ -100,7 +102,7 @@ const AllVendorsGrid = ({
       </Group>
 
       {viewStyle === "card" ? (
-        <AllVendorsVendorCard allVendors={allVendors} />
+        <AllVendorsVendorCard allVendors={allVendors} date={date} time={time} />
       ) : (
         <AllVendorsVendorList allVendors={allVendors} />
       )}

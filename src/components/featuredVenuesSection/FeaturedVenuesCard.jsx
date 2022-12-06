@@ -37,13 +37,13 @@ const FeaturedVenuesCard = ({ venue, date, time }) => {
       }}
       component={Link}
       to={
-        date === null && time === null
+        date === null && time === ""
           ? `/specificVenue/${venue._id}`
-          : date === null && time !== null
-          ? `/specificVenue/${venue._id}/${time}`
-          : date !== null && time === null``
-          ? `/specificVenue/${venue._id}/${date}`
-          : date !== null && time !== null
+          : date === null && time !== ""
+          ? `/specificVenue/${venue._id}/time/${time}`
+          : date !== null && time === ""
+          ? `/specificVenue/${venue._id}/date/${date}`
+          : date !== null && time !== ""
           ? `/specificVenue/${venue._id}/${date}/${time}`
           : `/specificVenue/${venue._id}`
       }
@@ -96,12 +96,12 @@ const FeaturedVenuesCard = ({ venue, date, time }) => {
           <Button
             component={Link}
             to={
-              params.date && params.time
-                ? `/venueBooking/${params.date}/${params.time}/${venue._id}`
-                : params.date && !params.time
-                ? `/venueBooking/${params.date}/${venue._id}`
-                : params.time && !params.date
-                ? `/venueBooking/${params.time}/${venue._id}`
+              date && time
+                ? `/venueBooking/date/${date}/time/${time}/${venue._id}`
+                : date && !time
+                ? `/venueBooking/date/${date}/${venue._id}`
+                : time && !date
+                ? `/venueBooking/time/${time}/${venue._id}`
                 : `/venueBooking/${venue._id}`
             }
             className="button"

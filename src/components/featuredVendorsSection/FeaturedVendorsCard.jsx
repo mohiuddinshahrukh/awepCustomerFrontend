@@ -34,7 +34,17 @@ const FeaturedVendorsCard = ({ vendor, date, time }) => {
         transitionProperty: "box-shadow",
       }}
       component={Link}
-      to={`/specificVendor${vendor._id}`}
+      to={
+        date === null && time === ""
+          ? `/specificVendor/${vendor._id}`
+          : date === null && time !== ""
+          ? `/specificVendor/${vendor._id}/time/${time}`
+          : date !== null && time === ""
+          ? `/specificVendor/${vendor._id}/date/${date}`
+          : date !== null && time !== ""
+          ? `/specificVendor/${vendor._id}/${date}/${time}`
+          : `/specificVendor/${vendor._id}`
+      }
       style={{ width: "302px" }}
     >
       <Card.Section style={{ height: "201px", position: "relative" }}>
@@ -48,12 +58,12 @@ const FeaturedVendorsCard = ({ vendor, date, time }) => {
           <Button
             component={Link}
             to={
-              params.date && params.time
-                ? `/vendorBooking/${params.date}/${params.time}/${vendor._id}`
-                : params.date && !params.time
-                ? `/vendorBooking/${params.date}/${vendor._id}`
-                : params.time && !params.date
-                ? `/vendorBooking/${params.time}/${vendor._id}`
+              date && time
+                ? `/vendorBooking/date/${date}/time/${time}/${vendor._id}`
+                : date && !time
+                ? `/vendorBooking/date/${date}/${vendor._id}`
+                : time && !date
+                ? `/vendorBooking/time/${time}/${vendor._id}`
                 : `/vendorBooking/${vendor._id}`
             }
             className="button"

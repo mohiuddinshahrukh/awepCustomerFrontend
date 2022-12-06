@@ -91,15 +91,15 @@ function App() {
                   element={<NewBookingFile />}
                 />
                 <Route
-                  path="/venueBooking/:date/:time/:venueId"
+                  path="/venueBooking/date/:date/time/:time/:venueId"
                   element={<NewBookingFile />}
                 />
                 <Route
-                  path="/venueBooking/:date/:venueId"
+                  path="/venueBooking/date/:date/:venueId"
                   element={<NewBookingFile />}
                 />
                 <Route
-                  path="/venueBooking/:time/:venueId"
+                  path="/venueBooking/time/:time/:venueId"
                   element={<NewBookingFile />}
                 />
                 <Route
@@ -116,15 +116,15 @@ function App() {
                   element={<NewVendorBookingFile />}
                 />
                 <Route
-                  path="/vendorBooking/:date/:time/:vendorId"
+                  path="/vendorBooking/date/:date/time/:time/:vendorId"
                   element={<NewVendorBookingFile />}
                 />
                 <Route
-                  path="/vendorBooking/:date/:vendorId"
+                  path="/vendorBooking/date/:date/:vendorId"
                   element={<NewVendorBookingFile />}
                 />
                 <Route
-                  path="/vendorBooking/:time/:vendorId"
+                  path="/vendorBooking/time/:time/:vendorId"
                   element={<NewVendorBookingFile />}
                 />
                 <Route
@@ -220,20 +220,13 @@ function App() {
                   path="/allVendors/city/:city"
                   element={<AllVendorsPage />}
                 />
-                <Route
-                  path="/specificVendor"
-                  element={<SpecificVendorBusinessDetails />}
-                />
-                <Route
-                  path="/specificVendor:id"
-                  element={<SpecificVendorBusinessDetails />}
-                />
+
                 <Route
                   path="/specificVenue/:id"
                   element={<SpecificVenueDetails />}
                 />
                 <Route
-                  path="/specificVenue/:id/:time"
+                  path="/specificVenue/:id/time/:time"
                   element={<SpecificVenueDetails />}
                 />
 
@@ -243,8 +236,27 @@ function App() {
                 />
 
                 <Route
-                  path="/specificVenue/:id/:date"
+                  path="/specificVenue/:id/date/:date"
                   element={<SpecificVenueDetails />}
+                />
+
+                <Route
+                  path="/specificVendor/:id"
+                  element={<SpecificVendorBusinessDetails />}
+                />
+                <Route
+                  path="/specificVendor/:id/time/:time"
+                  element={<SpecificVendorBusinessDetails />}
+                />
+
+                <Route
+                  path="/specificVendor/:id/:date/:time"
+                  element={<SpecificVendorBusinessDetails />}
+                />
+
+                <Route
+                  path="/specificVendor/:id/date/:date"
+                  element={<SpecificVendorBusinessDetails />}
                 />
 
                 <Route path="/contactUs" element={<ContactUs />} />

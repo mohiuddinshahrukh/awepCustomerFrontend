@@ -768,6 +768,18 @@ const NewBookingFile = () => {
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
         });
+        socket.socket.emit("generateNotification", {
+          userId: venueDetails?.venueOwnerId,
+          title: "Subvenue Booking Successful",
+          message: `Customer For Booking: ${email}`,
+          link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
+        });
+        // socket.socket.emit("generateNotification", {
+        //   userId: "634912abc5ba3ae82a86412c",
+        //   title: "Subvenue Booking Successful",
+        //   message: `Customer For Booking: ${email}`,
+        //   link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
+        // });
         setBookingId(response.data?.data?.trackingId);
         showNotification({
           color: "green",

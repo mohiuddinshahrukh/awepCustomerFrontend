@@ -39,14 +39,14 @@ const FinanceStats = ({
   const data = [
     {
       title: "My Venue Bookings",
-      value: `Rs. ${venueBookings}`,
+      value: `${venueBookings}`,
       icon: <IconBuildingFortress size={60} color="purple" />,
       color: "green",
       diff: "10",
     },
     {
       title: "My Vendor Bookings",
-      value: `Rs. ${vendorBookings}`,
+      value: `${vendorBookings}`,
       icon: <IconBuildingStore size={60} color="purple" />,
       color: "red",
       diff: "5",

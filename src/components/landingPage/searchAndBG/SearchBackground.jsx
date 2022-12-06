@@ -63,7 +63,7 @@ const SearchBackground = ({ carouselImages }) => {
         align="center"
         justify={"center"}
       >
-        {" "}
+        
         <div
           style={{
             // position: "absolute",

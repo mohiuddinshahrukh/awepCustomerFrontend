@@ -150,3 +150,11 @@ code {
 .mantine-Menu-dropdown {
   border: 1px solid #e60084;
 }
+
+#mv-demo {
+  height: 100%;
+  width: 100%;
+  background-color: gray;
+
+  /* background-image: url("https://cdn.pixabay.com/photo/2018/12/02/10/58/hall-3851014_960_720.jpg"); */
+}

@@ -757,7 +757,7 @@ const NewBookingFile = () => {
         setVisible(false);
         setLoading(false);
       } else {
-        socket.emit("generateNotification", {
+        socket.socket.emit("generateNotification", {
           userId: JSON.parse(localStorage.getItem("customerData")).id,
           title: "Subvenue Booking Successful",
           message: `Customer For Booking: ${email}`,

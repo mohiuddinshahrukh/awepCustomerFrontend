@@ -117,8 +117,7 @@ const AllVenuesGrid = ({
       </Group>
 
       {viewStyle === "card" ? (
-        <AllVenuesVenueCard allVenues={allVenues}  date={date}
-        time={time} />
+        <AllVenuesVenueCard allVenues={allVenues} date={date} time={time} />
       ) : (
         <AllVenuesVenueList allVenues={allVenues} />
       )}

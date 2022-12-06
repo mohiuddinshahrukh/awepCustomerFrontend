@@ -328,23 +328,6 @@ const SpecificVenueDetails = () => {
                 <ActionIcon size="xl" color="red">
                   <IconMail size={32} />
                 </ActionIcon>
-                <ActionIcon
-                  size="xl"
-                  color="gray"
-                  onClick={() => {
-                    socket.socket.emit("viewAllChatsOnStartConversation", {
-                      participant: {
-                        _id: venueDetails?._id,
-                        type: "venue",
-                      },
-                    });
-
-                    // navigate(`/dashboard/chat/${venueDetails?._id}`);
-                    navigate(`/dashboard/chats`);
-                  }}
-                >
-                  <IconMessage2 size={32} />
-                </ActionIcon>
               </Group>
             </Group>
           </Grid.Col>

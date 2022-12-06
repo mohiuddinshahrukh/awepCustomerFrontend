@@ -538,6 +538,8 @@ const AllVendorsPage = () => {
                 setSearch={setSearch}
                 vendorSort={vendorSort}
                 setVendorSort={setVendorSort}
+                date={date}
+                time={time}
               />
             ) : (
               <FiveCardsSkeleton />

@@ -254,7 +254,7 @@ const SignIn = ({
               );
 
               try {
-                socket = io("https://a-wep.herokuapp.com", {
+                socket.socket = io("https://a-wep.herokuapp.com", {
                   // export const socket = io("192.168.10.18:8081", {
                   // export const socket = io("http://localhost:8081", {
                   auth: {
@@ -264,6 +264,7 @@ const SignIn = ({
               } catch (e) {
                 console.log("Socket ERROR: ", e);
               }
+
               if (closeModal) {
                 setIsSignIn(false);
               } else {

@@ -73,7 +73,7 @@ import { socketContext } from "../../../Socket/Socket";
 const ChatScreen = () => {
   let { state } = useLocation();
   const [stateId, setStateId] = useState(state?.ID);
-  const socket = React.useContext(socketContext);
+  const socket = React.useContext(socketContext)?.socket;
   console.log("SCOKJET VALUE", socket);
 
   console.log("State: ", state);

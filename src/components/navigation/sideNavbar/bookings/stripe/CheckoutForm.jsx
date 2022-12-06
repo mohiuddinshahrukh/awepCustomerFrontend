@@ -15,7 +15,7 @@ export default function CheckoutForm({
   paidSuccessfully,
   onClickBack,
   setConfirmBooking,
-  //   start,
+    start,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -100,7 +100,7 @@ export default function CheckoutForm({
       setPaidSuccessfully(true);
       setPaid(true);
       setConfirmBooking(true);
-      //   start();
+        start();
     }
     setIsLoading(false);
   };

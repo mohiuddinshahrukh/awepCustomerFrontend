@@ -18,7 +18,7 @@ const StripePromise = ({
   paidSuccessfully,
   onClickBack,
   setConfirmBooking,
-  //   start,
+  start,
 }) => {
   console.log("INSIDE STRIPE_PROMISE");
 
@@ -56,7 +56,7 @@ const StripePromise = ({
             amountPayable={amountPayable}
             onClickBack={onClickBack}
             setConfirmBooking={setConfirmBooking}
-            // start={start}
+            start={start}
           />
         </Elements>
       )}

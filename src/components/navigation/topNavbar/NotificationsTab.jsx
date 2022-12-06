@@ -18,44 +18,15 @@ import { useEffect } from "react";
 import moment from "moment/moment";
 import { socket } from "../../Socket/Socket";
 let count = 0;
-const NotificaitonsTab = ({ allNotifications, unreadCount }) => {
+const NotificaitonsTab = ({ allNotifications, unreadCount, signedIn }) => {
   console.log("@COUNT", unreadCount);
-  const [getCount, setCount] = useState(0);
-  // const unreadNotifications = [
-  //   {
-  //     id: 1,
-  //     title: "New booking",
-  //     description: "You have a new booking",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "New message",
-  //     description: "You have a new message",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "New review",
-  //     description: "You have a new review",
-  //   },
-  // ];
-  // const readNotifications = [
-  //   {
-  //     id: 4,
-  //     title: "New booking",
-  //     description: "You have a new booking",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "New message",
-  //     description: "You have a new message",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "New review",
-  //     description:
-  //       "You have a new reviewYou have a new reviewYou have a new review",
-  //   },
-  // ];
+  // const [getCount, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log("123123NOTIFICATIONS", allNotifications);
+    console.log("123123NOTIFICATIONS", unreadCount);
+    // setCount(unreadCount);
+  }, [unreadCount, allNotifications, signedIn]);
 
   return (
     <Menu
@@ -99,7 +70,7 @@ const NotificaitonsTab = ({ allNotifications, unreadCount }) => {
             }
             variant="subtle"
             onClick={() => {
-              socket.emit("markAllNotificationsAsRead");
+              socket.socket.emit("markAllNotificationsAsRead");
             }}
           >
             Mark All As Read

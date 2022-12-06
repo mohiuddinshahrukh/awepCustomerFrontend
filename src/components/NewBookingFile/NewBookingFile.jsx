@@ -2,7 +2,7 @@ import axios from "axios";
 import "./styling.css";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTimeout } from "@mantine/hooks";
 
 import {
@@ -112,6 +112,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const NewBookingFile = () => {
+  const currentLocation = useLocation();
   const params = useParams();
   console.log("MY PARAMS: ", params);
   const theme = useMantineTheme();
@@ -387,6 +388,11 @@ const NewBookingFile = () => {
     nextStep();
     // makeVenueBooking();
   };
+
+  useEffect(() => {
+    console.log("CHECKING ROUTES");
+    console.log("currentLocation", currentLocation);
+  }, []);
 
   useEffect(() => {
     const url2 = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.venueId}`;

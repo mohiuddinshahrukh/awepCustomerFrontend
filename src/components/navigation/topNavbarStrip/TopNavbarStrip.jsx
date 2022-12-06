@@ -78,9 +78,11 @@ const TopNavbarStrip = () => {
                   variant="text"
                   href={`tel:${number.mobileNumber}`}
                   onClick={() => {
-                    window.ReactNativeWebView.postMessage(
-                      `phone::::::::${number.mobileNumber}`
-                    );
+                    try {
+                      window.ReactNativeWebView.postMessage(
+                        `phone::::::::${number.mobileNumber}`
+                      );
+                    } catch (e) {}
                   }}
                 >
                   <Group
@@ -130,9 +132,11 @@ const TopNavbarStrip = () => {
               component={Anchor}
               href={`mailto:${superAdminData.email}`}
               onClick={() => {
-                window.ReactNativeWebView.postMessage(
-                  `mail::::::::${superAdminData.email}`
-                );
+                try {
+                  window.ReactNativeWebView.postMessage(
+                    `mail::::::::${superAdminData.email}`
+                  );
+                } catch (e) {}
               }}
             >
               <IconMail />

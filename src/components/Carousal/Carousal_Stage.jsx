@@ -24,7 +24,7 @@ const Carousal_Stage = ({ stages }) => {
           let link =
             "https://firebasestorage.googleapis.com/v0/b/awep-92675.appspot.com/o/3D-Models%2Fretro_style_stage.glb?alt=media&token=76314b97-2727-4594-8533-9a75c2b223ad";
           try {
-            window.ReactNativeWebView.postMessage(`3DModel::::::::${link}}`);
+            window.ReactNativeWebView.postMessage(`3DModel::::::::${link}`);
           } catch (e) {
             alert("AR Only Works on Mobile");
           }

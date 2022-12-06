@@ -20,7 +20,6 @@ import img15 from "../../assets/searchBackgroundCarouselImages/15.jpg";
 import FilterCards from "../filterCards/FilterCards";
 import FeaturedVenuesSection from "../featuredVenuesSection/FeaturedVenuesSection";
 import FeaturedVendorsSection from "../featuredVendorsSection/FeaturedVendorsSection";
-import RealWeddingsSection from "../realWeddingsSection/RealWeddingsSection";
 import CustomerTestimonials from "../customerTestimonials/CustomerTestimonials";
 import WeddingCards from "../weddingCards/WeddingCards";
 import RegisteredCities from "../registeredCities/RegisteredCities";

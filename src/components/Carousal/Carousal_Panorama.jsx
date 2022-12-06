@@ -28,6 +28,7 @@ const Carousal_Panorama = ({ panorama }) => {
             width="100%"
             height="500px"
             image={venuePanorama}
+            
             pitch={10}
             yaw={50}
             hfov={1000}

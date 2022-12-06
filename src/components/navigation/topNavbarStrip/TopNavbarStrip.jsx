@@ -52,7 +52,7 @@ const socialMedia = [
     path: "https://www.youtube.com/@teamawepsat",
     icon: <IconBrandYoutube />,
   },
-]
+];
 
 const TopNavbarStrip = () => {
   const [openCall, setOpenCall] = useState(false);
@@ -77,6 +77,11 @@ const TopNavbarStrip = () => {
                   style={{ width: "100%" }}
                   variant="text"
                   href={`tel:${number.mobileNumber}`}
+                  onClick={() => {
+                    window.ReactNativeWebView.postMessage(
+                      `phone::::::::${number.mobileNumber}`
+                    );
+                  }}
                 >
                   <Group
                     style={{ width: "100%" }}
@@ -124,6 +129,11 @@ const TopNavbarStrip = () => {
               className="button"
               component={Anchor}
               href={`mailto:${superAdminData.email}`}
+              onClick={() => {
+                window.ReactNativeWebView.postMessage(
+                  `mail::::::::${superAdminData.email}`
+                );
+              }}
             >
               <IconMail />
             </ActionIcon>

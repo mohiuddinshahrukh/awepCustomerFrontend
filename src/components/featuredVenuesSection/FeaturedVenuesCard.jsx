@@ -41,7 +41,7 @@ const FeaturedVenuesCard = ({ venue, date, time }) => {
           ? `/specificVenue/${venue._id}`
           : date === null && time !== null
           ? `/specificVenue/${venue._id}/${time}`
-          : date !== null && time === null
+          : date !== null && time === null``
           ? `/specificVenue/${venue._id}/${date}`
           : date !== null && time !== null
           ? `/specificVenue/${venue._id}/${date}/${time}`

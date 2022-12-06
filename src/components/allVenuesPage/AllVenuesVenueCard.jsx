@@ -13,7 +13,6 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVenuesCard from "../featuredVenuesSection/FeaturedVenuesCard";
-import AllVenuesVenueCardCarousel from "./AllVenuesVenueCardCarousel";
 
 const AllVenuesVenueCard = ({ allVenues, time, date }) => {
   const venues = allVenues?.map((venue, index) => {

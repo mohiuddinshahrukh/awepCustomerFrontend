@@ -1,10 +1,10 @@
 import {
   Accordion,
   Anchor,
-  Box,
   Button,
   List,
   Paper,
+  ScrollArea,
   Text,
   ThemeIcon,
   useMantineTheme,
@@ -24,23 +24,32 @@ const TopNavbarDrawer = ({
   const currentLocation = useLocation();
   const accordion = linksData?.map((link, index) => {
     return (
-      <Box
+      <Button
+        variant={link?.variant ? link.variant : "filled"}
         styles={{
-          width: "100%",
+          inner: {
+            justifyContent: "flex-start",
+          },
         }}
+        leftIcon={link.icon}
         hidden={
           (!localStorage.getItem("customerToken") &&
             link.title.toString() === "Dashboard") ||
           (!localStorage.getItem("customerToken") &&
             link.title.toString() === "Settings") ||
           (!localStorage.getItem("customerToken") &&
-            link.title.toString() === "Signout")
+            link.title.toString() === "Signout") ||
+          (!localStorage.getItem("customerToken") &&
+            link.title.toString() === "Feedbacks")
             ? true
             : false
         }
-        my={"xl"}
+        mb={"xl"}
         key={index}
-        className="button"
+        fullWidth
+        className={
+          link.variant !== "outline" ? "bgColor hover" : "border fgColorF"
+        }
         component={Link}
         to={link.path}
         onClick={() => {
@@ -73,11 +82,16 @@ const TopNavbarDrawer = ({
           }
         }}
       >
-        {index + 1 + " " + link.title}
-      </Box>
+        <Text align="left">
+          {" "}
+          {localStorage.getItem("customerToken")
+            ? index + 1 + " - " + link.title
+            : index + " - " + link.title}
+        </Text>
+      </Button>
     );
   });
-  return <Paper p={"lg"}>{accordion}</Paper>;
+  return <ScrollArea p={"lg"}>{accordion}</ScrollArea>;
 };
 
 export default TopNavbarDrawer;

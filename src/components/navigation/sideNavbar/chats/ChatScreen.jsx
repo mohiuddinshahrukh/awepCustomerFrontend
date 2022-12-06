@@ -74,6 +74,7 @@ const ChatScreen = () => {
   let { state } = useLocation();
   const [stateId, setStateId] = useState(state?.ID);
   const socket = React.useContext(socketContext);
+  console.log("SCOKJET VALUE", socket);
 
   console.log("State: ", state);
   let userData = JSON.parse(localStorage.getItem("customerData"));
@@ -317,40 +318,40 @@ const ChatScreen = () => {
     }
   }, [chatHeadsFetched]);
 
-  React.useEffect(() => {
-    if (refresh) {
-      // axios
-      //   .get("https://a-wep.herokuapp.com/superAdmin/getAllUsers")
-      //   .then((res) => {
-      //     console.log("ALL USERS FETCHED", res.data);
-      //     if (res.data.status === "success") {
-      //       setAllUsers(res.data.data);
-      //       setRefresh(false);
-      //       setVisibleConversations(false);
-      //     } else {
-      //       alert("Error");
-      //     }
-      //   });
-      // axios
-      //   .get("https://a-wep.herokuapp.com/superAdmin/getAllVenues")
-      //   .then((res) => {
-      //     console.log("RES", res);
-      //     if (res.data.status === "success") {
-      //       console.log("RES>DATA>DATA", res.data.data);
-      //       setAllVenues(res.data.data);
-      //     }
-      //   });
-      // axios
-      //   .get("https://a-wep.herokuapp.com/superAdmin/getVendorBusiness")
-      //   .then((res) => {
-      //     console.log("RES", res);
-      //     if (res.data.status === "success") {
-      //       console.log("RES>DATA>DATA", res.data.data);
-      //       setAllVendors(res.data.data);
-      //     }
-      //   });
-    }
-  }, [refresh]);
+  // React.useEffect(() => {
+  if (refresh) {
+    // axios
+    //   .get("https://a-wep.herokuapp.com/superAdmin/getAllUsers")
+    //   .then((res) => {
+    //     console.log("ALL USERS FETCHED", res.data);
+    //     if (res.data.status === "success") {
+    //       setAllUsers(res.data.data);
+    //       setRefresh(false);
+    //       setVisibleConversations(false);
+    //     } else {
+    //       alert("Error");
+    //     }
+    //   });
+    // axios
+    //   .get("https://a-wep.herokuapp.com/superAdmin/getAllVenues")
+    //   .then((res) => {
+    //     console.log("RES", res);
+    //     if (res.data.status === "success") {
+    //       console.log("RES>DATA>DATA", res.data.data);
+    //       setAllVenues(res.data.data);
+    //     }
+    //   });
+    // axios
+    //   .get("https://a-wep.herokuapp.com/superAdmin/getVendorBusiness")
+    //   .then((res) => {
+    //     console.log("RES", res);
+    //     if (res.data.status === "success") {
+    //       console.log("RES>DATA>DATA", res.data.data);
+    //       setAllVendors(res.data.data);
+    //     }
+    //   });
+  }
+  // }, [refresh]);
 
   // const getAllUsersMethod = async () => {
   //   try {
@@ -372,8 +373,13 @@ const ChatScreen = () => {
   // };
   // USEEFFECT
   useEffect(() => {
+    socket.emit("getChatHeads");
+    console.log("$s1GET CHAT HEADS CALLED");
+  }, []);
+  useEffect(() => {
     socket.on("connect", () => {
       setIsConnected(true);
+
       // console.log("T-DEBUG:", "SOCKET CONNECTED");
     });
     socket.on("disconnect", () => {
@@ -394,7 +400,8 @@ const ChatScreen = () => {
         const newConversation = data.Conversations || [];
 
         // @123
-        console.log("NEW CONNVERSATION: ", newConversation);
+        console.log("$123NEW CONNVERSATION: ", newConversation);
+
         setAllConversations(newConversation);
         setFilterString(newConversation);
       }
@@ -536,6 +543,12 @@ const ChatScreen = () => {
 
   return (
     <Paper style={{ height: "100%", width: "100%" }}>
+      <Button
+        onClick={() => {
+          console.log("CALLING FUNCTION 123#");
+          socket.emit("getChatHeads", {});
+        }}
+      ></Button>
       <ChatStarterModal
         chatCreatorMethod={chatCreator}
         open={chatStarterModal}

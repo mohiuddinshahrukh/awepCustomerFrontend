@@ -1,50 +1,80 @@
 import {
   Accordion,
   Anchor,
+  Box,
   Button,
   List,
   Paper,
+  Text,
   ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
 import { IconLink } from "@tabler/icons";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const TopNavbarDrawer = ({ linksData, setDrawerState }) => {
+const TopNavbarDrawer = ({
+  linksData,
+  setDrawerState,
+  setSignedIn,
+  signedIn,
+}) => {
+  const navigate = useNavigate();
   const currentTheme = useMantineTheme();
   const currentLocation = useLocation();
   const accordion = linksData?.map((link, index) => {
     return (
-      <Button
+      <Box
+        styles={{
+          width: "100%",
+        }}
+        hidden={
+          (!localStorage.getItem("customerToken") &&
+            link.title.toString() === "Dashboard") ||
+          (!localStorage.getItem("customerToken") &&
+            link.title.toString() === "Settings") ||
+          (!localStorage.getItem("customerToken") &&
+            link.title.toString() === "Signout")
+            ? true
+            : false
+        }
         my={"xl"}
         key={index}
-        fullWidth
         className="button"
-        // style={{
-        //   borderRadius: "3px",
-        //   backgroundColor:
-        //     currentLocation.pathname === link.path
-        //       ? "#e60084"
-        //       : currentTheme.colorScheme === "light"
-        //       ? "white"
-        //       : currentTheme.colors.dark[7],
-        //   color:
-        //     currentLocation.pathname === link.path
-        //       ? currentTheme.white
-        //       : currentTheme.colorScheme === "light"
-        //       ? currentTheme.black
-        //       : currentTheme.white,
-        // }}
-        // size="1.25rem"
         component={Link}
         to={link.path}
         onClick={() => {
           setDrawerState(false);
+          if (link.title.toString() === "Signout") {
+            localStorage.removeItem("customerData");
+            localStorage.removeItem("customerToken");
+            // setLoggedInUserData({});
+            console.log("CURRENT LOCAITON 123", currentLocation);
+            if (
+              [
+                "/dashboard",
+                "/dashboard/bookings",
+                "/dashboard/chats",
+                "/dashboard/weddingCards",
+                "/dashboard/complaintsAndFeedback",
+                "/dashboard/payments",
+                "/dashboard/complaints",
+                // "/dashboard/FAQsAndHelp",
+                // "/dashboard/invite",
+                "/dashboard/profile",
+              ].includes(currentLocation.pathname.toString())
+            ) {
+              console.log("CURRENT LOCATION AND PATH MATCHED");
+              navigate({ pathname: "/" });
+              setSignedIn(!signedIn);
+            } else {
+              setSignedIn(!signedIn);
+            }
+          }
         }}
       >
-        {link.title}
-      </Button>
+        {index + 1 + " " + link.title}
+      </Box>
     );
   });
   return <Paper p={"lg"}>{accordion}</Paper>;

@@ -17,12 +17,35 @@ import ReviewImage from "./image2.jpg";
 import { Button, createStyles } from "@mantine/core";
 import React from "react";
 import axios from "axios";
-import { showNotification } from "@mantine/notifications";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  cleanNotificationsQueue,
+  showNotification,
+} from "@mantine/notifications";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 import logo from "../../assets/awepLogo/3a.png";
 
 const AddComplaint = () => {
+  const currentLocation = useLocation();
+  const checkLogin = () => {
+    cleanNotificationsQueue();
+    console.log("CHECKING ROUTES");
+    console.log("currentLocation", currentLocation);
+
+    if (localStorage.getItem("customerToken") === null || undefined || "") {
+      showNotification({
+        title: "Please Sign In First",
+        message: "You need to Sign In First",
+        color: "red",
+      });
+      navigate("/signin");
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
   const [feedbackDetails, setFeedbackDetails] = useState({});
   console.log("deererere", feedbackDetails);
   const fetchReviewDetails = async () => {
@@ -229,7 +252,7 @@ const AddComplaint = () => {
     }
   };
   const currentTheme = useMantineTheme();
-  return (
+  return localStorage.getItem("customerToken") ? (
     <Grid
       style={{
         width: "100%",
@@ -330,6 +353,8 @@ const AddComplaint = () => {
         </Container>
       </Grid.Col>
     </Grid>
+  ) : (
+    <></>
   );
 };
 

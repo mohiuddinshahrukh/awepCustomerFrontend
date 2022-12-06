@@ -1,5 +1,6 @@
 import {
   Anchor,
+  Button,
   Container,
   Drawer,
   Group,
@@ -19,6 +20,10 @@ import TopNavbarUserProfileIcon from "./TopNavbarUserProfileIcon";
 import logo from "../../../assets/awepLogo/3a.png";
 import NotificaitonsTab from "./NotificationsTab";
 import { socket as Socket } from "../../Socket/Socket";
+import TopNavbarUserProfileDrawer from "./TopNavbarUserProfileDrawer";
+import drawerBg from "../../../assets/Drawer/drawerBg.jpg";
+import { IconLayoutGrid, IconLogout, IconSettings } from "@tabler/icons";
+
 const TopNavbar = ({ signedIn, setSignedIn }) => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
@@ -97,23 +102,74 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
       {" "}
       <Container py={"0.5rem"} size={"xl"}>
         <Drawer
+          styles={{
+            header: { position: "absolute", zIndex: 2, right: 5, top: 5 },
+            closeButton: {
+              borderRadius: "50%",
+              backgroundColor: "#e60084",
+              color: "white",
+              ":hover": {
+                backgroundColor: "#c1006d",
+              },
+            },
+          }}
           opened={drawerState}
           onClose={() => {
             setDrawerState(false);
           }}
         >
-          <Anchor
-            component={Link}
-            to={"/"}
-            onClick={() => {
-              setDrawerState(false);
-            }}
-          >
-            <Image height={"70px"} fit={"contain"} src={logo} />
-          </Anchor>
+          {localStorage.getItem("customerToken") ? (
+            <div
+              style={{
+                position: "relative",
+                height: "150px",
+              }}
+            >
+              <Image src={drawerBg} height="150px" />
+              <TopNavbarUserProfileDrawer setDrawerState={setDrawerState} />
+            </div>
+          ) : (
+            <Anchor
+              mt={"xl"}
+              component={Link}
+              to={"/"}
+              onClick={() => {
+                setDrawerState(false);
+              }}
+            >
+              <Image mt={"xl"} height={"70px"} fit={"contain"} src={logo} />
+            </Anchor>
+          )}
+          {[].map((buttonData, index) => {
+            return (
+              <Button
+                className="button"
+                leftIcon={buttonData.icon}
+                mb={"sm"}
+                component={Link}
+                to={buttonData.path}
+                onClick={() => {
+                  setDrawerState(false);
+                }}
+                uppercase
+                fullWidth
+                key={index}
+              >
+                {buttonData.title}
+              </Button>
+            );
+          })}
+
           <TopNavbarDrawer
+            signedIn={signedIn}
+            setSignedIn={setSignedIn}
             setDrawerState={setDrawerState}
             linksData={[
+              {
+                title: "Dashboard",
+                path: "/dashboard",
+                icon: <IconLayoutGrid />,
+              },
               {
                 title: "Home",
                 path: "/",
@@ -126,6 +182,12 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
               { title: "Card Editor", path: "/cardEditor" },
               { title: "Contact Us", path: "/contactUs" },
               { title: "About Us", path: "/aboutUs" },
+              {
+                title: "Settings",
+                path: "/dashboard/profile",
+                icon: <IconSettings />,
+              },
+              { title: "Signout", path: "/dashboard", icon: <IconLogout /> },
             ]}
           />
           {!localStorage.getItem("customerToken") && (
@@ -182,7 +244,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
           )}
           <Group>
             <TopNavbarThemeToggle />
-            {localStorage.getItem("customerToken") ? (
+            {matches1200 && localStorage.getItem("customerToken") ? (
               <Group spacing={"lg"}>
                 <NotificaitonsTab
                   signedIn={signedIn}

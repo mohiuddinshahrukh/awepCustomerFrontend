@@ -4,7 +4,7 @@ import React from "react";
 
 const TopNavbarHamburger = ({ setDrawerState }) => {
   return (
-    <ActionIcon>
+    <ActionIcon variant="outline" size={43} className="border fgColorF">
       <IconMenu2
         onClick={() => {
           setDrawerState(true);

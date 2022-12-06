@@ -17,9 +17,8 @@ import TopNavbarLinks from "./TopNavbarLinks";
 import TopNavbarThemeToggle from "./TopNavbarThemeToggle";
 import TopNavbarUserProfileIcon from "./TopNavbarUserProfileIcon";
 import logo from "../../../assets/awepLogo/3a.png";
-
 import NotificaitonsTab from "./NotificationsTab";
-import { socket } from "../../Socket/Socket";
+import { socket as Socket } from "../../Socket/Socket";
 const TopNavbar = ({ signedIn, setSignedIn }) => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
@@ -29,6 +28,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
   const [refreshNotifications, setRefreshNotifications] = useState(false);
   useEffect(() => {
     console.count("@USE EFFECT TRIGGERED");
+    const socket = Socket.socket;
     const error = socket.on("error", (data) => {
       console.log("ERROR", data);
     });
@@ -36,8 +36,28 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
 
     socket.on("newConnection", (data) => {
       console.log("@NC", data);
-      console.log("Just notifications", data?.Notificaiton);
+      console.log("Just notifications", data?.Notificaitons);
       setAllNotificaitons(data?.Notifications);
+      //
+
+      let unreadCount = 0;
+      console.log("receiveNotification1");
+      if (data.userId === JSON.parse(localStorage.getItem("customerData")).id) {
+        let newNotifications = data.Notifications.filter((e, index) => {
+          if (!e.read && e.userId.toString() === data.userId.toString()) {
+            console.log("count 0:::", e, index);
+            unreadCount++;
+          }
+          return e.userId.toString() === data.userId.toString();
+        });
+        setAllNotificaitons(data?.Notifications);
+        setCount(unreadCount);
+
+        console.log("COUNt1", unreadCount);
+        console.log("receiveNotification1", newNotifications);
+      }
+
+      //
     });
     socket.on("receiveNotifications", (data) => {
       let unreadCount = 0;
@@ -54,11 +74,10 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
         setCount(unreadCount);
 
         console.log("COUNt1", unreadCount);
-
         console.log("receiveNotification1", newNotifications);
       }
     });
-  }, [socket, refreshNotifications, allNotifications, signedIn]);
+  }, [refreshNotifications, allNotifications, signedIn]);
   return (
     <Paper
       sx={(theme) => ({
@@ -166,6 +185,7 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
             {localStorage.getItem("customerToken") ? (
               <Group spacing={"lg"}>
                 <NotificaitonsTab
+                  signedIn={signedIn}
                   unreadCount={count}
                   allNotifications={allNotifications}
                   refreshNotifications={refreshNotifications}

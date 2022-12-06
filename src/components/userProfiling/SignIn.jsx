@@ -47,6 +47,8 @@ import {
   IconUserX,
 } from "@tabler/icons";
 import GoogleSignUpButon from "./GoogleSignUpButon";
+import { socket } from "../Socket/Socket";
+import { io } from "socket.io-client";
 
 const pictureBackground = [
   new URL("./customerIMG1.png", import.meta.url),
@@ -241,7 +243,6 @@ const SignIn = ({
                 })
               );
               dispatch(setToken({ token: response.data.token }));
-
               localStorage.setItem("customerToken", response.data.token);
               localStorage.setItem(
                 "navbarState",
@@ -251,6 +252,19 @@ const SignIn = ({
                 "customerData",
                 JSON.stringify(response.data.data)
               );
+
+              try {
+                socket.socket = io("https://a-wep.herokuapp.com", {
+                  // export const socket = io("192.168.10.18:8081", {
+                  // export const socket = io("http://localhost:8081", {
+                  auth: {
+                    token: response.data.token,
+                  },
+                });
+              } catch (e) {
+                console.log("Socket ERROR: ", e);
+              }
+
               if (closeModal) {
                 setIsSignIn(false);
               } else {

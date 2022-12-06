@@ -230,7 +230,27 @@ const SpecificVenueDetails = () => {
 
       <Grid pt="md">
         <Grid.Col lg={9}>
-          <Grid.Col>
+          <Grid.Col
+            m={0}
+            p={0}
+            style={{
+              position: "relative",
+            }}
+          >
+            {!matches && (
+              <Button
+                className="button"
+                onClick={() => setOpenBookNow(true)}
+                style={{
+                  position: "absolute",
+                  bottom: 30,
+                  right: 30,
+                  zIndex: 10,
+                }}
+              >
+                Book Now
+              </Button>
+            )}
             <Tabs defaultValue={"photos"} keepMounted={false} variant="pills">
               <Tabs.List>
                 <Tabs.Tab value="photos" icon={<IconMessageCircle size={14} />}>
@@ -288,26 +308,7 @@ const SpecificVenueDetails = () => {
               </Tabs.Panel>
             </Tabs>
           </Grid.Col>
-          <Grid.Col>
-            <Group position={!matches ? "apart" : "right"}>
-              {!matches && (
-                <Button className="button" onClick={() => setOpenBookNow(true)}>
-                  Book Now
-                </Button>
-              )}
-              <Group spacing={0}>
-                <ActionIcon size="xl" color="green">
-                  <IconBrandWhatsapp size={32} />
-                </ActionIcon>
-                <ActionIcon size="xl" color="blue">
-                  <IconPhone size={32} />
-                </ActionIcon>
-                <ActionIcon size="xl" color="red">
-                  <IconMail size={32} />
-                </ActionIcon>
-              </Group>
-            </Group>
-          </Grid.Col>
+
           <Group
             spacing="md"
             pt="sm"

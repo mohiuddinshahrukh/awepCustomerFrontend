@@ -34,12 +34,7 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   },
 }));
 
-const SpecificSubVenue = ({
-  open,
-  setOpen,
-  subVenue,
-  setIdOfSpecificSubVenue,
-}) => {
+const SpecificSubVenue = ({ setOpen, subVenue, setIdOfSpecificSubVenue }) => {
   let subVenueData = subVenue ? subVenue : {};
   const images = subVenueData?.images ? subVenueData?.images : [""];
   const { classes } = useStyles();
@@ -115,9 +110,9 @@ const SpecificSubVenue = ({
           </Text>
         </div>
 
-        <Button className="button" size="md" radius="md">
+        {/* <Button className="button" size="md" radius="md" onClick={}>
           Book Now
-        </Button>
+        </Button> */}
       </Group>
     </Card>
   );

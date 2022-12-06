@@ -36,7 +36,6 @@ const ReviewsOfSpecificVenue = ({
         <Text weight="bold" size="lg">
           {ratingCount} Reviews
         </Text>
-        <CustomButtonUnFilled title="Write A Review" />
       </Group>
       <Group>
         <div

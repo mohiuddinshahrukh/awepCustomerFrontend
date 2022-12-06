@@ -278,7 +278,11 @@ const SpecificVenueDetails = () => {
                 >
                   Panorama
                 </Tabs.Tab>
-                <Tabs.Tab value="stage" icon={<IconSettings size={14} />}>
+                <Tabs.Tab
+                  value="stage"
+                  // hidden={venueDetails?.stage === undefined}
+                  icon={<IconSettings size={14} />}
+                >
                   Stage
                 </Tabs.Tab>
               </Tabs.List>
@@ -307,30 +311,14 @@ const SpecificVenueDetails = () => {
                 <Carousal_Panorama panorama={venueDetails?.panorama} />
               </Tabs.Panel>
               <Tabs.Panel value="stage" pt="xs">
-                <Carousal_Stage />
+                <Carousal_Stage
+                  // hidden={venueDetails?.stage === undefined}
+                  stages={venueDetails?.stage}
+                />
               </Tabs.Panel>
             </Tabs>
           </Grid.Col>
-          <Grid.Col>
-            <Group position={!matches ? "apart" : "right"}>
-              {!matches && (
-                <Button className="button" onClick={() => setOpenBookNow(true)}>
-                  Book Now
-                </Button>
-              )}
-              <Group spacing={0}>
-                <ActionIcon size="xl" color="green">
-                  <IconBrandWhatsapp size={32} />
-                </ActionIcon>
-                <ActionIcon size="xl" color="blue">
-                  <IconPhone size={32} />
-                </ActionIcon>
-                <ActionIcon size="xl" color="red">
-                  <IconMail size={32} />
-                </ActionIcon>
-              </Group>
-            </Group>
-          </Grid.Col>
+
           <Group
             spacing="md"
             pt="sm"

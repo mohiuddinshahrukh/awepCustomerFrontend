@@ -38,6 +38,22 @@ const superAdminData = {
     },
   ],
 };
+
+const socialMedia = [
+  {
+    path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
+    icon: <IconBrandFacebook />,
+  },
+  {
+    path: "https://www.instagram.com/awep.pk/",
+    icon: <IconBrandInstagram />,
+  },
+  {
+    path: "https://www.youtube.com/@teamawepsat",
+    icon: <IconBrandYoutube />,
+  },
+];
+
 const TopNavbarStrip = () => {
   const [openCall, setOpenCall] = useState(false);
   const matches1000 = useMediaQuery("(min-width: 1055px)");
@@ -61,6 +77,13 @@ const TopNavbarStrip = () => {
                   style={{ width: "100%" }}
                   variant="text"
                   href={`tel:${number.mobileNumber}`}
+                  onClick={() => {
+                    try {
+                      window.ReactNativeWebView.postMessage(
+                        `phone::::::::${number.mobileNumber}`
+                      );
+                    } catch (e) {}
+                  }}
                 >
                   <Group
                     style={{ width: "100%" }}
@@ -108,6 +131,13 @@ const TopNavbarStrip = () => {
               className="button"
               component={Anchor}
               href={`mailto:${superAdminData.email}`}
+              onClick={() => {
+                try {
+                  window.ReactNativeWebView.postMessage(
+                    `mail::::::::${superAdminData.email}`
+                  );
+                } catch (e) {}
+              }}
             >
               <IconMail />
             </ActionIcon>
@@ -122,20 +152,7 @@ const TopNavbarStrip = () => {
             </ActionIcon>
           </Group>
 
-          {[
-            {
-              path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
-              icon: <IconBrandFacebook />,
-            },
-            {
-              path: "https://www.instagram.com/awep.pk/",
-              icon: <IconBrandInstagram />,
-            },
-            {
-              path: "https://www.youtube.com/@teamawepsat",
-              icon: <IconBrandYoutube />,
-            },
-          ].map((icon, index) => {
+          {socialMedia.map((icon, index) => {
             return (
               <ActionIcon
                 variant="filled"

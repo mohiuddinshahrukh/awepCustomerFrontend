@@ -146,3 +146,7 @@ code {
 .mantine-Spoiler-control {
   color: #e60084;
 }
+
+.mantine-Menu-dropdown {
+  border: 1px solid #e60084;
+}

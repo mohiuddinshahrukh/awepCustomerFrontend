@@ -246,8 +246,8 @@ const SpecificVenueDetails = () => {
                 onClick={() => setOpenBookNow(true)}
                 style={{
                   position: "absolute",
-                  bottom: 30,
-                  right: 30,
+                  bottom: 20,
+                  left: 20,
                   zIndex: 10,
                 }}
               >

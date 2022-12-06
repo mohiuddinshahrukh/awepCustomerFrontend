@@ -38,6 +38,22 @@ const superAdminData = {
     },
   ],
 };
+
+const socialMedia = [
+  {
+    path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
+    icon: <IconBrandFacebook />,
+  },
+  {
+    path: "https://www.instagram.com/awep.pk/",
+    icon: <IconBrandInstagram />,
+  },
+  {
+    path: "https://www.youtube.com/@teamawepsat",
+    icon: <IconBrandYoutube />,
+  },
+]
+
 const TopNavbarStrip = () => {
   const [openCall, setOpenCall] = useState(false);
   const matches1000 = useMediaQuery("(min-width: 1055px)");
@@ -122,20 +138,7 @@ const TopNavbarStrip = () => {
             </ActionIcon>
           </Group>
 
-          {[
-            {
-              path: "https://www.facebook.com/people/Automated-Wedding-Event-Planner-AWEP/100088104714206/",
-              icon: <IconBrandFacebook />,
-            },
-            {
-              path: "https://www.instagram.com/awep.pk/",
-              icon: <IconBrandInstagram />,
-            },
-            {
-              path: "https://www.youtube.com/@teamawepsat",
-              icon: <IconBrandYoutube />,
-            },
-          ].map((icon, index) => {
+          {socialMedia.map((icon, index) => {
             return (
               <ActionIcon
                 variant="filled"

@@ -191,7 +191,10 @@ const TopNavbar = ({ signedIn, setSignedIn }) => {
                   refreshNotifications={refreshNotifications}
                   setRefreshNotifications={setRefreshNotifications}
                 />
-                <TopNavbarUserProfileIcon setSignedIn={setSignedIn} />
+                <TopNavbarUserProfileIcon
+                  signedIn={signedIn}
+                  setSignedIn={setSignedIn}
+                />
               </Group>
             ) : (
               matches1200 && (

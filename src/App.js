@@ -83,7 +83,9 @@ function App() {
               <Routes>
                 <Route
                   path="/signIn"
-                  element={<SignIn setSignedIn={setSignedIn} />}
+                  element={
+                    <SignIn signedIn={signedIn} setSignedIn={setSignedIn} />
+                  }
                 />
                 <Route path="/signUp" element={<SignUp />} />
                 <Route

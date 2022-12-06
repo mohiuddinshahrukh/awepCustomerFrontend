@@ -392,6 +392,14 @@ const NewBookingFile = () => {
   useEffect(() => {
     console.log("CHECKING ROUTES");
     console.log("currentLocation", currentLocation);
+    if (localStorage.getItem("customerToken") === null || undefined || "") {
+      showNotification({
+        title: "Please Sign In First",
+        message: "You need to Sign In First",
+        color: "red",
+      });
+      navigate("/signin");
+    }
   }, []);
 
   useEffect(() => {
@@ -816,136 +824,179 @@ const NewBookingFile = () => {
 
   return (
     <Container size="xl">
-      <Paper
-        style={{
-          width: "100%",
-          height: "100%",
-          position: "relative",
-        }}
-        // p={0}
-      >
-        <LoadingOverlay
-          visible={visible}
-          loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
-          overlayOpacity={0.5}
-          overlayColor="#c5c5c5"
-          zIndex={1}
-        />
-
-        <Modal
-          styles={{
-            close: {
-              color: "black",
-              backgroundColor: "#EAEAEA",
-              borderRadius: "50%",
-              "&:hover": {
-                transition: "50ms",
-                color: "white",
-                backgroundColor: "red",
-              },
-            },
+      {localStorage.getItem("customerToken") ? (
+        <Paper
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "relative",
           }}
-          title={
-            <Title align="center" order={3}>
-              Booking Logged Successfully!!
-            </Title>
-          }
-          closeOnClickOutside={false}
-          opened={confirmBooking}
-          transition="rotate-left"
-          transitionDuration={600}
-          centered
-          size={600}
-          transitionTimingFunction="ease"
-          onClose={() => {
-            setConfirmBooking(false);
-            navigate("/");
-          }}
+          // p={0}
         >
-          <Stack>
-            <Group position="apart">
-              <Group position="left">
-                <Text weight={900}>Booking ID: {bookingId}</Text>
-              </Group>
-              <Badge size="lg">New Booking</Badge>
-            </Group>
-            <Paper
-              withBorder
-              p="xl"
-              shadow="md"
-              sx={{
-                ":hover": {
-                  transform: `scale(1.05)`,
-                  transition: "0.3s",
+          <LoadingOverlay
+            visible={visible}
+            loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
+            overlayOpacity={0.5}
+            overlayColor="#c5c5c5"
+            zIndex={1}
+          />
+
+          <Modal
+            styles={{
+              close: {
+                color: "black",
+                backgroundColor: "#EAEAEA",
+                borderRadius: "50%",
+                "&:hover": {
+                  transition: "50ms",
+                  color: "white",
+                  backgroundColor: "red",
                 },
-              }}
-            >
-              <Grid>
-                <Grid.Col span={6}>
+              },
+            }}
+            title={
+              <Title align="center" order={3}>
+                Booking Logged Successfully!!
+              </Title>
+            }
+            closeOnClickOutside={false}
+            opened={confirmBooking}
+            transition="rotate-left"
+            transitionDuration={600}
+            centered
+            size={600}
+            transitionTimingFunction="ease"
+            onClose={() => {
+              setConfirmBooking(false);
+              navigate("/");
+            }}
+          >
+            <Stack>
+              <Group position="apart">
+                <Group position="left">
+                  <Text weight={900}>Booking ID: {bookingId}</Text>
+                </Group>
+                <Badge size="lg">New Booking</Badge>
+              </Group>
+              <Paper
+                withBorder
+                p="xl"
+                shadow="md"
+                sx={{
+                  ":hover": {
+                    transform: `scale(1.05)`,
+                    transition: "0.3s",
+                  },
+                }}
+              >
+                <Grid>
+                  <Grid.Col span={6}>
+                    <Text>
+                      {venueDetails?.subVenues
+                        ?.filter((e) => e._id === idOfSelectedSubVenue)
+                        .map((e) => e.subVenueName)}
+                    </Text>
+
+                    <Group position="left">
+                      <Text>
+                        {moment(value1).format().split("T")[0]} / {time}
+                      </Text>
+                    </Group>
+
+                    <Group position="left">
+                      <Text>{eventType}</Text>
+                    </Group>
+                    <Group position="left">
+                      <Text>
+                        {noOfGuests} <b>Persons</b>
+                      </Text>
+                    </Group>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Image height={125} src={Congrats} />
+                  </Grid.Col>
+                </Grid>
+              </Paper>
+              <Paper
+                withBorder
+                p="xl"
+                shadow="md"
+                sx={{
+                  ":hover": {
+                    transform: `scale(1.05)`,
+                    transition: "0.3s",
+                  },
+                }}
+              >
+                <Group position="apart">
+                  <Text>Subtotal</Text>
                   <Text>
-                    {venueDetails?.subVenues
-                      ?.filter((e) => e._id === idOfSelectedSubVenue)
-                      .map((e) => e.subVenueName)}
+                    {" "}
+                    <b>
+                      {(
+                        hallCharges +
+                        selectedVenueServiceObject
+                          ?.map(
+                            (service) =>
+                              service.servicePrice *
+                              (service.duration === "Per Event" ? 1 : 3)
+                          )
+                          .reduce((a, b) => a + b, 0) +
+                        (selectedMenu?.price ? selectedMenu.price : 0) *
+                          noOfGuests
+                      )?.toLocaleString()}
+                    </b>
                   </Text>
-
-                  <Group position="left">
-                    <Text>
-                      {moment(value1).format().split("T")[0]} / {time}
-                    </Text>
-                  </Group>
-
-                  <Group position="left">
-                    <Text>{eventType}</Text>
-                  </Group>
-                  <Group position="left">
-                    <Text>
-                      {noOfGuests} <b>Persons</b>
-                    </Text>
-                  </Group>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <Image height={125} src={Congrats} />
-                </Grid.Col>
-              </Grid>
-            </Paper>
-            <Paper
-              withBorder
-              p="xl"
-              shadow="md"
-              sx={{
-                ":hover": {
-                  transform: `scale(1.05)`,
-                  transition: "0.3s",
-                },
-              }}
-            >
-              <Group position="apart">
-                <Text>Subtotal</Text>
-                <Text>
-                  {" "}
-                  <b>
-                    {(
-                      hallCharges +
-                      selectedVenueServiceObject
-                        ?.map(
-                          (service) =>
-                            service.servicePrice *
-                            (service.duration === "Per Event" ? 1 : 3)
-                        )
-                        .reduce((a, b) => a + b, 0) +
-                      (selectedMenu?.price ? selectedMenu.price : 0) *
-                        noOfGuests
-                    )?.toLocaleString()}
-                  </b>
-                </Text>
-              </Group>
-              <Group position="apart">
-                <Text>Discount</Text>
-                <Text>
-                  -{" "}
-                  <b>
-                    {(
-                      (hallCharges +
+                </Group>
+                <Group position="apart">
+                  <Text>Discount</Text>
+                  <Text>
+                    -{" "}
+                    <b>
+                      {(
+                        (hallCharges +
+                          selectedVenueServiceObject
+                            ?.map(
+                              (service) =>
+                                service.servicePrice *
+                                (service.duration === "Per Event" ? 1 : 3)
+                            )
+                            .reduce((a, b) => a + b, 0) +
+                          (selectedMenu?.price ? selectedMenu.price : 0) *
+                            noOfGuests) *
+                        0.25
+                      )?.toLocaleString()}
+                    </b>
+                  </Text>
+                </Group>
+                <Group position="apart">
+                  <Text>Tax</Text>
+                  <Text>
+                    {" "}
+                    +
+                    <b>
+                      {(
+                        (hallCharges +
+                          selectedVenueServiceObject
+                            ?.map(
+                              (service) =>
+                                service.servicePrice *
+                                (service.duration === "Per Event" ? 1 : 3)
+                            )
+                            .reduce((a, b) => a + b, 0) +
+                          (selectedMenu?.price ? selectedMenu.price : 0) *
+                            noOfGuests) *
+                        0.17
+                      )?.toLocaleString()}
+                    </b>
+                  </Text>
+                </Group>
+                <Group position="apart">
+                  <Text>Total</Text>
+                  <Text>
+                    <b>
+                      {(
+                        hallCharges +
                         selectedVenueServiceObject
                           ?.map(
                             (service) =>
@@ -954,38 +1005,81 @@ const NewBookingFile = () => {
                           )
                           .reduce((a, b) => a + b, 0) +
                         (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests) *
-                      0.25
-                    )?.toLocaleString()}
-                  </b>
-                </Text>
-              </Group>
-              <Group position="apart">
-                <Text>Tax</Text>
-                <Text>
-                  {" "}
-                  +
-                  <b>
-                    {(
-                      (hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests) *
-                      0.17
-                    )?.toLocaleString()}
-                  </b>
-                </Text>
-              </Group>
-              <Group position="apart">
-                <Text>Total</Text>
-                <Text>
-                  <b>
+                          noOfGuests -
+                        (hallCharges +
+                          selectedVenueServiceObject
+                            ?.map(
+                              (service) =>
+                                service.servicePrice *
+                                (service.duration === "Per Event" ? 1 : 3)
+                            )
+                            .reduce((a, b) => a + b, 0) +
+                          (selectedMenu?.price ? selectedMenu.price : 0) *
+                            noOfGuests) *
+                          0.25 +
+                        (hallCharges +
+                          selectedVenueServiceObject
+                            ?.map(
+                              (service) =>
+                                service.servicePrice *
+                                (service.duration === "Per Event" ? 1 : 3)
+                            )
+                            .reduce((a, b) => a + b, 0) +
+                          (selectedMenu?.price ? selectedMenu.price : 0) *
+                            noOfGuests) *
+                          0.17
+                      )?.toLocaleString()}
+                    </b>
+                  </Text>
+                </Group>
+                <Divider />
+                <Group position="apart">
+                  <Text>Amount Paid</Text>
+                  <Text>
+                    <b>
+                      {(
+                        (hallCharges +
+                          selectedVenueServiceObject
+                            ?.map(
+                              (service) =>
+                                service.servicePrice *
+                                (service.duration === "Per Event" ? 1 : 3)
+                            )
+                            .reduce((a, b) => a + b, 0) +
+                          (selectedMenu?.price ? selectedMenu.price : 0) *
+                            noOfGuests -
+                          (hallCharges +
+                            selectedVenueServiceObject
+                              ?.map(
+                                (service) =>
+                                  service.servicePrice *
+                                  (service.duration === "Per Event" ? 1 : 3)
+                              )
+                              .reduce((a, b) => a + b, 0) +
+                            (selectedMenu?.price ? selectedMenu.price : 0) *
+                              noOfGuests) *
+                            0.25 +
+                          (hallCharges +
+                            selectedVenueServiceObject
+                              ?.map(
+                                (service) =>
+                                  service.servicePrice *
+                                  (service.duration === "Per Event" ? 1 : 3)
+                              )
+                              .reduce((a, b) => a + b, 0) +
+                            (selectedMenu?.price ? selectedMenu.price : 0) *
+                              noOfGuests) *
+                            0.17) *
+                        0.25
+                      )?.toLocaleString()}
+                    </b>
+                  </Text>
+                </Group>
+                <Divider />
+                <Group position="apart">
+                  <Text>Amount Remaining: </Text>
+                  <Text>
+                    {" "}
                     {(
                       hallCharges +
                       selectedVenueServiceObject
@@ -1018,17 +1112,7 @@ const NewBookingFile = () => {
                           .reduce((a, b) => a + b, 0) +
                         (selectedMenu?.price ? selectedMenu.price : 0) *
                           noOfGuests) *
-                        0.17
-                    )?.toLocaleString()}
-                  </b>
-                </Text>
-              </Group>
-              <Divider />
-              <Group position="apart">
-                <Text>Amount Paid</Text>
-                <Text>
-                  <b>
-                    {(
+                        0.17 -
                       (hallCharges +
                         selectedVenueServiceObject
                           ?.map(
@@ -1061,475 +1145,455 @@ const NewBookingFile = () => {
                           (selectedMenu?.price ? selectedMenu.price : 0) *
                             noOfGuests) *
                           0.17) *
-                      0.25
+                        0.25
                     )?.toLocaleString()}
-                  </b>
-                </Text>
-              </Group>
-              <Divider />
-              <Group position="apart">
-                <Text>Amount Remaining: </Text>
-                <Text>
-                  {" "}
-                  {(
-                    hallCharges +
-                    selectedVenueServiceObject
-                      ?.map(
-                        (service) =>
-                          service.servicePrice *
-                          (service.duration === "Per Event" ? 1 : 3)
-                      )
-                      .reduce((a, b) => a + b, 0) +
-                    (selectedMenu?.price ? selectedMenu.price : 0) *
-                      noOfGuests -
-                    (hallCharges +
-                      selectedVenueServiceObject
-                        ?.map(
-                          (service) =>
-                            service.servicePrice *
-                            (service.duration === "Per Event" ? 1 : 3)
-                        )
-                        .reduce((a, b) => a + b, 0) +
-                      (selectedMenu?.price ? selectedMenu.price : 0) *
-                        noOfGuests) *
-                      0.25 +
-                    (hallCharges +
-                      selectedVenueServiceObject
-                        ?.map(
-                          (service) =>
-                            service.servicePrice *
-                            (service.duration === "Per Event" ? 1 : 3)
-                        )
-                        .reduce((a, b) => a + b, 0) +
-                      (selectedMenu?.price ? selectedMenu.price : 0) *
-                        noOfGuests) *
-                      0.17 -
-                    (hallCharges +
-                      selectedVenueServiceObject
-                        ?.map(
-                          (service) =>
-                            service.servicePrice *
-                            (service.duration === "Per Event" ? 1 : 3)
-                        )
-                        .reduce((a, b) => a + b, 0) +
-                      (selectedMenu?.price ? selectedMenu.price : 0) *
-                        noOfGuests -
-                      (hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests) *
-                        0.25 +
-                      (hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests) *
-                        0.17) *
-                      0.25
-                  )?.toLocaleString()}
-                </Text>
-              </Group>
-              <Divider />
-            </Paper>
-          </Stack>
+                  </Text>
+                </Group>
+                <Divider />
+              </Paper>
+            </Stack>
 
-          <Group position="center">
-            <Button
-              component={Link}
-              to="/"
-              mt="md"
-              leftIcon={<IconX />}
-              color="green"
-              // fullWidth
-              onClick={() => setConfirmBooking(false)}
-              uppercase
-            >
-              Close
-            </Button>
-          </Group>
-        </Modal>
-
-        <Paper
-          py="xl"
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          {params.bookingId ? (
-            <Title order={2} align="center" py="xl">
-              Sub Venue Booking Update
-            </Title>
-          ) : (
-            <Title order={2} align="center" py="xl">
-              Sub Venue Booking
-            </Title>
-          )}
-          <Modal
-            styles={{
-              close: {
-                color: "black",
-                backgroundColor: "#EAEAEA",
-                borderRadius: "50%",
-                "&:hover": {
-                  transition: "50ms",
-                  color: "white",
-                  backgroundColor: "red",
-                },
-              },
-            }}
-            opened={opened}
-            transition="rotate-left"
-            transitionDuration={600}
-            size={600}
-            transitionTimingFunction="ease"
-            onClose={() => setOpened(false)}
-          >
-            <Title align="center" order={3}>
-              Are You Sure You Want To Cancel?
-            </Title>
-            <Grid align="center" justify="space-around" p="md">
-              <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
-                <Button
-                  align="center"
-                  color="light"
-                  leftIcon={<IconTrashOff size={14} />}
-                  onClick={() => setOpened(false)}
-                >
-                  No, Don't Cancel
-                </Button>
-              </Grid.Col>
-              <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
-                <Button
-                  align="center"
-                  color="red"
-                  leftIcon={<IconTrash size={14} />}
-                  onClick={() => navigate("/")}
-                >
-                  Yes, Cancel
-                </Button>
-              </Grid.Col>
-            </Grid>
+            <Group position="center">
+              <Button
+                component={Link}
+                to="/"
+                mt="md"
+                leftIcon={<IconX />}
+                color="green"
+                // fullWidth
+                onClick={() => setConfirmBooking(false)}
+                uppercase
+              >
+                Close
+              </Button>
+            </Group>
           </Modal>
-          <Stepper
-            active={active}
-            onStepClick={setActive}
-            breakpoint="lg"
-            pt="xl"
+
+          <Paper
+            py="xl"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
           >
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Booking Details"
-              description="General Booking Details"
-              allowStepSelect={active > 0}
-              disabled={stepperDisabled}
+            {params.bookingId ? (
+              <Title order={2} align="center" py="xl">
+                Sub Venue Booking Update
+              </Title>
+            ) : (
+              <Title order={2} align="center" py="xl">
+                Sub Venue Booking
+              </Title>
+            )}
+            <Modal
+              styles={{
+                close: {
+                  color: "black",
+                  backgroundColor: "#EAEAEA",
+                  borderRadius: "50%",
+                  "&:hover": {
+                    transition: "50ms",
+                    color: "white",
+                    backgroundColor: "red",
+                  },
+                },
+              }}
+              opened={opened}
+              transition="rotate-left"
+              transitionDuration={600}
+              size={600}
+              transitionTimingFunction="ease"
+              onClose={() => setOpened(false)}
             >
-              <Paper
-                // p="xl"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
+              <Title align="center" order={3}>
+                Are You Sure You Want To Cancel?
+              </Title>
+              <Grid align="center" justify="space-around" p="md">
+                <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
+                  <Button
+                    align="center"
+                    color="light"
+                    leftIcon={<IconTrashOff size={14} />}
+                    onClick={() => setOpened(false)}
+                  >
+                    No, Don't Cancel
+                  </Button>
+                </Grid.Col>
+                <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
+                  <Button
+                    align="center"
+                    color="red"
+                    leftIcon={<IconTrash size={14} />}
+                    onClick={() => navigate("/")}
+                  >
+                    Yes, Cancel
+                  </Button>
+                </Grid.Col>
+              </Grid>
+            </Modal>
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              breakpoint="lg"
+              pt="xl"
+            >
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Booking Details"
+                description="General Booking Details"
+                allowStepSelect={active > 0}
+                disabled={stepperDisabled}
+              >
+                <Paper
+                  // p="xl"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <Group position="apart">
+                    <Text weight="bold" size="xl" py="md">
+                      General Booking Details
+                    </Text>
+                    <Button
+                      size="md"
+                      hidden={params.bookingId}
+                      // disabled={eventType === ""}
+                      variant="filled"
+                      color="red"
+                      // disabled={loading}
+                      // leftIcon={<X />}
+                      onClick={() => {
+                        setEventType("");
+                        form1.setFieldValue("eventType", "");
+                        form1.setFieldValue("date", null);
+                        form1.setFieldValue("time", "");
+                        form1.setFieldValue("noOfGuests", "");
+
+                        setTime("");
+                        setNoOfGuests("");
+
+                        setIdOfSelectedSubVenue("");
+                        setSelectedVenueServices([]);
+                        setSelectedVenueServiceObject([]);
+                        setIdOfSelectedMenu("");
+                        setIdOfSelectedTheme("");
+                        setTotalPrice(0);
+                        setMenuPrice(0);
+                        setChargesError("");
+                        setHallCharges(0);
+                        setHidden(true);
+                        setChecked(false);
+                        onChange("");
+                        setError("");
+                        setDisabled(false);
+
+                        // form1.reset();
+                      }}
+                    >
+                      RESET
+                    </Button>
+                  </Group>
+
+                  <form
+                    onSubmit={form1.onSubmit((values) => handleSubmit(values))}
+                  >
+                    <Grid justify="space-around" py="md">
+                      <Grid.Col lg={6}>
+                        <Select
+                          size="md"
+                          disabled={
+                            params.subVenueId
+                              ? false
+                              : idOfSelectedSubVenue !== ""
+                          }
+                          label="Event Type"
+                          placeholder="Event Type"
+                          value={eventType}
+                          // onChange={(e) => {
+                          //   console.log("event is ", e);
+                          //   setEventType(e.target.value);
+                          //   //   setValue2([]);
+                          // }}
+                          data={[
+                            {
+                              value: "MEHNDI",
+                              label: "MEHNDI",
+                            },
+                            {
+                              value: "BARAT",
+                              label: "BARAT",
+                            },
+                            {
+                              value: "WALIMA",
+                              label: "WALIMA",
+                            },
+                            {
+                              value: "SEMINAR",
+                              label: "SEMINAR",
+                            },
+                            {
+                              value: "OTHER",
+                              label: "OTHER",
+                            },
+                          ]}
+                          rightSection={<IconChevronDown size={14} />}
+                          rightSectionWidth={40}
+                          {...form1.getInputProps("eventType")}
+                        />
+                      </Grid.Col>
+
+                      <Grid.Col lg={6}>
+                        <DatePicker
+                          inputFormat="YYYY-MM-DD"
+                          size="md"
+                          disabled={
+                            params.subVenueId
+                              ? false
+                              : idOfSelectedSubVenue !== ""
+                          }
+                          minDate={dayjs(new Date())
+                            .startOf("month")
+                            .add(new Date().getDate(), "days")
+                            .toDate()}
+                          maxDate={dayjs(new Date()).add(365, "days").toDate()}
+                          placeholder="Pick date"
+                          label="Event Date"
+                          icon={<IconCalendar size={16} />}
+                          value={value1}
+                          // onChange={onChange}
+                          onInput={(e) => {
+                            onChange(e);
+                            if (!params.bookingId) {
+                              setIdOfSelectedSubVenue("");
+                              setMenuPrice(0);
+                              setHallCharges(0);
+                              setIdOfSelectedMenu("");
+                              setTotalPrice(0);
+                              setHidden(true);
+                            }
+                          }}
+                          {...form1.getInputProps("date")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col lg={6}>
+                        <Select
+                          size="md"
+                          label="Event Time"
+                          disabled={
+                            params.subVenueId
+                              ? false
+                              : idOfSelectedSubVenue !== ""
+                          }
+                          placeholder="Time"
+                          value={time}
+                          onInput={(e) => {
+                            if (!params.bookingId) {
+                              setIdOfSelectedSubVenue("");
+                              setMenuPrice(0);
+                              setHallCharges(0);
+                              setIdOfSelectedMenu("");
+                              setTotalPrice(0);
+                            }
+                          }}
+                          data={[
+                            {
+                              value: "LUNCH",
+                              label: "Lunch",
+                            },
+                            {
+                              value: "DINNER",
+                              label: "Dinner",
+                            },
+                          ]}
+                          rightSection={<IconChevronDown size={14} />}
+                          rightSectionWidth={40}
+                          {...form1.getInputProps("time")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col lg={6}>
+                        <TextInput
+                          type="number"
+                          size="md"
+                          min={49}
+                          // disabled={idOfSelectedSubVenue !== ""}
+                          value={noOfGuests}
+                          label="Number of Guests"
+                          placeholder="Enter Number of Guests"
+                          onInput={(e) => {
+                            setNoOfGuests(e.currentTarget.value);
+                            if (!params.bookingId) {
+                              setIdOfSelectedSubVenue("");
+                              setMenuPrice(0);
+                              setHallCharges(0);
+                              setIdOfSelectedMenu("");
+                              setTotalPrice(0);
+                            }
+                            setChargesError("");
+                          }}
+                          onChange={(e) => {
+                            setNoOfGuests(e.currentTarget.value);
+                          }}
+                          {...form1.getInputProps("noOfGuests")}
+                        />
+                      </Grid.Col>
+                    </Grid>
+
+                    {venueDetails?.subVenues && (
+                      <SubVenuesForBooking
+                        isUpdate={params.bookingId ? true : false}
+                        subvenueDetails={
+                          venueDetails?.subVenues ? venueDetails?.subVenues : []
+                        }
+                        setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
+                        idOfSelectedSubVenue={
+                          params.subVenueId || idOfSelectedSubVenue
+                        }
+                        bookedDateAndTime={bookedDateAndTime}
+                        bookingDateAndTime={bookingDateAndTime}
+                        noOfGuests={form1.values.noOfGuests}
+                        setHidden={setHidden}
+                        error={error}
+                        setError={setError}
+                        setDisabled={setDisabled}
+                        setChargesError={setChargesError}
+                        hallCharges={hallCharges}
+                        setHallCharges={setHallCharges}
+                        setNoOfGuests={setNoOfGuests}
+                        hideSelectButton={hideSelectButton}
+                        time={time}
+                        form1={form1}
+                      />
+                    )}
+
+                    <Text align="center" color="red">
+                      {chargesError}
+                    </Text>
+                    <Grid justify="flex-end" py="md">
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="red"
+                          leftIcon={<IconX />}
+                          onClick={() => setOpened(true)}
+                        >
+                          CANCEL
+                        </Button>
+                      </Grid.Col>
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="dark"
+                          type="submit"
+                          disabled={disabled || !idOfSelectedSubVenue}
+                          // loading={loading}
+                          rightIcon={<IconArrowRight />}
+                          // onClick={nextStep}
+                        >
+                          NEXT
+                        </Button>
+                      </Grid.Col>
+                    </Grid>
+                  </form>
+                </Paper>
+              </Stepper.Step>
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Select Services"
+                description="Select Venue Services"
+                allowStepSelect={active > 1}
+                disabled={stepperDisabled}
               >
                 <Group position="apart">
                   <Text weight="bold" size="xl" py="md">
-                    General Booking Details
+                    What Services Do You Want To Avail?
                   </Text>
-                  <Button
-                    size="md"
-                    hidden={params.bookingId}
-                    // disabled={eventType === ""}
-                    variant="filled"
-                    color="red"
-                    // disabled={loading}
-                    // leftIcon={<X />}
-                    onClick={() => {
-                      setEventType("");
-                      form1.setFieldValue("eventType", "");
-                      form1.setFieldValue("date", null);
-                      form1.setFieldValue("time", "");
-                      form1.setFieldValue("noOfGuests", "");
-
-                      setTime("");
-                      setNoOfGuests("");
-
-                      setIdOfSelectedSubVenue("");
-                      setSelectedVenueServices([]);
-                      setSelectedVenueServiceObject([]);
-                      setIdOfSelectedMenu("");
-                      setIdOfSelectedTheme("");
-                      setTotalPrice(0);
-                      setMenuPrice(0);
-                      setChargesError("");
-                      setHallCharges(0);
-                      setHidden(true);
-                      setChecked(false);
-                      onChange("");
-                      setError("");
-                      setDisabled(false);
-
-                      // form1.reset();
-                    }}
-                  >
-                    RESET
-                  </Button>
+                  <Text weight="bold" size="xl" py="md" color="red">
+                    Total{" "}
+                    <b>
+                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                    </b>
+                  </Text>
                 </Group>
-
-                <form
-                  onSubmit={form1.onSubmit((values) => handleSubmit(values))}
-                >
-                  <Grid justify="space-around" py="md">
-                    <Grid.Col lg={6}>
-                      <Select
+                <Paper pb="xl">
+                  <Grid>
+                    <Grid.Col lg={hidden ? 12 : 6}>
+                      <Checkbox
                         size="md"
-                        disabled={
-                          params.subVenueId
-                            ? false
-                            : idOfSelectedSubVenue !== ""
+                        label="Select All"
+                        checked={checked}
+                        onChange={(event) =>
+                          setChecked(event.currentTarget.checked)
                         }
-                        label="Event Type"
-                        placeholder="Event Type"
-                        value={eventType}
-                        // onChange={(e) => {
-                        //   console.log("event is ", e);
-                        //   setEventType(e.target.value);
-                        //   //   setValue2([]);
-                        // }}
-                        data={[
-                          {
-                            value: "MEHNDI",
-                            label: "MEHNDI",
-                          },
-                          {
-                            value: "BARAT",
-                            label: "BARAT",
-                          },
-                          {
-                            value: "WALIMA",
-                            label: "WALIMA",
-                          },
-                          {
-                            value: "SEMINAR",
-                            label: "SEMINAR",
-                          },
-                          {
-                            value: "OTHER",
-                            label: "OTHER",
-                          },
-                        ]}
-                        rightSection={<IconChevronDown size={14} />}
-                        rightSectionWidth={40}
-                        {...form1.getInputProps("eventType")}
+                        onClick={() => {
+                          const SelectedVenueServiceObjects =
+                            venueDetails?.subVenues?.filter(
+                              (f) => f._id === idOfSelectedSubVenue
+                            )[0]?.subVenueServices;
+                          if (!checked) {
+                            setSelectedVenueServices(
+                              venueDetails?.subVenues
+                                ?.filter(
+                                  (f) => f._id === idOfSelectedSubVenue
+                                )[0]
+                                ?.subVenueServices.map((m) => m.serviceTitle)
+                            );
+
+                            console.log("555555", SelectedVenueServiceObjects);
+                            setSelectedVenueServiceObject(
+                              SelectedVenueServiceObjects
+                            );
+
+                            setTotalPrice(
+                              SelectedVenueServiceObjects.reduce(
+                                (acc, curr) => {
+                                  const price =
+                                    curr.duration === "Per Hour"
+                                      ? acc + curr.servicePrice * 3
+                                      : acc + curr.servicePrice;
+                                  return price;
+                                },
+                                0
+                              )
+                            );
+                          } else {
+                            setSelectedVenueServices([]);
+                            setSelectedVenueServiceObject([]);
+                            setTotalPrice(
+                              totalPrice -
+                                SelectedVenueServiceObjects.reduce(
+                                  (acc, curr) => {
+                                    const price =
+                                      curr.duration === "Per Hour"
+                                        ? acc + curr.servicePrice * 3
+                                        : acc + curr.servicePrice;
+                                    return price;
+                                  },
+                                  0
+                                )
+                            );
+                          }
+                        }}
                       />
-                    </Grid.Col>
-
-                    <Grid.Col lg={6}>
-                      <DatePicker
-                        inputFormat="YYYY-MM-DD"
-                        size="md"
-                        disabled={
-                          params.subVenueId
-                            ? false
-                            : idOfSelectedSubVenue !== ""
-                        }
-                        minDate={dayjs(new Date())
-                          .startOf("month")
-                          .add(new Date().getDate(), "days")
-                          .toDate()}
-                        maxDate={dayjs(new Date()).add(365, "days").toDate()}
-                        placeholder="Pick date"
-                        label="Event Date"
-                        icon={<IconCalendar size={16} />}
-                        value={value1}
-                        // onChange={onChange}
-                        onInput={(e) => {
-                          onChange(e);
-                          if (!params.bookingId) {
-                            setIdOfSelectedSubVenue("");
-                            setMenuPrice(0);
-                            setHallCharges(0);
-                            setIdOfSelectedMenu("");
-                            setTotalPrice(0);
+                      <Checkbox.Group
+                        value={selectedVenueServices}
+                        onChange={(e) => {
+                          if (e.length > 0) {
+                            setHidden(false);
+                          } else {
                             setHidden(true);
                           }
-                        }}
-                        {...form1.getInputProps("date")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col lg={6}>
-                      <Select
-                        size="md"
-                        label="Event Time"
-                        disabled={
-                          params.subVenueId
-                            ? false
-                            : idOfSelectedSubVenue !== ""
-                        }
-                        placeholder="Time"
-                        value={time}
-                        onInput={(e) => {
-                          if (!params.bookingId) {
-                            setIdOfSelectedSubVenue("");
-                            setMenuPrice(0);
-                            setHallCharges(0);
-                            setIdOfSelectedMenu("");
-                            setTotalPrice(0);
-                          }
-                        }}
-                        data={[
-                          {
-                            value: "LUNCH",
-                            label: "Lunch",
-                          },
-                          {
-                            value: "DINNER",
-                            label: "Dinner",
-                          },
-                        ]}
-                        rightSection={<IconChevronDown size={14} />}
-                        rightSectionWidth={40}
-                        {...form1.getInputProps("time")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col lg={6}>
-                      <TextInput
-                        type="number"
-                        size="md"
-                        min={49}
-                        // disabled={idOfSelectedSubVenue !== ""}
-                        value={noOfGuests}
-                        label="Number of Guests"
-                        placeholder="Enter Number of Guests"
-                        onInput={(e) => {
-                          setNoOfGuests(e.currentTarget.value);
-                          if (!params.bookingId) {
-                            setIdOfSelectedSubVenue("");
-                            setMenuPrice(0);
-                            setHallCharges(0);
-                            setIdOfSelectedMenu("");
-                            setTotalPrice(0);
-                          }
-                          setChargesError("");
-                        }}
-                        onChange={(e) => {
-                          setNoOfGuests(e.currentTarget.value);
-                        }}
-                        {...form1.getInputProps("noOfGuests")}
-                      />
-                    </Grid.Col>
-                  </Grid>
-
-                  {venueDetails?.subVenues && (
-                    <SubVenuesForBooking
-                      isUpdate={params.bookingId ? true : false}
-                      subvenueDetails={
-                        venueDetails?.subVenues ? venueDetails?.subVenues : []
-                      }
-                      setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
-                      idOfSelectedSubVenue={
-                        params.subVenueId || idOfSelectedSubVenue
-                      }
-                      bookedDateAndTime={bookedDateAndTime}
-                      bookingDateAndTime={bookingDateAndTime}
-                      noOfGuests={form1.values.noOfGuests}
-                      setHidden={setHidden}
-                      error={error}
-                      setError={setError}
-                      setDisabled={setDisabled}
-                      setChargesError={setChargesError}
-                      hallCharges={hallCharges}
-                      setHallCharges={setHallCharges}
-                      setNoOfGuests={setNoOfGuests}
-                      hideSelectButton={hideSelectButton}
-                      time={time}
-                      form1={form1}
-                    />
-                  )}
-
-                  <Text align="center" color="red">
-                    {chargesError}
-                  </Text>
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        leftIcon={<IconX />}
-                        onClick={() => setOpened(true)}
-                      >
-                        CANCEL
-                      </Button>
-                    </Grid.Col>
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        type="submit"
-                        disabled={disabled || !idOfSelectedSubVenue}
-                        // loading={loading}
-                        rightIcon={<IconArrowRight />}
-                        // onClick={nextStep}
-                      >
-                        NEXT
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
-                </form>
-              </Paper>
-            </Stepper.Step>
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Select Services"
-              description="Select Venue Services"
-              allowStepSelect={active > 1}
-              disabled={stepperDisabled}
-            >
-              <Group position="apart">
-                <Text weight="bold" size="xl" py="md">
-                  What Services Do You Want To Avail?
-                </Text>
-                <Text weight="bold" size="xl" py="md" color="red">
-                  Total{" "}
-                  <b>Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}</b>
-                </Text>
-              </Group>
-              <Paper pb="xl">
-                <Grid>
-                  <Grid.Col lg={hidden ? 12 : 6}>
-                    <Checkbox
-                      size="md"
-                      label="Select All"
-                      checked={checked}
-                      onChange={(event) =>
-                        setChecked(event.currentTarget.checked)
-                      }
-                      onClick={() => {
-                        const SelectedVenueServiceObjects =
-                          venueDetails?.subVenues?.filter(
-                            (f) => f._id === idOfSelectedSubVenue
-                          )[0]?.subVenueServices;
-                        if (!checked) {
-                          setSelectedVenueServices(
+                          setSelectedVenueServices(e);
+                          const SelectedVenueServiceObjects =
                             venueDetails?.subVenues
                               ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
-                              ?.subVenueServices.map((m) => m.serviceTitle)
-                          );
-
+                              ?.subVenueServices.filter((g) =>
+                                e.includes(g.serviceTitle)
+                              );
                           console.log("555555", SelectedVenueServiceObjects);
                           setSelectedVenueServiceObject(
                             SelectedVenueServiceObjects
@@ -1544,416 +1608,132 @@ const NewBookingFile = () => {
                               return price;
                             }, 0)
                           );
-                        } else {
-                          setSelectedVenueServices([]);
-                          setSelectedVenueServiceObject([]);
-                          setTotalPrice(
-                            totalPrice -
-                              SelectedVenueServiceObjects.reduce(
-                                (acc, curr) => {
-                                  const price =
-                                    curr.duration === "Per Hour"
-                                      ? acc + curr.servicePrice * 3
-                                      : acc + curr.servicePrice;
-                                  return price;
-                                },
-                                0
-                              )
-                          );
-                        }
-                      }}
-                    />
-                    <Checkbox.Group
-                      value={selectedVenueServices}
-                      onChange={(e) => {
-                        if (e.length > 0) {
-                          setHidden(false);
-                        } else {
-                          setHidden(true);
-                        }
-                        setSelectedVenueServices(e);
-                        const SelectedVenueServiceObjects =
-                          venueDetails?.subVenues
-                            ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
-                            ?.subVenueServices.filter((g) =>
-                              e.includes(g.serviceTitle)
-                            );
-                        console.log("555555", SelectedVenueServiceObjects);
-                        setSelectedVenueServiceObject(
-                          SelectedVenueServiceObjects
-                        );
-
-                        setTotalPrice(
-                          SelectedVenueServiceObjects.reduce((acc, curr) => {
-                            const price =
-                              curr.duration === "Per Hour"
-                                ? acc + curr.servicePrice * 3
-                                : acc + curr.servicePrice;
-                            return price;
-                          }, 0)
-                        );
-                      }}
-                      size="md"
-                      pb="xl"
-                    >
-                      <Grid>
-                        {venueDetails?.subVenues
-                          ?.filter((e) => e._id === idOfSelectedSubVenue)[0]
-                          ?.subVenueServices.map((row, index) => {
-                            return (
-                              <Grid.Col lg={12} key={index}>
-                                <Group>
-                                  <Checkbox
-                                    key={row.serviceTitle}
-                                    value={row.serviceTitle}
-                                    label={
-                                      <Paper
-                                        style={{
-                                          display: "flex",
-
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <Avatar
-                                          src={row.coverImage}
-                                          alt="it's me"
-                                        />
-                                        <div
+                        }}
+                        size="md"
+                        pb="xl"
+                      >
+                        <Grid>
+                          {venueDetails?.subVenues
+                            ?.filter((e) => e._id === idOfSelectedSubVenue)[0]
+                            ?.subVenueServices.map((row, index) => {
+                              return (
+                                <Grid.Col lg={12} key={index}>
+                                  <Group>
+                                    <Checkbox
+                                      key={row.serviceTitle}
+                                      value={row.serviceTitle}
+                                      label={
+                                        <Paper
                                           style={{
-                                            paddingLeft: "1rem",
+                                            display: "flex",
+
+                                            alignItems: "center",
                                           }}
                                         >
-                                          <Text align="justify">
-                                            {row.serviceTitle}{" "}
-                                            <b>
-                                              (Rs.{" "}
-                                              {row.servicePrice === 0
-                                                ? "Complimentary"
-                                                : row.servicePrice}
-                                              )
-                                            </b>
-                                          </Text>
-
-                                          <Text
-                                            align="justify"
-                                            size="xs"
-                                            color="dimmed"
+                                          <Avatar
+                                            src={row.coverImage}
+                                            alt="it's me"
+                                          />
+                                          <div
+                                            style={{
+                                              paddingLeft: "1rem",
+                                            }}
                                           >
-                                            {row.serviceDescription}
-                                          </Text>
-                                        </div>
-                                      </Paper>
-                                    }
-                                    pr="md"
-                                  />
-                                </Group>
-                              </Grid.Col>
-                            );
-                          })}
-                      </Grid>
-                    </Checkbox.Group>
-                  </Grid.Col>
-                  {!hidden && matches1200 && (
-                    <Grid.Col lg={6}>
-                      <Paper withBorder radius="xl" p="xl">
-                        <Grid justify="flex-end">
-                          <Grid.Col lg={5}>
-                            <Text weight="bold">Service Name</Text>
-                          </Grid.Col>
-                          <Grid.Col lg={2}>
-                            <Text weight="bold"> Cost</Text>
-                          </Grid.Col>
-                          <Grid.Col lg={2}>
-                            <Text weight="bold">Multiple</Text>
-                          </Grid.Col>
-                          <Grid.Col lg={3}>
-                            <Text weight="bold">Total Cost</Text>
-                          </Grid.Col>
+                                            <Text align="justify">
+                                              {row.serviceTitle}{" "}
+                                              <b>
+                                                (Rs.{" "}
+                                                {row.servicePrice === 0
+                                                  ? "Complimentary"
+                                                  : row.servicePrice}
+                                                )
+                                              </b>
+                                            </Text>
+
+                                            <Text
+                                              align="justify"
+                                              size="xs"
+                                              color="dimmed"
+                                            >
+                                              {row.serviceDescription}
+                                            </Text>
+                                          </div>
+                                        </Paper>
+                                      }
+                                      pr="md"
+                                    />
+                                  </Group>
+                                </Grid.Col>
+                              );
+                            })}
                         </Grid>
-                        <Divider p="sm" />
-
-                        <Grid>
-                          {selectedVenueServiceObject?.map((service, index) => (
-                            <>
-                              <Grid.Col lg={5} key={index}>
-                                <Text weight="bold">
-                                  <Text>{service.serviceTitle}</Text>
-                                </Text>
-                              </Grid.Col>
-
-                              <Grid.Col lg={2}>
-                                <Text>Rs. {service.servicePrice}</Text>
-                              </Grid.Col>
-                              <Grid.Col lg={2}>
-                                {service.duration === "Per Hour" ? (
-                                  <Text>3 Hours</Text>
-                                ) : (
-                                  <Text>1 Event</Text>
-                                )}
-                              </Grid.Col>
-                              <Grid.Col lg={3}>
-                                {service.duration === "Per Hour" ? (
-                                  <Text>Rs. {service.servicePrice * 3}</Text>
-                                ) : (
-                                  <Text>Rs. {service.servicePrice}</Text>
-                                )}
-                              </Grid.Col>
-                            </>
-                          ))}
-                        </Grid>
-                        <Divider p="sm" />
-
-                        <Grid>
-                          <Grid.Col lg={9}>
-                            <Text weight="bold">Total Price Of Services</Text>
-                          </Grid.Col>
-                          <Grid.Col lg={3}>
-                            <Text weight="bold">Rs. {totalPrice}</Text>
-                          </Grid.Col>
-                        </Grid>
-                      </Paper>
+                      </Checkbox.Group>
                     </Grid.Col>
-                  )}
-                </Grid>
-                <Grid justify="flex-end" py="md">
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="red"
-                      // disabled={loading}
-                      leftIcon={<IconArrowLeft />}
-                      onClick={prevStep}
-                    >
-                      BACK
-                    </Button>
-                  </Grid.Col>
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="dark"
-                      rightIcon={<IconArrowRight />}
-                      onClick={nextStep}
-                    >
-                      NEXT
-                    </Button>
-                  </Grid.Col>
-                </Grid>
-              </Paper>
-            </Stepper.Step>
-            {venueDetails?.menus?.length !== 0 && (
-              <Stepper.Step
-                color={!stepperDisabled ? "grape" : "gray"}
-                label="Menu Selection"
-                description="Select A Menu"
-                allowStepSelect={active > 2}
-                disabled={stepperDisabled}
-              >
-                <Paper pb="xl">
-                  <Group position="apart">
-                    <Text weight="bold" size="xl" py="md">
-                      Menu Selection
-                    </Text>
-                    <Text weight="bold" size="xl" py="md" color="red">
-                      Total{" "}
-                      <b>
-                        Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
-                      </b>
-                    </Text>
-                  </Group>
-                  {idOfSelectedMenu === "" && (
-                    <Text size="xl" color="red" weight="bold">
-                      Please Select A Menu{" "}
-                    </Text>
-                  )}
-                </Paper>
+                    {!hidden && matches1200 && (
+                      <Grid.Col lg={6}>
+                        <Paper withBorder radius="xl" p="xl">
+                          <Grid justify="flex-end">
+                            <Grid.Col lg={5}>
+                              <Text weight="bold">Service Name</Text>
+                            </Grid.Col>
+                            <Grid.Col lg={2}>
+                              <Text weight="bold"> Cost</Text>
+                            </Grid.Col>
+                            <Grid.Col lg={2}>
+                              <Text weight="bold">Multiple</Text>
+                            </Grid.Col>
+                            <Grid.Col lg={3}>
+                              <Text weight="bold">Total Cost</Text>
+                            </Grid.Col>
+                          </Grid>
+                          <Divider p="sm" />
 
-                <MenusOfSpecificVenueForBooking
-                  menus={venueDetails?.menus}
-                  setIdOfSelectedMenu={setIdOfSelectedMenu}
-                  idOfSelectedMenu={idOfSelectedMenu}
-                  setMenuPrice={setMenuPrice}
-                  setSelectedMenu={setSelectedMenu}
-                  noOfGuests={noOfGuests}
-                />
-                <Grid justify="flex-end" py="md">
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="red"
-                      // disabled={loading}
-                      leftIcon={<IconArrowLeft />}
-                      onClick={prevStep}
-                    >
-                      BACK
-                    </Button>
-                  </Grid.Col>
+                          <Grid>
+                            {selectedVenueServiceObject?.map(
+                              (service, index) => (
+                                <>
+                                  <Grid.Col lg={5} key={index}>
+                                    <Text weight="bold">
+                                      <Text>{service.serviceTitle}</Text>
+                                    </Text>
+                                  </Grid.Col>
 
-                  {idOfSelectedMenu === "" ? (
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        rightIcon={<IconArrowRight />}
-                        onClick={() => {
-                          setMenuPrice(0);
-                          setIdOfSelectedMenu("");
-                          setSelectedMenu("");
-                          nextStep();
-                        }}
-                      >
-                        Skip
-                      </Button>
-                    </Grid.Col>
-                  ) : (
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        rightIcon={<IconArrowRight />}
-                        onClick={handleMenuSelect}
-                      >
-                        NEXT
-                      </Button>
-                    </Grid.Col>
-                  )}
-                </Grid>
-              </Stepper.Step>
-            )}
-            {venueDetails?.themes?.length !== 0 && (
-              <Stepper.Step
-                color={!stepperDisabled ? "grape" : "gray"}
-                label="Theme Selection"
-                description="Select A Theme"
-                allowStepSelect={active > 2}
-                disabled={stepperDisabled}
-              >
-                <Paper pb="xl">
-                  <Group position="apart">
-                    <Text weight="bold" size="xl" py="md">
-                      Theme Selection
-                    </Text>
-                    <Text weight="bold" size="xl" py="md" color="red">
-                      Total{" "}
-                      <b>
-                        Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
-                      </b>
-                    </Text>
-                  </Group>
-                  {idOfSelectedTheme === "" && (
-                    <Text size="xl" color="red" weight="bold">
-                      Please Select A Theme{" "}
-                    </Text>
-                  )}
-                </Paper>
+                                  <Grid.Col lg={2}>
+                                    <Text>Rs. {service.servicePrice}</Text>
+                                  </Grid.Col>
+                                  <Grid.Col lg={2}>
+                                    {service.duration === "Per Hour" ? (
+                                      <Text>3 Hours</Text>
+                                    ) : (
+                                      <Text>1 Event</Text>
+                                    )}
+                                  </Grid.Col>
+                                  <Grid.Col lg={3}>
+                                    {service.duration === "Per Hour" ? (
+                                      <Text>
+                                        Rs. {service.servicePrice * 3}
+                                      </Text>
+                                    ) : (
+                                      <Text>Rs. {service.servicePrice}</Text>
+                                    )}
+                                  </Grid.Col>
+                                </>
+                              )
+                            )}
+                          </Grid>
+                          <Divider p="sm" />
 
-                <ThemesOfSpecificVenueForBooking
-                  themes={venueDetails?.themes}
-                  setIdOfSelectedTheme={setIdOfSelectedTheme}
-                  idOfSelectedTheme={idOfSelectedTheme}
-                  setSelectedTheme={setSelectedTheme}
-                  selectedTheme={selectedTheme}
-                />
-
-                <Grid justify="flex-end" py="md">
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="red"
-                      // disabled={loading}
-                      leftIcon={<IconArrowLeft />}
-                      onClick={prevStep}
-                    >
-                      BACK
-                    </Button>
-                  </Grid.Col>
-
-                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                    <Button
-                      size="md"
-                      fullWidth
-                      variant="filled"
-                      color="dark"
-                      rightIcon={<IconArrowRight />}
-                      onClick={nextStep}
-                    >
-                      NEXT
-                    </Button>
-                  </Grid.Col>
-                </Grid>
-              </Stepper.Step>
-            )}
-
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Contact Information"
-              description="Contact Information"
-              allowStepSelect={active > 3}
-              disabled={stepperDisabled}
-            >
-              <Group position="apart">
-                <Text weight="bold" size="xl" py="md">
-                  Contact Details and Booking Description
-                </Text>
-                <Text weight="bold" size="xl" py="md" color="red">
-                  Total{" "}
-                  <b>Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}</b>
-                </Text>
-              </Group>
-              <Paper py="xl">
-                <form
-                  onSubmit={form.onSubmit((values) => handleSubmit1(values))}
-                >
-                  <Grid>
-                    <Grid.Col md={12} lg={6}>
-                      <TextInput
-                        size="md"
-                        required
-                        type="number"
-                        label="Contact Number"
-                        placeholder="03XXXXXXXX"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        {...form.getInputProps("phone")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col md={12} lg={6}>
-                      <TextInput
-                        size="md"
-                        placeholder="abc@gmail.com"
-                        value={email}
-                        required
-                        label="Email Address"
-                        onChange={(e) => setEmail(e.target.value)}
-                        {...form.getInputProps("email")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col md={12} lg={12}>
-                      <Textarea
-                        size="md"
-                        placeholder="Describe Your Event"
-                        value={description}
-                        required
-                        minRows={3}
-                        maxRows={10}
-                        maxLength={1000}
-                        autosize
-                        label="Booking Description"
-                        onChange={(e) => setDescription(e.target.value)}
-                        {...form.getInputProps("description")}
-                      />
-                    </Grid.Col>
+                          <Grid>
+                            <Grid.Col lg={9}>
+                              <Text weight="bold">Total Price Of Services</Text>
+                            </Grid.Col>
+                            <Grid.Col lg={3}>
+                              <Text weight="bold">Rs. {totalPrice}</Text>
+                            </Grid.Col>
+                          </Grid>
+                        </Paper>
+                      </Grid.Col>
+                    )}
                   </Grid>
                   <Grid justify="flex-end" py="md">
                     <Grid.Col xs={6} sm={3} md={3} lg={3}>
@@ -1975,84 +1755,230 @@ const NewBookingFile = () => {
                         fullWidth
                         variant="filled"
                         color="dark"
-                        type="submit"
                         rightIcon={<IconArrowRight />}
+                        onClick={nextStep}
                       >
                         NEXT
                       </Button>
                     </Grid.Col>
                   </Grid>
-                </form>
-              </Paper>
-            </Stepper.Step>
-
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Payment Details"
-              description="Please proceed with the minimum"
-              allowStepSelect={active > 4}
-              disabled={stepperDisabled}
-            >
-              <Paper py="xl">
-                <form
-                  onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+                </Paper>
+              </Stepper.Step>
+              {venueDetails?.menus?.length !== 0 && (
+                <Stepper.Step
+                  color={!stepperDisabled ? "grape" : "gray"}
+                  label="Menu Selection"
+                  description="Select A Menu"
+                  allowStepSelect={active > 2}
+                  disabled={stepperDisabled}
                 >
-                  <Group position="apart">
-                    {params.bookingId ? (
+                  <Paper pb="xl">
+                    <Group position="apart">
                       <Text weight="bold" size="xl" py="md">
-                        Review And Confirm
+                        Menu Selection
                       </Text>
-                    ) : (
-                      <Group>
-                        <Text weight="bold" size="xl" py="md">
-                          Review And
-                        </Text>
+                      <Text weight="bold" size="xl" py="md" color="red">
+                        Total{" "}
+                        <b>
+                          Rs.{" "}
+                          {hallCharges + totalPrice + menuPrice * noOfGuests}
+                        </b>
+                      </Text>
+                    </Group>
+                    {idOfSelectedMenu === "" && (
+                      <Text size="xl" color="red" weight="bold">
+                        Please Select A Menu{" "}
+                      </Text>
+                    )}
+                  </Paper>
 
+                  <MenusOfSpecificVenueForBooking
+                    menus={venueDetails?.menus}
+                    setIdOfSelectedMenu={setIdOfSelectedMenu}
+                    idOfSelectedMenu={idOfSelectedMenu}
+                    setMenuPrice={setMenuPrice}
+                    setSelectedMenu={setSelectedMenu}
+                    noOfGuests={noOfGuests}
+                  />
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        // disabled={loading}
+                        leftIcon={<IconArrowLeft />}
+                        onClick={prevStep}
+                      >
+                        BACK
+                      </Button>
+                    </Grid.Col>
+
+                    {idOfSelectedMenu === "" ? (
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
                         <Button
-                          rightIcon={
-                            <div className="xyz">
-                              <IconArrowDown />
-                            </div>
-                          }
-                          onClick={() =>
-                            scrollIntoView({ alignment: "center" })
-                          }
-                          style={{
-                            background: "#E60084",
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="dark"
+                          rightIcon={<IconArrowRight />}
+                          onClick={() => {
+                            setMenuPrice(0);
+                            setIdOfSelectedMenu("");
+                            setSelectedMenu("");
+                            nextStep();
                           }}
                         >
-                          Pay
+                          Skip
                         </Button>
-                      </Group>
+                      </Grid.Col>
+                    ) : (
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="dark"
+                          rightIcon={<IconArrowRight />}
+                          onClick={handleMenuSelect}
+                        >
+                          NEXT
+                        </Button>
+                      </Grid.Col>
                     )}
+                  </Grid>
+                </Stepper.Step>
+              )}
+              {venueDetails?.themes?.length !== 0 && (
+                <Stepper.Step
+                  color={!stepperDisabled ? "grape" : "gray"}
+                  label="Theme Selection"
+                  description="Select A Theme"
+                  allowStepSelect={active > 2}
+                  disabled={stepperDisabled}
+                >
+                  <Paper pb="xl">
+                    <Group position="apart">
+                      <Text weight="bold" size="xl" py="md">
+                        Theme Selection
+                      </Text>
+                      <Text weight="bold" size="xl" py="md" color="red">
+                        Total{" "}
+                        <b>
+                          Rs.{" "}
+                          {hallCharges + totalPrice + menuPrice * noOfGuests}
+                        </b>
+                      </Text>
+                    </Group>
+                    {idOfSelectedTheme === "" && (
+                      <Text size="xl" color="red" weight="bold">
+                        Please Select A Theme{" "}
+                      </Text>
+                    )}
+                  </Paper>
 
-                    <Text weight="bold" color="red" size="xl" py="md">
-                      Total Cost Rs.{" "}
-                      {totalPrice + hallCharges + menuPrice * noOfGuests}
-                    </Text>
-                  </Group>
-                  <BookingReviewInvoice
-                    // allVenues={allVenues}
-                    // allSubVenues={allSubVenues}
-                    // allCustomers={allCustomers}
-                    selectedVenueServiceObject={selectedVenueServiceObject}
-                    venue={venue}
-                    idOfSelectedSubVenue={idOfSelectedSubVenue}
-                    value1={value1}
-                    time={time}
-                    eventType={eventType}
-                    noOfGuests={noOfGuests}
-                    hallCharges={hallCharges}
-                    selectedMenu={selectedMenu}
-                    menuPrice={menuPrice}
-                    totalPrice={totalPrice}
-                    customer={customer}
-                    phone={phone}
-                    email={email}
-                    description={description}
-                    step={6}
+                  <ThemesOfSpecificVenueForBooking
+                    themes={venueDetails?.themes}
+                    setIdOfSelectedTheme={setIdOfSelectedTheme}
+                    idOfSelectedTheme={idOfSelectedTheme}
+                    setSelectedTheme={setSelectedTheme}
+                    selectedTheme={selectedTheme}
                   />
-                  {params.bookingId ? (
+
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        // disabled={loading}
+                        leftIcon={<IconArrowLeft />}
+                        onClick={prevStep}
+                      >
+                        BACK
+                      </Button>
+                    </Grid.Col>
+
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        rightIcon={<IconArrowRight />}
+                        onClick={nextStep}
+                      >
+                        NEXT
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </Stepper.Step>
+              )}
+
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Contact Information"
+                description="Contact Information"
+                allowStepSelect={active > 3}
+                disabled={stepperDisabled}
+              >
+                <Group position="apart">
+                  <Text weight="bold" size="xl" py="md">
+                    Contact Details and Booking Description
+                  </Text>
+                  <Text weight="bold" size="xl" py="md" color="red">
+                    Total{" "}
+                    <b>
+                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                    </b>
+                  </Text>
+                </Group>
+                <Paper py="xl">
+                  <form
+                    onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+                  >
+                    <Grid>
+                      <Grid.Col md={12} lg={6}>
+                        <TextInput
+                          size="md"
+                          required
+                          type="number"
+                          label="Contact Number"
+                          placeholder="03XXXXXXXX"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          {...form.getInputProps("phone")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col md={12} lg={6}>
+                        <TextInput
+                          size="md"
+                          placeholder="abc@gmail.com"
+                          value={email}
+                          required
+                          label="Email Address"
+                          onChange={(e) => setEmail(e.target.value)}
+                          {...form.getInputProps("email")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col md={12} lg={12}>
+                        <Textarea
+                          size="md"
+                          placeholder="Describe Your Event"
+                          value={description}
+                          required
+                          minRows={3}
+                          maxRows={10}
+                          maxLength={1000}
+                          autosize
+                          label="Booking Description"
+                          onChange={(e) => setDescription(e.target.value)}
+                          {...form.getInputProps("description")}
+                        />
+                      </Grid.Col>
+                    </Grid>
                     <Grid justify="flex-end" py="md">
                       <Grid.Col xs={6} sm={3} md={3} lg={3}>
                         <Button
@@ -2073,79 +1999,184 @@ const NewBookingFile = () => {
                           fullWidth
                           variant="filled"
                           color="dark"
-                          onClick={() => {
-                            updateSubVenueBooking();
-                          }}
+                          type="submit"
                           rightIcon={<IconArrowRight />}
                         >
-                          UPDATE
+                          NEXT
                         </Button>
                       </Grid.Col>
                     </Grid>
-                  ) : (
-                    <>
-                      <Text weight="bold" size="xl" py="lg">
-                        Pay With Stripe
-                      </Text>
-                      <Grid>
-                        <Grid.Col md={12} lg={6}>
-                          <Paper
-                            p="sm"
-                            withBorder
-                            shadow="md"
+                  </form>
+                </Paper>
+              </Stepper.Step>
+
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Payment Details"
+                description="Please proceed with the minimum"
+                allowStepSelect={active > 4}
+                disabled={stepperDisabled}
+              >
+                <Paper py="xl">
+                  <form
+                    onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+                  >
+                    <Group position="apart">
+                      {params.bookingId ? (
+                        <Text weight="bold" size="xl" py="md">
+                          Review And Confirm
+                        </Text>
+                      ) : (
+                        <Group>
+                          <Text weight="bold" size="xl" py="md">
+                            Review And
+                          </Text>
+
+                          <Button
+                            rightIcon={
+                              <div className="xyz">
+                                <IconArrowDown />
+                              </div>
+                            }
+                            onClick={() =>
+                              scrollIntoView({ alignment: "center" })
+                            }
                             style={{
-                              width: "100%",
-                              height: "100%",
+                              background: "#E60084",
                             }}
                           >
-                            <Title className={classes.title} order={2} pt="sm">
-                              Payment Breakdown
-                            </Title>
+                            Pay
+                          </Button>
+                        </Group>
+                      )}
 
-                            <SimpleGrid
-                              cols={1}
-                              spacing={20}
-                              breakpoints={[
-                                { maxWidth: 550, cols: 1, spacing: 40 },
-                              ]}
-                              style={{ marginTop: 30 }}
-                            >
-                              {items}
-                            </SimpleGrid>
-                          </Paper>
+                      <Text weight="bold" color="red" size="xl" py="md">
+                        Total Cost Rs.{" "}
+                        {totalPrice + hallCharges + menuPrice * noOfGuests}
+                      </Text>
+                    </Group>
+                    <BookingReviewInvoice
+                      // allVenues={allVenues}
+                      // allSubVenues={allSubVenues}
+                      // allCustomers={allCustomers}
+                      selectedVenueServiceObject={selectedVenueServiceObject}
+                      venue={venue}
+                      idOfSelectedSubVenue={idOfSelectedSubVenue}
+                      value1={value1}
+                      time={time}
+                      eventType={eventType}
+                      noOfGuests={noOfGuests}
+                      hallCharges={hallCharges}
+                      selectedMenu={selectedMenu}
+                      menuPrice={menuPrice}
+                      totalPrice={totalPrice}
+                      customer={customer}
+                      phone={phone}
+                      email={email}
+                      description={description}
+                      step={6}
+                    />
+                    {params.bookingId ? (
+                      <Grid justify="flex-end" py="md">
+                        <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                          <Button
+                            size="md"
+                            fullWidth
+                            variant="filled"
+                            color="red"
+                            // disabled={loading}
+                            leftIcon={<IconArrowLeft />}
+                            onClick={prevStep}
+                          >
+                            BACK
+                          </Button>
                         </Grid.Col>
-                        <Grid.Col md={12} lg={6} ref={targetRef}>
-                          <StripePromise
-                            paidSuccessfully={paidSuccessfully}
-                            setPaidSuccessfully={setPaidSuccessfully}
-                            onClickBack={prevStep}
-                            // setConfirmBooking={setConfirmBooking}
-                            // start={start}
-                            amountPayable={
-                              (hallCharges +
-                                totalPrice +
-                                menuPrice * noOfGuests +
-                                (hallCharges +
-                                  totalPrice +
-                                  menuPrice * noOfGuests) *
-                                  taxPercentage -
-                                (hallCharges +
-                                  totalPrice +
-                                  menuPrice * noOfGuests) *
-                                  discountPercentage) *
-                              bookingPercentage
-                            }
-                          />
+                        <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                          <Button
+                            size="md"
+                            fullWidth
+                            variant="filled"
+                            color="dark"
+                            onClick={() => {
+                              updateSubVenueBooking();
+                            }}
+                            rightIcon={<IconArrowRight />}
+                          >
+                            UPDATE
+                          </Button>
                         </Grid.Col>
                       </Grid>
-                    </>
-                  )}
-                </form>
-              </Paper>
-            </Stepper.Step>
-          </Stepper>
+                    ) : (
+                      <>
+                        <Text weight="bold" size="xl" py="lg">
+                          Pay With Stripe
+                        </Text>
+                        <Grid>
+                          <Grid.Col md={12} lg={6}>
+                            <Paper
+                              p="sm"
+                              withBorder
+                              shadow="md"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            >
+                              <Title
+                                className={classes.title}
+                                order={2}
+                                pt="sm"
+                              >
+                                Payment Breakdown
+                              </Title>
+
+                              <SimpleGrid
+                                cols={1}
+                                spacing={20}
+                                breakpoints={[
+                                  { maxWidth: 550, cols: 1, spacing: 40 },
+                                ]}
+                                style={{ marginTop: 30 }}
+                              >
+                                {items}
+                              </SimpleGrid>
+                            </Paper>
+                          </Grid.Col>
+                          <Grid.Col md={12} lg={6} ref={targetRef}>
+                            <StripePromise
+                              paidSuccessfully={paidSuccessfully}
+                              setPaidSuccessfully={setPaidSuccessfully}
+                              onClickBack={prevStep}
+                              // setConfirmBooking={setConfirmBooking}
+                              // start={start}
+                              amountPayable={
+                                (hallCharges +
+                                  totalPrice +
+                                  menuPrice * noOfGuests +
+                                  (hallCharges +
+                                    totalPrice +
+                                    menuPrice * noOfGuests) *
+                                    taxPercentage -
+                                  (hallCharges +
+                                    totalPrice +
+                                    menuPrice * noOfGuests) *
+                                    discountPercentage) *
+                                bookingPercentage
+                              }
+                            />
+                          </Grid.Col>
+                        </Grid>
+                      </>
+                    )}
+                  </form>
+                </Paper>
+              </Stepper.Step>
+            </Stepper>
+          </Paper>
         </Paper>
-      </Paper>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };

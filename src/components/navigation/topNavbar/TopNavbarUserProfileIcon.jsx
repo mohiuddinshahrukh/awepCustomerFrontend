@@ -14,7 +14,7 @@ import {
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const TopNavbarUserProfileIcon = ({ setSignedIn }) => {
+const TopNavbarUserProfileIcon = ({ signedIn, setSignedIn }) => {
   const currentLocation = useLocation();
   const navigate = useNavigate();
   // console.log("currentLocation", currentLocation);
@@ -119,9 +119,9 @@ const TopNavbarUserProfileIcon = ({ setSignedIn }) => {
             ) {
               console.log("CURRENT LOCATION AND PATH MATCHED");
               navigate({ pathname: "/" });
-              setSignedIn(false);
+              setSignedIn(!signedIn);
             } else {
-              setSignedIn(false);
+              setSignedIn(!signedIn);
             }
           }}
         >

@@ -80,7 +80,7 @@ const NotificaitonsTab = ({ allNotifications, unreadCount, signedIn }) => {
           if (!notification.read) {
             return (
               // <Anchor variant="text" key={index} href={notification.link}>
-              <Menu.Item>
+              <Menu.Item key={index}>
                 <Notification
                   onClick={() => {
                     socket.emit("markNotificationAsRead", {

@@ -83,7 +83,12 @@ const SearchBackground = ({ carouselImages }) => {
             <b className="fgColorF">One</b>
           </Text>
         </div>
-        <Group position="center">
+        <Group
+          position="center"
+          style={{
+            zIndex: 10,
+          }}
+        >
           {" "}
           <Grid
             px={"5rem"}
@@ -108,6 +113,7 @@ const SearchBackground = ({ carouselImages }) => {
                   label: { color: "white" },
                 }}
                 label="Supplier"
+                value={searchSupplier}
                 placeholder="Select A Supplier"
                 onChange={setSearchSupplier}
                 data={[
@@ -135,6 +141,7 @@ const SearchBackground = ({ carouselImages }) => {
             <Grid.Col sm={25} md={25} lg={10}>
               {" "}
               <DatePicker
+                dropdownPosition="bottom"
                 size={matches600 ? "lg" : "md"}
                 styles={{ label: { color: "white" } }}
                 placeholder="Pick date"

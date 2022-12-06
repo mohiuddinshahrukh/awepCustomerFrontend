@@ -290,7 +290,7 @@ const SignUp = ({
     // });
 
     setHiddenButton(false);
-    let token = localStorage.getItem("userToken");
+    let token = localStorage.getItem("customerToken");
     if (token !== null && token !== "") {
       navigate("/");
     } else {

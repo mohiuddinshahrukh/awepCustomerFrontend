@@ -21,7 +21,7 @@ const fetchAllVendorComplaints = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getMyVendorPackageBookingComplaints",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);
@@ -57,7 +57,7 @@ const VendorComplaints = () => {
         method: "delete",
         url: `https://a-wep.herokuapp.com/customer/deleteVendorPackageBookingComplaint/${id}`,
         headers: {
-          token: localStorage.getItem("userToken"),
+          token: localStorage.getItem("customerToken"),
         },
       });
       console.log("API RESPONSE: ", apiResponse.data);

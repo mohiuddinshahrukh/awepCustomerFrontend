@@ -20,7 +20,7 @@ import logo from "../../../assets/awepLogo/3a.png";
 
 import NotificaitonsTab from "./NotificationsTab";
 import { socket } from "../../Socket/Socket";
-const TopNavbar = () => {
+const TopNavbar = ({ signedIn, setSignedIn }) => {
   const [drawerState, setDrawerState] = useState(false);
   const theme = useMantineTheme();
   const matches1200 = useMediaQuery("(min-width: 1200px)");
@@ -42,7 +42,7 @@ const TopNavbar = () => {
     socket.on("receiveNotifications", (data) => {
       let unreadCount = 0;
       console.log("receiveNotification1");
-      if (data.userId === JSON.parse(localStorage.getItem("userData")).id) {
+      if (data.userId === JSON.parse(localStorage.getItem("customerData")).id) {
         let newNotifications = data.notifications.filter((e, index) => {
           if (!e.read && e.userId.toString() === data.userId.toString()) {
             console.log("count 0:::", e, index);
@@ -58,7 +58,7 @@ const TopNavbar = () => {
         console.log("receiveNotification1", newNotifications);
       }
     });
-  }, [socket, refreshNotifications, allNotifications]);
+  }, [socket, refreshNotifications, allNotifications, signedIn]);
   return (
     <Paper
       sx={(theme) => ({
@@ -109,7 +109,7 @@ const TopNavbar = () => {
               { title: "About Us", path: "/aboutUs" },
             ]}
           />
-          {!localStorage.getItem("userToken") && (
+          {!localStorage.getItem("customerToken") && (
             <Group position="center">
               <TopNavbarButtons
                 buttonsData={[
@@ -163,7 +163,7 @@ const TopNavbar = () => {
           )}
           <Group>
             <TopNavbarThemeToggle />
-            {localStorage.getItem("userToken") ? (
+            {localStorage.getItem("customerToken") ? (
               <Group spacing={"lg"}>
                 <NotificaitonsTab
                   unreadCount={count}
@@ -171,7 +171,7 @@ const TopNavbar = () => {
                   refreshNotifications={refreshNotifications}
                   setRefreshNotifications={setRefreshNotifications}
                 />
-                <TopNavbarUserProfileIcon />
+                <TopNavbarUserProfileIcon setSignedIn={setSignedIn} />
               </Group>
             ) : (
               matches1200 && (

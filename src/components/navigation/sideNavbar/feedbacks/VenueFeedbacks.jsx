@@ -23,7 +23,7 @@ const fetchAllvenueFeedbacks = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);
@@ -59,7 +59,7 @@ const VenueFeedbacks = () => {
         method: "delete",
         url: `https://a-wep.herokuapp.com/customer/deleteVenueFeedback/${id}`,
         headers: {
-          token: localStorage.getItem("userToken"),
+          token: localStorage.getItem("customerToken"),
         },
       });
       console.log("API RESPONSE: ", apiResponse.data);

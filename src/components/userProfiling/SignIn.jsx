@@ -57,7 +57,14 @@ const pictureBackground = [
   //
 ];
 // NAVIGATION
-const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
+const SignIn = ({
+  email,
+  password,
+  closeModal,
+  setIsSignIn,
+  setIsSignUp,
+  setSignedIn,
+}) => {
   // DISPATCH
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -217,7 +224,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
                 color: "green",
                 message: "Login Successful",
               });
-
+              setSignedIn(true);
               setVisible(false);
               dispatch(
                 login({
@@ -235,13 +242,13 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
               );
               dispatch(setToken({ token: response.data.token }));
 
-              localStorage.setItem("userToken", response.data.token);
+              localStorage.setItem("customerToken", response.data.token);
               localStorage.setItem(
                 "navbarState",
                 JSON.stringify({ navbarState: true })
               );
               localStorage.setItem(
-                "userData",
+                "customerData",
                 JSON.stringify(response.data.data)
               );
               if (closeModal) {
@@ -251,7 +258,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
               }
             } else if (
               response.data.status === "success" &&
-              response.data.data.userType !== "superAdmin"
+              response.data.data.userType !== "customer"
             ) {
               console.log(
                 "NO LOGIN COS BLOODY USERTYPE IS: ",
@@ -627,11 +634,13 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
           );
           dispatch(setToken({ token: response.data.token }));
 
-          localStorage.setItem("userToken", response.data.token);
-          localStorage.setItem("userData", JSON.stringify(response.data.data));
+          localStorage.setItem("customerToken", response.data.token);
+          localStorage.setItem(
+            "customerData",
+            JSON.stringify(response.data.data)
+          );
 
-          navigate("/");
-
+          window.location = "/";
           // TOKEN SHIT HERE TOO!
         } else if (response.data.status === "error") {
           showNotification({
@@ -685,7 +694,7 @@ const SignIn = ({ email, password, closeModal, setIsSignIn, setIsSignUp }) => {
       //   setRefresh(false);
     }
 
-    let token = localStorage.getItem("userToken");
+    let token = localStorage.getItem("customerToken");
     if (token !== null && token !== "") {
       navigate("/");
     }

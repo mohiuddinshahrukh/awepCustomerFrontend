@@ -23,7 +23,7 @@ const fetchAllVendorComplaints = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/auth/user/myAddedSystemFeedbacks",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);
@@ -60,7 +60,7 @@ const SystemFeedbacks = () => {
         method: "delete",
         url: `https://a-wep.herokuapp.com/auth/user/deleteSystemFeedback/${id}`,
         headers: {
-          token: localStorage.getItem("userToken"),
+          token: localStorage.getItem("customerToken"),
         },
       });
       console.log("API RESPONSE: ", apiResponse.data);

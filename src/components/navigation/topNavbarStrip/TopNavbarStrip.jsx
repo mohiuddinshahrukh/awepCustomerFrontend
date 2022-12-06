@@ -40,7 +40,7 @@ const superAdminData = {
 };
 const TopNavbarStrip = () => {
   const [openCall, setOpenCall] = useState(false);
-  const matches1000 = useMediaQuery("(min-width: 1050px)");
+  const matches1000 = useMediaQuery("(min-width: 1055px)");
   return (
     <Paper p={"xs"} radius={0} className="bgColor fgColor">
       <Modal

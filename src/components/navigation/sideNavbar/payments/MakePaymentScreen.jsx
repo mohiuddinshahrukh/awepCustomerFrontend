@@ -9,7 +9,7 @@ const fetchAllVenueBookings = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);
@@ -33,7 +33,7 @@ const fetchAllVendorBookings = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getVendorPackageBookings",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);

@@ -1,4 +1,4 @@
-import { Checkbox, Select } from "@mantine/core";
+import { Checkbox, Select, Spoiler } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -41,12 +41,19 @@ const AllVendorCategories = ({ categories, setCategories }) => {
       label="Categories"
       spacing={0}
     >
-      {allVendorsCategories?.map((category) => (
-        <Checkbox
-          value={category.categoryTitle}
-          label={category.categoryTitle}
-        />
-      ))}
+      <Spoiler
+        maxHeight={165}
+        showLabel="Show More Services"
+        hideLabel="Show Less Services"
+        transitionDuration={0}
+      >
+        {allVendorsCategories?.map((category) => (
+          <Checkbox
+            value={category.categoryTitle}
+            label={category.categoryTitle}
+          />
+        ))}
+      </Spoiler>
     </Checkbox.Group>
     // <Select
     //   placeholder="Categories Filter"

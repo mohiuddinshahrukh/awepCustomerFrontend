@@ -66,7 +66,7 @@ const BookVenueSideColums = ({
     if (Object.keys(errorValues).length > 0) {
       setError(errorValues);
     } else {
-      if (localStorage.getItem("userToken") !== null) {
+      if (localStorage.getItem("customerToken") !== null) {
         console.log("onClickFunction SUBVENUE");
 
         navigate(

@@ -15,7 +15,7 @@ const fetchAllVendors = async () => {
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getVendorPackageBookings",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
     console.log("API RESPONSE: ", apiResponse.data);
@@ -67,7 +67,7 @@ const CustomerVendorBookings = () => {
           paymentAmount: amountPayable.price.remainingAmount,
         },
         headers: {
-          token: localStorage.getItem("userToken"),
+          token: localStorage.getItem("customerToken"),
         },
       });
       console.log("API RESPONSE: ", apiResponse.data);

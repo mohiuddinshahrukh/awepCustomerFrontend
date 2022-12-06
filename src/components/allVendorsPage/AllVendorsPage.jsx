@@ -188,6 +188,8 @@ const AllVendorsPage = () => {
             if (bookingsOnDate < vendorServicePackage.noOfBookingsPerDay) {
               dateMatch = true;
             }
+          } else if (!vendorServicePackage.bookedOn) {
+            dateMatch = true;
           }
         });
         if (!dateMatch) {
@@ -331,8 +333,8 @@ const AllVendorsPage = () => {
                     value={time}
                     onChange={setTime}
                     styles={{ label: { color: "white" } }}
-                    label="Time"
-                    placeholder="Select A Time"
+                    label="Duration"
+                    placeholder="Select A Duration"
                     data={[
                       { value: "1 Day", label: "1 Day" },
                       { value: "2 Days", label: "2 Days" },

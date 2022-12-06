@@ -18,6 +18,12 @@ code {
 .bgColor {
   background-color: #e60084;
 }
+.aboutUsBgColor1 {
+  background-color: #e60084;
+}
+.aboutUsBgColor2 {
+  background-color: #e22590;
+}
 .fgColorF {
   color: #e60084;
 }
@@ -135,4 +141,8 @@ code {
 .unSelectedChat:hover {
   background-color: rgb(230, 0, 130, 0.8);
   color: white;
+}
+
+.mantine-Spoiler-control {
+  color: #e60084;
 }

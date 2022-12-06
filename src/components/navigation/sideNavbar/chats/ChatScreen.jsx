@@ -66,7 +66,7 @@ import { socketContext } from "../../../Socket/Socket";
 // const socket = io("https://a-wep.herokuapp.com", {
 //   // const socket = io("http://localhost:8081", {
 //   auth: {
-//     token: localStorage.getItem("userToken"),
+//     token: localStorage.getItem("customerToken"),
 //   },
 // });
 
@@ -76,7 +76,7 @@ const ChatScreen = () => {
   const socket = React.useContext(socketContext);
 
   console.log("State: ", state);
-  let userData = JSON.parse(localStorage.getItem("userData"));
+  let userData = JSON.parse(localStorage.getItem("customerData"));
 
   // HOOKS
   // UPLOAD IMAGES
@@ -714,53 +714,62 @@ const ChatScreen = () => {
                         );
                       }}
                     >
-                      <Group position="apart">
+                      <Group noWrap>
+                        <Avatar
+                          size="lg"
+                          radius="xl"
+                          src={
+                            conversation.chatHead2.id === currentUser?.id
+                              ? conversation?.chatHead1?.image
+                              : conversation?.chatHead2?.image
+                          }
+                        />
                         <Group>
-                          {" "}
-                          <Avatar
-                            size="lg"
-                            radius="xl"
-                            src={
-                              conversation.chatHead2.id === currentUser?.id
-                                ? conversation?.chatHead1?.image
-                                : conversation?.chatHead2?.image
-                            }
-                          ></Avatar>
-                          <Text size="lg" lineClamp={1}>
-                            {conversation?.chatHead2?.id === currentUser?.id
-                              ? conversation?.chatHead1?.title
-                              : conversation?.chatHead2?.title}
-                          </Text>
-                        </Group>
-                        <Group position="right">
-                          <Stack spacing={0}>
-                            <Text size="sm" align="right">
+                          <Stack spacing={0} align="flex-start">
+                            <Text size="lg" lineClamp={1}>
                               {conversation?.chatHead2?.id === currentUser?.id
-                                ? conversation?.chatHead1?.userType ===
-                                  "superAdmin"
+                                ? conversation?.chatHead1?.title
+                                : conversation?.chatHead2?.title}
+                            </Text>
+                            {/* <Text size="lg" lineClamp={1}>
+                              {conversation?.chatHead2?.id === currentUser?.id
+                                ? conversation?.chatHead1?.title?.substr(0, 1) +
+                                  ". " +
+                                  conversation?.chatHead1?.title?.split(" ")[1]
+                                : conversation?.chatHead2?.title}
+                            </Text> */}
+
+                            <Group>
+                              {" "}
+                              <Text size="sm">
+                                {conversation?.chatHead2?.id === currentUser?.id
+                                  ? conversation?.chatHead1?.userType ===
+                                    "superAdmin"
+                                    ? "Super Admin"
+                                    : conversation?.chatHead1?.userType ===
+                                      "venueOwner"
+                                    ? "Venue Owner"
+                                    : conversation?.chatHead1?.userType ===
+                                      "vendor"
+                                    ? "Vendor"
+                                    : "customer"
+                                  : conversation?.chatHead2?.userType ===
+                                    "superAdmin"
                                   ? "Super Admin"
-                                  : conversation?.chatHead1?.userType ===
+                                  : conversation?.chatHead2?.userType ===
                                     "venueOwner"
                                   ? "Venue Owner"
-                                  : conversation?.chatHead1?.userType ===
+                                  : conversation?.chatHead2?.userType ===
                                     "vendor"
                                   ? "Vendor"
-                                  : "customer"
-                                : conversation?.chatHead2?.userType ===
-                                  "superAdmin"
-                                ? "Super Admin"
-                                : conversation?.chatHead2?.userType ===
-                                  "venueOwner"
-                                ? "Venue Owner"
-                                : conversation?.chatHead2?.userType === "vendor"
-                                ? "Vendor"
-                                : "Customer"}
-                            </Text>
-                            <Text size="sm" align="right">
-                              {conversation?.chatHead2?.id === currentUser?.id
-                                ? conversation?.chatHead1?.phone
-                                : conversation?.chatHead2?.phone}
-                            </Text>
+                                  : "Customer"}
+                              </Text>
+                              {/* <Text size="sm">
+                                {conversation?.chatHead2?.id === currentUser?.id
+                                  ? conversation?.chatHead1?.phone
+                                  : conversation?.chatHead2?.phone}
+                              </Text> */}
+                            </Group>
                           </Stack>
                         </Group>
                       </Group>

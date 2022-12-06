@@ -76,27 +76,57 @@ const RegisteredCitiesCarousel = () => {
         return vendor?.city?.toString() === "lahore";
       })?.length,
     },
+    {
+      img: "https://images.unsplash.com/photo-1470756544705-1848092fbe5f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1978&q=80",
+      city: "Islamabad",
+      venues: allVenuesCount?.data?.filter((venue) => {
+        return venue?.venueCity?.toString() === "islamabad";
+      })?.length,
+      vendors: allVendorsCount?.data?.filter((vendor) => {
+        return vendor?.city?.toString() === "islamabad";
+      })?.length,
+    },
+    {
+      img: "https://images.unsplash.com/photo-1617129926580-44e96bf7d0dc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+      city: "Rawalpindi",
+      venues: allVenuesCount?.data?.filter((venue) => {
+        return venue?.venueCity?.toString() === "rawalpindi";
+      })?.length,
+      vendors: allVendorsCount?.data?.filter((vendor) => {
+        return vendor?.city?.toString() === "rawalpindi";
+      })?.length,
+    },
+    {
+      img: "https://images.unsplash.com/photo-1622546758596-f1f06ba11f58?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1221&q=80",
+      city: "Lahore",
+      venues: allVenuesCount?.data?.filter((venue) => {
+        return venue?.venueCity?.toString() === "lahore";
+      })?.length,
+      vendors: allVendorsCount?.data?.filter((vendor) => {
+        return vendor?.city?.toString() === "lahore";
+      })?.length,
+    },
 
-    {
-      img: "https://images.unsplash.com/photo-1611068661807-c850d6a24f62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
-      city: "Karachi",
-      venues: allVenuesCount?.data?.filter((venue) => {
-        return venue?.venueCity?.toString() === "karachi";
-      })?.length,
-      vendors: allVendorsCount?.data?.filter((vendor) => {
-        return vendor?.city?.toString() === "karachi";
-      })?.length,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1600434890250-44df6e4c0d05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=751&q=80",
-      city: "Multan",
-      venues: allVenuesCount?.data?.filter((venue) => {
-        return venue?.venueCity?.toString() === "multan";
-      })?.length,
-      vendors: allVendorsCount?.data?.filter((vendor) => {
-        return vendor?.city?.toString() === "multan";
-      })?.length,
-    },
+    // {
+    //   img: "https://images.unsplash.com/photo-1611068661807-c850d6a24f62?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
+    //   city: "Karachi",
+    //   venues: allVenuesCount?.data?.filter((venue) => {
+    //     return venue?.venueCity?.toString() === "karachi";
+    //   })?.length,
+    //   vendors: allVendorsCount?.data?.filter((vendor) => {
+    //     return vendor?.city?.toString() === "karachi";
+    //   })?.length,
+    // },
+    // {
+    //   img: "https://images.unsplash.com/photo-1600434890250-44df6e4c0d05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=751&q=80",
+    //   city: "Multan",
+    //   venues: allVenuesCount?.data?.filter((venue) => {
+    //     return venue?.venueCity?.toString() === "multan";
+    //   })?.length,
+    //   vendors: allVendorsCount?.data?.filter((vendor) => {
+    //     return vendor?.city?.toString() === "multan";
+    //   })?.length,
+    // },
   ];
   const carouselSlides = landingPageRegisteredCitiesCards.map(
     (citiesCard, index) => {
@@ -119,8 +149,9 @@ const RegisteredCitiesCarousel = () => {
         },
       }}
       slideSize={"25% "}
+      loop
       align={"start"}
-      slidesToScroll={"auto"}
+      slidesToScroll={1}
       breakpoints={[
         { maxWidth: "lg", slideSize: "33.33333333%" },
         { maxWidth: "md", slideSize: "33.33333333%" },

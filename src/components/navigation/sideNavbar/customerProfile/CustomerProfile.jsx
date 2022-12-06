@@ -29,7 +29,7 @@ const fetchCustomerProfile = async () => {
       method: "GET",
       url: "https://a-wep.herokuapp.com/auth/user/viewProfile",
       headers: {
-        token: localStorage.getItem("userToken"),
+        token: localStorage.getItem("customerToken"),
       },
     });
 
@@ -155,7 +155,7 @@ const CustomerProfile = () => {
       let response = await axios({
         method: "patch",
         url: url,
-        headers: { token: localStorage.getItem("userToken") },
+        headers: { token: localStorage.getItem("customerToken") },
         data: {
           oldPassword: values.currentPassword,
           newPassword: values.newPassword,
@@ -318,7 +318,7 @@ const CustomerProfile = () => {
           profileImage: responses.profileImage,
         };
 
-        localStorage.setItem("userData", JSON.stringify(localStorageData));
+        localStorage.setItem("customerData", JSON.stringify(localStorageData));
         setVisible(false);
         // navigate("/");
       } else {

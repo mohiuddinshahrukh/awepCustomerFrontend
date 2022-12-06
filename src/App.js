@@ -46,6 +46,7 @@ import VendorFeedbacks from "./components/navigation/sideNavbar/feedbacks/Vendor
 import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFeedbacks";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
+  const [signedIn, setSignedIn] = useState(false);
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
@@ -77,9 +78,12 @@ function App() {
           <SocketContext.Provider value={socket}>
             <Paper className="App">
               <TopNavbarStrip />
-              <TopNavbar />
+              <TopNavbar signedIn={signedIn} setSignedIn={setSignedIn} />
               <Routes>
-                <Route path="/signIn" element={<SignIn />} />
+                <Route
+                  path="/signIn"
+                  element={<SignIn setSignedIn={setSignedIn} />}
+                />
                 <Route path="/signUp" element={<SignUp />} />
                 <Route
                   path="/venueBooking/:eventType/:date/:time/:guests/:venueId"

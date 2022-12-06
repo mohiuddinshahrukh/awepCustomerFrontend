@@ -27,7 +27,7 @@ const CustomerDashboard = () => {
         "/dashboard/invite",
         "/dashboard/profile",
       ].includes(currentLocation.pathname.toString()) &&
-      localStorage.getItem("userToken")
+      localStorage.getItem("customerToken")
     ) {
       // console.log("ALLOW USER ACCESS");
       setAllowView(true);

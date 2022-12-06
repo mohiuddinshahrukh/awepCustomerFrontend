@@ -389,9 +389,10 @@ const NewBookingFile = () => {
     // makeVenueBooking();
   };
 
-  useEffect(() => {
+  const checkLogin = () => {
     console.log("CHECKING ROUTES");
     console.log("currentLocation", currentLocation);
+
     if (localStorage.getItem("customerToken") === null || undefined || "") {
       showNotification({
         title: "Please Sign In First",
@@ -400,6 +401,10 @@ const NewBookingFile = () => {
       });
       navigate("/signin");
     }
+  };
+
+  useEffect(() => {
+    checkLogin();
   }, []);
 
   useEffect(() => {

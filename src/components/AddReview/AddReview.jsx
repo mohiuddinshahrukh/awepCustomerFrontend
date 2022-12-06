@@ -16,8 +16,8 @@ import ReviewImage from "./image2.jpg";
 import { Button, createStyles } from "@mantine/core";
 import React from "react";
 import axios from "axios";
-import { showNotification } from "@mantine/notifications";
-import { useNavigate, useParams } from "react-router-dom";
+import { cleanNotifications, showNotification } from "@mantine/notifications";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 import logo from "../../assets/awepLogo/3a.png";
 
@@ -124,6 +124,26 @@ const AddReview = () => {
       console.log("Error in fetchAllVenueServices catch block", error);
     }
   };
+  const currentLocation = useLocation();
+  const checkLogin = () => {
+    cleanNotifications();
+    console.log("CHECKING ROUTES");
+    console.log("currentLocation", currentLocation);
+
+    if (localStorage.getItem("customerToken") === null || undefined || "") {
+      showNotification({
+        title: "Please Sign In First",
+        message: "You need to Sign In First",
+        color: "red",
+      });
+      navigate("/signin");
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
   useEffect(() => {
     fetchReviewDetails().then(setFeedbackDetails);
     console.count();
@@ -328,7 +348,7 @@ const AddReview = () => {
     }
   };
   const currentTheme = useMantineTheme();
-  return (
+  return localStorage.getItem("customerToken") ? (
     <Grid
       style={{
         width: "100%",
@@ -449,6 +469,8 @@ const AddReview = () => {
         </Container>
       </Grid.Col>
     </Grid>
+  ) : (
+    <></>
   );
 };
 

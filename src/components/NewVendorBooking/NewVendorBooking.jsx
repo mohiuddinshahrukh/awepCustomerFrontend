@@ -2,7 +2,7 @@ import axios from "axios";
 import "./styling.css";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Grid,
   Paper,
@@ -96,6 +96,24 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const NewVendorBookingFile = () => {
+  const currentLocation = useLocation();
+  const checkLogin = () => {
+    console.log("CHECKING ROUTES");
+    console.log("currentLocation", currentLocation);
+
+    if (localStorage.getItem("customerToken") === null || undefined || "") {
+      showNotification({
+        title: "Please Sign In First",
+        message: "You need to Sign In First",
+        color: "red",
+      });
+      navigate("/signin");
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  }, []);
   const params = useParams();
   console.log("MY PARAMS: ", params);
   const theme = useMantineTheme();
@@ -630,185 +648,24 @@ const NewVendorBookingFile = () => {
   };
   return (
     <Container size="xl">
-      <Paper
-        style={{
-          width: "100%",
-          height: "100%",
-          position: "relative",
-        }}
-      >
-        <LoadingOverlay
-          visible={visible}
-          loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
-          overlayOpacity={0.5}
-          overlayColor="#c5c5c5"
-          zIndex={1}
-        />
-
-        <Modal
-          zIndex={1000}
-          styles={{
-            close: {
-              color: "black",
-              backgroundColor: "#EAEAEA",
-              borderRadius: "50%",
-              "&:hover": {
-                transition: "50ms",
-                color: "white",
-                backgroundColor: "red",
-              },
-            },
-          }}
-          title={
-            <Title align="center" order={3}>
-              Booking Logged Successfully!!
-            </Title>
-          }
-          opened={confirmBooking}
-          transition="rotate-left"
-          transitionDuration={600}
-          centered
-          size={600}
-          transitionTimingFunction="ease"
-          onClose={() => {
-            navigate("/shahrukhTest/bookings");
-            setConfirmBooking(false);
-          }}
-        >
-          <Stack>
-            <Group position="apart">
-              <Group position="left">
-                <Text weight={900}>Booking ID: {"12345678910"}</Text>
-              </Group>
-              <Badge size="lg">New Booking</Badge>
-            </Group>
-            <Paper
-              withBorder
-              p="xl"
-              shadow="md"
-              sx={{
-                ":hover": {
-                  transform: `scale(1.05)`,
-                  transition: "0.3s",
-                },
-              }}
-            >
-              <Grid>
-                <Grid.Col span={6}>
-                  <Group position="left">
-                    <Text>
-                      {/* {
-                        selectedVendorPackage?.vendorBusinessId
-                          ?.vendorBusinessTitle
-                      } */}
-                      Business Name Here
-                    </Text>
-                  </Group>
-                  <Group position="left">
-                    <Text>{bookedDateAndTime} </Text>
-                  </Group>
-                  <Group position="left">
-                    <Text>
-                      {/* {selectedVendorPackage?.vendorPackageTitle} */}
-                      Package name here
-                    </Text>
-                  </Group>
-                  <Group position="left">
-                    <Text>
-                      {/* {selectedVendorPackage?.packageDuration} */}
-                      Package Duration here
-                    </Text>
-                  </Group>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <Image height={125} src={Congrats} />
-                </Grid.Col>
-              </Grid>
-            </Paper>
-            <Paper
-              withBorder
-              p="xl"
-              shadow="md"
-              sx={{
-                ":hover": {
-                  transform: `scale(1.05)`,
-                  transition: "0.3s",
-                },
-              }}
-            >
-              <Group position="apart">
-                <Text>Subtotal</Text>
-                <Text> {totalPrice.toLocaleString()}</Text>
-              </Group>
-              {/*              <Group position="apart">
-<Text>Discount</Text>
-<Text>-{(totalPrice * 0.25).toLocaleString()}</Text>
-</Group>*/}
-              <Group position="apart">
-                <Text>Tax</Text>
-                <Text>+{(totalPrice * 0.17).toLocaleString()}</Text>
-              </Group>
-              <Group position="apart">
-                <Text>Total</Text>
-                <Text>{(totalPrice + totalPrice * 0.17).toLocaleString()}</Text>
-              </Group>
-              <Divider />
-              <Group position="apart">
-                <Text>Amount Paid</Text>
-                <Text>
-                  {(
-                    (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
-                    0.25
-                  ).toLocaleString()}
-                </Text>
-              </Group>
-              <Divider />
-              <Group position="apart">
-                <Text>Amount Remaining: </Text>
-                <Text>
-                  {(
-                    totalPrice +
-                    totalPrice * 0.17 -
-                    (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) * 0.25
-                  ).toLocaleString()}
-                </Text>
-              </Group>
-            </Paper>
-          </Stack>
-
-          <Group position="center">
-            <Button
-              component={Link}
-              to="/shahrukhTest/bookings"
-              mt="md"
-              leftIcon={<IconX />}
-              color="green"
-              // fullWidth
-              onClick={() => setConfirmBooking(false)}
-              uppercase
-            >
-              Close
-            </Button>
-          </Group>
-        </Modal>
-
+      {localStorage.getItem("customerToken") ? (
         <Paper
-          py="xl"
           style={{
             width: "100%",
             height: "100%",
+            position: "relative",
           }}
         >
-          {params.bookingId ? (
-            <Title order={2} align="center" py="xl">
-              Vendor Package Booking Update
-            </Title>
-          ) : (
-            <Title order={2} align="center" py="xl">
-              Vendor Package Booking
-            </Title>
-          )}
+          <LoadingOverlay
+            visible={visible}
+            loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
+            overlayOpacity={0.5}
+            overlayColor="#c5c5c5"
+            zIndex={1}
+          />
+
           <Modal
+            zIndex={1000}
             styles={{
               close: {
                 color: "black",
@@ -821,443 +678,517 @@ const NewVendorBookingFile = () => {
                 },
               },
             }}
-            opened={opened}
+            title={
+              <Title align="center" order={3}>
+                Booking Logged Successfully!!
+              </Title>
+            }
+            opened={confirmBooking}
             transition="rotate-left"
             transitionDuration={600}
+            centered
             size={600}
             transitionTimingFunction="ease"
-            onClose={() => setOpened(false)}
+            onClose={() => {
+              navigate("/shahrukhTest/bookings");
+              setConfirmBooking(false);
+            }}
           >
-            <Title align="center" order={3}>
-              Are You Sure You Want To Cancel?
-            </Title>
-            <Grid align="center" justify="space-around" p="md">
-              <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
-                <Button
-                  align="center"
-                  color="light"
-                  leftIcon={<IconTrashOff size={14} />}
-                  onClick={() => setOpened(false)}
-                >
-                  No, Don't Cancel
-                </Button>
-              </Grid.Col>
-              <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
-                <Button
-                  align="center"
-                  color="red"
-                  leftIcon={<IconTrash size={14} />}
-                  onClick={() => navigate("/shahrukhTest/bookings")}
-                >
-                  Yes, Cancel
-                </Button>
-              </Grid.Col>
-            </Grid>
-          </Modal>
-          <Stepper
-            active={active}
-            onStepClick={setActive}
-            breakpoint="lg"
-            pt="xl"
-          >
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Booking Details"
-              description="General Booking Details"
-              allowStepSelect={active > 0}
-              disabled={stepperDisabled}
-            >
+            <Stack>
+              <Group position="apart">
+                <Group position="left">
+                  <Text weight={900}>Booking ID: {"12345678910"}</Text>
+                </Group>
+                <Badge size="lg">New Booking</Badge>
+              </Group>
               <Paper
-                // p="xl"
-                style={{
-                  width: "100%",
-                  height: "100%",
+                withBorder
+                p="xl"
+                shadow="md"
+                sx={{
+                  ":hover": {
+                    transform: `scale(1.05)`,
+                    transition: "0.3s",
+                  },
+                }}
+              >
+                <Grid>
+                  <Grid.Col span={6}>
+                    <Group position="left">
+                      <Text>
+                        {/* {
+                selectedVendorPackage?.vendorBusinessId
+                  ?.vendorBusinessTitle
+              } */}
+                        Business Name Here
+                      </Text>
+                    </Group>
+                    <Group position="left">
+                      <Text>{bookedDateAndTime} </Text>
+                    </Group>
+                    <Group position="left">
+                      <Text>
+                        {/* {selectedVendorPackage?.vendorPackageTitle} */}
+                        Package name here
+                      </Text>
+                    </Group>
+                    <Group position="left">
+                      <Text>
+                        {/* {selectedVendorPackage?.packageDuration} */}
+                        Package Duration here
+                      </Text>
+                    </Group>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Image height={125} src={Congrats} />
+                  </Grid.Col>
+                </Grid>
+              </Paper>
+              <Paper
+                withBorder
+                p="xl"
+                shadow="md"
+                sx={{
+                  ":hover": {
+                    transform: `scale(1.05)`,
+                    transition: "0.3s",
+                  },
                 }}
               >
                 <Group position="apart">
-                  <Text weight="bold" size="xl" py="md">
-                    General Booking Details
-                  </Text>
-                  <Button
-                    size="md"
-                    hidden={params.bookingId ? true : false}
-                    // disabled={eventType === ""}
-                    variant="filled"
-                    color="red"
-                    // disabled={loading}
-                    // leftIcon={<X />}
-                    onClick={() => {
-                      setEventType("");
-                      form1.setFieldValue("eventType", "");
-                      form1.setFieldValue("date", null);
-                      form1.setFieldValue("time", "");
-                      form1.setFieldValue("vendorCategory", "");
-
-                      setTime("");
-                      setVendorCategory("");
-
-                      setIdOfSelectedPackage("");
-
-                      setTotalPrice(0);
-
-                      setHidden(true);
-                      onChange("");
-                      setError("");
-                      setDisabled(false);
-
-                      // form1.reset();
-                    }}
-                  >
-                    RESET
-                  </Button>
+                  <Text>Subtotal</Text>
+                  <Text> {totalPrice.toLocaleString()}</Text>
                 </Group>
-
-                <form
-                  onSubmit={form1.onSubmit((values) => handleSubmit(values))}
-                >
-                  <Grid justify="space-around" py="md">
-                    <Grid.Col lg={12}>
-                      <Select
-                        size="md"
-                        disabled={
-                          params.vendorPackageId
-                            ? false
-                            : idOfSelectedPackage !== ""
-                        }
-                        label="Event Type"
-                        placeholder="Event Type"
-                        value={eventType}
-                        data={[
-                          {
-                            value: "MEHNDI",
-                            label: "MEHNDI",
-                          },
-                          {
-                            value: "BARAT",
-                            label: "BARAT",
-                          },
-                          {
-                            value: "WALIMA",
-                            label: "WALIMA",
-                          },
-                          {
-                            value: "SEMINAR",
-                            label: "SEMINAR",
-                          },
-                          {
-                            value: "OTHER",
-                            label: "OTHER",
-                          },
-                        ]}
-                        rightSection={<IconChevronDown size={14} />}
-                        rightSectionWidth={40}
-                        {...form1.getInputProps("eventType")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col lg={6}>
-                      <DatePicker
-                        inputFormat="YYYY-MM-DD"
-                        size="md"
-                        disabled={
-                          params.vendorPackageId
-                            ? false
-                            : idOfSelectedPackage !== ""
-                        }
-                        minDate={dayjs(new Date())
-                          .startOf("month")
-                          .add(new Date().getDate(), "days")
-                          .toDate()}
-                        maxDate={dayjs(new Date()).add(365, "days").toDate()}
-                        placeholder="Pick date"
-                        label="Event Date"
-                        icon={<IconCalendar size={16} />}
-                        value={value1}
-                        onInput={(e) => {
-                          onChange(e);
-                          setIdOfSelectedPackage("");
-                          setTotalPrice(0);
-                          setHidden(true);
-                        }}
-                        {...form1.getInputProps("date")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col lg={6}>
-                      <Select
-                        size="md"
-                        label="Event Time"
-                        disabled={
-                          params.vendorPackageId
-                            ? false
-                            : idOfSelectedPackage !== ""
-                        }
-                        placeholder="Time"
-                        value={time}
-                        // onChange={(e) => {
-                        //   setTime(e.target.value);
-                        //   setIdOfSelectedPackage("");
-                        //   setIdOfSelectedMenu("");
-                        //   setMenuPrice(0);
-                        //   setChargesError("");
-                        //   setHidden(true);
-
-                        //   setTotalPrice(0);
-                        // }}
-                        data={[
-                          {
-                            value: "1 Day",
-                            label: "1 Day",
-                          },
-                          {
-                            value: "2 Days",
-                            label: "2 Days",
-                          },
-                          {
-                            value: "3 Days",
-                            label: "3 Days",
-                          },
-                          {
-                            value: "4 Days",
-                            label: "4 Days",
-                          },
-                        ]}
-                        rightSection={<IconChevronDown size={14} />}
-                        rightSectionWidth={40}
-                        {...form1.getInputProps("time")}
-                      />
-                    </Grid.Col>
-                    {/* <Grid.Col lg={6}>
-                      <Select
-                        size="md"
-                        // disabled={vendor === ""}
-                        label="Service Category"
-                        placeholder="Select Category"
-                        searchable
-                        value={vendorCategory}
-                        // value={selectedVendorCategory}
-                        // onChange={setSelectedVendorCategory}
-                        nothingFound="None Found"
-                        data={CategoryData ? CategoryData : []}
-                        {...form1.getInputProps("vendorCategory")}
-                      />
-                    </Grid.Col> */}
-                  </Grid>
-
-                  {vendorDetails?.vendorServicePackages && (
-                    <VendorPackagesForBooking
-                      isUpdate={params.bookingId ? true : false}
-                      vendorPackageDetails={
-                        vendorDetails?.vendorServicePackages
-                          ? vendorDetails?.vendorServicePackages
-                          : []
-                      }
-                      totalPrice={totalPrice}
-                      setTotalPrice={setTotalPrice}
-                      setIdOfSelectedPackage={setIdOfSelectedPackage}
-                      idOfSelectedPackage={
-                        params.vendorPackageId || idOfSelectedPackage
-                      }
-                      bookedDateAndTime={bookedDateAndTime}
-                      bookingDateAndTime={bookingDateAndTime}
-                      // vendorCategory={form1.values.vendorCategory}
-                      vendorCategory=""
-                      setHidden={setHidden}
-                      error={error}
-                      setError={setError}
-                      setDisabled={setDisabled}
-                      setVendorCategory={setVendorCategory}
-                      hideSelectButton={hideSelectButton}
-                      setSelectedVendorPackage={setSelectedVendorPackage}
-                      time={time}
-                      form1={form1}
-                    />
-                  )}
-
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        leftIcon={<IconX />}
-                        onClick={() => setOpened(true)}
-                      >
-                        CANCEL
-                      </Button>
-                    </Grid.Col>
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        type="submit"
-                        disabled={disabled || !idOfSelectedPackage}
-                        // loading={loading}
-                        rightIcon={<IconArrowRight />}
-                        // onClick={nextStep}
-                      >
-                        NEXT
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
-                </form>
+                {/*              <Group position="apart">
+<Text>Discount</Text>
+<Text>-{(totalPrice * 0.25).toLocaleString()}</Text>
+</Group>*/}
+                <Group position="apart">
+                  <Text>Tax</Text>
+                  <Text>+{(totalPrice * 0.17).toLocaleString()}</Text>
+                </Group>
+                <Group position="apart">
+                  <Text>Total</Text>
+                  <Text>
+                    {(totalPrice + totalPrice * 0.17).toLocaleString()}
+                  </Text>
+                </Group>
+                <Divider />
+                <Group position="apart">
+                  <Text>Amount Paid</Text>
+                  <Text>
+                    {(
+                      (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
+                      0.25
+                    ).toLocaleString()}
+                  </Text>
+                </Group>
+                <Divider />
+                <Group position="apart">
+                  <Text>Amount Remaining: </Text>
+                  <Text>
+                    {(
+                      totalPrice +
+                      totalPrice * 0.17 -
+                      (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
+                        0.25
+                    ).toLocaleString()}
+                  </Text>
+                </Group>
               </Paper>
-            </Stepper.Step>
+            </Stack>
 
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Contact Information"
-              description="Contact Information"
-              allowStepSelect={active > 3}
-              disabled={stepperDisabled}
-            >
-              <Group position="apart">
-                <Text weight="bold" size="xl" py="md">
-                  Contact Details and Booking Description
-                </Text>
-                <Text weight="bold" size="xl" py="md" color="red">
-                  Total <b>Rs. {totalPrice}</b>
-                </Text>
-              </Group>
-              <Paper py="xl">
-                <form
-                  onSubmit={form.onSubmit((values) => handleSubmit1(values))}
-                >
-                  <Grid>
-                    <Grid.Col md={12} lg={6}>
-                      <TextInput
-                        size="md"
-                        required
-                        type="number"
-                        label="Contact Number"
-                        placeholder="03XXXXXXXX"
-                        // disabled={disabled}
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        {...form.getInputProps("phone")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col md={12} lg={6}>
-                      <TextInput
-                        size="md"
-                        placeholder="abc@gmail.com"
-                        value={email}
-                        required
-                        // disabled={disabled}
-                        label="Email Address"
-                        onChange={(e) => setEmail(e.target.value)}
-                        {...form.getInputProps("email")}
-                      />
-                    </Grid.Col>
-                    <Grid.Col md={12} lg={12}>
-                      <Textarea
-                        size="md"
-                        placeholder="Describe Your Event"
-                        value={description}
-                        required
-                        minRows={3}
-                        maxRows={10}
-                        maxLength={1000}
-                        autosize
-                        // disabled={disabled}
-                        label="Booking Description"
-                        onChange={(e) => setDescription(e.target.value)}
-                        {...form.getInputProps("description")}
-                      />
-                    </Grid.Col>
-                  </Grid>
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        // disabled={loading}
-                        leftIcon={<IconArrowLeft />}
-                        onClick={prevStep}
-                      >
-                        BACK
-                      </Button>
-                    </Grid.Col>
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        type="submit"
-                        rightIcon={<IconArrowRight />}
-                      >
-                        NEXT
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
-                </form>
-              </Paper>
-            </Stepper.Step>
+            <Group position="center">
+              <Button
+                component={Link}
+                to="/shahrukhTest/bookings"
+                mt="md"
+                leftIcon={<IconX />}
+                color="green"
+                // fullWidth
+                onClick={() => setConfirmBooking(false)}
+                uppercase
+              >
+                Close
+              </Button>
+            </Group>
+          </Modal>
 
-            <Stepper.Step
-              color={!stepperDisabled ? "grape" : "gray"}
-              label="Payment Details"
-              description="Please proceed with the minimum"
-              allowStepSelect={active > 4}
-              disabled={stepperDisabled}
+          <Paper
+            py="xl"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {params.bookingId ? (
+              <Title order={2} align="center" py="xl">
+                Vendor Package Booking Update
+              </Title>
+            ) : (
+              <Title order={2} align="center" py="xl">
+                Vendor Package Booking
+              </Title>
+            )}
+            <Modal
+              styles={{
+                close: {
+                  color: "black",
+                  backgroundColor: "#EAEAEA",
+                  borderRadius: "50%",
+                  "&:hover": {
+                    transition: "50ms",
+                    color: "white",
+                    backgroundColor: "red",
+                  },
+                },
+              }}
+              opened={opened}
+              transition="rotate-left"
+              transitionDuration={600}
+              size={600}
+              transitionTimingFunction="ease"
+              onClose={() => setOpened(false)}
             >
-              <Paper py="xl">
-                <form
-                  onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+              <Title align="center" order={3}>
+                Are You Sure You Want To Cancel?
+              </Title>
+              <Grid align="center" justify="space-around" p="md">
+                <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
+                  <Button
+                    align="center"
+                    color="light"
+                    leftIcon={<IconTrashOff size={14} />}
+                    onClick={() => setOpened(false)}
+                  >
+                    No, Don't Cancel
+                  </Button>
+                </Grid.Col>
+                <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
+                  <Button
+                    align="center"
+                    color="red"
+                    leftIcon={<IconTrash size={14} />}
+                    onClick={() => navigate("/shahrukhTest/bookings")}
+                  >
+                    Yes, Cancel
+                  </Button>
+                </Grid.Col>
+              </Grid>
+            </Modal>
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              breakpoint="lg"
+              pt="xl"
+            >
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Booking Details"
+                description="General Booking Details"
+                allowStepSelect={active > 0}
+                disabled={stepperDisabled}
+              >
+                <Paper
+                  // p="xl"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
                 >
                   <Group position="apart">
-                    {params.bookingId ? (
-                      <Text weight="bold" size="xl" py="md">
-                        Review And Confirm
-                      </Text>
-                    ) : (
-                      <Group>
-                        <Text weight="bold" size="xl" py="md">
-                          Review And
-                        </Text>
+                    <Text weight="bold" size="xl" py="md">
+                      General Booking Details
+                    </Text>
+                    <Button
+                      size="md"
+                      hidden={params.bookingId ? true : false}
+                      // disabled={eventType === ""}
+                      variant="filled"
+                      color="red"
+                      // disabled={loading}
+                      // leftIcon={<X />}
+                      onClick={() => {
+                        setEventType("");
+                        form1.setFieldValue("eventType", "");
+                        form1.setFieldValue("date", null);
+                        form1.setFieldValue("time", "");
+                        form1.setFieldValue("vendorCategory", "");
 
-                        <Button
-                          rightIcon={
-                            <div className="xyz">
-                              <IconArrowDown />
-                            </div>
+                        setTime("");
+                        setVendorCategory("");
+
+                        setIdOfSelectedPackage("");
+
+                        setTotalPrice(0);
+
+                        setHidden(true);
+                        onChange("");
+                        setError("");
+                        setDisabled(false);
+
+                        // form1.reset();
+                      }}
+                    >
+                      RESET
+                    </Button>
+                  </Group>
+
+                  <form
+                    onSubmit={form1.onSubmit((values) => handleSubmit(values))}
+                  >
+                    <Grid justify="space-around" py="md">
+                      <Grid.Col lg={12}>
+                        <Select
+                          size="md"
+                          disabled={
+                            params.vendorPackageId
+                              ? false
+                              : idOfSelectedPackage !== ""
                           }
-                          onClick={() =>
-                            scrollIntoView({ alignment: "center" })
+                          label="Event Type"
+                          placeholder="Event Type"
+                          value={eventType}
+                          data={[
+                            {
+                              value: "MEHNDI",
+                              label: "MEHNDI",
+                            },
+                            {
+                              value: "BARAT",
+                              label: "BARAT",
+                            },
+                            {
+                              value: "WALIMA",
+                              label: "WALIMA",
+                            },
+                            {
+                              value: "SEMINAR",
+                              label: "SEMINAR",
+                            },
+                            {
+                              value: "OTHER",
+                              label: "OTHER",
+                            },
+                          ]}
+                          rightSection={<IconChevronDown size={14} />}
+                          rightSectionWidth={40}
+                          {...form1.getInputProps("eventType")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col lg={6}>
+                        <DatePicker
+                          inputFormat="YYYY-MM-DD"
+                          size="md"
+                          disabled={
+                            params.vendorPackageId
+                              ? false
+                              : idOfSelectedPackage !== ""
                           }
-                          style={{
-                            background: "#E60084",
+                          minDate={dayjs(new Date())
+                            .startOf("month")
+                            .add(new Date().getDate(), "days")
+                            .toDate()}
+                          maxDate={dayjs(new Date()).add(365, "days").toDate()}
+                          placeholder="Pick date"
+                          label="Event Date"
+                          icon={<IconCalendar size={16} />}
+                          value={value1}
+                          onInput={(e) => {
+                            onChange(e);
+                            setIdOfSelectedPackage("");
+                            setTotalPrice(0);
+                            setHidden(true);
                           }}
-                        >
-                          Pay
-                        </Button>
-                      </Group>
+                          {...form1.getInputProps("date")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col lg={6}>
+                        <Select
+                          size="md"
+                          label="Event Time"
+                          disabled={
+                            params.vendorPackageId
+                              ? false
+                              : idOfSelectedPackage !== ""
+                          }
+                          placeholder="Time"
+                          value={time}
+                          // onChange={(e) => {
+                          //   setTime(e.target.value);
+                          //   setIdOfSelectedPackage("");
+                          //   setIdOfSelectedMenu("");
+                          //   setMenuPrice(0);
+                          //   setChargesError("");
+                          //   setHidden(true);
+
+                          //   setTotalPrice(0);
+                          // }}
+                          data={[
+                            {
+                              value: "1 Day",
+                              label: "1 Day",
+                            },
+                            {
+                              value: "2 Days",
+                              label: "2 Days",
+                            },
+                            {
+                              value: "3 Days",
+                              label: "3 Days",
+                            },
+                            {
+                              value: "4 Days",
+                              label: "4 Days",
+                            },
+                          ]}
+                          rightSection={<IconChevronDown size={14} />}
+                          rightSectionWidth={40}
+                          {...form1.getInputProps("time")}
+                        />
+                      </Grid.Col>
+                      {/* <Grid.Col lg={6}>
+              <Select
+                size="md"
+                // disabled={vendor === ""}
+                label="Service Category"
+                placeholder="Select Category"
+                searchable
+                value={vendorCategory}
+                // value={selectedVendorCategory}
+                // onChange={setSelectedVendorCategory}
+                nothingFound="None Found"
+                data={CategoryData ? CategoryData : []}
+                {...form1.getInputProps("vendorCategory")}
+              />
+            </Grid.Col> */}
+                    </Grid>
+
+                    {vendorDetails?.vendorServicePackages && (
+                      <VendorPackagesForBooking
+                        isUpdate={params.bookingId ? true : false}
+                        vendorPackageDetails={
+                          vendorDetails?.vendorServicePackages
+                            ? vendorDetails?.vendorServicePackages
+                            : []
+                        }
+                        totalPrice={totalPrice}
+                        setTotalPrice={setTotalPrice}
+                        setIdOfSelectedPackage={setIdOfSelectedPackage}
+                        idOfSelectedPackage={
+                          params.vendorPackageId || idOfSelectedPackage
+                        }
+                        bookedDateAndTime={bookedDateAndTime}
+                        bookingDateAndTime={bookingDateAndTime}
+                        // vendorCategory={form1.values.vendorCategory}
+                        vendorCategory=""
+                        setHidden={setHidden}
+                        error={error}
+                        setError={setError}
+                        setDisabled={setDisabled}
+                        setVendorCategory={setVendorCategory}
+                        hideSelectButton={hideSelectButton}
+                        setSelectedVendorPackage={setSelectedVendorPackage}
+                        time={time}
+                        form1={form1}
+                      />
                     )}
 
-                    <Text weight="bold" color="red" size="xl" py="md">
-                      Total Cost Rs. {totalPrice}
-                    </Text>
-                  </Group>
-                  <ViewAllVendorPaymentTableReceipts
-                    bookedDateAndTime={bookedDateAndTime}
-                    vendorTitle={vendorDetails?.vendorBusinessTitle}
-                    vendorAddress={vendorDetails?.address}
-                    vendorEmail={vendorDetails?.infoEmail}
-                    vendorPhone={vendorDetails?.contactPhone}
-                    vendorWhatsapp={vendorDetails?.contactWhatsApp}
-                    packageTitle={selectedVendorPackage?.vendorPackageTitle}
-                    packageDuration={selectedVendorPackage?.packageDuration}
-                    bookingDesription={description}
-                    totalPrice={totalPrice}
-                    customerName={customerName}
-                    customerEmail={customerEmail}
-                    customerPhone={customerPhone}
-                  />
-                  {params.bookingId ? (
+                    <Grid justify="flex-end" py="md">
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="red"
+                          leftIcon={<IconX />}
+                          onClick={() => setOpened(true)}
+                        >
+                          CANCEL
+                        </Button>
+                      </Grid.Col>
+                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                        <Button
+                          size="md"
+                          fullWidth
+                          variant="filled"
+                          color="dark"
+                          type="submit"
+                          disabled={disabled || !idOfSelectedPackage}
+                          // loading={loading}
+                          rightIcon={<IconArrowRight />}
+                          // onClick={nextStep}
+                        >
+                          NEXT
+                        </Button>
+                      </Grid.Col>
+                    </Grid>
+                  </form>
+                </Paper>
+              </Stepper.Step>
+
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Contact Information"
+                description="Contact Information"
+                allowStepSelect={active > 3}
+                disabled={stepperDisabled}
+              >
+                <Group position="apart">
+                  <Text weight="bold" size="xl" py="md">
+                    Contact Details and Booking Description
+                  </Text>
+                  <Text weight="bold" size="xl" py="md" color="red">
+                    Total <b>Rs. {totalPrice}</b>
+                  </Text>
+                </Group>
+                <Paper py="xl">
+                  <form
+                    onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+                  >
+                    <Grid>
+                      <Grid.Col md={12} lg={6}>
+                        <TextInput
+                          size="md"
+                          required
+                          type="number"
+                          label="Contact Number"
+                          placeholder="03XXXXXXXX"
+                          // disabled={disabled}
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          {...form.getInputProps("phone")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col md={12} lg={6}>
+                        <TextInput
+                          size="md"
+                          placeholder="abc@gmail.com"
+                          value={email}
+                          required
+                          // disabled={disabled}
+                          label="Email Address"
+                          onChange={(e) => setEmail(e.target.value)}
+                          {...form.getInputProps("email")}
+                        />
+                      </Grid.Col>
+                      <Grid.Col md={12} lg={12}>
+                        <Textarea
+                          size="md"
+                          placeholder="Describe Your Event"
+                          value={description}
+                          required
+                          minRows={3}
+                          maxRows={10}
+                          maxLength={1000}
+                          autosize
+                          // disabled={disabled}
+                          label="Booking Description"
+                          onChange={(e) => setDescription(e.target.value)}
+                          {...form.getInputProps("description")}
+                        />
+                      </Grid.Col>
+                    </Grid>
                     <Grid justify="flex-end" py="md">
                       <Grid.Col xs={6} sm={3} md={3} lg={3}>
                         <Button
@@ -1278,71 +1209,169 @@ const NewVendorBookingFile = () => {
                           fullWidth
                           variant="filled"
                           color="dark"
-                          onClick={() => {
-                            updateVendorPackageBooking();
-                          }}
+                          type="submit"
                           rightIcon={<IconArrowRight />}
                         >
-                          UPDATE
+                          NEXT
                         </Button>
                       </Grid.Col>
                     </Grid>
-                  ) : (
-                    <>
-                      <Text weight="bold" size="xl" py="lg">
-                        Pay With Stripe
-                      </Text>
-                      <Grid>
-                        <Grid.Col md={12} lg={6}>
-                          <Paper
-                            p="sm"
-                            withBorder
-                            shadow="md"
+                  </form>
+                </Paper>
+              </Stepper.Step>
+
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Payment Details"
+                description="Please proceed with the minimum"
+                allowStepSelect={active > 4}
+                disabled={stepperDisabled}
+              >
+                <Paper py="xl">
+                  <form
+                    onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+                  >
+                    <Group position="apart">
+                      {params.bookingId ? (
+                        <Text weight="bold" size="xl" py="md">
+                          Review And Confirm
+                        </Text>
+                      ) : (
+                        <Group>
+                          <Text weight="bold" size="xl" py="md">
+                            Review And
+                          </Text>
+
+                          <Button
+                            rightIcon={
+                              <div className="xyz">
+                                <IconArrowDown />
+                              </div>
+                            }
+                            onClick={() =>
+                              scrollIntoView({ alignment: "center" })
+                            }
                             style={{
-                              width: "100%",
-                              height: "100%",
+                              background: "#E60084",
                             }}
                           >
-                            <Title className={classes.title} order={2} pt="sm">
-                              Payment Breakdown
-                            </Title>
+                            Pay
+                          </Button>
+                        </Group>
+                      )}
 
-                            <SimpleGrid
-                              cols={1}
-                              spacing={20}
-                              breakpoints={[
-                                { maxWidth: 550, cols: 1, spacing: 40 },
-                              ]}
-                              style={{ marginTop: 30 }}
-                            >
-                              {items}
-                            </SimpleGrid>
-                          </Paper>
+                      <Text weight="bold" color="red" size="xl" py="md">
+                        Total Cost Rs. {totalPrice}
+                      </Text>
+                    </Group>
+                    <ViewAllVendorPaymentTableReceipts
+                      bookedDateAndTime={bookedDateAndTime}
+                      vendorTitle={vendorDetails?.vendorBusinessTitle}
+                      vendorAddress={vendorDetails?.address}
+                      vendorEmail={vendorDetails?.infoEmail}
+                      vendorPhone={vendorDetails?.contactPhone}
+                      vendorWhatsapp={vendorDetails?.contactWhatsApp}
+                      packageTitle={selectedVendorPackage?.vendorPackageTitle}
+                      packageDuration={selectedVendorPackage?.packageDuration}
+                      bookingDesription={description}
+                      totalPrice={totalPrice}
+                      customerName={customerName}
+                      customerEmail={customerEmail}
+                      customerPhone={customerPhone}
+                    />
+                    {params.bookingId ? (
+                      <Grid justify="flex-end" py="md">
+                        <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                          <Button
+                            size="md"
+                            fullWidth
+                            variant="filled"
+                            color="red"
+                            // disabled={loading}
+                            leftIcon={<IconArrowLeft />}
+                            onClick={prevStep}
+                          >
+                            BACK
+                          </Button>
                         </Grid.Col>
-                        <Grid.Col md={12} lg={6} ref={targetRef}>
-                          <StripePromise
-                            paidSuccessfully={paidSuccessfully}
-                            setPaidSuccessfully={setPaidSuccessfully}
-                            onClickBack={prevStep}
-                            setConfirmBooking={setConfirmBooking}
-                            amountPayable={
-                              (totalPrice +
-                                totalPrice * taxPercentage -
-                                totalPrice * discountPercentage) *
-                              bookingPercentage
-                            }
-                            // start={start}
-                          />
+                        <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                          <Button
+                            size="md"
+                            fullWidth
+                            variant="filled"
+                            color="dark"
+                            onClick={() => {
+                              updateVendorPackageBooking();
+                            }}
+                            rightIcon={<IconArrowRight />}
+                          >
+                            UPDATE
+                          </Button>
                         </Grid.Col>
                       </Grid>
-                    </>
-                  )}
-                </form>
-              </Paper>
-            </Stepper.Step>
-          </Stepper>
+                    ) : (
+                      <>
+                        <Text weight="bold" size="xl" py="lg">
+                          Pay With Stripe
+                        </Text>
+                        <Grid>
+                          <Grid.Col md={12} lg={6}>
+                            <Paper
+                              p="sm"
+                              withBorder
+                              shadow="md"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            >
+                              <Title
+                                className={classes.title}
+                                order={2}
+                                pt="sm"
+                              >
+                                Payment Breakdown
+                              </Title>
+
+                              <SimpleGrid
+                                cols={1}
+                                spacing={20}
+                                breakpoints={[
+                                  { maxWidth: 550, cols: 1, spacing: 40 },
+                                ]}
+                                style={{ marginTop: 30 }}
+                              >
+                                {items}
+                              </SimpleGrid>
+                            </Paper>
+                          </Grid.Col>
+                          <Grid.Col md={12} lg={6} ref={targetRef}>
+                            <StripePromise
+                              paidSuccessfully={paidSuccessfully}
+                              setPaidSuccessfully={setPaidSuccessfully}
+                              onClickBack={prevStep}
+                              setConfirmBooking={setConfirmBooking}
+                              amountPayable={
+                                (totalPrice +
+                                  totalPrice * taxPercentage -
+                                  totalPrice * discountPercentage) *
+                                bookingPercentage
+                              }
+                              // start={start}
+                            />
+                          </Grid.Col>
+                        </Grid>
+                      </>
+                    )}
+                  </form>
+                </Paper>
+              </Stepper.Step>
+            </Stepper>
+          </Paper>
         </Paper>
-      </Paper>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };

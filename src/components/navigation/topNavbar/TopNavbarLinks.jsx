@@ -8,6 +8,12 @@ const TopNavbarLinks = ({ linksData }) => {
   const links = linksData?.map((link, index) => {
     return (
       <Anchor
+        hidden={
+          !localStorage.getItem("customerToken") &&
+          link.title.toString() === "Feedbacks"
+            ? true
+            : false
+        }
         className="border"
         style={{
           borderRadius: "3px",

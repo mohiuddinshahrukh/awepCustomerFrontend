@@ -543,12 +543,6 @@ const ChatScreen = () => {
 
   return (
     <Paper style={{ height: "100%", width: "100%" }}>
-      <Button
-        onClick={() => {
-          console.log("CALLING FUNCTION 123#");
-          socket.emit("getChatHeads", {});
-        }}
-      ></Button>
       <ChatStarterModal
         chatCreatorMethod={chatCreator}
         open={chatStarterModal}
@@ -573,7 +567,11 @@ const ChatScreen = () => {
         setViewVendorModal={setViewVendorModal}
       />
       <Grid justify="space-between" style={{ height: "100%", width: "100% " }}>
-        <Grid.Col lg={3} style={{ borderRight: "1px solid #EAEAEA" }}>
+        <Grid.Col
+          lg={3}
+          style={{ borderRight: "1px solid #EAEAEA" }}
+          hidden={allConversations.length > 0 ? false : true}
+        >
           <Grid>
             {/*
                     <Grid.Col>
@@ -770,7 +768,7 @@ const ChatScreen = () => {
                                     "superAdmin"
                                   ? "Super Admin"
                                   : conversation?.chatHead2?.userType ===
-                                    "venueOwner"
+                                    "venue"
                                   ? "Venue Owner"
                                   : conversation?.chatHead2?.userType ===
                                     "vendor"
@@ -980,7 +978,12 @@ const ChatScreen = () => {
                       width: "100%",
                     }}
                   >
-                    <Title> PLEASE SELECT A CONVERSATION TO VIEW</Title>
+                    {console.log("allConversations", allConversations)}
+                    {allConversations.length > 0 ? (
+                      <Title> PLEASE SELECT A CONVERSATION TO VIEW</Title>
+                    ) : (
+                      <Title> NO CHATS </Title>
+                    )}
                     <IconMessage size={45} />
                   </Group>
                 )}

@@ -332,7 +332,7 @@ const SpecificVenueDetails = () => {
                   size="xl"
                   color="gray"
                   onClick={() => {
-                    socket.emit("viewAllChatsOnStartConversation", {
+                    socket.socket.emit("viewAllChatsOnStartConversation", {
                       participant: {
                         _id: venueDetails?._id,
                         type: "venue",

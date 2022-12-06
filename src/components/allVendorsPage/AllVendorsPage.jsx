@@ -303,6 +303,7 @@ const AllVendorsPage = () => {
                     value={city}
                     onChange={setCity}
                     data={[
+                      { value: "all", label: "All" },
                       { value: "islamabad", label: "Islamabad" },
                       { value: "rawalpindi", label: "Rawalpindi" },
                       { value: "lahore", label: "Lahore" },
@@ -349,6 +350,9 @@ const AllVendorsPage = () => {
                     uppercase
                     size={matches992 ? "md" : "lg"}
                     component={Link}
+                    to={`/allVendors${date ? "/date/" + date : ""}${
+                      time ? "/time/" + time : ""
+                    }${city ? "/city/" + city : ""}`}
                     fullWidth
                     // to={searchSupplier === "vendor" ? "/allVenues" : "/allVendors"}
                   >

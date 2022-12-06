@@ -505,11 +505,12 @@ const AllVenuesPage = () => {
                     className="button"
                     size={matches992 ? "md" : "lg"}
                     component={Link}
+                    to={`/allVenues${date ? "/date/" + date : ""}${
+                      time ? "/time/" + time : ""
+                    }${city ? "/city/" + city : ""}`}
                     uppercase
                     fullWidth
-                    onClick={() => {
-                      window.location.reload();
-                    }}
+
                     // to={searchSupplier === "venue" ? "/allVenues" : "/allVendors"}
                   >
                     Search

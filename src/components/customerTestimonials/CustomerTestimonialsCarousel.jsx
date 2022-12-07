@@ -12,7 +12,7 @@ const CustomerTestimonialsCarousel = ({ landingPageTestimonials }) => {
   });
   return (
     <Carousel
-      draggable={false}
+      // draggable={false}
       styles={{
         viewport: { padding: "20px 5px" },
         control: {

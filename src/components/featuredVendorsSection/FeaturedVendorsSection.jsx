@@ -30,7 +30,7 @@ const FeaturedVendorsSection = ({ landingPageVendors }) => {
           rightIcon={<IconArrowRight />}
           className="buttonOutline"
         >
-          View All Vendors
+          All Vendors
         </Button>
       </Group>
     </Container>

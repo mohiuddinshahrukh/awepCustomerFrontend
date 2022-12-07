@@ -28,7 +28,7 @@ const FeaturedMenus = ({ landingPageMenus }) => {
           rightIcon={<IconArrowRight />}
           className="buttonOutline"
         >
-          All Menus
+          All Venues
         </Button>
       </Group>
     </Container>

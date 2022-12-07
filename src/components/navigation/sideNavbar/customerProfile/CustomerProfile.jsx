@@ -1,70 +1,119 @@
-import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Accordion,
-  Avatar,
-  Button,
   Grid,
-  Group,
-  Image,
-  Input,
-  LoadingOverlay,
   Paper,
-  PasswordInput,
-  Progress,
-  Text,
-  TextInput,
   Title,
+  Button,
+  PasswordInput,
+  TextInput,
+  NativeSelect,
+  LoadingOverlay,
+  Center,
+  Avatar,
+  Progress,
+  Input,
+  Image,
+  Group,
+  Accordion,
+  Text,
+  Loader,
 } from "@mantine/core";
-import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { Modal, useMantineTheme } from "@mantine/core";
+
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { IconEdit, IconKey } from "@tabler/icons";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import storage from "../../../fireBase/FB";
-import InputMask from "react-input-mask";
-const fetchCustomerProfile = async () => {
-  try {
-    const apiResponse = await axios({
-      method: "GET",
-      url: "https://a-wep.herokuapp.com/auth/user/viewProfile",
-      headers: {
-        token: localStorage.getItem("customerToken"),
-      },
-    });
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
-    console.log("1 API RESPONSE", apiResponse);
+import axios from "axios";
+import {
+  IconEdit,
+  IconKey,
+  IconTrash,
+  IconTrashOff,
+  IconX,
+} from "@tabler/icons";
 
-    if (apiResponse.data.status === "success") {
-      console.log("2 API RESPONSE SUCCESS", apiResponse);
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("3 API RESPONSE ERROR", apiResponse);
-    } else {
-      console.log("4 Some other unknown error");
-    }
-  } catch (e) {
-    console.log("fetchCustomerProfile error", e);
-  }
-};
+// COMPONNET
 const CustomerProfile = () => {
-  useEffect(() => {
-    console.count();
-    fetchCustomerProfile().then(setCustomerProfile);
-  }, []);
-  const [urls, setUrls] = useState("");
+  // CURRENT LOCATION
+  // NAVIGATE STATE
+  let { state } = useLocation();
+  const {} = state ?? "";
+  // HOOKS
+  const [errorMessages, setErrorMessages] = useState({});
+  const [opened, setOpened] = useState(false);
+  const [id, setID] = useState("");
+  const [cnic, setCNIC] = useState("");
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [disabled2, setDisabled2] = useState(false);
   const [percentages, setPercentages] = useState([]);
-  const [refresh, setRefresh] = useState(false);
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState("");
-  const [changepwdVisible, setChangepwdVisible] = useState(false);
-  const [customerProfile, setCustomerProfile] = useState({});
-  const [refresh3, setRefresh3] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [refresh2, setRefresh2] = useState(true);
+  const [refresh3, setRefresh3] = useState(true);
   const [changed, setChanged] = useState(false);
+  const [error, setError] = useState("");
+  const [images, setImages] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [changepwdVisible, setChangepwdVisible] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
+  // const [isEnabled, setIsEnabled] = useState(IsEnabled);
+  // PASSWORD HOOKS
+  const [getCurrentPassword, setCurrentPassword] = useState("");
+  const [getNewPassword, setNewPassword] = useState("");
+  const [getConfirmPassword, setConfirmPassword] = useState("");
+  // const [urls, setUrls] = useState(PROFILEIMAGE);
+
+  const [urls, setUrls] = useState();
+  const [profileData, setProfileData] = useState({});
+  console.log("PROFILE DATA: ", profileData);
+  const fetchUserDetails = async () => {
+    try {
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/auth/user/viewProfile",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log("Successfully fetched all venues:", apiResponse.data.data);
+        let response = apiResponse.data.data;
+        setUrls(response.profileImage);
+        setID(response._id);
+        setCNIC(response.CNIC);
+        setName(response.name);
+        setEmail(response.email);
+        setPhone(response.phone);
+        setProfileImage(response.profileImage);
+        form.setFieldValue("name", response.name);
+        form.setFieldValue("email", response.email);
+        form.setFieldValue("phone", response.phone);
+        form.setFieldValue("cnic", response.CNIC);
+
+        return response;
+      } else if (apiResponse.data.status === "error") {
+        console.log("Error while fetching all venues");
+      } else {
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
+  useEffect(() => {
+    fetchUserDetails().then(setProfileData);
+  }, [refresh]);
   const previews = images?.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
@@ -90,113 +139,11 @@ const CustomerProfile = () => {
       </div>
     );
   });
-  const form = useForm({
-    initialValues: {
-      CNIC: customerProfile?.CNIC,
-      email: customerProfile?.email,
-      name: customerProfile?.name,
-      phone: customerProfile?.phone,
-      profileImage: customerProfile?.profileImage,
-      walletBalance: customerProfile?.walletBalance,
-    },
-    validate: {
-      password: (value) =>
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-          value
-        ) || value === ""
-          ? null
-          : "Must Contain 8 Characters, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character",
-      cpassword: (value, values) =>
-        value === values.password ? null : "Passwords do not match",
-      name: (value) =>
-        value.trim().length > 1 && /^[a-zA-Z\s]*$/.test(value.trim())
-          ? null
-          : "Alphabetic Name with 2 or more characters",
-      phone: (value) =>
-        /^(03)(\d{9})$/.test(value)
-          ? null
-          : "11 digits Phone Number must start with 03",
-      CNIC: (value) =>
-        /^(\d{13})$/.test(value) ? null : "Please Enter 13 Digit CNIC Number",
-    },
-  });
-  const form1 = useForm({
-    validateInputOnChange: true,
-    initialValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
 
-    validate: {
-      currentPassword: (value, values) =>
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-          value
-        ) || value === ""
-          ? null
-          : "Must Contain 8 Characters, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character",
-      newPassword: (value, values) =>
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-          value
-        ) || value === ""
-          ? values.currentPassword !== value
-            ? null
-            : "The current password and new password cant be the same"
-          : "Must Contain 8 Characters, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character",
-      confirmPassword: (value, values) =>
-        value === values.newPassword ? null : "Passwords do not match",
-    },
-  });
+  // NAVIGATE
+  let navigate = useNavigate();
 
-  const updatePasswordMethod = async (values) => {
-    setChangepwdVisible(true);
-    try {
-      let url = "https://a-wep.herokuapp.com/auth/user/updatePassword";
-      let response = await axios({
-        method: "patch",
-        url: url,
-        headers: { token: localStorage.getItem("customerToken") },
-        data: {
-          oldPassword: values.currentPassword,
-          newPassword: values.newPassword,
-        },
-      });
-      console.log(response);
-      if (response.data.status === "success") {
-        showNotification({
-          title: "SUCCESS",
-          color: "green",
-          message: "PASSWORD UPDATED SUCCESSFULLY",
-        });
-        form1.reset();
-        setChangepwdVisible(false);
-        setRefresh3(!refresh3);
-      } else if (response.data.status === "error") {
-        showNotification({
-          title: "INVALID PASSWORD",
-          color: "yellow",
-          message:
-            "PASSWORD COULD NOT BE UPDATED BECAUSE YOU HAVE ENTERED AN INVALID PASSWORD",
-        });
-        form1.setFieldError(
-          "currentPassword",
-          "The entered password is incorrect"
-        );
-        setChangepwdVisible(false);
-      } else {
-        showNotification({
-          title: "ERROR",
-          color: "red",
-          message: "SOME INTERNAL ERROR",
-        });
-        setChangepwdVisible(false);
-      }
-    } catch (e) {
-      console.error(e);
-      setChangepwdVisible(false);
-    }
-    setChangepwdVisible(false);
-  };
+  // UPLOAD IMAGES METHOD
   const handleUpload = (images) => {
     setError("");
     setPercentages([]);
@@ -212,7 +159,7 @@ const CustomerProfile = () => {
       // alert("IN2");
       const storageRef = ref(
         storage,
-        `/users/${image?.name}+${Math.random(999999)}`
+        `/users/${image.name}+${Math.random(999999)}`
       );
       const uploadTask = uploadBytesResumable(storageRef, image);
       uploadTask.on(
@@ -244,31 +191,75 @@ const CustomerProfile = () => {
     }
     // alert("OUT");
   };
+
+  // FORM
+  const form = useForm({
+    validateInputOnChange: true,
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      cpassword: "",
+      cnic: cnic,
+      profileImage: urls,
+      phone: phone,
+    },
+
+    validate: {
+      password: (value) =>
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+          value
+        ) || value === ""
+          ? null
+          : "Must Contain 8 Characters, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character",
+      cpassword: (value, values) =>
+        value === values.password ? null : "Passwords do not match",
+      name: (value) =>
+        value.trim().length > 1 && /^[a-zA-Z\s]*$/.test(value.trim())
+          ? null
+          : "Alphabetic Name with 2 or more characters",
+      phone: (value) =>
+        /^(03)(\d{9})$/.test(value)
+          ? null
+          : "11 digits Phone Number must start with 03",
+      cnic: (value) =>
+        /^(\d{13})$/.test(value) ? null : "Please Enter 13 Digit CNIC Number",
+    },
+  });
+  // EDIT PASSWORD FORM
+  const form1 = useForm({
+    validateInputOnChange: true,
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+
+    validate: {
+      currentPassword: (value, values) =>
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+          value
+        ) || value === ""
+          ? null
+          : "Must Contain 8 Characters, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character",
+      newPassword: (value, values) =>
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+          value
+        ) || value === ""
+          ? values.currentPassword !== value
+            ? null
+            : "The current password and new password cant be the same"
+          : "Must Contain 8 Characters, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character",
+      confirmPassword: (value, values) =>
+        value === values.newPassword ? null : "Passwords do not match",
+    },
+  });
+  // FORM SUBMIT
   const handleSubmit = async (event) => {
     setVisible(true);
     setLoading(true);
     var { name, phone, cnic } = event;
     // console.log(event);
-    if (
-      customerProfile.name === name &&
-      customerProfile.phone === phone &&
-      customerProfile.CNIC === cnic &&
-      customerProfile.profileImage === urls
-    ) {
-      setVisible(false);
-      setChanged(false);
-      console.log("No Changes");
-      showNotification({
-        title: `NO CHANGES SEEN`,
-        color: "blue",
-
-        message: "NOTHING WAS UPDATED",
-      });
-      // navigate("/users");
-
-      setLoading(false);
-      return;
-    }
 
     const body = {
       name,
@@ -280,6 +271,7 @@ const CustomerProfile = () => {
 
     const headers = {
       "Content-Type": "application/json",
+      token: localStorage.getItem("customerToken"),
     };
     try {
       const response = await axios({
@@ -318,9 +310,12 @@ const CustomerProfile = () => {
           profileImage: responses.profileImage,
         };
 
-        localStorage.setItem("customerData", JSON.stringify(localStorageData));
+        localStorage.setItem(
+          "superAdminData",
+          JSON.stringify(localStorageData)
+        );
         setVisible(false);
-        // navigate("/");
+        navigate("/");
       } else {
         showNotification({
           title: "THIS ERROR SHOULD NOT HAVE OCCURRED",
@@ -333,241 +328,419 @@ const CustomerProfile = () => {
       console.log("TRY CATCH ERROR: ", err);
     }
   };
-  return (
-    <Paper withBorder w={"100%"} p="xl">
-      <Title align="center">Your Profile Screen</Title>
 
-      <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-        <Grid justify="flex-start">
-          <Grid.Col lg={12} p="md">
-            <Group position="center">
-              <Input.Wrapper size="md" label="Profile Picture" error={error}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    // alignItems: "center",
-                    flexDirection: "column",
+  const renderErrorMessage = (name) => {
+    if (errorMessages[name]) {
+      return errorMessages[name];
+    }
+  };
+
+  const updatePasswordMethod = async (values) => {
+    setChangepwdVisible(true);
+    try {
+      const data = {
+        oldPassword: values.currentPassword,
+        newPassword: values.newPassword,
+      };
+      const headers = {
+        "Content-Type": "application/json",
+        token: localStorage.getItem("customerToken"),
+      };
+      const response = await axios({
+        method: "patch",
+        url: `https://a-wep.herokuapp.com/auth/user/updatePassword`,
+        data: data,
+        headers: headers,
+      });
+      console.log(response);
+      if (response.data.status === "success") {
+        console.log("hello success", response.data);
+        showNotification({
+          title: "SUCCESS",
+          color: "green",
+          message: "PASSWORD UPDATED SUCCESSFULLY",
+        });
+        form1.reset();
+        setChangepwdVisible(false);
+        setRefresh3(!refresh3);
+      } else if (response.data.status === "error") {
+        console.log("hello errors", response.data);
+        showNotification({
+          title: "INVALID PASSWORD",
+          color: "yellow",
+          message:
+            "PASSWORD COULD NOT BE UPDATED BECAUSE YOU HAVE ENTERED AN INVALID PASSWORD",
+        });
+        form1.setFieldError(
+          "currentPassword",
+          "The entered password is incorrect"
+        );
+        setChangepwdVisible(false);
+      } else {
+        showNotification({
+          title: "ERROR",
+          color: "red",
+          message: "SOME INTERNAL ERROR",
+        });
+        setChangepwdVisible(false);
+      }
+    } catch (e) {
+      console.error(e);
+      setChangepwdVisible(false);
+    }
+    setChangepwdVisible(false);
+  };
+  return (
+    <Paper
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <Center>
+        <Paper
+          style={{
+            width: "80%",
+            height: "100%",
+          }}
+        >
+          <LoadingOverlay
+            visible={visible}
+            loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
+            overlayOpacity={0.5}
+            overlayColor="#c5c5c5"
+            zIndex={1}
+          />
+          <Modal
+            styles={{
+              close: {
+                color: "black",
+                backgroundColor: "#EAEAEA",
+                borderRadius: "50%",
+                "&:hover": {
+                  transition: "50ms",
+                  color: "white",
+                  backgroundColor: "red",
+                },
+              },
+            }}
+            opened={opened}
+            transition="rotate-left"
+            transitionDuration={600}
+            size={600}
+            transitionTimingFunction="ease"
+            onClose={() => setOpened(false)}
+          >
+            <Title align="center" order={3}>
+              Are you sure you want to cancel?
+            </Title>
+            <Grid align="center" justify="space-around">
+              <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
+                <Button
+                  align="center"
+                  color="light"
+                  leftIcon={<IconTrashOff size={14} />}
+                  onClick={() => setOpened(false)}
+                >
+                  No, Don't Cancel
+                </Button>
+              </Grid.Col>
+              <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
+                <Button
+                  align="center"
+                  color="red"
+                  leftIcon={<IconTrash size={14} />}
+                  onClick={() => navigate("/")}
+                >
+                  Yes, Cancel
+                </Button>
+              </Grid.Col>
+            </Grid>
+          </Modal>
+          <Title order={1} align="center">
+            Update Profile
+          </Title>
+          <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+            <Grid justify="space-around">
+              <Grid.Col lg={6}>
+                <TextInput
+                  error={renderErrorMessage("name")}
+                  size="md"
+                  required
+                  label="Full Name"
+                  placeholder="Enter User's Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  onInput={(e) => {
+                    setDisabled(false);
+                    setName(e.target.value);
+                  }}
+                  {...form.getInputProps("name")}
+                />
+              </Grid.Col>
+              <Grid.Col lg={6}>
+                <TextInput
+                  error={renderErrorMessage("email")}
+                  size="md"
+                  placeholder="Enter User's Email"
+                  value={email}
+                  required
+                  disabled={true}
+                  label="Email Address"
+                  onChange={(e) => setEmail(e.target.value)}
+                  onInput={(e) => setDisabled(false)}
+                  {...form.getInputProps("email")}
+                />
+              </Grid.Col>
+              <Grid.Col lg={6}>
+                <TextInput
+                  error={renderErrorMessage("cnic")}
+                  size="md"
+                  required
+                  type="number"
+                  label="CNIC"
+                  min="0"
+                  onScroll={() => {}}
+                  placeholder="Enter 13 Digit CNIC"
+                  value={cnic}
+                  onChange={(e) => setCNIC(e.target.value)}
+                  onInput={(e) => {
+                    setDisabled(false);
+                    setCNIC(e.target.value);
+                  }}
+                  {...form.getInputProps("cnic")}
+                />
+              </Grid.Col>
+              <Grid.Col lg={6}>
+                <TextInput
+                  error={renderErrorMessage("phone")}
+                  size="md"
+                  required
+                  type="number"
+                  label="Contact Number"
+                  placeholder="Enter 11 Digit Phone Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  onInput={(e) => {
+                    setDisabled(false);
+                    setPhone(e.target.value);
+                  }}
+                  {...form.getInputProps("phone")}
+                />
+              </Grid.Col>
+            </Grid>
+            <Grid justify="flex-start">
+              <Grid.Col lg={12}>
+                <Input.Wrapper size="md" label="Profile Picture" error={error}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      // alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Dropzone
+                      style={{
+                        height: "180px",
+                        width: "200px",
+                        backgroundColor: "#E0E0E0",
+                      }}
+                      // radius={120}
+                      onDrop={(e) => {
+                        setImages(e);
+                        handleUpload(e);
+                      }}
+                      maxSize={3 * 1024 ** 2}
+                      maxFiles={1}
+                      multiple={false}
+                      disabled={disabled}
+                      accept={[
+                        MIME_TYPES.jpeg,
+                        MIME_TYPES.jpg,
+                        MIME_TYPES.png,
+                        MIME_TYPES.svg,
+                        MIME_TYPES.gif,
+                      ]}
+                    >
+                      {images.length < 1 && (
+                        <Avatar
+                          // key={index}
+                          src={urls}
+                          size={150}
+                          radius={120}
+                          mx="auto"
+                        />
+                      )}
+                      {previews}
+                    </Dropzone>
+                    <Button
+                      size="sm"
+                      mt="sm"
+                      compact
+                      style={{
+                        width: "200px",
+                      }}
+                      color="red"
+                      hidden={disabled2}
+                      onClick={() => {
+                        setImages([]);
+                        setUrls(
+                          "https://firebasestorage.googleapis.com/v0/b/awep-dummy.appspot.com/o/defaultAvatar%2FDefaultAvatarForAllUsersWith%20No%20Profile%20Image.jpg%2B0.4989565837086003?alt=media&token=86eb4791-707e-4409-b6e8-dcc47caa2461"
+                        );
+                        setDisabled(false);
+                        setDisabled2(true);
+                        // setRemove(false);
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </Input.Wrapper>
+              </Grid.Col>
+            </Grid>
+
+            <Grid justify="flex-end">
+              <Grid.Col xs={6} sm={6} md={6} lg={6} xl={3}>
+                <Button
+                  size="md"
+                  fullWidth
+                  variant="filled"
+                  color="red"
+                  disabled={disabled}
+                  rightIcon={<IconX />}
+                  uppercase
+                  onClick={() => {
+                    setOpened(true);
                   }}
                 >
-                  <Dropzone
-                    style={{
-                      height: "180px",
-                      width: "200px",
-                      backgroundColor: "#E0E0E0",
-                    }}
-                    // radius={120}
-                    onDrop={(e) => {
-                      setImages(e);
-                      handleUpload(e);
-                    }}
-                    maxSize={3 * 1024 ** 2}
-                    maxFiles={1}
-                    multiple={false}
-                    disabled={disabled}
-                    accept={[
-                      MIME_TYPES.jpeg,
-                      MIME_TYPES.jpg,
-                      MIME_TYPES.png,
-                      MIME_TYPES.svg,
-                      MIME_TYPES.gif,
-                    ]}
-                  >
-                    {images.length < 1 && (
-                      <Avatar
-                        // key={index}
-                        src={urls}
-                        size={150}
-                        radius={120}
-                        mx="auto"
-                      />
-                    )}
-                    {previews}
-                  </Dropzone>
-                  <Button
-                    size="sm"
-                    mt="sm"
-                    compact
-                    style={{
-                      width: "200px",
-                    }}
-                    color="red"
-                    hidden={disabled2}
-                    onClick={() => {
-                      setImages([]);
-                      setUrls(
-                        "https://firebasestorage.googleapis.com/v0/b/awep-dummy.appspot.com/o/defaultAvatar%2FDefaultAvatarForAllUsersWith%20No%20Profile%20Image.jpg%2B0.4989565837086003?alt=media&token=86eb4791-707e-4409-b6e8-dcc47caa2461"
-                      );
-                      setDisabled(false);
-                      setDisabled2(true);
-                      // setRemove(false);
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </Input.Wrapper>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        <Grid>
-          <Grid.Col lg={6}>
-            <TextInput
-              size="md"
-              label="Full Name"
-              defaultValue={customerProfile.name}
-              required
-              {...form.getInputProps("name")}
-            />
-          </Grid.Col>
-          <Grid.Col lg={6}>
-            <TextInput
-              size="md"
-              disabled
-              defaultValue={customerProfile.email}
-              label="Email Address"
-              required
-              {...form.getInputProps("email")}
-            />
-          </Grid.Col>
-          <Grid.Col lg={6}>
-            <TextInput
-              size="md"
-              defaultValue={customerProfile.CNIC}
-              label="CNIC"
-              //   component={InputMask}
-              //   mask="99999-9999999-9"
-              required
-              {...form.getInputProps("CNIC")}
-            />
-          </Grid.Col>
-          <Grid.Col lg={6}>
-            <TextInput
-              size="md"
-              defaultValue={customerProfile.phone}
-              label="Contact Number"
-              //   component={InputMask}
-              //   mask="99999999999"
-              required
-              {...form.getInputProps("phone")}
-            />
-          </Grid.Col>
-        </Grid>
-        <Group position="right">
-          {" "}
-          <Button
-            rightIcon={<IconEdit />}
-            color={"dark"}
-            size={"md"}
-            type="submit"
-          >
-            Update Profile
-          </Button>
-        </Group>
-      </form>
-
-      <Grid pt={0} mt={0}>
-        <Grid.Col lg={12} style={{ position: "relative" }}>
-          <LoadingOverlay
-            loaderProps={{ color: "grape", variant: "bars" }}
-            visible={changepwdVisible}
-          />
-          <Accordion variant="contained" radius="xs" color="ffffff">
-            <Accordion.Item value="customization">
-              <Accordion.Control icon={<IconKey />}>
-                <Text> Change Password</Text>
-                <Text size="sm" color="dimmed" weight={400}>
-                  It's a good idea to use a strong password that you don't use
-                  elsewhere
-                </Text>
-              </Accordion.Control>
-
-              <Accordion.Panel>
-                <form
-                  onSubmit={form1.onSubmit((values) =>
-                    updatePasswordMethod(values)
-                  )}
+                  Cancel
+                </Button>
+              </Grid.Col>
+              <Grid.Col xs={6} sm={6} md={6} lg={6} xl={3}>
+                <Button
+                  type="submit"
+                  size="md"
+                  fullWidth
+                  variant="filled"
+                  color="dark"
+                  disabled={disabled}
+                  loading={loading}
+                  rightIcon={<IconEdit />}
+                  uppercase
                 >
-                  <PasswordInput
-                    size="md"
-                    placeholder="Current Password"
-                    label="Current Password"
-                    required
-                    onInput={(event) => {
-                      if (event.target.value === form1.values.newPassword) {
-                        form1.setFieldError(
-                          "newPassword",
-                          "CURRENT PASSWORD AND NEW PASSWORD CANT BE THE SAME"
-                        );
-                      } else {
-                        form1.setFieldError("newPassword", "");
-                      }
-                    }}
-                    {...form1.getInputProps("currentPassword")}
-                  />
-                  <PasswordInput
-                    size="md"
-                    placeholder="New Password"
-                    label="New Password"
-                    required
-                    onInput={(event) => {
-                      if (event.target.value !== form1.values.confirmPassword) {
-                        form1.setFieldError(
-                          "confirmPassword",
-                          "New password and confrim password don't match"
-                        );
-                      } else {
-                        form1.setFieldError("confirmPassword", "");
-                      }
-                    }}
-                    {...form1.getInputProps("newPassword")}
-                  />
-                  <PasswordInput
-                    size="md"
-                    placeholder="Confirm Password"
-                    label="Confirm Password"
-                    required
-                    onInput={(event) => {}}
-                    {...form1.getInputProps("confirmPassword")}
-                  />
-                  <Group position="right">
-                    <Button
-                      my="md"
-                      size="md"
-                      color="dark"
-                      type="submit"
-                      uppercase
-                      disabled={
-                        form1.values.confirmPassword &&
-                        form1.values.newPassword &&
-                        form1.values.currentPassword &&
-                        form1.values.currentPassword !==
-                          form1.values.newPassword &&
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-                          form1.values.currentPassword
-                        ) &&
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-                          form1.values.newPassword
-                        ) &&
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-                          form1.values.confirmPassword
-                        ) &&
-                        form1.values.newPassword ===
-                          form1.values.confirmPassword
-                          ? false
-                          : true
-                      }
-                      rightIcon={<IconEdit />}
+                  update profile
+                </Button>
+              </Grid.Col>
+            </Grid>
+          </form>
+
+          <Grid pt={0} mt={0}>
+            <Grid.Col lg={12} style={{ position: "relative" }}>
+              <LoadingOverlay
+                loaderProps={{ color: "grape", variant: "bars" }}
+                visible={changepwdVisible}
+              />
+              <Accordion variant="contained" radius="xs" color="ffffff">
+                <Accordion.Item value="customization">
+                  <Accordion.Control icon={<IconKey />}>
+                    <Text> Change Password</Text>
+                    <Text size="sm" color="dimmed" weight={400}>
+                      It's a good idea to use a strong password that you don't
+                      use elsewhere
+                    </Text>
+                  </Accordion.Control>
+
+                  <Accordion.Panel>
+                    <form
+                      onSubmit={form1.onSubmit((values) =>
+                        updatePasswordMethod(values)
+                      )}
                     >
-                      Update Password
-                    </Button>
-                  </Group>
-                </form>
-              </Accordion.Panel>
-            </Accordion.Item>
-          </Accordion>
-        </Grid.Col>
-      </Grid>
+                      <PasswordInput
+                        size="md"
+                        placeholder="Current Password"
+                        label="Current Password"
+                        required
+                        onInput={(event) => {
+                          if (event.target.value === form1.values.newPassword) {
+                            form1.setFieldError(
+                              "newPassword",
+                              "CURRENT PASSWORD AND NEW PASSWORD CANT BE THE SAME"
+                            );
+                          } else {
+                            form1.setFieldError("newPassword", "");
+                          }
+                        }}
+                        {...form1.getInputProps("currentPassword")}
+                      />
+                      <PasswordInput
+                        size="md"
+                        placeholder="New Password"
+                        label="New Password"
+                        required
+                        onInput={(event) => {
+                          if (
+                            event.target.value !== form1.values.confirmPassword
+                          ) {
+                            form1.setFieldError(
+                              "confirmPassword",
+                              "New password and confrim password don't match"
+                            );
+                          } else {
+                            form1.setFieldError("confirmPassword", "");
+                          }
+                        }}
+                        {...form1.getInputProps("newPassword")}
+                      />
+                      <PasswordInput
+                        size="md"
+                        placeholder="Confirm Password"
+                        label="Confirm Password"
+                        required
+                        onInput={(event) => {}}
+                        {...form1.getInputProps("confirmPassword")}
+                      />
+                      <Group position="right">
+                        <Button
+                          my="md"
+                          size="md"
+                          color="dark"
+                          type="submit"
+                          uppercase
+                          disabled={
+                            form1.values.confirmPassword &&
+                            form1.values.newPassword &&
+                            form1.values.currentPassword &&
+                            form1.values.currentPassword !==
+                              form1.values.newPassword &&
+                            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+                              form1.values.currentPassword
+                            ) &&
+                            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+                              form1.values.newPassword
+                            ) &&
+                            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+                              form1.values.confirmPassword
+                            ) &&
+                            form1.values.newPassword ===
+                              form1.values.confirmPassword
+                              ? false
+                              : true
+                          }
+                          rightIcon={<IconEdit />}
+                        >
+                          Update Password
+                        </Button>
+                      </Group>
+                    </form>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              </Accordion>
+            </Grid.Col>
+          </Grid>
+        </Paper>
+      </Center>
     </Paper>
   );
 };

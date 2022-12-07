@@ -488,6 +488,7 @@ const SignUp = ({
                       </Grid.Col>
                     </Grid>
                     <Button
+                      className="button"
                       my="md"
                       size={inputSize}
                       fullWidth

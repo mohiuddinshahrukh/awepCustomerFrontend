@@ -555,6 +555,19 @@ const NewVendorBookingFile = () => {
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
         });
+        socket.socket.emit("generateNotification", {
+          userId: vendorDetails.vendorId,
+          title: "Subvenue Booking Successful",
+          message: `Customer For Booking: ${email}`,
+          link: "https://awep-frontend-vendor-01-sept-22.vercel.app/vendorBookings",
+        });
+
+        socket.socket.emit("viewAllChatsOnStartConversation", {
+          participant: {
+            _id: vendorDetails.vendorBusinessId,
+            type: "vendorBusiness",
+          },
+        });
         setBookingId(response.data?.data?.trackingId);
         showNotification({
           color: "green",

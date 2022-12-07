@@ -1,5 +1,6 @@
 import { Center, Container, Grid, Paper, Text } from "@mantine/core";
 import axios from "axios";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import BookingCalendar from "./Calendar";
 import FinanceStats from "./FinanceStats";
@@ -33,9 +34,21 @@ const DashboardStats = () => {
       console.log("ERROR in fetching all venues:", e);
     }
   };
+  const [bookingData, setBookingData] = useState({});
   useEffect(() => {
     console.count();
-    fetchAllvenueFeedbacks().then(setDashboardStats);
+    fetchAllvenueFeedbacks().then((result) => {
+      setDashboardStats(result);
+      let bookingData = {};
+      result.subVenueBookings.map(
+        (booking) =>
+          (bookingData[
+            moment(booking.bookingDate).add(1, "days").format("YYYY-MM-DD")
+          ] = moment(booking.bookingDate).add(1, "days").format("YYYY-MM-DD"))
+      );
+      console.log("result", bookingData);
+      setBookingData(bookingData);
+    });
   }, []);
   return (
     <Grid style={{ width: "100%" }}>
@@ -75,7 +88,11 @@ const DashboardStats = () => {
       </Grid.Col>
       <Grid.Col md={4}>
         <Center mb="md">
-          <BookingCalendar size={"md"} initialMonth={new Date()} />
+          <BookingCalendar
+            size={"md"}
+            initialMonth={new Date()}
+            bookingData={bookingData}
+          />
         </Center>
       </Grid.Col>
     </Grid>

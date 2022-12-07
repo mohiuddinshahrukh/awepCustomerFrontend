@@ -10,8 +10,9 @@ import {
   Text,
 } from "@mantine/core";
 import axios from "axios";
+import moment from "moment";
 
-const BookingCalendar = ({ size, initialMonth }) => {
+const BookingCalendar = ({ size, initialMonth, bookingData }) => {
   const [refresh, setRefresh] = useState(true);
   const [stats, setStats] = useState([]);
   const [value, setValue] = useState(initialMonth);
@@ -50,69 +51,85 @@ const BookingCalendar = ({ size, initialMonth }) => {
 
   // console.log("dataWeHave", dataWeHave);
 
-  const dataWeHave = {
-    "2022-10-14LUNCH": "2022-10-14LUNCH",
-    "2022-10-14DINNER": "2022-10-14DINNER",
-    // "2022-10-15LUNCH": "2022-10-15LUNCH",
-    "2022-10-15DINNER": "2022-10-15DINNER",
-    "2022-10-16LUNCH": "2022-10-16LUNCH",
-    "2022-10-17DINNER": "2022-10-17DINNER",
-    "2022-11-17DINNER": "2022-11-17DINNER",
-    "2022-10-17LUNCH": "2022-10-17LUNCH",
-    "2022-11-17LUNCH": "2022-11-17LUNCH",
-    "2022-11-17DINNER": "2022-11-17DINNER",
-    "2022-11-18LUNCH": "2022-11-18LUNCH",
-    "2022-12-17DINNER": "2022-12-17DINNER",
-    "2022-12-01LUNCH": "2022-12-01LUNCH",
-    "2022-12-05LUNCH": "2022-12-05LUNCH",
-    "2022-12-17DINNER": "2022-12-17DINNER",
-  };
   return (
     <div>
-      <Paper radius="lg">
-        {/* {stats && (
+      {bookingData && (
+        <Paper radius="lg">
           <Calendar
             size={size}
             initialMonth={initialMonth}
+            styles={(theme) => ({
+              cell: {
+                border: `1px solid ${
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[4]
+                    : theme.colors.gray[2]
+                }`,
+              },
+              day: {
+                borderRadius: 0,
+                height: 70,
+                fontSize: theme.fontSizes.lg,
+              },
+              weekday: { fontSize: theme.fontSizes.lg, },
+              weekdayCell: {
+                fontSize: theme.fontSizes.xl,
+                backgroundColor:
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[5]
+                    : theme.colors.gray[0],
+                border: `1px solid ${
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[4]
+                    : theme.colors.gray[2]
+                }`,
+                height: 70,
+              },
+            })}
             dayStyle={(date) => {
-              let formatedDate = dayjs(date)?.format("YYYY-MM-DD");
-              if (dataWeHave) {
-                if (
-                  dataWeHave[`${formatedDate}LUNCH`] &&
-                  !dataWeHave[`${formatedDate}DINNER`]
-                ) {
+              let formatedDate = moment(date)?.format("YYYY-MM-DD");
+              if (bookingData) {
+                console.log("IN@@ BOOKING DATA", bookingData);
+                console.log("IN@@ DATE", moment(date)?.format("YYYY-MM-DD"));
+                console.log(
+                  "IN@@ BOOKING DATA OBJECT",
+                  bookingData[moment(date)?.format("YYYY-MM-DD")]
+                );
+                console.log("IN@@ STYLE");
+                if (bookingData[formatedDate]) {
                   return {
-                    backgroundColor: "red",
+                    backgroundColor: "#e60084",
                     color: "#fff",
                     margin: "1px",
-                    borderRadius: "50%",
-                  };
-                } else if (
-                  dataWeHave[`${formatedDate}DINNER`] &&
-                  !dataWeHave[`${formatedDate}LUNCH`]
-                ) {
-                  return {
-                    backgroundColor: "blue",
-                    color: "#fff",
-                    margin: "1px",
-                    borderRadius: "50%",
-                  };
-                } else if (
-                  dataWeHave[`${formatedDate}LUNCH`] &&
-                  dataWeHave[`${formatedDate}DINNER`]
-                ) {
-                  return {
-                    backgroundColor: "green",
-                    color: "#fff",
-                    margin: "1px",
-                    borderRadius: "50%",
+                    // borderRadius: "60%",
                   };
                 }
+                // else if (
+                //   dataWeHave[`${formatedDate}DINNER`] &&
+                //   !dataWeHave[`${formatedDate}LUNCH`]
+                // ) {
+                //   return {
+                //     backgroundColor: "blue",
+                //     color: "#fff",
+                //     margin: "1px",
+                //     borderRadius: "50%",
+                //   };
+                // } else if (
+                //   dataWeHave[`${formatedDate}LUNCH`] &&
+                //   dataWeHave[`${formatedDate}DINNER`]
+                // ) {
+                //   return {
+                //     backgroundColor: "green",
+                //     color: "#fff",
+                //     margin: "1px",
+                //     borderRadius: "50%",
+                //   };
+                // }
               }
             }}
           />
-        )} */}
-        <Calendar
+
+          {/* <Calendar
           value={value}
           onChange={setValue}
           fullWidth
@@ -141,8 +158,9 @@ const BookingCalendar = ({ size, initialMonth }) => {
               height: 70,
             },
           })}
-        />
-      </Paper>
+        /> */}
+        </Paper>
+      )}
     </div>
   );
 };

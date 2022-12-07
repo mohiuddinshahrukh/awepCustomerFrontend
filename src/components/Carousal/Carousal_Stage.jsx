@@ -82,6 +82,12 @@ const Carousal_Stage = ({ stages }) => {
           viewport: {
             borderRadius: "10px",
           },
+          control: {
+            "&[data-inactive]": {
+              opacity: 0,
+              cursor: "default",
+            },
+          },
         }}
         // withIndicators
         onSlideChange={(index) => {

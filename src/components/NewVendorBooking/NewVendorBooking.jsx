@@ -549,7 +549,7 @@ const NewVendorBookingFile = () => {
         setLoading(false);
       } else {
         console.log("success response", response.data.data);
-        socket.emit("generateNotification", {
+        socket.socket.emit("generateNotification", {
           userId: JSON.parse(localStorage.getItem("customerData")).id,
           title: "Subvenue Booking Successful",
           message: `Customer For Booking: ${email}`,

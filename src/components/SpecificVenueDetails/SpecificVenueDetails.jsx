@@ -313,7 +313,7 @@ const SpecificVenueDetails = () => {
               <Tabs.Panel value="stage" pt="xs">
                 <Carousal_Stage
                   // hidden={venueDetails?.stage === undefined}
-                  stages={venueDetails?.stage}
+                  stages={venueDetails?.stages}
                 />
               </Tabs.Panel>
             </Tabs>

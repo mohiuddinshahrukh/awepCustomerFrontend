@@ -84,10 +84,12 @@ const LandingPageMain = () => {
       <FeaturedVenuesSection
         landingPageVenues={allData?.data?.topRatedVenues}
         date={null}
-        time={null}
+        time={""}
       />
       <FeaturedVendorsSection
         landingPageVendors={allData?.data?.topRatedVendors}
+        date={null}
+        time={""}
       />
       <FeaturedMenus landingPageMenus={allData?.data?.mostBookedMenus} />
       <FeaturedVendorServicesSection

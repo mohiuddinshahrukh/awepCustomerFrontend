@@ -7,9 +7,11 @@ import {
   Grid,
   Group,
   Modal,
+  Button,
   Paper,
   Tabs,
   Text,
+  Skeleton,
   Title,
 } from "@mantine/core";
 import axios from "axios";
@@ -23,10 +25,19 @@ import MapComponentView from "../MapViewComponent/MapComponentView";
 import CarouselOfPackages from "../SpecificVendorPackages/CarouselOfPackages";
 import ModalOfPackages from "../SpecificVendorPackages/ModalOfPackages";
 import { useParams } from "react-router-dom";
-import { IconMessageCircle, IconSettings } from "@tabler/icons";
+import {
+  IconMap2,
+  IconMessageCircle,
+  IconPhoto,
+  IconSettings,
+  IconVideo,
+} from "@tabler/icons";
 import BookVenueSideColumnsForVendor from "../BookVenueSideColums/BookVenueSideColumnsForVendor";
 import SignIn from "../userProfiling/SignIn";
 import SignUp from "../userProfiling/SignUp";
+import Carousal_Images from "../Carousal/Carousal";
+import Carousal_Videos from "../Carousal/Carousal_videos";
+import { useMediaQuery } from "@mantine/hooks";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -35,6 +46,7 @@ const useStyles = createStyles(() => ({
   },
 }));
 const SpecificVendorBusinessDetails = () => {
+  const matches = useMediaQuery("(min-width: 1200px)");
   const params = useParams();
   const { classes } = useStyles();
 
@@ -44,13 +56,14 @@ const SpecificVendorBusinessDetails = () => {
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [eventType, setEventType] = useState("");
-  const [date, setDate] = useState(params.date ? new Date(params.date) : null);
+  const [ date, setDate] = useState(params.date ? new Date(params.date) : null);
   const [time, setTime] = useState(params.time ? params.time : "");
   const [guests, setGuests] = useState();
   const [isSignIn, setIsSignIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [idOfSpecificVendorPackage, setIdOfSpecificVendorPackage] =
     useState("");
+  const [openBookNow, setOpenBookNow] = useState(false);
   console.log("vendorDetails are", vendorDetails);
   const [open, setOpen] = useState(false);
 
@@ -106,6 +119,28 @@ const SpecificVendorBusinessDetails = () => {
           alignItems: "center",
         }}
       >
+        <Modal opened={openBookNow} onClose={() => setOpenBookNow(false)}>
+          <BookVenueSideColumnsForVendor
+            onClickFunction={() => {
+              console.log("onClickFunction111");
+              setOpen(true);
+            }}
+            contactPhone={contactPhone}
+            setContactPhone={setContactPhone}
+            contactEmail={contactEmail}
+            setContactEmail={setContactEmail}
+            eventType={eventType}
+            setEventType={setEventType}
+            date={date}
+            setDate={setDate}
+            time={time}
+            setTime={setTime}
+            vendorId={params.id}
+            isSignIn={isSignIn}
+            setIsSignIn={setIsSignIn}
+          />
+        </Modal>
+
         <Modal opened={isSignIn} onClose={() => setIsSignIn(false)} fullScreen>
           <SignIn
             closeModal={true}
@@ -120,45 +155,123 @@ const SpecificVendorBusinessDetails = () => {
             setIsSignIn={setIsSignIn}
           />
         </Modal>
-        <Text color="dimmed">{vendorDetails?.city}, Pakistan</Text>
-        <Text underline>View Map</Text>
-        <Text underline>Phone Number</Text>
-        <Anchor
-          // component={Link}
-
-          href="https://www.google.com/"
-          color="dark"
-          underline
-        >
-          Visit Website
-        </Anchor>
       </Group>
       <Group
-        spacing="md"
         pt="sm"
         style={{
           display: "flex",
           alignItems: "center",
         }}
       >
-        <Group spacing={0}>
-          <RatingStars
-            rating={vendorDetails?.rating ? vendorDetails?.rating : 5}
-            ratingCount={
-              vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0
-            }
-          />
-        </Group>
-        <Text color="dimmed" underline>
-          {vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0}{" "}
-          {vendorDetails?.ratingCount === 1 ? "Review" : "Reviews"}
-        </Text>
+        <Anchor
+          href={`https://maps.google.com/?q=${vendorDetails?.pinLocation?.lat},${vendorDetails?.pinLocation?.lng}`}
+          target="_blank"
+          color="dimmed"
+        >
+          <Group>
+            <IconMap2 />
+            {vendorDetails ? (
+              <Text color="dimmed">
+                {`${vendorDetails?.address?.concat(":") || ""} ${
+                  vendorDetails?.city?.toUpperCase()
+                    ? vendorDetails?.city?.toUpperCase()?.concat(", Pakistan")
+                    : ""
+                }`}
+              </Text>
+            ) : (
+              <Skeleton height={8} mt={6} radius="xl" />
+            )}
+          </Group>
+        </Anchor>
       </Group>
       <Grid pt="md">
         <Grid.Col lg={9}>
-          <Carousal
-            images={vendorDetails?.images ? vendorDetails?.images : ["", ""]}
-          />
+          <Grid.Col
+            m={0}
+            p={0}
+            style={{
+              position: "relative",
+            }}
+          >
+            {!matches && (
+              <Button
+                className="button"
+                onClick={() => setOpenBookNow(true)}
+                style={{
+                  position: "absolute",
+                  bottom: 20,
+                  left: 20,
+                  zIndex: 10,
+                }}
+              >
+                Book Now
+              </Button>
+            )}
+            <Tabs
+              color={"pink"}
+              defaultValue={"photos"}
+              keepMounted={false}
+              variant="pills"
+              // styles={{}}
+              // classNames={{
+              //   tabsList: {},
+              // }}
+            >
+              <Tabs.List>
+                <Tabs.Tab value="photos" icon={<IconPhoto size={14} />}>
+                  Photos
+                </Tabs.Tab>
+
+                <Tabs.Tab
+                  value="videos"
+                  icon={<IconVideo size={14} />}
+                  hidden={
+                    vendorDetails?.videos?.length === 0 ||
+                    vendorDetails?.videos == undefined
+                  }
+                >
+                  Videos
+                </Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel
+                value="videos"
+                pt="xs"
+                hidden={
+                  vendorDetails?.videos?.length === 0 ||
+                  vendorDetails?.videos === undefined
+                }
+              >
+                <Carousal_Videos videos={vendorDetails?.videos} />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="photos" pt="xs">
+                <Carousal_Images images={vendorDetails?.images} />
+              </Tabs.Panel>
+              {console.log("char images", vendorDetails)}
+            </Tabs>
+          </Grid.Col>
+          <Group
+            spacing="md"
+            pt="sm"
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Group spacing={0}>
+              <RatingStars
+                rating={vendorDetails?.rating ? vendorDetails?.rating : 5}
+                ratingCount={
+                  vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0
+                }
+              />
+            </Group>
+            <Text color="dimmed" underline>
+              {vendorDetails?.ratingCount ? vendorDetails?.ratingCount : 0}{" "}
+              {vendorDetails?.ratingCount === 1 ? "Review" : "Reviews"}
+            </Text>
+          </Group>
           <Tabs defaultValue="About" py="xl" color="pink" keepMounted={false}>
             <Paper className={classes.stickySThings}>
               <Tabs.List py="md">

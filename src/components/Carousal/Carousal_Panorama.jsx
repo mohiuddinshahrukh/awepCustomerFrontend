@@ -12,6 +12,12 @@ const Carousal_Panorama = ({ panorama }) => {
         viewport: {
           borderRadius: "10px",
         },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
       }}
       // withIndicators
       height="501px"
@@ -28,7 +34,6 @@ const Carousal_Panorama = ({ panorama }) => {
             width="100%"
             height="500px"
             image={venuePanorama}
-            
             pitch={10}
             yaw={50}
             hfov={1000}

@@ -11,8 +11,15 @@ const Carousal_Videos = ({ videos }) => {
         viewport: {
           borderRadius: "10px",
         },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
       }}
       // withIndicators
+
       height="501px"
       slideSize="100%"
       slideGap={2}

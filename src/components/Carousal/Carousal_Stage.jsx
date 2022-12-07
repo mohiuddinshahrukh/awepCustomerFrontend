@@ -16,6 +16,7 @@ import Stage3DView from "../Stage3DView/stage3DView";
 
 const Carousal_Stage = ({ stages }) => {
   const [stageModal, setStageModal] = useState(false);
+  const [stageIndex, setStageIndex] = useState(0);
   let venueStages = stages;
   console.log("TU KHER BIYON stage", stages);
   return (
@@ -43,7 +44,7 @@ const Carousal_Stage = ({ stages }) => {
         <model-viewer
           id="mv-demo"
           shadow-intensity="20"
-          src="https://cors-anywhere.herokuapp.com/https://firebasestorage.googleapis.com/v0/b/awep-92675.appspot.com/o/3D-Models%2Fretro_style_stage.glb?alt=media&token=76314b97-2727-4594-8533-9a75c2b223ad"
+          src={`https://cors-anywhere.herokuapp.com/${venueStages[stageIndex]?.stage3DModelURL}`}
           alt="A 3D model of an astronaut"
           auto-rotate
           camera-controls
@@ -59,40 +60,40 @@ const Carousal_Stage = ({ stages }) => {
         }}
         className="button"
         onClick={() => {
-          let link =
-            "https://firebasestorage.googleapis.com/v0/b/awep-92675.appspot.com/o/3D-Models%2Fretro_style_stage.glb?alt=media&token=76314b97-2727-4594-8533-9a75c2b223ad";
+          // let link =
+          //   "https://firebasestorage.googleapis.com/v0/b/awep-92675.appspot.com/o/3D-Models%2Fretro_style_stage.glb?alt=media&token=76314b97-2727-4594-8533-9a75c2b223ad";
+          let link = venueStages[stageIndex]?.stage3DModelURL;
+
           try {
             window.ReactNativeWebView.postMessage(`3DModel::::::::${link}`);
           } catch (e) {
-            alert("AR Only Works on Mobile");
+            console.log(venueStages[stageIndex]?.stage3DModelURL);
+            setStageModal(true);
+
+            // alert("AR Only Works on Mobile");
           }
         }}
       >
-        View in AR
+        <IconScreenShare /> View in 3D
       </Button>
-      <ActionIcon
-        variant="filled"
-        // color="black"
-        className="fgColor"
-        style={{
-          position: "absolute",
-          zIndex: 10,
-          top: 20,
-          right: 20,
-        }}
-        onClick={() => {
-          setStageModal(true);
-        }}
-      >
-        <IconScreenShare />
-      </ActionIcon>
+
       <Carousel
         styles={{
           viewport: {
             borderRadius: "10px",
           },
+          control: {
+            "&[data-inactive]": {
+              opacity: 0,
+              cursor: "default",
+            },
+          },
         }}
         // withIndicators
+        onSlideChange={(index) => {
+          console.log("index", index);
+          setStageIndex(index);
+        }}
         height="501px"
         slideSize="100%"
         slideGap={2}
@@ -101,9 +102,15 @@ const Carousal_Stage = ({ stages }) => {
         align="start"
         control
       >
-        <Carousel.Slide>
-          <Stage3DView />
-        </Carousel.Slide>
+        {venueStages?.length !== 0 && venueStages !== undefined ? (
+          venueStages.map((image, index) => (
+            <Carousel.Slide key={index}>
+              <Image height="500px" width={"100%"} src={image?.stageImageURL} />
+            </Carousel.Slide>
+          ))
+        ) : (
+          <Skeleton height="500px" width="100%" />
+        )}
       </Carousel>
     </Paper>
   );

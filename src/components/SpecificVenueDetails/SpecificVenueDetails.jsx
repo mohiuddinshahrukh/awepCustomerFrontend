@@ -38,6 +38,7 @@ import {
   IconPhone,
   IconMail,
   IconMessage2,
+  IconVideo,
 } from "@tabler/icons";
 import SignIn from "../userProfiling/SignIn";
 import SignUp from "../userProfiling/SignUp";
@@ -265,13 +266,13 @@ const SpecificVenueDetails = () => {
               // }}
             >
               <Tabs.List>
-                <Tabs.Tab value="photos" icon={<IconMessageCircle size={14} />}>
+                <Tabs.Tab value="photos" icon={<IconPhoto size={14} />}>
                   Photos
                 </Tabs.Tab>
 
                 <Tabs.Tab
                   value="videos"
-                  icon={<IconPhoto size={14} />}
+                  icon={<IconVideo size={14} />}
                   hidden={
                     venueDetails?.videos?.length === 0 ||
                     venueDetails?.videos == undefined
@@ -322,7 +323,7 @@ const SpecificVenueDetails = () => {
               <Tabs.Panel value="stage" pt="xs">
                 <Carousal_Stage
                   // hidden={venueDetails?.stage === undefined}
-                  stages={venueDetails?.stage}
+                  stages={venueDetails?.stages}
                 />
               </Tabs.Panel>
             </Tabs>

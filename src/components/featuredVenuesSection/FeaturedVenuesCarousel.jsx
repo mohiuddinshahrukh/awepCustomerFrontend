@@ -17,7 +17,7 @@ const FeaturedVenuesCarousel = ({ landingPageVenues, date, time }) => {
     : landingPageVenues?.map((venue, index) => {
         return (
           <Carousel.Slide key={index}>
-            <FeaturedVenuesCard venue={venue} date={null} time={null} />
+            <FeaturedVenuesCard venue={venue} date={null} time={""} />
           </Carousel.Slide>
         );
       });

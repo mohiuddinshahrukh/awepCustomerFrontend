@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import FeaturedVendorsCarousel from "./FeaturedVendorsCarousel";
 
-const FeaturedVendorsSection = ({ landingPageVendors }) => {
+const FeaturedVendorsSection = ({ landingPageVendors, date, time }) => {
   return (
     <Container size={"xl"} my="xl">
       <Divider my="lg" />
@@ -20,7 +20,11 @@ const FeaturedVendorsSection = ({ landingPageVendors }) => {
         </Anchor>
       </Group>
 
-      <FeaturedVendorsCarousel landingPageVendors={landingPageVendors} />
+      <FeaturedVendorsCarousel
+        landingPageVendors={landingPageVendors}
+        date={null}
+        time={""}
+      />
 
       <Group position="right">
         <Button

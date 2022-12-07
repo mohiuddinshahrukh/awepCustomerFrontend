@@ -11,6 +11,12 @@ const Carousal_Images = ({ images }) => {
         viewport: {
           borderRadius: "10px",
         },
+        control: {
+          "&[data-inactive]": {
+            opacity: 0,
+            cursor: "default",
+          },
+        },
       }}
       withIndicators
       height="501px"

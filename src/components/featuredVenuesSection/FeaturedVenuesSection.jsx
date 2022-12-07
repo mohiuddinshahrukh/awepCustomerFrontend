@@ -23,7 +23,7 @@ const FeaturedVenuesSection = ({ landingPageVenues, date, time }) => {
       <FeaturedVenuesCarousel
         landingPageVenues={landingPageVenues}
         date={null}
-        time={null}
+        time={""}
       />
       <Group position="right">
         <Button

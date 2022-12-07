@@ -1,5 +1,5 @@
 import { Paper } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchBackground from "./searchAndBG/SearchBackground";
 import img1 from "../../assets/searchBackgroundCarouselImages/1.jpg";
 import img2 from "../../assets/searchBackgroundCarouselImages/2.jpg";
@@ -26,6 +26,8 @@ import RegisteredCities from "../registeredCities/RegisteredCities";
 import axios from "axios";
 import FeaturedVendorServicesSection from "../featuredVendorServices/FeaturedVendorServicesSection";
 import FeaturedMenus from "../featuredMenusSection/FeaturedMenus";
+import LandingPageStats from "../landingPageStats/LandingPageStats";
+import { useIntersection } from "@mantine/hooks";
 
 const fetchVenuesMethod = async () => {
   try {
@@ -51,6 +53,11 @@ const LandingPageMain = () => {
     fetchVenuesMethod().then(setAllData);
   }, []);
 
+  const containerRef = useRef();
+  const { ref, entry } = useIntersection({
+    root: containerRef.current,
+    threshold: 1,
+  });
   return (
     <Paper>
       <SearchBackground
@@ -91,6 +98,11 @@ const LandingPageMain = () => {
       <WeddingCards />
       <CustomerTestimonials
         landingPageTestimonials={allData?.data?.testimonials}
+      />
+      <LandingPageStats
+        landingPageStats={allData?.data?.landingPageStats}
+        entry={entry}
+        ref={ref}
       />
       <RegisteredCities />
     </Paper>

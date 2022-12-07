@@ -29,7 +29,7 @@ const FeaturedVendorServicesSection = ({ vendorServices }) => {
           rightIcon={<IconArrowRight />}
           className="buttonOutline"
         >
-          All Vendor Packages
+          All Vendors
         </Button>
       </Group>
     </Container>

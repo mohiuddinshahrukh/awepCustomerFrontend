@@ -12,7 +12,7 @@ const CustomerTestimonialsCarousel = ({ landingPageTestimonials }) => {
   });
   return (
     <Carousel
-      draggable={false}
+      // draggable={false}
       styles={{
         viewport: { padding: "20px 5px" },
         control: {
@@ -24,10 +24,12 @@ const CustomerTestimonialsCarousel = ({ landingPageTestimonials }) => {
       }}
       slideSize={"25% "}
       align={"start"}
-      slidesToScroll={"auto"}
+      slidesToScroll={1}
       breakpoints={[
-        { maxWidth: "md", slideSize: "33.33333333%" },
-        { maxWidth: "sm", slideSize: "75%" },
+        { maxWidth: "md", slideSize: "33.33333333%", slideGap: 10 },
+        { maxWidth: "lg", slideSize: "33.33333333%", slideGap: 10 },
+        { maxWidth: "xl", slideSize: "25%", slideGap: 10 },
+        { maxWidth: "sm", slideSize: "75%", slideGap: 10 },
       ]}
     >
       {carouselSlides}

@@ -4,9 +4,57 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import BookingCalendar from "./Calendar";
 import FinanceStats from "./FinanceStats";
+import RecentBookings from "./RecentBookings";
+import UpcomingBookings from "./UpcomingBookings";
+
+const logicForSortingBookingsAccordingToLunchOrDinner = (bookings) => {
+  let sortedBookings = [];
+  let lunchBookings = [];
+  let dinnerBookings = [];
+  bookings.forEach((booking) => {
+    if (booking.bookingTime === "LUNCH") {
+      lunchBookings.push(booking);
+    } else {
+      dinnerBookings.push(booking);
+    }
+  });
+  let i = 0;
+  let j = 0;
+  while (i < lunchBookings.length && j < dinnerBookings.length) {
+    if (
+      moment(lunchBookings[i].bookingDate).format("YYYY-MM-DD") ===
+      moment(dinnerBookings[j].bookingDate).format("YYYY-MM-DD")
+    ) {
+      sortedBookings.push(lunchBookings[i]);
+      sortedBookings.push(dinnerBookings[j]);
+      i++;
+      j++;
+    } else if (
+      moment(lunchBookings[i].bookingDate).format("YYYY-MM-DD") <
+      moment(dinnerBookings[j].bookingDate).format("YYYY-MM-DD")
+    ) {
+      sortedBookings.push(lunchBookings[i]);
+      i++;
+    } else {
+      sortedBookings.push(dinnerBookings[j]);
+      j++;
+    }
+  }
+  while (i < lunchBookings.length) {
+    sortedBookings.push(lunchBookings[i]);
+    i++;
+  }
+  while (j < dinnerBookings.length) {
+    sortedBookings.push(dinnerBookings[j]);
+    j++;
+  }
+  return sortedBookings;
+};
 
 const DashboardStats = () => {
   const [dashboardStats, setDashboardStats] = useState({});
+  const [processedBookings, setProcessedBookings] = useState([]);
+  const [upcomingBookings, setUpcomingBookings] = useState([]);
   console.log("dashboardStats", dashboardStats);
   const fetchAllvenueFeedbacks = async () => {
     try {
@@ -34,20 +82,55 @@ const DashboardStats = () => {
       console.log("ERROR in fetching all venues:", e);
     }
   };
-  const [bookingData, setBookingData] = useState({});
+  const [bookingDatesObject, setBookingDatesObject] = useState({});
   useEffect(() => {
     console.count();
     fetchAllvenueFeedbacks().then((result) => {
       setDashboardStats(result);
       let bookingData = {};
-      result.subVenueBookings.map(
+      let bookings = result.subVenueBookings;
+      bookings.map(
         (booking) =>
           (bookingData[
             moment(booking.bookingDate).add(1, "days").format("YYYY-MM-DD")
           ] = moment(booking.bookingDate).add(1, "days").format("YYYY-MM-DD"))
       );
       console.log("result", bookingData);
-      setBookingData(bookingData);
+      setBookingDatesObject(bookingData);
+      const processedBookings = bookings.map((booking) => {
+        return {
+          date: booking.bookingDate,
+          time: booking.bookingTime ? booking.bookingTime : "N/A",
+          customer: booking.customerName ? booking.customerName : "N/A",
+          eventType: booking.eventType ? booking.eventType : "N/A",
+          guests: booking.numberOfGuests ? booking.numberOfGuests : "N/A",
+          menu: booking?.selectedMenu?.menu?.menuTitle
+            ? booking?.selectedMenu?.menu?.menuTitle
+            : "No Menu Selected",
+          venue: booking.venueName ? booking.venueName : "N/A",
+          subVenue: booking.subVenueName ? booking.subVenueName : "N/A",
+        };
+      });
+      let upcomingBookings = bookings.map((booking) => {
+        return {
+          date: booking.bookingDate,
+          time: booking.bookingTime ? booking.bookingTime : "N/A",
+          customer: booking.customerName ? booking.customerName : "N/A",
+          eventType: booking.eventType ? booking.eventType : "N/A",
+          guests: booking.numberOfGuests ? booking.numberOfGuests : "N/A",
+          menu: booking?.selectedMenu?.menu?.menuTitle
+            ? booking?.selectedMenu?.menu?.menuTitle
+            : "No Menu Selected",
+          venue: booking.venueName ? booking.venueName : "N/A",
+          subVenue: booking.subVenueName ? booking.subVenueName : "N/A",
+        };
+      });
+      upcomingBookings = upcomingBookings.reverse();
+      upcomingBookings =
+        logicForSortingBookingsAccordingToLunchOrDinner(upcomingBookings);
+
+      setProcessedBookings(processedBookings);
+      setUpcomingBookings(upcomingBookings);
     });
   }, []);
   return (
@@ -87,11 +170,17 @@ const DashboardStats = () => {
         />
       </Grid.Col>
       <Grid.Col md={4}>
+        <RecentBookings processedBookings={processedBookings} />
+      </Grid.Col>
+      <Grid.Col md={4}>
+        <UpcomingBookings processedUpcomingBookings={upcomingBookings} />
+      </Grid.Col>
+      <Grid.Col md={4}>
         <Center mb="md">
           <BookingCalendar
             size={"md"}
             initialMonth={new Date()}
-            bookingData={bookingData}
+            bookingData={bookingDatesObject}
           />
         </Center>
       </Grid.Col>

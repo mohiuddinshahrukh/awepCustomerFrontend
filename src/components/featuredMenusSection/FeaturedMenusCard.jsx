@@ -7,6 +7,7 @@ import {
   Title,
 } from "@mantine/core";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -43,7 +44,8 @@ const FeaturedMenusCard = ({ menu }) => {
   let dishCategoriesFinalArray = Array?.from(new Set(dishCategoriesArray));
   return (
     <Paper
-      component={ScrollArea}
+      component={Link}
+      to={`/specificVenue/${menu?.venueId}`}
       p="xl"
       radius="md"
       sx={{
@@ -68,53 +70,55 @@ const FeaturedMenusCard = ({ menu }) => {
       }}
       className="border"
     >
-      <div>
-        <Title align="center" order={4}>
-          {menu?.venue?.venueName}
-        </Title>
-        <Title align="center" order={3}>
-          {menuName}
-        </Title>
-        <Title align="center" color={"red"} order={5}>
-          PKR: {menuPrice} PER HEAD
-        </Title>
+      <ScrollArea style={{ height: "350px" }}>
+        <div>
+          <Title align="center" order={4}>
+            {menu?.venue?.venueName}
+          </Title>
+          <Title align="center" order={3}>
+            {menuName}
+          </Title>
+          <Title align="center" color={"red"} order={5}>
+            PKR: {menuPrice} PER HEAD
+          </Title>
 
-        {dishCategoriesFinalArray?.map((dishCategory, globalIndex) => {
-          return (
-            <Box
-              key={globalIndex}
-              color="green"
-              orientation="horizontal"
-              label={dishCategory}
-              size="md"
-            >
-              <Text
-                mt="sm"
-                style={{ color: "#95CE78" }}
-                size="lg"
-                align="center"
+          {dishCategoriesFinalArray?.map((dishCategory, globalIndex) => {
+            return (
+              <Box
+                key={globalIndex}
+                color="green"
+                orientation="horizontal"
+                label={dishCategory}
+                size="md"
               >
-                {dishCategory}
-              </Text>
+                <Text
+                  mt="sm"
+                  style={{ color: "#95CE78" }}
+                  size="lg"
+                  align="center"
+                >
+                  {dishCategory}
+                </Text>
 
-              {dishes?.map((dish, localIndex) => {
-                if (dish.dishCategory === dishCategory) {
-                  return (
-                    <Text
-                      align="center"
-                      key={localIndex}
-                      size="md"
-                      // style={{ color: "black" }}
-                    >
-                      {dish.dishName}
-                    </Text>
-                  );
-                }
-              })}
-            </Box>
-          );
-        })}
-      </div>
+                {dishes?.map((dish, localIndex) => {
+                  if (dish.dishCategory === dishCategory) {
+                    return (
+                      <Text
+                        align="center"
+                        key={localIndex}
+                        size="md"
+                        // style={{ color: "black" }}
+                      >
+                        {dish.dishName}
+                      </Text>
+                    );
+                  }
+                })}
+              </Box>
+            );
+          })}
+        </div>
+      </ScrollArea>
     </Paper>
   );
 };

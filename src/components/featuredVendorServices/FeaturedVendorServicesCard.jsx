@@ -18,6 +18,7 @@ import {
   IconUser,
 } from "@tabler/icons";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -53,6 +54,8 @@ const FeaturedVendorServicesCard = ({ service }) => {
         transitionProperty: "box-shadow",
       }}
       style={{ width: "302px" }}
+      component={Link}
+      to={`/specificVendor/${service?.vendorBusinessId}`}
     >
       <Card.Section mb="sm">
         <Image

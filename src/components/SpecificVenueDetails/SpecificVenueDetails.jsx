@@ -254,7 +254,16 @@ const SpecificVenueDetails = () => {
                 Book Now
               </Button>
             )}
-            <Tabs defaultValue={"photos"} keepMounted={false} variant="pills">
+            <Tabs
+              color={"pink"}
+              defaultValue={"photos"}
+              keepMounted={false}
+              variant="pills"
+              // styles={{}}
+              // classNames={{
+              //   tabsList: {},
+              // }}
+            >
               <Tabs.List>
                 <Tabs.Tab value="photos" icon={<IconMessageCircle size={14} />}>
                   Photos
@@ -368,7 +377,7 @@ const SpecificVenueDetails = () => {
               </b>
             </Text>
           </Group>
-          <Tabs defaultValue="About" py="xl" color="grape" keepMounted={false}>
+          <Tabs defaultValue="About" py="xl" color="pink" keepMounted={false}>
             <Paper className={classes.stickySThings}>
               <Tabs.List py="md">
                 <Tabs.Tab icon={<IconMessageCircle size={14} />} value="About">

@@ -301,7 +301,7 @@ const SignUp = ({
   return (
     <MantineProvider withNormalizeCSS withGlobalStyles>
       <NotificationsProvider>
-        <Container size="xl" my={"xl"}>
+        <Container size="xl" mt={"xl"}>
           <Grid align={"center"}>
             <Grid.Col lg={6}>
               <Grid>

@@ -65,12 +65,14 @@ const CustomerDashboard = () => {
         size="lg"
         position="left"
       >
-        <Sidebar />
+        <Sidebar setOpened={setOpened} />
       </Drawer>
 
       {!matches1200 && (
         <Group position="apart" align={"center"}>
-          <Text>Customer Dashboard</Text>
+          <Text size={"xl"} weight={500}>
+            Customer Dashboard
+          </Text>
           <ActionIcon
             variant="outline"
             size={43}
@@ -91,7 +93,7 @@ const CustomerDashboard = () => {
           noWrap
           style={{ flexShrink: 0, height: "100%" }}
         >
-          {matches1200 ? <Sidebar /> : null}
+          {matches1200 ? <Sidebar setOpened={setOpened} /> : null}
           <Outlet />
         </Group>
       )}

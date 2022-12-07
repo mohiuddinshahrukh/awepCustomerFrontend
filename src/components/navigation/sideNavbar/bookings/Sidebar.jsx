@@ -104,7 +104,7 @@ const data = [
   { icon: IconSettings, label: "Settings", path: "profile" },
 ];
 
-const SideBar = () => {
+const SideBar = ({ setOpened }) => {
   const [active, setActive] = useState(0);
   const [subActive, setSubActive] = useState(0);
 
@@ -124,6 +124,9 @@ const SideBar = () => {
       onClick={() => {
         setActive(index);
         setSubActive(null);
+        if (!item.subNav) {
+          setOpened(false);
+        }
       }}
       // classNames={{
       //   body: {
@@ -145,6 +148,7 @@ const SideBar = () => {
             onClick={() => {
               setSubActive(i);
               setActive(index);
+              setOpened(false);
             }}
           />
         ))}

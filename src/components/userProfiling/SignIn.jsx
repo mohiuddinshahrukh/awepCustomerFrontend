@@ -727,6 +727,7 @@ const SignIn = ({
       <NotificationsProvider>
         {/* Forgot Password Modal*/}
         <Modal
+          closeOnClickOutside={false}
           title={<Title align="left">Forgot Your Password?</Title>}
           opened={forgotPasswordModal}
           onClose={() => {
@@ -735,6 +736,7 @@ const SignIn = ({
             forgotPasswordFormStep3.setFieldValue("confirmPassword", "");
             forgotPasswordFormStep3.setFieldValue("newPassword", "");
             setForgotPasswordModal(false);
+            setActive(0);
           }}
           styles={{
             close: {
@@ -759,10 +761,10 @@ const SignIn = ({
           <Container>
             <Stepper
               size={inputSize}
-              color="grape"
+              color="pink"
               my="md"
               active={active}
-              onStepClick={setActive}
+              // onStepClick={setActive}
               breakpoint="sm"
             >
               <Stepper.Step label="Enter Your Email">
@@ -792,6 +794,7 @@ const SignIn = ({
 
                   <Group position="right" mt="sm">
                     <Button
+                      className="button"
                       rightIcon={<IconAt />}
                       size={inputSize}
                       loading={forgotPasswordButtonStateStep1}
@@ -829,6 +832,7 @@ const SignIn = ({
 
                   <Group position="right" mt="sm">
                     <Button
+                      className="button"
                       rightIcon={<IconShieldLock />}
                       size={inputSize}
                       loading={forgotPasswordButtonStateStep2}
@@ -881,9 +885,9 @@ const SignIn = ({
                   />
                   <Group position="right">
                     <Button
+                      className="button"
                       my="md"
                       size="md"
-                      color="dark"
                       type="submit"
                       uppercase
                       disabled={
@@ -1040,7 +1044,7 @@ const SignIn = ({
         </Modal>
 
         {/* REST OF THE PAGE */}
-        <Container size="xl" my={"xl"}>
+        <Container size="xl" mt={"xl"}>
           <Grid>
             <Grid.Col lg={6}>
               <Grid>

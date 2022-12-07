@@ -41,7 +41,7 @@ const RealWeddingsCarousel = () => {
       slideSize={"25% "}
       slideGap={"md"}
       align={"start"}
-      slidesToScroll={"auto"}
+      slidesToScroll={1}
       withControls={false}
       breakpoints={[
         { maxWidth: "md", slideSize: "33.33333333%" },

@@ -1133,6 +1133,7 @@ const SignIn = ({
                       {...form.getInputProps("password")}
                     />
                     <Button
+                      className="button"
                       my="md"
                       size={inputSize}
                       uppercase

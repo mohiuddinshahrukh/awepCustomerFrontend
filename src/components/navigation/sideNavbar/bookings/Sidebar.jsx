@@ -1,93 +1,106 @@
 import { useState } from "react";
 import {
-  IconGauge,
   IconFingerprint,
   IconActivity,
   IconChevronRight,
+  IconSettings,
+  IconLayoutGrid,
+  IconNotebook,
+  IconMessage,
+  IconCards,
+  IconBrandStripe,
+  IconCornerUpLeftDouble,
+  IconUserExclamation,
+  IconBuildingStore,
+  IconBuildingFortress,
 } from "@tabler/icons";
 import { Box, NavLink, Paper } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 const data = [
-  { icon: IconGauge, label: "Dashboard", description: "Item with description" },
   {
-    icon: IconFingerprint,
+    icon: IconLayoutGrid,
+    label: "Dashboard",
+    description: "Item with description",
+  },
+  {
+    icon: IconNotebook,
     label: "Bookings",
     rightSection: <IconChevronRight size={14} stroke={1.5} />,
     path: "#",
     subNav: [
       {
-        icon: IconActivity,
+        icon: IconBuildingFortress,
         label: "Venue Bookings",
         path: "venueBookings",
       },
       {
-        icon: IconActivity,
+        icon: IconBuildingStore,
         label: "Vendor Bookings",
         path: "vendorBookings",
       },
     ],
   },
-  { icon: IconActivity, label: "Chats", path: "chats" },
-  { icon: IconActivity, label: "My Cards", path: "weddingCards" },
+  { icon: IconMessage, label: "Chats", path: "chats" },
+  { icon: IconCards, label: "My Cards", path: "weddingCards" },
   {
-    icon: IconFingerprint,
+    icon: IconBrandStripe,
     label: "Payments",
     rightSection: <IconChevronRight size={14} stroke={1.5} />,
     path: "#",
 
     subNav: [
       {
-        icon: IconActivity,
+        icon: IconBuildingFortress,
         label: "Venue Payments",
         path: "venuePayments",
       },
       {
-        icon: IconActivity,
+        icon: IconBuildingStore,
         label: "Vendor Payments",
         path: "vendorPayments",
       },
     ],
   },
   {
-    icon: IconFingerprint,
+    icon: IconCornerUpLeftDouble,
     label: "Feedbacks",
     rightSection: <IconChevronRight size={14} stroke={1.5} />,
     path: "#",
 
     subNav: [
       {
-        icon: IconActivity,
+        icon: IconBuildingStore,
         label: "Venue Feedbacks",
         path: "venueFeedbacks",
       },
       {
-        icon: IconActivity,
+        icon: IconBuildingFortress,
         label: "Vendor Feedbacks",
         path: "vendorFeedbacks",
       },
     ],
   },
   {
-    icon: IconFingerprint,
+    icon: IconUserExclamation,
     label: "Complaints",
     rightSection: <IconChevronRight size={14} stroke={1.5} />,
     path: "#",
 
     subNav: [
       {
-        icon: IconActivity,
+        icon: IconBuildingFortress,
         label: "Venue Complaints",
         path: "venueComplaints",
       },
       {
-        icon: IconActivity,
+        icon: IconBuildingStore,
         label: "Vendor Complaints",
         path: "vendorComplaints",
       },
     ],
   },
-  { icon: IconActivity, label: "Profile", path: "profile", path: "#" },
+  { icon: IconSettings, label: "Settings", path: "profile" },
 ];
 
 const SideBar = () => {

@@ -622,19 +622,23 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           </>
         )}
 
-        <InvoiceHeaders title={"Stage Details"} />
+        {singleInvoice?.selectedStage?.stage?.length > 0 && (
+          <>
+            <InvoiceHeaders title={"Stage Details"} />
+            <Table striped withBorder withColumnBorders>
+              <thead>{stageHeaders}</thead>
+              <tbody>
+                <tr>
+                  <td align="center">{1}</td>
+                  <td>{singleInvoice?.selectedStage?.stage?.stageTitle}</td>
+                  <td>{singleInvoice?.selectedStage?.stage?.price}</td>
+                  <td>{singleInvoice?.selectedStage?.stage?.description}</td>
+                </tr>
+              </tbody>
+            </Table>
+          </>
+        )}
 
-        <Table striped withBorder withColumnBorders>
-          <thead>{stageHeaders}</thead>
-          <tbody>
-            <tr>
-              <td align="center">{1}</td>
-              <td>{singleInvoice?.selectedStage?.stage?.stageTitle}</td>
-              <td>{singleInvoice?.selectedStage?.stage?.price}</td>
-              <td>{singleInvoice?.selectedStage?.stage?.description}</td>
-            </tr>
-          </tbody>
-        </Table>
         <InvoiceHeaders title={"Customers Request"} />
         <Text
           align="justify"

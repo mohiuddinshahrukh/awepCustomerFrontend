@@ -184,6 +184,8 @@ const NewVendorBookingFile = () => {
   const [description, setDescription] = useState("");
   const [hidden, setHidden] = useState(true);
   const [hideSelectButton, setHideSelectButton] = useState(false);
+  const [bookingResponse, setBookingResponse] = useState({});
+  console.log("bookingResponse hai ye to", bookingResponse);
 
   const [selectedTheme, setSelectedTheme] = useState("");
   console.log("selected theme", selectedTheme);
@@ -549,6 +551,7 @@ const NewVendorBookingFile = () => {
         setLoading(false);
       } else {
         console.log("success response", response.data.data);
+        setBookingResponse(response.data.data);
         socket.socket.emit("generateNotification", {
           userId: JSON.parse(localStorage.getItem("customerData")).id,
           title: "Subvenue Booking Successful",
@@ -714,9 +717,9 @@ const NewVendorBookingFile = () => {
           >
             <Stack>
               <Group position="apart">
-                <Group position="left">
+                {/* <Group position="left">
                   <Text weight={900}>Booking ID: {"12345678910"}</Text>
-                </Group>
+                </Group> */}
                 <Badge size="lg">New Booking</Badge>
               </Group>
               <Paper
@@ -733,28 +736,16 @@ const NewVendorBookingFile = () => {
                 <Grid>
                   <Grid.Col span={6}>
                     <Group position="left">
-                      <Text>
-                        {/* {
-                selectedVendorPackage?.vendorBusinessId
-                  ?.vendorBusinessTitle
-              } */}
-                        Business Name Here
-                      </Text>
+                      <Text>{bookingResponse?.vendorBusinessTitle}</Text>
                     </Group>
                     <Group position="left">
                       <Text>{bookedDateAndTime} </Text>
                     </Group>
                     <Group position="left">
-                      <Text>
-                        {/* {selectedVendorPackage?.vendorPackageTitle} */}
-                        Package name here
-                      </Text>
+                      <Text>{bookingResponse?.vendorPackageTitle}</Text>
                     </Group>
                     <Group position="left">
-                      <Text>
-                        {/* {selectedVendorPackage?.packageDuration} */}
-                        Package Duration here
-                      </Text>
+                      <Text>{bookingResponse?.eventDuration} </Text>
                     </Group>
                   </Grid.Col>
                   <Grid.Col span={6}>
@@ -775,42 +766,45 @@ const NewVendorBookingFile = () => {
               >
                 <Group position="apart">
                   <Text>Subtotal</Text>
-                  <Text> {totalPrice.toLocaleString()}</Text>
+                  <Text>
+                    {" "}
+                    {bookingResponse?.price?.totalPrice?.toLocaleString()}
+                  </Text>
                 </Group>
-                {/*              <Group position="apart">
-<Text>Discount</Text>
-<Text>-{(totalPrice * 0.25).toLocaleString()}</Text>
-</Group>*/}
+                <Group position="apart">
+                  <Text>Discount</Text>
+                  <Text>
+                    -
+                    {bookingResponse?.price?.totalPrice *
+                      bookingResponse?.price?.discountPercentage?.toLocaleString()}
+                  </Text>
+                </Group>
                 <Group position="apart">
                   <Text>Tax</Text>
-                  <Text>+{(totalPrice * 0.17).toLocaleString()}</Text>
+                  <Text>
+                    +{" "}
+                    {bookingResponse?.price?.totalPrice *
+                      bookingResponse?.price?.taxPercentage?.toLocaleString()}
+                  </Text>
                 </Group>
                 <Group position="apart">
                   <Text>Total</Text>
                   <Text>
-                    {(totalPrice + totalPrice * 0.17).toLocaleString()}
+                    {bookingResponse?.price?.totalPriceAfterTaxAndDiscount?.toLocaleString()}
                   </Text>
                 </Group>
                 <Divider />
                 <Group position="apart">
                   <Text>Amount Paid</Text>
                   <Text>
-                    {(
-                      (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
-                      0.25
-                    ).toLocaleString()}
+                    {bookingResponse?.price?.paidAmount?.toLocaleString()}
                   </Text>
                 </Group>
                 <Divider />
                 <Group position="apart">
                   <Text>Amount Remaining: </Text>
                   <Text>
-                    {(
-                      totalPrice +
-                      totalPrice * 0.17 -
-                      (totalPrice - totalPrice * 0.25 + totalPrice * 0.17) *
-                        0.25
-                    ).toLocaleString()}
+                    {bookingResponse?.price?.remainingAmount?.toLocaleString()}
                   </Text>
                 </Group>
               </Paper>

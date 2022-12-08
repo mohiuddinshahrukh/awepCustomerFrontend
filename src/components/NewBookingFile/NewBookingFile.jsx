@@ -199,8 +199,8 @@ const NewBookingFile = () => {
   console.log("hall charges are", hallCharges);
   const [idOfSelectedMenu, setIdOfSelectedMenu] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
-  const menuObject = {};
-  menuObject?.selectedMenu?.menu = selectedMenu;
+  // const menuObject = {};
+  // menuObject.selectedMenu.menu = selectedMenu;
   const [menuPrice, setMenuPrice] = useState(0);
   console.log("Totalprice", totalPrice);
   console.log("menuPrice", menuPrice);
@@ -244,7 +244,7 @@ const NewBookingFile = () => {
       )[0]?.subVenueName,
       hallCharges: hallCharges,
       numberOfGuests: noOfGuests,
-      selectedMenu: menuObject,
+      // selectedMenu: menuObject,
       selectedTheme: selectedTheme,
       selectedStage: selectedStage,
       bookingDescription: description,

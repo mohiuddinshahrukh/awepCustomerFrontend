@@ -564,8 +564,14 @@ const NewVendorBookingFile = () => {
 
         socket.socket.emit("viewAllChatsOnStartConversation", {
           participant: {
-            _id: vendorDetails.vendorBusinessId,
+            _id: selectedVendorPackage?.vendorBusinessId,
             type: "vendorBusiness",
+          },
+        });
+        socket.socket.emit("viewAllChatsOnStartConversation", {
+          participant: {
+            _id: JSON.parse(localStorage.getItem("customerData")).id,
+            type: "user",
           },
         });
         setBookingId(response.data?.data?.trackingId);
@@ -575,7 +581,6 @@ const NewVendorBookingFile = () => {
           message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
         });
         setConfirmBooking(true);
-
         setVisible(false);
         // navigate(-1);
         setLoading(false);

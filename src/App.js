@@ -125,7 +125,7 @@ function App() {
                 />
 
                 <Route
-                  path="/vendorBooking/:eventType/:date/:time/:guests/:vendorId"
+                  path="/vendorBooking/:eventType/:date/:time/:vendorId"
                   element={<NewVendorBookingFile />}
                 />
                 <Route

@@ -34,10 +34,6 @@ import {
   IconSettings,
   IconPhoto,
   IconMap2,
-  IconBrandWhatsapp,
-  IconPhone,
-  IconMail,
-  IconMessage2,
   IconVideo,
 } from "@tabler/icons";
 import SignIn from "../userProfiling/SignIn";
@@ -55,7 +51,7 @@ const useStyles = createStyles(() => ({
     zIndex: 1,
   },
 }));
-const SpecificVenueDetails = () => {
+const SpecificVenueDetails = ({ signedIn, setSignedIn }) => {
   const matches = useMediaQuery("(min-width: 1200px)");
   let params = useParams();
   console.log("Route Params: ", params);
@@ -168,6 +164,8 @@ const SpecificVenueDetails = () => {
           closeModal={true}
           setIsSignIn={setIsSignIn}
           setIsSignUp={setIsSignUp}
+          signedIn={signedIn}
+          setSignedIn={setSignedIn}
         />
       </Modal>
 

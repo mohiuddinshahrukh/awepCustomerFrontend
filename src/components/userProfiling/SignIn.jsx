@@ -227,7 +227,11 @@ const SignIn = ({
                 color: "green",
                 message: "Login Successful",
               });
-              setSignedIn(!signedIn);
+              try {
+                setSignedIn(!signedIn);
+              } catch (error) {
+                console.log("Error in setting signed in state: ", error);
+              }
               setVisible(false);
               dispatch(
                 login({
@@ -266,11 +270,11 @@ const SignIn = ({
                 console.log("Socket ERROR: ", e);
               }
 
-              // if (closeModal) {
-              // } else {
-              //   navigate("/");
-              // }
-              navigate("/dashboard");
+              if (closeModal) {
+                setIsSignIn(false);
+              } else {
+                navigate("/dashboard");
+              }
             } else if (
               response.data.status === "success" &&
               response.data.data.userType !== "customer"
@@ -303,6 +307,7 @@ const SignIn = ({
 
             setVisible(false);
           } catch (error) {
+            console.log("SIGN IN ERROR", error);
             console.error("Error from try catch block");
           }
 

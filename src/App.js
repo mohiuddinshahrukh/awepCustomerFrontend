@@ -225,40 +225,80 @@ function App() {
 
                 <Route
                   path="/specificVenue/:id"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
                 <Route
                   path="/specificVenue/:id/time/:time"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVenue/:id/:date/:time"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVenue/:id/date/:date"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVendor/:id"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
                 <Route
                   path="/specificVendor/:id/time/:time"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVendor/:id/:date/:time"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVendor/:id/date/:date"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route path="/contactUs" element={<ContactUs />} />

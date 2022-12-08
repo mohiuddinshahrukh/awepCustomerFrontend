@@ -21,7 +21,7 @@ const fetchAllVenues = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
-      url: https://a-wep-production.herokuapp.com/customer/getSubVenueBookings",
+      url: "https://a-wep-production.herokuapp.com/customer/getSubVenueBookings",
       headers: {
         token: localStorage.getItem("customerToken"),
       },

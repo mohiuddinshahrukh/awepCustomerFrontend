@@ -5,7 +5,7 @@ import RealWeddingCard from "./RealWeddingCard";
 const fetchVendorsMethod = async () => {
   try {
     const apiResponse = await axios.get(
-      https://a-wep-production.herokuapp.com/auth/user/getHomeScreenData"
+      "https://a-wep-production.herokuapp.com/auth/user/getHomeScreenData"
     );
     if (apiResponse.data.status === "success") {
       console.log("API RESPONSE SUCCESS: ", apiResponse);

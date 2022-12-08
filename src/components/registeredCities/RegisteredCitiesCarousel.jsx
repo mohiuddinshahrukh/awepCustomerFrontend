@@ -6,7 +6,7 @@ import RegisteredCitiesCard from "./RegisteredCitiesCard";
 const fetchVenueCount = async () => {
   try {
     const apiResponse = await axios.get(
-      https://a-wep-production.herokuapp.com/customer/getVenues"
+      "https://a-wep-production.herokuapp.com/customer/getVenues"
     );
     if (apiResponse.data.status === "success") {
       console.log("@@#@@ API RESPONSE SUCCESS: ", apiResponse);
@@ -23,7 +23,7 @@ const fetchVenueCount = async () => {
 const fetchVendorCount = async () => {
   try {
     const apiResponse = await axios.get(
-      https://a-wep-production.herokuapp.com/customer/getVendorBusinesses"
+      "https://a-wep-production.herokuapp.com/customer/getVendorBusinesses"
     );
     if (apiResponse.data.status === "success") {
       console.log("@@#@@ API RESPONSE SUCCESS: ", apiResponse);

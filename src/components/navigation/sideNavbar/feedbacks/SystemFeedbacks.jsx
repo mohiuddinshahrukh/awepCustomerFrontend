@@ -21,7 +21,7 @@ const fetchAllVendorComplaints = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
-      url: https://a-wep-production.herokuapp.com/auth/user/myAddedSystemFeedbacks",
+      url: "https://a-wep-production.herokuapp.com/auth/user/myAddedSystemFeedbacks",
       headers: {
         token: localStorage.getItem("customerToken"),
       },

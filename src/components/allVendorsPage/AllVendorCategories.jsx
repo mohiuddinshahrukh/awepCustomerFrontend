@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 const fetchAllVendorsCategories = async () => {
   try {
     const apiResponse = await axios.get(
-      https://a-wep-production.herokuapp.com/customer/getVendorCategories"
+      "https://a-wep-production.herokuapp.com/customer/getVendorCategories"
     );
 
     if (apiResponse.data.status === "success") {

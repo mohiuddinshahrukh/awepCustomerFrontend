@@ -47,7 +47,7 @@ const InvoiceGenerator = () => {
   const [singleInvoice, setSingleInvoice] = useState();
   const fetchData = async () => {
     let response = await axios.get(
-      https://a-wep-production.herokuapp.com/superAdmin/getAllSubVenueBookings"
+      "https://a-wep-production.herokuapp.com/superAdmin/getAllSubVenueBookings"
     );
     console.log("RESPONSE: ", response.data.data[0]);
     if (response) {

@@ -96,9 +96,9 @@ const AddReview = () => {
       let url;
       if (params.provider === "vendor") {
         url =
-          https://a-wep-production.herokuapp.com/customer/getMyVendorServiceFeedbacks";
+          "https://a-wep-production.herokuapp.com/customer/getMyVendorServiceFeedbacks";
       } else if (params.provider === "venue") {
-        url = https://a-wep-production.herokuapp.com/customer/getMyVenueFeedbacks";
+        url = "https://a-wep-production.herokuapp.com/customer/getMyVenueFeedbacks";
       }
       const apiResponse = await axios({
         url: url,
@@ -232,11 +232,11 @@ const AddReview = () => {
 
     var url = "";
     if (params.provider === "venue") {
-      url = https://a-wep-production.herokuapp.com/customer/addVenueFeedback";
+      url = "https://a-wep-production.herokuapp.com/customer/addVenueFeedback";
     } else if (params.provider === "vendor") {
-      url = https://a-wep-production.herokuapp.com/customer/addVendorServiceFeedback";
+      url = "https://a-wep-production.herokuapp.com/customer/addVendorServiceFeedback";
     } else if (params.provider === "admin") {
-      url = https://a-wep-production.herokuapp.com/auth/user/addSystemFeedback";
+      url = "https://a-wep-production.herokuapp.com/auth/user/addSystemFeedback";
     }
     console.log("URL: ", url);
     try {

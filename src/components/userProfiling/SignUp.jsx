@@ -90,7 +90,7 @@ const SignUp = ({
     console.log("I have been clicked");
     setLoading(true);
     console.log("Values: ", values);
-    const url = https://a-wep-production.herokuapp.com/auth/user/signup";
+    const url = "https://a-wep-production.herokuapp.com/auth/user/signup";
     try {
       const response = await axios.post(url, {
         email: values.email,

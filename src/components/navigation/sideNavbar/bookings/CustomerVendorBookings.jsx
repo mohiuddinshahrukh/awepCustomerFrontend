@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Group, Modal, Table, Title } from "@mantine/core";
+import { ActionIcon, Badge, Button, Group, Menu, Modal, Table, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import {
   IconBrandStripe,
@@ -14,6 +14,7 @@ import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingO
 import ViewAllVendorPaymentReceipts from "./ViewAllVendorPaymentReceipts";
 import moment from "moment";
 import StripePromise from "./stripe/StripePromise";
+import { showNotification } from "@mantine/notifications";
 
 const fetchAllVendors = async () => {
   try {
@@ -31,6 +32,26 @@ const fetchAllVendors = async () => {
         "Successfully fetched all vendor bookings:",
         apiResponse.data.data
       );
+      apiResponse.data.data.map((Booking) => {
+        if (Booking.bookingStatus === "IN PROGRESS") {
+          const daysTillBookings = moment(Booking.bookingDate)
+            .diff(Date.now(), "days")
+            .toString();
+          if (daysTillBookings < 0) {
+            Booking.BOOKING_STATUS = "PAST";
+            Booking.BOOKING_STATUS_COLOR = "red";
+          } else if (daysTillBookings > 7) {
+            Booking.BOOKING_STATUS = "PENDING";
+            Booking.BOOKING_STATUS_COLOR = "orange";
+          } else if (daysTillBookings > 1) {
+            Booking.BOOKING_STATUS = "UPCOMING";
+            Booking.BOOKING_STATUS_COLOR = "yellow";
+          } else {
+            Booking.BOOKING_STATUS = "IN PROGRESS";
+            Booking.BOOKING_STATUS_COLOR = "blue";
+          }
+        }
+      });
       return apiResponse.data.data;
     } else if (apiResponse.data.status === "error") {
       console.log("Error while fetching all vendor bookings");
@@ -57,6 +78,63 @@ const CustomerVendorBookings = () => {
   useEffect(() => {
     fetchAllVendors().then(setVendorBookings).then(setVisible(false));
   }, [refresh]);
+  const updateStatus = async (id, name) => {
+    console.log("updating status", id, name);
+    setVisible(true);
+    const body = {
+      bookingStatus: name,
+    };
+    console.log(body);
+
+    const headers = {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("customerToken"),
+    };
+    let url = `https://a-wep.herokuapp.com/customer/cancelVendorPackageBooking/${id}`;
+
+    try {
+      const response = await axios({
+        method: "patch",
+        url: url,
+        data: body,
+        headers: headers,
+      });
+      console.log(response.data);
+
+      if (response.data.status === "error") {
+        console.log("error", response.data.error);
+        showNotification({
+          title: `${response.data.error}`,
+          color: "red",
+
+          message: `${response.data.message}`,
+        });
+        setVisible(false);
+      } else {
+        showNotification({
+          title: `SUCCESS`,
+          color: "green",
+
+          message: `BOOKING STATUS CHANGED TO ${
+            name === "CANCELLED"
+              ? "CANCELLED"
+              : name === "IN PROGRESS"
+              ? "IN PROGRESS"
+              : name === "COMPLETED"
+              ? "COMPLETED"
+              : null
+          }! `,
+        });
+        console.log("navigating");
+        setVisible(false);
+        setRefresh(true);
+        // navigate("/users");
+        console.log("navigated");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const makeCompletePayment = async () => {
     console.log("$AMOUNT PAYABLE", amountPayable);
@@ -112,17 +190,80 @@ const CustomerVendorBookings = () => {
       <td>{moment(row?.bookingDate).format().split("T")[0]}</td>
       <td>{row.eventDuration}</td>
       <td align="center">
-        <Badge
-          color={
-            row.bookingStatus === "IN PROGRESS"
-              ? "blue"
-              : row.bookingStatus === "COMPLETED"
-              ? "green"
-              : "red"
-          }
-        >
-          {row.bookingStatus}
-        </Badge>
+        {row.bookingStatus === "IN PROGRESS" ? (
+          <Menu
+            // trigger="hover"
+            align="center"
+            offset={8}
+            width="target"
+            transition="rotate-right"
+            transitionDuration={150}
+          >
+            <Menu.Target width="target">
+              <Button
+                size="xs"
+                uppercase
+                compact
+                fullWidth
+                color={row.BOOKING_STATUS_COLOR}
+              >
+                {row.BOOKING_STATUS}
+                {/* <IconChevronDown size={14} /> */}
+              </Button>
+            </Menu.Target>
+            {!(row.BOOKING_STATUS === "PAST") && (
+              <Menu.Dropdown p={0}>
+                {!(row.BOOKING_STATUS === "IN PROGRESS") && (
+                  <Menu.Item p={0}>
+                    <Button
+                      color="red"
+                      size="xs"
+                      uppercase
+                      compact
+                      fullWidth
+                      m={0}
+                      p={0}
+                      onClick={() => updateStatus(row._id, "CANCELLED")}
+                    >
+                      CANCEL
+                    </Button>
+                  </Menu.Item>
+                )}
+              </Menu.Dropdown>
+            )}
+          </Menu>
+        ) : row.bookingStatus === "CANCELLED" ? (
+          <Menu
+            sx={{
+              cursor: "default",
+            }}
+            align="center"
+            offset={2}
+            width="target"
+          >
+            <Menu.Target width="target">
+              <Button size="xs" compact uppercase fullWidth color="red">
+                CANCELLED
+              </Button>
+            </Menu.Target>
+          </Menu>
+        ) : (
+          row.bookingStatus === "COMPLETED" && (
+            <Menu
+              align="center"
+              width="target"
+              sx={{
+                cursor: "default",
+              }}
+            >
+              <Menu.Target width="target">
+                <Button size="xs" compact uppercase fullWidth color="green">
+                  COMPLETED
+                </Button>
+              </Menu.Target>
+            </Menu>
+          )
+        )}
       </td>
       <td align="center">
         <Badge

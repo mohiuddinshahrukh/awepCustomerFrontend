@@ -76,7 +76,7 @@ const FilterCards = () => {
             },
             {
               cardTitle: "Feedbacks",
-              cardLinkPath: "/allVenues",
+              cardLinkPath: "/addreview/admin",
               cardLinkIcon: (
                 <IconCornerUpLeftDouble
                   size={70}

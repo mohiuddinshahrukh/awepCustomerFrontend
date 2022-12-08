@@ -1,0 +1,75 @@
+import React from "react";
+import { createStyles, Image, Card, Text, Group, Button } from "@mantine/core";
+
+const useStyles = createStyles((theme, _params, getRef) => ({
+  price: {
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+  },
+
+  carousel: {
+    "&:hover": {
+      [`& .${getRef("carouselControls")}`]: {
+        opacity: 1,
+      },
+    },
+  },
+
+  carouselControls: {
+    ref: getRef("carouselControls"),
+    transition: "opacity 150ms ease",
+    opacity: 0,
+  },
+
+  carouselIndicator: {
+    width: 4,
+    height: 4,
+    transition: "width 250ms ease",
+
+    "&[data-active]": {
+      width: 16,
+    },
+  },
+}));
+
+const SpecificStage = ({ stage }) => {
+  const { classes } = useStyles();
+
+  return (
+    <Card
+      radius="md"
+      withBorder
+      p="xl"
+      style={{
+        minHeight: "400px",
+      }}
+    >
+      <Card.Section>
+        <Image src={stage.stageImageURL} height={220} />
+      </Card.Section>
+
+      <Group position="apart" mt="lg">
+        <Text weight={500} size="lg">
+          {stage.stageTitle}
+        </Text>
+      </Group>
+      <Group position="apart" mt="lg">
+        <Text weight={500} size="lg">
+          Rs. {stage.price}
+        </Text>
+      </Group>
+      <Text
+        size="sm"
+        color="dimmed"
+        mt="sm"
+        style={{
+          wordBreak: "break-word",
+          whiteSpace: "normal",
+        }}
+        lineClamp={2}
+      >
+        {stage.description}
+      </Text>
+    </Card>
+  );
+};
+export default SpecificStage;

@@ -48,7 +48,6 @@ import {
   IconCalendar,
   IconChevronDown,
   IconDownload,
-  IconEdit,
   IconTrash,
   IconTrashOff,
   IconX,
@@ -58,6 +57,8 @@ import MenusOfSpecificVenueForBooking from "../MenusOfSpecifcVenue/MenusOfSpecif
 import ThemesOfSpecificVenueForBooking from "../ThemesOfSpecificVenue/ThemesOfSpecificVenueForBooking";
 import BookingReviewInvoice from "../InvoiceGenerator/BookingReviewInvoice";
 import StripePromise from "../paymentGateways/StripePromise";
+import StagesOfSpecificVenueForBooking from "../StagesOfSpecificVenue/StagesOfSpecificVenueForBooking";
+import BookingViewAllBookings from "../navigation/sideNavbar/bookings/BookingViewAllBookings";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -159,7 +160,7 @@ const NewBookingFile = () => {
 
   const [stepperDisabled, setStepperDisabled] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
-  const [bookingId, setBookingId] = useState("");
+  const [bookingResponse, setBookingResponse] = useState({});
   const [bookingDetails, setBookingDetails] = useState({});
   console.log("bookingDetails", bookingDetails);
 
@@ -210,20 +211,41 @@ const NewBookingFile = () => {
 
   const [idOfSelectedTheme, setIdOfSelectedTheme] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
+
+  const [idOfSelectedStage, setIdOfSelectedStage] = useState("");
+  const [selectedStage, setSelectedStage] = useState("");
+  console.log("selected selectedStage", selectedStage);
+  const [stagePrice, setStagePrice] = useState(0);
   console.log("selected theme", selectedTheme);
   const [bookingPercentage, setBookingPercentage] = useState(0.2);
   const [taxPercentage, setTaxPercentage] = useState(0.17);
   const [discountPercentage, setDiscountPercentage] = useState(0);
+
+  const singleInvioce = {
+    subVenueBookingCharges: hallCharges,
+    serviceCharge: totalPrice,
+    menuCharge: menuPrice * noOfGuests,
+    subTotalCharges:
+      hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
+    selectedVenueServices: [selectedVenueServices],
+    selectedMenu: selectedMenu,
+    selectedTheme: selectedTheme,
+    selectedStage: selectedStage,
+    noOfGuests: noOfGuests,
+    venueName: venue,
+  };
 
   const data = [
     {
       percent: bookingPercentage * 100,
       Amount: (
         (hallCharges +
+          stagePrice +
           totalPrice +
           menuPrice * noOfGuests +
-          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
-          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
             discountPercentage) *
         bookingPercentage
       ).toLocaleString(),
@@ -237,17 +259,20 @@ const NewBookingFile = () => {
       percent: (1 - bookingPercentage) * 100,
       Amount: (
         hallCharges +
+        stagePrice +
         totalPrice +
         menuPrice * noOfGuests -
-        (hallCharges + totalPrice + menuPrice * noOfGuests) *
+        (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
           discountPercentage +
-        (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+        (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+          taxPercentage -
         (hallCharges +
           totalPrice +
           menuPrice * noOfGuests -
-          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
             discountPercentage +
-          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage) *
           bookingPercentage
       ).toLocaleString(),
       color: "green",
@@ -430,6 +455,7 @@ const NewBookingFile = () => {
               setIdOfSelectedSubVenue(params.subVenueId);
               setIdOfSelectedMenu(response?.selectedMenu?.menu?._id);
               setIdOfSelectedTheme(response?.selectedVenueTheme?.theme?._id);
+              setIdOfSelectedStage(response?.selectedStage?.stage?._id);
               setSelectedVenueServices(
                 response?.selectedVenueServices.map(
                   (service) => service.serviceTitle
@@ -446,6 +472,8 @@ const NewBookingFile = () => {
               form.setFieldValue("phone", response?.pointOfContact?.phone);
               form.setFieldValue("email", response?.pointOfContact?.email);
               form.setFieldValue("description", response?.bookingDescription);
+              setSelectedStage(response?.selectedStage?.stage);
+              setStagePrice(response?.selectedStage?.stage?.price);
               setSelectedMenu(response?.selectedMenu?.menu);
               setSelectedTheme(response?.selectedVenueTheme?.theme);
               setPrice(response?.price);
@@ -585,6 +613,9 @@ const NewBookingFile = () => {
     const body = {
       bookingDate: moment(value1).format(),
       subVenueBookingCharges: hallCharges,
+      selectedStage: {
+        stage: selectedStage,
+      },
 
       bookingTime: time,
       eventType: eventType,
@@ -594,24 +625,29 @@ const NewBookingFile = () => {
       },
       //   selectedSubVenueServices: selectedFilteredSubVenueServices,
       price: {
-        totalPrice: hallCharges + totalPrice + menuPrice * noOfGuests,
+        totalPrice:
+          hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
         paidAmount: price.paidAmount,
         remainingAmount:
           hallCharges +
+          stagePrice +
           totalPrice +
           menuPrice * noOfGuests -
-          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
             discountPercentage +
-          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
           price.paidAmount,
         discountPercentage: discountPercentage,
         taxPercentage: taxPercentage,
         totalPriceAfterTaxAndDiscount:
           hallCharges +
+          stagePrice +
           totalPrice +
           menuPrice * noOfGuests +
-          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
-          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
             discountPercentage,
         paymentHistory: price.paymentHistory,
       },
@@ -693,6 +729,9 @@ const NewBookingFile = () => {
       selectedVenueTheme: {
         theme: selectedTheme,
       },
+      selectedStage: {
+        stage: selectedStage,
+      },
       selectedMenu: {
         menu: idOfSelectedMenu,
         price: menuPrice,
@@ -707,36 +746,42 @@ const NewBookingFile = () => {
         totalPrice: hallCharges + totalPrice + menuPrice * noOfGuests,
         paidAmount:
           (hallCharges +
+            stagePrice +
             totalPrice +
             menuPrice * noOfGuests +
-            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
               taxPercentage -
-            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
               discountPercentage) *
           bookingPercentage,
         remainingAmount:
           hallCharges +
+          stagePrice +
           totalPrice +
           menuPrice * noOfGuests -
-          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
             discountPercentage +
-          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
           (hallCharges +
+            stagePrice +
             totalPrice +
             menuPrice * noOfGuests -
-            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
               discountPercentage +
-            (hallCharges + totalPrice + menuPrice * noOfGuests) *
+            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
               taxPercentage) *
             bookingPercentage,
         discountPercentage: discountPercentage,
         taxPercentage: taxPercentage,
         totalPriceAfterTaxAndDiscount:
           hallCharges +
+          stagePrice +
           totalPrice +
           menuPrice * noOfGuests +
-          (hallCharges + totalPrice + menuPrice * noOfGuests) * taxPercentage -
-          (hallCharges + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
             discountPercentage,
       },
       //   selectedSubVenueServices: selectedFilteredSubVenueServices,
@@ -793,7 +838,7 @@ const NewBookingFile = () => {
         //   message: `Customer For Booking: ${email}`,
         //   link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
         // });
-        setBookingId(response.data?.data?.trackingId);
+        setBookingResponse(response.data?.data);
         showNotification({
           color: "green",
           title: `Successfully`,
@@ -869,6 +914,7 @@ const NewBookingFile = () => {
             transition="rotate-left"
             transitionDuration={600}
             centered
+            zIndex={1000}
             size={600}
             transitionTimingFunction="ease"
             onClose={() => {
@@ -879,7 +925,9 @@ const NewBookingFile = () => {
             <Stack>
               <Group position="apart">
                 <Group position="left">
-                  <Text weight={900}>Booking ID: {bookingId}</Text>
+                  <Text weight={900}>
+                    Booking ID: {bookingResponse?.trackingId}
+                  </Text>
                 </Group>
                 <Badge size="lg">New Booking</Badge>
               </Group>
@@ -896,11 +944,7 @@ const NewBookingFile = () => {
               >
                 <Grid>
                   <Grid.Col span={6}>
-                    <Text>
-                      {venueDetails?.subVenues
-                        ?.filter((e) => e._id === idOfSelectedSubVenue)
-                        .map((e) => e.subVenueName)}
-                    </Text>
+                    <Text>{bookingResponse?.subVenueName}</Text>
 
                     <Group position="left">
                       <Text>
@@ -936,40 +980,18 @@ const NewBookingFile = () => {
                 <Group position="apart">
                   <Text>Subtotal</Text>
                   <Text>
-                    {" "}
                     <b>
-                      {(
-                        hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests
-                      )?.toLocaleString()}
+                      {bookingResponse?.price?.totalPrice?.toLocaleString()}
                     </b>
                   </Text>
                 </Group>
                 <Group position="apart">
                   <Text>Discount</Text>
                   <Text>
-                    -{" "}
                     <b>
                       {(
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests) *
-                        0.25
+                        bookingResponse?.price?.totalPrice *
+                        bookingResponse?.price?.discountPercentage
                       )?.toLocaleString()}
                     </b>
                   </Text>
@@ -977,21 +999,11 @@ const NewBookingFile = () => {
                 <Group position="apart">
                   <Text>Tax</Text>
                   <Text>
-                    {" "}
                     +
                     <b>
                       {(
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests) *
-                        0.17
+                        bookingResponse?.price?.totalPrice *
+                        bookingResponse?.price?.taxPercentage
                       )?.toLocaleString()}
                     </b>
                   </Text>
@@ -1000,40 +1012,7 @@ const NewBookingFile = () => {
                   <Text>Total</Text>
                   <Text>
                     <b>
-                      {(
-                        hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests -
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests) *
-                          0.25 +
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests) *
-                          0.17
-                      )?.toLocaleString()}
+                      {bookingResponse?.price?.totalPriceAfterTaxAndDiscount?.toLocaleString()}
                     </b>
                   </Text>
                 </Group>
@@ -1042,41 +1021,9 @@ const NewBookingFile = () => {
                   <Text>Amount Paid</Text>
                   <Text>
                     <b>
-                      {(
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests -
-                          (hallCharges +
-                            selectedVenueServiceObject
-                              ?.map(
-                                (service) =>
-                                  service.servicePrice *
-                                  (service.duration === "Per Event" ? 1 : 3)
-                              )
-                              .reduce((a, b) => a + b, 0) +
-                            (selectedMenu?.price ? selectedMenu.price : 0) *
-                              noOfGuests) *
-                            0.25 +
-                          (hallCharges +
-                            selectedVenueServiceObject
-                              ?.map(
-                                (service) =>
-                                  service.servicePrice *
-                                  (service.duration === "Per Event" ? 1 : 3)
-                              )
-                              .reduce((a, b) => a + b, 0) +
-                            (selectedMenu?.price ? selectedMenu.price : 0) *
-                              noOfGuests) *
-                            0.17) *
-                        0.25
-                      )?.toLocaleString()}
+                      {bookingResponse?.price?.paidAmount
+                        ?.toLocaleString()
+                        ?.toLocaleString()}
                     </b>
                   </Text>
                 </Group>
@@ -1084,74 +1031,7 @@ const NewBookingFile = () => {
                 <Group position="apart">
                   <Text>Amount Remaining: </Text>
                   <Text>
-                    {" "}
-                    {(
-                      hallCharges +
-                      selectedVenueServiceObject
-                        ?.map(
-                          (service) =>
-                            service.servicePrice *
-                            (service.duration === "Per Event" ? 1 : 3)
-                        )
-                        .reduce((a, b) => a + b, 0) +
-                      (selectedMenu?.price ? selectedMenu.price : 0) *
-                        noOfGuests -
-                      (hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests) *
-                        0.25 +
-                      (hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests) *
-                        0.17 -
-                      (hallCharges +
-                        selectedVenueServiceObject
-                          ?.map(
-                            (service) =>
-                              service.servicePrice *
-                              (service.duration === "Per Event" ? 1 : 3)
-                          )
-                          .reduce((a, b) => a + b, 0) +
-                        (selectedMenu?.price ? selectedMenu.price : 0) *
-                          noOfGuests -
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests) *
-                          0.25 +
-                        (hallCharges +
-                          selectedVenueServiceObject
-                            ?.map(
-                              (service) =>
-                                service.servicePrice *
-                                (service.duration === "Per Event" ? 1 : 3)
-                            )
-                            .reduce((a, b) => a + b, 0) +
-                          (selectedMenu?.price ? selectedMenu.price : 0) *
-                            noOfGuests) *
-                          0.17) *
-                        0.25
-                    )?.toLocaleString()}
+                    {bookingResponse?.price?.remainingAmount?.toLocaleString()}
                   </Text>
                 </Group>
                 <Divider />
@@ -1520,7 +1400,11 @@ const NewBookingFile = () => {
                   <Text weight="bold" size="xl" py="md" color="red">
                     Total{" "}
                     <b>
-                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                      Rs.{" "}
+                      {hallCharges +
+                        totalPrice +
+                        stagePrice +
+                        menuPrice * noOfGuests}
                     </b>
                   </Text>
                 </Group>
@@ -1786,7 +1670,10 @@ const NewBookingFile = () => {
                         Total{" "}
                         <b>
                           Rs.{" "}
-                          {hallCharges + totalPrice + menuPrice * noOfGuests}
+                          {hallCharges +
+                            totalPrice +
+                            stagePrice +
+                            menuPrice * noOfGuests}
                         </b>
                       </Text>
                     </Group>
@@ -1872,7 +1759,10 @@ const NewBookingFile = () => {
                         Total{" "}
                         <b>
                           Rs.{" "}
-                          {hallCharges + totalPrice + menuPrice * noOfGuests}
+                          {hallCharges +
+                            totalPrice +
+                            stagePrice +
+                            menuPrice * noOfGuests}{" "}
                         </b>
                       </Text>
                     </Group>
@@ -1921,6 +1811,76 @@ const NewBookingFile = () => {
                   </Grid>
                 </Stepper.Step>
               )}
+              {venueDetails?.stages?.length !== 0 && (
+                <Stepper.Step
+                  color={!stepperDisabled ? "grape" : "gray"}
+                  label="Stage Selection"
+                  description="Select A Stage"
+                  allowStepSelect={active > 2}
+                  disabled={stepperDisabled}
+                >
+                  <Paper pb="xl">
+                    <Group position="apart">
+                      <Text weight="bold" size="xl" py="md">
+                        Stage Selection
+                      </Text>
+                      <Text weight="bold" size="xl" py="md" color="red">
+                        Total{" "}
+                        <b>
+                          Rs.{" "}
+                          {hallCharges +
+                            totalPrice +
+                            stagePrice +
+                            menuPrice * noOfGuests}
+                        </b>
+                      </Text>
+                    </Group>
+                    {idOfSelectedTheme === "" && (
+                      <Text size="xl" color="red" weight="bold">
+                        Please Select A Stage{" "}
+                      </Text>
+                    )}
+                  </Paper>
+
+                  <StagesOfSpecificVenueForBooking
+                    setStagePrice={setStagePrice}
+                    stages={venueDetails?.stages}
+                    setIdOfSelectedStage={setIdOfSelectedStage}
+                    idOfSelectedStage={idOfSelectedStage}
+                    setSelectedStage={setSelectedStage}
+                    selectedStage={selectedStage}
+                  />
+
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        // disabled={loading}
+                        leftIcon={<IconArrowLeft />}
+                        onClick={prevStep}
+                      >
+                        BACK
+                      </Button>
+                    </Grid.Col>
+
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        rightIcon={<IconArrowRight />}
+                        onClick={nextStep}
+                      >
+                        NEXT
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </Stepper.Step>
+              )}
 
               <Stepper.Step
                 color={!stepperDisabled ? "grape" : "gray"}
@@ -1936,7 +1896,11 @@ const NewBookingFile = () => {
                   <Text weight="bold" size="xl" py="md" color="red">
                     Total{" "}
                     <b>
-                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                      Rs.{" "}
+                      {hallCharges +
+                        totalPrice +
+                        stagePrice +
+                        menuPrice * noOfGuests}
                     </b>
                   </Text>
                 </Group>
@@ -2057,10 +2021,13 @@ const NewBookingFile = () => {
 
                       <Text weight="bold" color="red" size="xl" py="md">
                         Total Cost Rs.{" "}
-                        {totalPrice + hallCharges + menuPrice * noOfGuests}
+                        {totalPrice +
+                          stagePrice +
+                          hallCharges +
+                          menuPrice * noOfGuests}
                       </Text>
                     </Group>
-                    <BookingReviewInvoice
+                    {/* <BookingReviewInvoice
                       // allVenues={allVenues}
                       // allSubVenues={allSubVenues}
                       // allCustomers={allCustomers}
@@ -2080,7 +2047,8 @@ const NewBookingFile = () => {
                       email={email}
                       description={description}
                       step={6}
-                    />
+                    /> */}
+                    <BookingViewAllBookings singleInvoice={singleInvioce} />
                     {params.bookingId ? (
                       <Grid justify="flex-end" py="md">
                         <Grid.Col xs={6} sm={3} md={3} lg={3}>
@@ -2156,13 +2124,16 @@ const NewBookingFile = () => {
                               // start={start}
                               amountPayable={
                                 (hallCharges +
+                                  stagePrice +
                                   totalPrice +
                                   menuPrice * noOfGuests +
                                   (hallCharges +
+                                    stagePrice +
                                     totalPrice +
                                     menuPrice * noOfGuests) *
                                     taxPercentage -
                                   (hallCharges +
+                                    stagePrice +
                                     totalPrice +
                                     menuPrice * noOfGuests) *
                                     discountPercentage) *

@@ -331,11 +331,11 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 </Text>
               </Grid.Col>
 
-              <Grid.Col>
+              {/* <Grid.Col>
                 <Text align="left">
                   <b>Invoice Number</b>: {randomInvoiceNumber}
                 </Text>
-              </Grid.Col>
+              </Grid.Col> */}
               {/*              <Grid.Col>
   <Text align="left">Account Number: {randomAccountNumber}</Text>
   </Grid.Col>*/}

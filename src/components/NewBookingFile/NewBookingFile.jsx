@@ -199,6 +199,8 @@ const NewBookingFile = () => {
   console.log("hall charges are", hallCharges);
   const [idOfSelectedMenu, setIdOfSelectedMenu] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
+  const menuObject = {};
+  menuObject.selectedMenu.menu = selectedMenu;
   const [menuPrice, setMenuPrice] = useState(0);
   console.log("Totalprice", totalPrice);
   console.log("menuPrice", menuPrice);
@@ -224,19 +226,61 @@ const NewBookingFile = () => {
   console.log("singleInvioce", singleInvioce);
 
   const makeInvoice = () => {
+    let customerData = JSON.parse(localStorage.getItem("customerData"));
     let singleInvioceData = {
       subVenueBookingCharges: hallCharges,
       selectedVenueServices: selectedVenueServiceObject,
-
-      serviceCharge: totalPrice,
-      menuCharge: menuPrice * noOfGuests,
-      subTotalCharges:
-        hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
-      selectedMenu: selectedMenu,
+      venueId: venueDetails,
+      createdAt: new Date(),
+      customerName: customerData?.name,
+      pointOfContact: {
+        phone: customerData?.phone,
+        email: customerData?.email,
+      },
+      bookingDate: value1,
+      bookingTime: time,
+      subVenueName: venueDetails?.subVenues?.filter(
+        (e) => e._id === idOfSelectedSubVenue
+      )[0]?.subVenueName,
+      hallCharges: hallCharges,
+      numberOfGuests: noOfGuests,
+      selectedMenu: menuObject,
       selectedTheme: selectedTheme,
       selectedStage: selectedStage,
-      noOfGuests: noOfGuests,
-      venueId: venueDetails,
+      bookingDescription: description,
+      hallCharges: hallCharges,
+      price: {
+        discountPercentage: discountPercentage,
+        totalPrice:
+          hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount:
+          hallCharges +
+          stagePrice +
+          totalPrice +
+          menuPrice * noOfGuests +
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage,
+        paidAmount: 0,
+        remainingAmount:
+          hallCharges +
+          stagePrice +
+          totalPrice +
+          menuPrice * noOfGuests +
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            taxPercentage -
+          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+            discountPercentage,
+      },
+
+      serviceCharge: totalPrice,
+      menuCharges: menuPrice * noOfGuests,
+      subTotalCharges:
+        hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
+
+      selectedStage: selectedStage,
     };
     setSingleInvioce(singleInvioceData);
     nextStep();

@@ -653,7 +653,7 @@ const NewVendorBookingFile = () => {
         console.log("navigating");
         // setOpened(true);
         console.log("navigated");
-        navigate("/shahrukhTest/bookings");
+        navigate("/dashboard/vendorBookings");
       }
     } catch (err) {
       console.log(err);
@@ -703,7 +703,7 @@ const NewVendorBookingFile = () => {
             size={600}
             transitionTimingFunction="ease"
             onClose={() => {
-              navigate("/shahrukhTest/bookings");
+              navigate("/dashboard/vendorBookings");
               setConfirmBooking(false);
             }}
           >
@@ -882,7 +882,7 @@ const NewVendorBookingFile = () => {
                     align="center"
                     color="red"
                     leftIcon={<IconTrash size={14} />}
-                    onClick={() => navigate("/shahrukhTest/bookings")}
+                    onClick={() => navigate("/dashboard/vendorBookings")}
                   >
                     Yes, Cancel
                   </Button>

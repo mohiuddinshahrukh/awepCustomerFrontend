@@ -69,10 +69,16 @@ const TopNavbarStrip = () => {
       >
         {" "}
         <Title align="center">Contact</Title>
-        {superAdminData.numbers.map((number, index) => {
+        {superAdminData?.numbers?.map((number, index) => {
           return (
-            <Paper className="border" p={"xl"} m="xl" position="center">
-              <Group key={index} align={"center"} style={{ width: "100%" }}>
+            <Paper
+              key={index}
+              className="border"
+              p={"xl"}
+              m="xl"
+              position="center"
+            >
+              <Group align={"center"} style={{ width: "100%" }}>
                 <Anchor
                   style={{ width: "100%" }}
                   variant="text"
@@ -111,7 +117,7 @@ const TopNavbarStrip = () => {
           </Anchor>
           <Group spacing={3} hidden={matches1000 ? false : true}>
             Mobile:{" "}
-            {superAdminData.numbers.map((number, index) => {
+            {superAdminData?.numbers?.map((number, index) => {
               return (
                 <Anchor
                   key={index}
@@ -152,7 +158,7 @@ const TopNavbarStrip = () => {
             </ActionIcon>
           </Group>
 
-          {socialMedia.map((icon, index) => {
+          {socialMedia?.map((icon, index) => {
             return (
               <ActionIcon
                 variant="filled"

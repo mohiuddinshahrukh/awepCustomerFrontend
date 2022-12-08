@@ -7,7 +7,43 @@ import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import BookingViewAllBookings from "../bookings/BookingViewAllBookings";
 
-const VenuePayments = ({ venueBookings }) => {
+const VenuePayments = () => {
+  const [venueBookings, setVenueBookings] = useState([]);
+  console.log("VENUE Payments: ", venueBookings);
+  // <CustomeLoadingOverlay visible={visible} />
+  // FETCH ALL VENUES
+  useEffect(() => {
+    fetchAllVenuePayments().then(setVenueBookings);
+  }, []);
+  const fetchAllVenuePayments = async () => {
+    console.log("Fetching all venues");
+    try {
+      console.log("Fetching all venues try");
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMyPayments",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "@Successfully fetched all venue payemnts:",
+          apiResponse.data.data
+        );
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        console.log("Error while fetching all venues");
+      } else {
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
+
   console.log("VENUE BOOKINGS: ", venueBookings);
   let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
@@ -16,7 +52,7 @@ const VenuePayments = ({ venueBookings }) => {
   const [viewBookingModal, setViewBookingModal] = useState(false);
 
   console.log("venueBookings", venueBookings);
-  const rows = venueBookings?.map((row, index) => (
+  const rows = venueBookings?.subVenueBookingPayments?.map((row, index) => (
     <tr key={index}>
       <td align="center">{index + 1}</td>
       <td>{row.venueName}</td>

@@ -199,7 +199,7 @@ const AllVenuesPage = () => {
           if (capacity === "100") {
             if (
               venue?.subVenues?.some(
-                (e) => e?.subVenueCapacity >= 0 && e?.subVenueCapacity <= 100
+                (e) => e?.subVenueMinCapacity >= 0 && e?.subVenueCapacity <= 100
               )
             ) {
               venueCapacityMatch = true;
@@ -208,7 +208,8 @@ const AllVenuesPage = () => {
           } else if (capacity === "300") {
             if (
               venue?.subVenues?.some(
-                (e) => e?.subVenueCapacity >= 100 && e?.subVenueCapacity <= 300
+                (e) =>
+                  e?.subVenueMinCapacity >= 100 && e?.subVenueCapacity <= 300
               )
             ) {
               venueCapacityMatch = true;
@@ -217,7 +218,8 @@ const AllVenuesPage = () => {
           } else if (capacity === "600") {
             if (
               venue?.subVenues?.some(
-                (e) => e?.subVenueCapacity >= 300 && e?.subVenueCapacity <= 600
+                (e) =>
+                  e?.subVenueMinCapacity >= 300 && e?.subVenueCapacity <= 600
               )
             ) {
               venueCapacityMatch = true;
@@ -226,7 +228,8 @@ const AllVenuesPage = () => {
           } else if (capacity === "1000") {
             if (
               venue?.subVenues?.some(
-                (e) => e?.subVenueCapacity >= 600 && e?.subVenueCapacity <= 1000
+                (e) =>
+                  e?.subVenueMinCapacity >= 600 && e?.subVenueCapacity <= 1000
               )
             ) {
               venueCapacityMatch = true;
@@ -236,7 +239,7 @@ const AllVenuesPage = () => {
             if (
               venue?.subVenues?.some(
                 (e) =>
-                  e?.subVenueCapacity >= 1000 && e?.subVenueCapacity <= 1500
+                  e?.subVenueMinCapacity >= 1000 && e?.subVenueCapacity <= 1500
               )
             ) {
               venueCapacityMatch = true;

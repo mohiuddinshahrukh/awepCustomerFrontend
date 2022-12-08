@@ -48,6 +48,8 @@ import AddComplaint from "./components/AddComplaint/AddComplaint";
 import DashboardStats from "./components/DashboardStats/DashboardStats";
 import CustomerBookingCardEditor from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingCardEditor";
 function App() {
+  const [hookEmail, setHookEmail] = useState();
+  const [hookPassword, setHookPassword] = useState();
   const [colorScheme, setColorScheme] = useState("light");
   const [signedIn, setSignedIn] = useState(false);
   const toggleColorScheme = (value) =>
@@ -88,7 +90,15 @@ function App() {
                     <SignIn signedIn={signedIn} setSignedIn={setSignedIn} />
                   }
                 />
-                <Route path="/signUp" element={<SignUp />} />
+                <Route
+                  path="/signUp"
+                  element={
+                    <SignUp
+                      setHookEmail={setHookEmail}
+                      setHookPassword={setHookPassword}
+                    />
+                  }
+                />
                 <Route
                   path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
                   element={<NewBookingFile />}
@@ -229,40 +239,80 @@ function App() {
 
                 <Route
                   path="/specificVenue/:id"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
                 <Route
                   path="/specificVenue/:id/time/:time"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVenue/:id/:date/:time"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVenue/:id/date/:date"
-                  element={<SpecificVenueDetails />}
+                  element={
+                    <SpecificVenueDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVendor/:id"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
                 <Route
                   path="/specificVendor/:id/time/:time"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVendor/:id/:date/:time"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route
                   path="/specificVendor/:id/date/:date"
-                  element={<SpecificVendorBusinessDetails />}
+                  element={
+                    <SpecificVendorBusinessDetails
+                      signedIn={signedIn}
+                      setSignedIn={setSignedIn}
+                    />
+                  }
                 />
 
                 <Route path="/contactUs" element={<ContactUs />} />

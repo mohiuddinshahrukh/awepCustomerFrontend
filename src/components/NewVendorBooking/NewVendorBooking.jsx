@@ -530,7 +530,7 @@ const NewVendorBookingFile = () => {
     try {
       const response = await axios({
         method: "post",
-        url: "https://a-wep.herokuapp.com/customer/bookVendorPackage",
+        url: https://a-wep-production.herokuapp.com/customer/bookVendorPackage",
         data: body,
         headers: headers,
       });

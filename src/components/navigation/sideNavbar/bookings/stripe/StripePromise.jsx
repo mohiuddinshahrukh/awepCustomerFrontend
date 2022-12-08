@@ -27,7 +27,7 @@ const StripePromise = ({
   const stripeCallBackend = async () => {
     // Create PaymentIntent as soon as the page loads
     let data = await axios.post(
-      "https://a-wep.herokuapp.com/payment/create-payment-intent",
+      https://a-wep-production.herokuapp.com/payment/create-payment-intent",
       { items: amountPayable }
     );
     console.log("Data gotten: ", data);

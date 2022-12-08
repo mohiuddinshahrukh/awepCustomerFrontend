@@ -32,7 +32,7 @@ import { useIntersection } from "@mantine/hooks";
 const fetchVenuesMethod = async () => {
   try {
     const apiResponse = await axios.get(
-      "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
+      https://a-wep-production.herokuapp.com/auth/user/getHomeScreenData"
     );
     if (apiResponse.data.status === "success") {
       console.log("12345 API RESPONSE SUCCESS: ", apiResponse);

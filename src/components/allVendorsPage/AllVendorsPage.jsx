@@ -80,7 +80,7 @@ const AllVendorsPage = () => {
   const fetchAllVendors = async () => {
     try {
       const apiResponse = await axios.get(
-        "https://a-wep.herokuapp.com/customer/getVendorBusinesses"
+        https://a-wep-production.herokuapp.com/customer/getVendorBusinesses"
       );
 
       if (apiResponse.data.status === "success") {

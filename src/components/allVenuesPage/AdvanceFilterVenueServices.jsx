@@ -5,7 +5,7 @@
 // const fetchAllVenueServices = async () => {
 //   try {
 //     const apiResponse = await axios.get(
-//       "https://a-wep.herokuapp.com/customer/getAllVenueServices"
+//       https://a-wep-production.herokuapp.com/customer/getAllVenueServices"
 //     );
 //     console.log("API Response", apiResponse);
 //     if (apiResponse.data.status === "success") {

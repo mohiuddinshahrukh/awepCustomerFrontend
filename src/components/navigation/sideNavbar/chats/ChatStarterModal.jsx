@@ -34,7 +34,7 @@ const ChatStarterModal = ({
   async function getAllVendorBusinesses() {
     try {
       let response = await axios.get(
-        "https://a-wep.herokuapp.com/superAdmin/getVendorBusiness"
+        https://a-wep-production.herokuapp.com/superAdmin/getVendorBusiness"
       );
       if (response.data.status === "success") {
         setVendorBusiness(response.data.data);
@@ -48,7 +48,7 @@ const ChatStarterModal = ({
   async function getAllVenues() {
     try {
       let response = await axios.get(
-        "https://a-wep.herokuapp.com/superAdmin/getAllVenues"
+        https://a-wep-production.herokuapp.com/superAdmin/getAllVenues"
       );
       if (response.data.status === "success") {
         // setVendorBusiness(response.data.data);
@@ -64,7 +64,7 @@ const ChatStarterModal = ({
   async function getAllUsers() {
     try {
       let response = await axios.get(
-        "https://a-wep.herokuapp.com/superAdmin/getAllUsers"
+        https://a-wep-production.herokuapp.com/superAdmin/getAllUsers"
       );
       if (response.data.status === "success") {
         // setVendorBusiness(response.data.data);

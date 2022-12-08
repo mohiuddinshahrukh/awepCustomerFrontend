@@ -252,6 +252,7 @@ const CustomerBookingCardEditor = () => {
     groomNameX,
     groomNameY,
     image,
+    qrCode,
   ]);
 
   return (

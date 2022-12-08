@@ -56,6 +56,14 @@ const billHeadCells = [
   { title: "Item Cost Rs.", align: "right" },
 ];
 
+const themeHeadCells = [
+  { title: "ID", align: "center" },
+  { title: "Theme Title", align: "left" },
+  { title: "Color 1", align: "center" },
+  { title: "Color 2", align: "center" },
+  { title: "Description", align: "left" },
+];
+
 const BookingViewAllBookings = ({ singleInvoice }) => {
   //
 
@@ -66,25 +74,36 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
     singleInvoice?.subVenueBookingCharges
   );
   const [serviceCharges, setServiceCharges] = useState(
-    singleInvoice?.selectedVenueServices
-      ?.map(
-        (service) =>
-          service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-      )
-      .reduce((a, b) => a + b, 0)
+    singleInvoice?.selectedVenueServices?.length > 0
+      ? singleInvoice?.selectedVenueServices
+          ?.map(
+            (service) =>
+              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
+          )
+          .reduce((a, b) => a + b, 0)
+      : 0
   );
   const [menuCharges, setMenuCharges] = useState(
-    singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+    singleInvoice?.selectedMenu?.length > 0
+      ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+      : 0
   );
   const [subtotalCharges, setSubtotalCharges] = useState(
-    singleInvoice?.subVenueBookingCharges +
-      singleInvoice?.selectedVenueServices
-        ?.map(
-          (service) =>
-            service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
-        )
-        .reduce((a, b) => a + b, 0) +
-      singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+    (singleInvoice?.subVenueBookingCharges
+      ? singleInvoice?.subVenueBookingCharges
+      : 0) +
+      (singleInvoice?.selectedVenueServices?.length > 0
+        ? singleInvoice?.selectedVenueServices
+            ?.map(
+              (service) =>
+                service.servicePrice *
+                (service.duration === "Per Event" ? 1 : 3)
+            )
+            .reduce((a, b) => a + b, 0)
+        : 0) +
+      (singleInvoice?.selectedMenu?.length > 0
+        ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+        : 0)
   );
 
   let iconSize = 20;
@@ -128,6 +147,19 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
       })}
     </tr>
   );
+
+  const themeHeaders = (
+    <tr>
+      {themeHeadCells?.map((headCell, index) => {
+        return (
+          <th key={index} style={{ whiteSpace: "nowrap" }}>
+            <Text align={headCell.align}>{headCell.title}</Text>
+          </th>
+        );
+      })}
+    </tr>
+  );
+
   const billHeaders = (
     <tr>
       {billHeadCells?.map((headCell, index) => {
@@ -378,87 +410,132 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             </Group>
           </Paper>
         )}
-        <InvoiceHeaders title={"Service Details"} />
-
-        {matches500 ? (
-          <Table striped withBorder withColumnBorders>
-            <thead>{serviceHeaders}</thead>
-            <tbody>
-              {serviceRows}
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td align="right" style={{ whiteSpace: "nowrap" }}>
-                  Total&nbsp;Service&nbsp;Charges Rs.&nbsp;
-                  <b>{serviceCharges?.toLocaleString()}</b>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        ) : (
+        {singleInvoice?.selectedVenueServices?.length > 0 && (
           <>
-            {singleInvoice?.selectedVenueServices?.map((service, index) => {
-              return (
-                <Paper key={index}>
-                  <Paper>
-                    <Group position="apart" spacing={3}>
-                      <Text>{service?.serviceTitle}</Text>
-                      <Text>{service?.duration}</Text>{" "}
-                    </Group>
-                    <Group position="apart" spacing={3}>
-                      {" "}
-                      <Text>
-                        {service?.servicePrice.toLocaleString()}
-                        {service?.duration === "Per Event" ? (
-                          <span
-                            component={Text}
-                            style={{ color: "GrayText", fontSize: 12 }}
-                          >
-                            &nbsp;x 1
-                          </span>
-                        ) : (
-                          <span
-                            component={Text}
-                            style={{ color: "GrayText", fontSize: 12 }}
-                          >
-                            &nbsp;x 3
-                          </span>
-                        )}
-                      </Text>
-                      <Text align="right">
-                        {service?.duration === "Per Event"
-                          ? service?.servicePrice.toLocaleString()
-                          : (service?.servicePrice * 3).toLocaleString()}
-                      </Text>
-                    </Group>
-                    {/*          <td>
+            <InvoiceHeaders title={"Service Details"} />
+
+            {matches500 ? (
+              <Table striped withBorder withColumnBorders>
+                <thead>{serviceHeaders}</thead>
+                <tbody>
+                  {serviceRows}
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td align="right" style={{ whiteSpace: "nowrap" }}>
+                      Total&nbsp;Service&nbsp;Charges Rs.&nbsp;
+                      <b>{serviceCharges?.toLocaleString()}</b>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            ) : (
+              <>
+                {singleInvoice?.selectedVenueServices?.map((service, index) => {
+                  return (
+                    <Paper key={index}>
+                      <Paper>
+                        <Group position="apart" spacing={3}>
+                          <Text>{service?.serviceTitle}</Text>
+                          <Text>{service?.duration}</Text>{" "}
+                        </Group>
+                        <Group position="apart" spacing={3}>
+                          {" "}
+                          <Text>
+                            {service?.servicePrice.toLocaleString()}
+                            {service?.duration === "Per Event" ? (
+                              <span
+                                component={Text}
+                                style={{ color: "GrayText", fontSize: 12 }}
+                              >
+                                &nbsp;x 1
+                              </span>
+                            ) : (
+                              <span
+                                component={Text}
+                                style={{ color: "GrayText", fontSize: 12 }}
+                              >
+                                &nbsp;x 3
+                              </span>
+                            )}
+                          </Text>
+                          <Text align="right">
+                            {service?.duration === "Per Event"
+                              ? service?.servicePrice.toLocaleString()
+                              : (service?.servicePrice * 3).toLocaleString()}
+                          </Text>
+                        </Group>
+                        {/*          <td>
 <Text align="justify">{service?.serviceDescription}</Text>
 </td>*/}
-                  </Paper>
-                  <Divider />
-                </Paper>
-              );
-            })}
+                      </Paper>
+                      <Divider />
+                    </Paper>
+                  );
+                })}
 
-            <Text align="right" style={{ whiteSpace: "nowrap" }}>
-              Total Rs.
-              <b>{serviceCharges?.toLocaleString()}</b>
-            </Text>
+                <Text align="right" style={{ whiteSpace: "nowrap" }}>
+                  Total Rs.
+                  <b>{serviceCharges?.toLocaleString()}</b>
+                </Text>
+              </>
+            )}
           </>
         )}
-        <InvoiceHeaders title={"Menu Details"} />
+        {singleInvoice?.selectedMenu?.length > 0 && (
+          <>
+            <InvoiceHeaders title={"Menu Details"} />
 
-        {matches500 ? (
-          <Table striped withBorder withColumnBorders>
-            <thead>{menuHeaders}</thead>
-            <tbody>
-              <tr>
-                <td align="center">1</td>
-                <td>{singleInvoice?.selectedMenu?.menu?.menuTitle}</td>
+            {matches500 ? (
+              <Table striped withBorder withColumnBorders>
+                <thead>{menuHeaders}</thead>
+                <tbody>
+                  <tr>
+                    <td align="center">1</td>
+                    <td>{singleInvoice?.selectedMenu?.menu?.menuTitle}</td>
 
-                <td>
+                    <td>
+                      {/*<Group spacing={3}>*/}
+                      <List>
+                        {singleInvoice?.selectedMenu?.menu?.dishes?.map(
+                          (dish, index) => {
+                            return (
+                              <List.Item p={0} m={0} key={index}>
+                                {dish.dishName}
+                              </List.Item>
+                            );
+                          }
+                        )}
+                      </List>
+                      {/*</Group>*/}
+                    </td>
+
+                    <td align="right">
+                      {singleInvoice?.selectedMenu?.price.toLocaleString()}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td align="right" style={{ whiteSpace: "nowrap" }}>
+                      <Text> Persons X Menu Cost Per Head</Text>
+                      <Text>
+                        Total Menu Cost Rs.{" "}
+                        <b>{menuCharges.toLocaleString()}</b>
+                      </Text>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            ) : (
+              <Paper>
+                <Text align="left" mb={3}>
+                  <b>{singleInvoice?.selectedMenu?.menu?.menuTitle}</b>
+                </Text>
+                <Text mb={3}>
                   {/*<Group spacing={3}>*/}
                   <List>
                     {singleInvoice?.selectedMenu?.menu?.dishes?.map(
@@ -472,68 +549,63 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     )}
                   </List>
                   {/*</Group>*/}
-                </td>
-
-                <td align="right">
-                  {singleInvoice?.selectedMenu?.price.toLocaleString()}
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td align="right" style={{ whiteSpace: "nowrap" }}>
-                  <Text> Persons X Menu Cost Per Head</Text>
+                </Text>
+                <Group position="apart">
+                  <Text>Menu Cost Per Head</Text>
                   <Text>
-                    Total Menu Cost Rs. <b>{menuCharges.toLocaleString()}</b>
+                    <b>{singleInvoice?.selectedMenu?.price.toLocaleString()}</b>
                   </Text>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        ) : (
-          <Paper>
-            <Text align="left" mb={3}>
-              <b>{singleInvoice?.selectedMenu?.menu?.menuTitle}</b>
-            </Text>
-            <Text mb={3}>
-              {/*<Group spacing={3}>*/}
-              <List>
-                {singleInvoice?.selectedMenu?.menu?.dishes?.map(
-                  (dish, index) => {
-                    return (
-                      <List.Item p={0} m={0} key={index}>
-                        {dish.dishName}
-                      </List.Item>
-                    );
-                  }
-                )}
-              </List>
-              {/*</Group>*/}
-            </Text>
-            <Group position="apart">
-              <Text>Menu Cost Per Head</Text>
-              <Text>
-                <b>{singleInvoice?.selectedMenu?.price.toLocaleString()}</b>
-              </Text>
-            </Group>
-            <Group position="apart">
-              <Text> Persons</Text>
-              <Text>
-                {" "}
-                <b>{singleInvoice.numberOfGuests}</b>
-              </Text>
-            </Group>
-            <Group position="apart">
-              <Text> Total Menu Cost Rs</Text>
-              <Text>
-                <b>{menuCharges.toLocaleString()}</b>
-              </Text>
-            </Group>
-          </Paper>
+                </Group>
+                <Group position="apart">
+                  <Text> Persons</Text>
+                  <Text>
+                    {" "}
+                    <b>{singleInvoice.numberOfGuests}</b>
+                  </Text>
+                </Group>
+                <Group position="apart">
+                  <Text> Total Menu Cost Rs</Text>
+                  <Text>
+                    <b>{menuCharges.toLocaleString()}</b>
+                  </Text>
+                </Group>
+              </Paper>
+            )}
+          </>
         )}
-        <InvoiceHeaders title={"Customers Request"} />
+        {singleInvoice?.selectedVenueTheme?.theme !== "" && (
+          <>
+            <InvoiceHeaders title={"Theme Details"} />
+            <Table striped withBorder withColumnBorders>
+              <thead>{themeHeaders}</thead>
+              <tbody>
+                {" "}
+                <tr>
+                  <td align="center">{1}</td>
+                  <td>
+                    {singleInvoice?.selectedVenueTheme?.theme?.themeTitle}
+                  </td>
+                  <td>
+                    {singleInvoice?.selectedVenueTheme?.theme?.themeColors[0]}
+                  </td>
+                  <td>
+                    {singleInvoice?.selectedVenueTheme?.theme?.themeColors[1]}
+                  </td>
+                  <td align="right">
+                    <Text>
+                      {
+                        singleInvoice?.selectedVenueTheme?.theme
+                          ?.themeDescription
+                      }
+                    </Text>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          </>
+        )}
 
+        <InvoiceHeaders title={"Customers Request"} />
         <Text
           align="justify"
           style={{

@@ -288,7 +288,10 @@ const SpecificVenueDetails = ({ signedIn, setSignedIn }) => {
                 </Tabs.Tab>
                 <Tabs.Tab
                   value="stage"
-                  // hidden={venueDetails?.stage === undefined}
+                  hidden={
+                    venueDetails?.stages === undefined ||
+                    venueDetails?.stages?.length === 0
+                  }
                   icon={<IconSettings size={14} />}
                 >
                   Stage
@@ -320,7 +323,10 @@ const SpecificVenueDetails = ({ signedIn, setSignedIn }) => {
               </Tabs.Panel>
               <Tabs.Panel value="stage" pt="xs">
                 <Carousal_Stage
-                  // hidden={venueDetails?.stage === undefined}
+                  hidden={
+                    venueDetails?.stages === undefined ||
+                    venueDetails?.stages?.length === 0
+                  }
                   stages={venueDetails?.stages}
                 />
               </Tabs.Panel>

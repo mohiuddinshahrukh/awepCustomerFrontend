@@ -170,9 +170,11 @@ const DashboardStats = () => {
         />
       </Grid.Col>
       <Grid.Col md={4}>
+        <Text>Recent Bookings</Text>
         <RecentBookings processedBookings={processedBookings} />
       </Grid.Col>
       <Grid.Col md={4}>
+        <Text>Upcoming Bookings</Text>
         <UpcomingBookings processedUpcomingBookings={upcomingBookings} />
       </Grid.Col>
       <Grid.Col md={4}>

@@ -44,7 +44,7 @@ const Carousal_Stage = ({ stages }) => {
         <model-viewer
           id="mv-demo"
           shadow-intensity="20"
-          src={`0.0.0.0:8080/${venueStages[stageIndex]?.stage3DModelURL}`}
+          src={`${venueStages[stageIndex]?.stage3DModelURL}`}
           alt="A 3D model of an astronaut"
           auto-rotate
           camera-controls

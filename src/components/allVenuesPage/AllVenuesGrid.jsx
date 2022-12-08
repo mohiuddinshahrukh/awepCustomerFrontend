@@ -86,6 +86,7 @@ const AllVenuesGrid = ({
             </>
           )}
           <Group>
+            {/*
             <SegmentedControl
               data={[
                 {
@@ -112,6 +113,9 @@ const AllVenuesGrid = ({
                 setViewStyle(value);
               }}
             />
+
+
+            */}
           </Group>
         </Group>
       </Group>

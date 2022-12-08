@@ -38,6 +38,7 @@ import {
 import QRCode from "react-qr-code";
 import { DatePicker } from "@mantine/dates";
 import moment from "moment";
+import dayjs from "dayjs";
 let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
@@ -193,7 +194,7 @@ const CustomerBookingCardEditor = () => {
         `${
           eventTimeDuration === "LUNCH"
             ? eventTimeDuration + " (3pm - 5pm)"
-            : eventTimeDuration + " 7PM - 10PM"
+            : eventTimeDuration + " (7pm - 10pm)"
         }`,
         eventTimeDurationX,
         eventTimeDurationY,
@@ -438,6 +439,11 @@ const CustomerBookingCardEditor = () => {
                 label="Event Date"
                 value={eventDate}
                 onChange={setEventDate}
+                minDate={dayjs(new Date())
+                  .startOf("month")
+                  .add(new Date().getDate() - 1, "days")
+                  .toDate()}
+                maxDate={dayjs(new Date()).add(365, "days").toDate()}
               />
             </Grid.Col>
 

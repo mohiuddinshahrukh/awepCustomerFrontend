@@ -99,7 +99,7 @@ const AllVenuesPage = () => {
   const fetchAllVenueServices = async () => {
     try {
       const apiResponse = await axios.get(
-        "https://a-wep-production.herokuapp.com/customer/getAllVenueServices"
+        "https://a-wep.herokuapp.com/customer/getAllVenueServices"
       );
       console.log("API Response", apiResponse);
       if (apiResponse.data.status === "success") {
@@ -125,7 +125,7 @@ const AllVenuesPage = () => {
   const fetchAllVenues = async () => {
     try {
       const apiResponse = await axios.get(
-        "https://a-wep-production.herokuapp.com/customer/getVenues"
+        "https://a-wep.herokuapp.com/customer/getVenues"
       );
 
       if (apiResponse.data.status === "success") {

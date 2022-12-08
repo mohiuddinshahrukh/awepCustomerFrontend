@@ -115,7 +115,7 @@ const SignIn = ({
       setInterval(() => {
         setVerificationCodeButton(false);
       }, 60000);
-      let url = "https://a-wep-production.herokuapp.com/auth/user/verifySMS";
+      let url = "https://a-wep.herokuapp.com/auth/user/verifySMS";
       let response = await axios.post(url, {
         fourDigitCode: values.code,
         email: modalEmail,
@@ -198,7 +198,7 @@ const SignIn = ({
           console.log("Phone and email both verified");
           console.log("Proceed to login");
           try {
-            let url = "https://a-wep-production.herokuapp.com/auth/user/signin";
+            let url = "https://a-wep.herokuapp.com/auth/user/signin";
             let response = await axios.post(url, {
               email: email,
               password: password,
@@ -255,7 +255,7 @@ const SignIn = ({
               );
 
               try {
-                socket.socket = io("https://a-wep-production.herokuapp.com", {
+                socket.socket = io("https://a-wep.herokuapp.com", {
                   // export const socket = io("192.168.10.18:8081", {
                   // export const socket = io("http://localhost:8081", {
                   auth: {
@@ -376,7 +376,7 @@ const SignIn = ({
   };
 
   const sendVerificationEmail = async () => {
-    let url = "https://a-wep-production.herokuapp.com/auth/user/emailVerification";
+    let url = "https://a-wep.herokuapp.com/auth/user/emailVerification";
     try {
       const response = await axios.post(url, {
         email: modalEmail,
@@ -428,7 +428,7 @@ const SignIn = ({
   const forPasswordStep1 = async (values) => {
     setForgotPasswordButtonStateStep1(true);
     const response = await axios.post(
-      "https://a-wep-production.herokuapp.com/auth/generateEmailForPasswordReset",
+      "https://a-wep.herokuapp.com/auth/generateEmailForPasswordReset",
       { email: values.forgotPasswordEmail }
     );
     console.log("RESPONSE: ", response);
@@ -453,7 +453,7 @@ const SignIn = ({
     setForgotPasswordButtonStateStep2(true);
     try {
       const response = await axios.post(
-        "https://a-wep-production.herokuapp.com/auth/verifyCodeEmailForPasswordReset",
+        "https://a-wep.herokuapp.com/auth/verifyCodeEmailForPasswordReset",
         {
           email: forgotPasswordFormStep1.values.forgotPasswordEmail,
           fourDigitCode: values.fourDigitCode,
@@ -497,7 +497,7 @@ const SignIn = ({
   });
   const updatePasswordMethod = async (values) => {
     try {
-      let url = "https://a-wep-production.herokuapp.com/auth/resetPassword";
+      let url = "https://a-wep.herokuapp.com/auth/resetPassword";
       console.log(
         newForgotPasswordEmail,
         forgotPasswordFourDigitCode,
@@ -548,7 +548,7 @@ const SignIn = ({
   // const forPasswordStep3 = async (values) => {
   //   setForgotPasswordButtonStateStep3(true);
   //   const response = await axios.post(
-  //     "https://a-wep-production.herokuapp.com/auth/generateEmailForPasswordReset",
+  //     "https://a-wep.herokuapp.com/auth/generateEmailForPasswordReset",
   //     { email: values.forgotPasswordEmail }
   //   );
   //   console.log("RESPONSE: ", response);
@@ -581,7 +581,7 @@ const SignIn = ({
     let email = modalEmail;
     try {
       let url =
-        "https://a-wep-production.herokuapp.com/auth/user/generateSMSforPhoneVerification";
+        "https://a-wep.herokuapp.com/auth/user/generateSMSforPhoneVerification";
       let response = await axios.post(url, {
         email: email,
       });
@@ -619,7 +619,7 @@ const SignIn = ({
     setVisible(true);
     console.log("We are in social sign up function with token: ", token);
     try {
-      let url = "https://a-wep-production.herokuapp.com/auth/user/googleSignIn";
+      let url = "https://a-wep.herokuapp.com/auth/user/googleSignIn";
       let response = await axios.post(url, {
         googleToken: token,
       });

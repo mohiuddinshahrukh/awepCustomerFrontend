@@ -60,7 +60,7 @@ const DashboardStats = () => {
     try {
       const apiResponse = await axios({
         method: "get",
-        url: "https://a-wep-production.herokuapp.com/customer/dashboard",
+        url: "https://a-wep.herokuapp.com/customer/dashboard",
         headers: {
           token: localStorage.getItem("customerToken"),
         },

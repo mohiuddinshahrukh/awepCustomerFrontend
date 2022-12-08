@@ -14,7 +14,7 @@ const fetchAllVenuePayments = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
-      url: "https://a-wep-production.herokuapp.com/customer/getMyPayments",
+      url: "https://a-wep.herokuapp.com/customer/getMyPayments",
       headers: {
         token: localStorage.getItem("customerToken"),
       },

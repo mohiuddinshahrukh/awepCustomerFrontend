@@ -52,13 +52,13 @@ const AddComplaint = () => {
     let url;
     if (params.provider === "venue") {
       url =
-        "https://a-wep-production.herokuapp.com/customer/getMySubVenueBookingComplaints";
+        "https://a-wep.herokuapp.com/customer/getMySubVenueBookingComplaints";
     } else if (params.provider === "vendor") {
       url =
-        "https://a-wep-production.herokuapp.com/customer/getMyVendorPackageBookingComplaints";
+        "https://a-wep.herokuapp.com/customer/getMyVendorPackageBookingComplaints";
     }
     // else if (params.provider === "admin") {
-    //   url = "https://a-wep-production.herokuapp.com/auth/user/addSystemFeedback";
+    //   url = "https://a-wep.herokuapp.com/auth/user/addSystemFeedback";
     // }
     try {
       const apiResponse = await axios({
@@ -142,13 +142,13 @@ const AddComplaint = () => {
 
     var url = "";
     if (params.provider === "venue") {
-      url = "https://a-wep-production.herokuapp.com/customer/addSubVenueBookingComplaint";
+      url = "https://a-wep.herokuapp.com/customer/addSubVenueBookingComplaint";
     } else if (params.provider === "vendor") {
       url =
-        "https://a-wep-production.herokuapp.com/customer/addVendorPackageBookingComplaint";
+        "https://a-wep.herokuapp.com/customer/addVendorPackageBookingComplaint";
     }
     // else if (params.provider === "admin") {
-    //   url = "https://a-wep-production.herokuapp.com/auth/user/addSystemFeedback";
+    //   url = "https://a-wep.herokuapp.com/auth/user/addSystemFeedback";
     // }
     console.log("URL: ", url);
     try {

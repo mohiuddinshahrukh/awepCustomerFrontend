@@ -63,7 +63,7 @@ import {
 } from "@tabler/icons";
 import { socketContext } from "../../../Socket/Socket";
 
-// const socket = io("https://a-wep-production.herokuapp.com", {
+// const socket = io("https://a-wep.herokuapp.com", {
 //   // const socket = io("http://localhost:8081", {
 //   auth: {
 //     token: localStorage.getItem("customerToken"),
@@ -321,7 +321,7 @@ const ChatScreen = () => {
   // React.useEffect(() => {
   if (refresh) {
     // axios
-    //   .get("https://a-wep-production.herokuapp.com/superAdmin/getAllUsers")
+    //   .get("https://a-wep.herokuapp.com/superAdmin/getAllUsers")
     //   .then((res) => {
     //     console.log("ALL USERS FETCHED", res.data);
     //     if (res.data.status === "success") {
@@ -333,7 +333,7 @@ const ChatScreen = () => {
     //     }
     //   });
     // axios
-    //   .get("https://a-wep-production.herokuapp.com/superAdmin/getAllVenues")
+    //   .get("https://a-wep.herokuapp.com/superAdmin/getAllVenues")
     //   .then((res) => {
     //     console.log("RES", res);
     //     if (res.data.status === "success") {
@@ -342,7 +342,7 @@ const ChatScreen = () => {
     //     }
     //   });
     // axios
-    //   .get("https://a-wep-production.herokuapp.com/superAdmin/getVendorBusiness")
+    //   .get("https://a-wep.herokuapp.com/superAdmin/getVendorBusiness")
     //   .then((res) => {
     //     console.log("RES", res);
     //     if (res.data.status === "success") {
@@ -355,7 +355,7 @@ const ChatScreen = () => {
 
   // const getAllUsersMethod = async () => {
   //   try {
-  //     let url = "https://a-wep-production.herokuapp.com/chat/getAllConversations";
+  //     let url = "https://a-wep.herokuapp.com/chat/getAllConversations";
   //     let response = await axios.get(url, {
   //       headers: {
   //         token:

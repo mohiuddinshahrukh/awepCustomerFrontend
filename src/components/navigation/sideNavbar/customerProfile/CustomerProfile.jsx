@@ -79,7 +79,7 @@ const CustomerProfile = () => {
     try {
       const apiResponse = await axios({
         method: "get",
-        url: "https://a-wep-production.herokuapp.com/auth/user/viewProfile",
+        url: "https://a-wep.herokuapp.com/auth/user/viewProfile",
         headers: {
           token: localStorage.getItem("customerToken"),
         },

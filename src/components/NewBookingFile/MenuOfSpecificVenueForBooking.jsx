@@ -318,7 +318,7 @@ const MenuOfSpecificVenueForBooking = (props) => {
     }
   };
   const FetchVenues = () => {
-    let url = "https://a-wep-production.herokuapp.com/superAdmin/getAllVenues";
+    let url = "https://a-wep.herokuapp.com/superAdmin/getAllVenues";
     axios.get(url).then((res) => {
       console.log("VENUE RESPONSE FROM API: ", res);
       if (res.data.status === "success") {
@@ -401,7 +401,7 @@ const MenuOfSpecificVenueForBooking = (props) => {
   // GET MENUS
   useEffect(() => {
     FetchVenues();
-    const url = "https://a-wep-production.herokuapp.com/superAdmin/getMenus";
+    const url = "https://a-wep.herokuapp.com/superAdmin/getMenus";
     // setVisible(true);
     if (refresh) {
       axios.get(url).then((res) => {
@@ -464,7 +464,7 @@ const MenuOfSpecificVenueForBooking = (props) => {
   }
 
   const FetchDishCategoies = () => {
-    let url = "https://a-wep-production.herokuapp.com/superAdmin/getDishCategories";
+    let url = "https://a-wep.herokuapp.com/superAdmin/getDishCategories";
     axios.get(url).then((res) => {
       console.log("Successfully Fetched Data", res.data);
       // customer = (id, img, name, date, email, contact, status)
@@ -472,7 +472,7 @@ const MenuOfSpecificVenueForBooking = (props) => {
         let data = res.data.data.map((x) =>
           createDishData(x._id, x.title, x.image, x.description, x.price)
         );
-        let url = "https://a-wep-production.herokuapp.com/superAdmin/getDishes";
+        let url = "https://a-wep.herokuapp.com/superAdmin/getDishes";
         axios.get(url).then((res) => {
           console.log("Successfully Fetched Data", res.data);
           // customer = (id, img, name, date, email, contact, status)

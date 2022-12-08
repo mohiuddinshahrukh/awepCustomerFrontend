@@ -7,7 +7,7 @@ const fetchAllVenueBookings = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
-      url: "https://a-wep-production.herokuapp.com/customer/getSubVenueBookings",
+      url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
       headers: {
         token: localStorage.getItem("customerToken"),
       },
@@ -31,7 +31,7 @@ const fetchAllVendorBookings = async () => {
   try {
     const apiResponse = await axios({
       method: "get",
-      url: "https://a-wep-production.herokuapp.com/customer/getVendorPackageBookings",
+      url: "https://a-wep.herokuapp.com/customer/getVendorPackageBookings",
       headers: {
         token: localStorage.getItem("customerToken"),
       },

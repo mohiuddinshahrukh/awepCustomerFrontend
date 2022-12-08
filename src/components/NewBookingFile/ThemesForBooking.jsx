@@ -251,7 +251,7 @@ const ThemesForSpecificVenue = (props) => {
     }
   };
   const url =
-    "https://a-wep-production.herokuapp.com/superAdmin/getVenueThemesForBooking/venue/" +
+    "https://a-wep.herokuapp.com/superAdmin/getVenueThemesForBooking/venue/" +
     ID;
   React.useEffect(() => {
     // setVisible(true);

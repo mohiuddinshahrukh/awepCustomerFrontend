@@ -17,29 +17,29 @@ import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingO
 import moment from "moment";
 import CustomerBookingCardEditor from "./CustomerBookingCardEditor";
 
-const fetchAllVenues = async () => {
-  try {
-    const apiResponse = await axios({
-      method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
-      headers: {
-        token: localStorage.getItem("customerToken"),
-      },
-    });
-    console.log("API RESPONSE: ", apiResponse.data);
+// const fetchAllVenues = async () => {
+//   try {
+//     const apiResponse = await axios({
+//       method: "get",
+//       url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
+//       headers: {
+//         token: localStorage.getItem("customerToken"),
+//       },
+//     });
+//     console.log("API RESPONSE: ", apiResponse.data);
 
-    if (apiResponse.data.status === "success") {
-      console.log("Successfully fetched all venues:", apiResponse.data.data);
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venues");
-    } else {
-      console.log("Failed to fetch all venues, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
+//     if (apiResponse.data.status === "success") {
+//       console.log("Successfully fetched all venues:", apiResponse.data.data);
+//       return apiResponse.data.data;
+//     } else if (apiResponse.data.status === "error") {
+//       console.log("Error while fetching all venues");
+//     } else {
+//       console.log("Failed to fetch all venues, dont know this error");
+//     }
+//   } catch (e) {
+//     console.log("ERROR in fetching all venues:", e);
+//   }
+// };
 
 const CustomerBookingWEddingCards = () => {
   let navigate = useNavigate();
@@ -51,9 +51,9 @@ const CustomerBookingWEddingCards = () => {
   const [viewBookingModal, setViewBookingModal] = useState(false);
   const [venueBookings, setVenueBookings] = useState([]);
 
-  useEffect(() => {
-    fetchAllVenues().then(setVenueBookings).then(setVisible(false));
-  }, []);
+  // useEffect(() => {
+  //   fetchAllVenues().then(setVenueBookings).then(setVisible(false));
+  // }, []);
 
   console.log("venueBookings", venueBookings);
   const rows = venueBookings?.map((row, index) => (
@@ -133,7 +133,9 @@ const CustomerBookingWEddingCards = () => {
   );
   return (
     <div style={{ position: "relative", width: "100%" }}>
+      {/*
       <CustomeLoadingOverlay visible={visible} />
+    */}
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"
@@ -144,14 +146,7 @@ const CustomerBookingWEddingCards = () => {
       >
         {/*<BookingViewAllBookings singleInvoice={singleInvoice} />*/}
       </Modal>
-      <Paper component={ScrollArea} h={"30vh"} withBorder>
-        {" "}
-        <Table striped withBorder withColumnBorders>
-          <thead>{headers}</thead>
-          <tbody>{rows}</tbody>
-        </Table>
-      </Paper>
-      <CustomerBookingCardEditor selectedBooking={selectedBooking} />
+      <CustomerBookingCardEditor />
     </div>
   );
 };

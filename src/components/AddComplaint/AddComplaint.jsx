@@ -256,9 +256,7 @@ const AddComplaint = () => {
     <Grid
       style={{
         width: "100%",
-        position: "absolute",
-        top: 0,
-        zIndex: 20,
+
         backgroundColor:
           currentTheme.colorScheme === "dark"
             ? currentTheme.colors.dark[7]

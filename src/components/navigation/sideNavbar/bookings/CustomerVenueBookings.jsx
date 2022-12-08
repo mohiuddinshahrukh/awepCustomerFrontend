@@ -24,7 +24,9 @@ import moment from "moment";
 import StripePromise from "./stripe/StripePromise";
 
 const fetchAllVenues = async () => {
+  console.log("Fetching alasdasl venues");
   try {
+    console.log("Fetchinasdasdg alasdasl venues");
     const apiResponse = await axios({
       method: "get",
       url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
@@ -32,6 +34,7 @@ const fetchAllVenues = async () => {
         token: localStorage.getItem("customerToken"),
       },
     });
+    console.log("$!@#API RESPONSE: ", apiResponse);
     console.log("API RESPONSE: ", apiResponse.data);
 
     if (apiResponse.data.status === "success") {

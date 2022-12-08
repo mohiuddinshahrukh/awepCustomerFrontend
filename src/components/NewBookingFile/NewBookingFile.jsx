@@ -671,7 +671,7 @@ const NewBookingFile = () => {
           message: `BOOKING DETAILS UPDATED!!`,
         });
         console.log("navigating");
-        navigate("/");
+        navigate("/dashboard/venueBookings");
         // setOpened(true);
         console.log("navigated");
         // navigate(-1);
@@ -873,7 +873,7 @@ const NewBookingFile = () => {
             transitionTimingFunction="ease"
             onClose={() => {
               setConfirmBooking(false);
-              navigate("/");
+              navigate("/dashboard/venueBookings");
             }}
           >
             <Stack>
@@ -1229,7 +1229,7 @@ const NewBookingFile = () => {
                     align="center"
                     color="red"
                     leftIcon={<IconTrash size={14} />}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/dashboard/venueBookings")}
                   >
                     Yes, Cancel
                   </Button>

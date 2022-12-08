@@ -7,7 +7,42 @@ import { useNavigate } from "react-router-dom";
 import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import BookingViewAllBookings from "../bookings/BookingViewAllBookings";
 import ViewAllVendorPaymentReceipts from "../bookings/ViewAllVendorPaymentReceipts";
-const VendorPayments = ({ vendorBookings }) => {
+const VendorPayments = ({}) => {
+  const [vendorBookings, setVendorBookings] = useState([]);
+  console.log("VENUE Payments: ", vendorBookings);
+  // <CustomeLoadingOverlay visible={visible} />
+  // FETCH ALL VENUES
+  useEffect(() => {
+    fetchAllVenuePayments().then(setVendorBookings);
+  }, []);
+  const fetchAllVenuePayments = async () => {
+    console.log("Fetching all venues");
+    try {
+      console.log("Fetching all venues try");
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMyPayments",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "@Successfully fetched all venue payemnts:",
+          apiResponse.data.data
+        );
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        console.log("Error while fetching all venues");
+      } else {
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
   console.log("VENUE BOOKINGS: ", vendorBookings);
   let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
@@ -16,7 +51,7 @@ const VendorPayments = ({ vendorBookings }) => {
   const [viewBookingModal, setViewBookingModal] = useState(false);
 
   console.log("@VENDOR PAYMENTS", vendorBookings);
-  const rows = vendorBookings?.map((row, index) => (
+  const rows = vendorBookings?.vendorPayments?.map((row, index) => (
     <tr key={index}>
       <td align="center">{index + 1}</td>
       <td>{row?.vendorPackageBookingObject?.vendorBusinessTitle}</td>

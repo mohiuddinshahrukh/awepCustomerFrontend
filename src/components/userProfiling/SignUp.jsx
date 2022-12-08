@@ -116,16 +116,20 @@ const SignUp = ({
             message:
               "You have successfully signed up, we are redirecting you to the sign in page",
           });
-          setHookEmail(values.email);
-          setHookPassword(values.password);
-          navigate("/signin");
-          // if (closeModal) {
-          //   setIsSignUp(false);
-          // } else {
-          //   navigate("/signin");
-          // }
-          // setInterval(() => {
-          // }, 3000);
+
+          // setHookEmail(values.email);
+          // setHookPassword(values.password);
+          // navigate("/signin");
+
+          if (closeModal) {
+            console.log("hello in sign up");
+            setIsSignUp(false);
+            setIsSignIn(true);
+          } else {
+            console.log("asdasdasd");
+            navigate("/signin");
+          }
+          setInterval(() => {}, 3000);
         } else if (response.data.status === "error") {
           console.log("This is the error wala response", response.data);
           setSocialSignUpEmail("");

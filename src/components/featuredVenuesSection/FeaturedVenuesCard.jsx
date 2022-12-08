@@ -176,7 +176,7 @@ const FeaturedVenuesCard = ({ venue, date, time }) => {
             <Text>
               from Rs.{" "}
               {venue?.menus.length !== 0
-                ? Math.max
+                ? Math.min
                     .apply(
                       Math,
                       venue?.menus?.map((menu) => {

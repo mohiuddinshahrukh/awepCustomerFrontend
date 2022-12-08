@@ -17,7 +17,7 @@ import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingO
 import ViewVenueComplaintModal from "./ViewVenueComplaintModal";
 
 const fetchAllvenueComplaints = async () => {
-  try {
+  try { 
     const apiResponse = await axios({
       method: "get",
       url: "https://a-wep-production.herokuapp.com/customer/getMySubVenueBookingComplaints",

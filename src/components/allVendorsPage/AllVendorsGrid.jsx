@@ -72,32 +72,35 @@ const AllVendorsGrid = ({
             </>
           )}
 
-          <SegmentedControl
-            data={[
-              {
-                value: "card",
-                label: (
-                  <Center>
-                    <IconLayoutGrid size={16} />
-                    <Box ml={10}>Card</Box>
-                  </Center>
-                ),
-              },
-              {
-                value: "list",
-                label: (
-                  <Center>
-                    <IconLayoutCards size={16} />
-                    <Box ml={10}>List</Box>
-                  </Center>
-                ),
-              },
-            ]}
-            onChange={(value) => {
-              console.log(value);
-              setViewStyle(value);
-            }}
-          />
+          {/*
+<SegmentedControl
+data={[
+  {
+    value: "card",
+    label: (
+      <Center>
+        <IconLayoutGrid size={16} />
+        <Box ml={10}>Card</Box>
+      </Center>
+    ),
+  },
+  {
+    value: "list",
+    label: (
+      <Center>
+        <IconLayoutCards size={16} />
+        <Box ml={10}>List</Box>
+      </Center>
+    ),
+  },
+]}
+onChange={(value) => {
+  console.log(value);
+  setViewStyle(value);
+}}
+/>
+
+*/}
         </Group>
       </Group>
 

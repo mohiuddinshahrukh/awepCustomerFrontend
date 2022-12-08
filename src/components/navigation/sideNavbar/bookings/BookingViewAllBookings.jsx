@@ -63,6 +63,12 @@ const themeHeadCells = [
   { title: "Color 2", align: "center" },
   { title: "Description", align: "left" },
 ];
+const stageHeadCells = [
+  { title: "ID", align: "center" },
+  { title: "Stage Title", align: "left" },
+  { title: "Price", align: "right" },
+  { title: "Description", align: "left" },
+];
 
 const BookingViewAllBookings = ({ singleInvoice }) => {
   //
@@ -163,6 +169,17 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   const billHeaders = (
     <tr>
       {billHeadCells?.map((headCell, index) => {
+        return (
+          <th key={index} style={{ whiteSpace: "nowrap" }}>
+            <Text align={headCell.align}>{headCell.title}</Text>
+          </th>
+        );
+      })}
+    </tr>
+  );
+  const stageHeaders = (
+    <tr>
+      {stageHeadCells?.map((headCell, index) => {
         return (
           <th key={index} style={{ whiteSpace: "nowrap" }}>
             <Text align={headCell.align}>{headCell.title}</Text>
@@ -605,6 +622,19 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           </>
         )}
 
+        <InvoiceHeaders title={"Stage Details"} />
+
+        <Table striped withBorder withColumnBorders>
+          <thead>{stageHeaders}</thead>
+          <tbody>
+            <tr>
+              <td align="center">{1}</td>
+              <td>{singleInvoice?.selectedStage?.stage?.stageTitle}</td>
+              <td>{singleInvoice?.selectedStage?.stage?.price}</td>
+              <td>{singleInvoice?.selectedStage?.stage?.description}</td>
+            </tr>
+          </tbody>
+        </Table>
         <InvoiceHeaders title={"Customers Request"} />
         <Text
           align="justify"

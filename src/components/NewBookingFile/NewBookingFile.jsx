@@ -58,6 +58,7 @@ import ThemesOfSpecificVenueForBooking from "../ThemesOfSpecificVenue/ThemesOfSp
 import BookingReviewInvoice from "../InvoiceGenerator/BookingReviewInvoice";
 import StripePromise from "../paymentGateways/StripePromise";
 import StagesOfSpecificVenueForBooking from "../StagesOfSpecificVenue/StagesOfSpecificVenueForBooking";
+import BookingViewAllBookings from "../navigation/sideNavbar/bookings/BookingViewAllBookings";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -219,6 +220,20 @@ const NewBookingFile = () => {
   const [bookingPercentage, setBookingPercentage] = useState(0.2);
   const [taxPercentage, setTaxPercentage] = useState(0.17);
   const [discountPercentage, setDiscountPercentage] = useState(0);
+
+  const singleInvioce = {
+    subVenueBookingCharges: hallCharges,
+    serviceCharge: totalPrice,
+    menuCharge: menuPrice * noOfGuests,
+    subTotalCharges:
+      hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
+    selectedVenueServices: [selectedVenueServices],
+    selectedMenu: selectedMenu,
+    selectedTheme: selectedTheme,
+    selectedStage: selectedStage,
+    noOfGuests: noOfGuests,
+    venueName: venue,
+  };
 
   const data = [
     {
@@ -440,6 +455,7 @@ const NewBookingFile = () => {
               setIdOfSelectedSubVenue(params.subVenueId);
               setIdOfSelectedMenu(response?.selectedMenu?.menu?._id);
               setIdOfSelectedTheme(response?.selectedVenueTheme?.theme?._id);
+              setIdOfSelectedStage(response?.selectedStage?.stage?._id);
               setSelectedVenueServices(
                 response?.selectedVenueServices.map(
                   (service) => service.serviceTitle
@@ -456,6 +472,8 @@ const NewBookingFile = () => {
               form.setFieldValue("phone", response?.pointOfContact?.phone);
               form.setFieldValue("email", response?.pointOfContact?.email);
               form.setFieldValue("description", response?.bookingDescription);
+              setSelectedStage(response?.selectedStage?.stage);
+              setStagePrice(response?.selectedStage?.stage?.price);
               setSelectedMenu(response?.selectedMenu?.menu);
               setSelectedTheme(response?.selectedVenueTheme?.theme);
               setPrice(response?.price);
@@ -2009,7 +2027,7 @@ const NewBookingFile = () => {
                           menuPrice * noOfGuests}
                       </Text>
                     </Group>
-                    <BookingReviewInvoice
+                    {/* <BookingReviewInvoice
                       // allVenues={allVenues}
                       // allSubVenues={allSubVenues}
                       // allCustomers={allCustomers}
@@ -2029,7 +2047,8 @@ const NewBookingFile = () => {
                       email={email}
                       description={description}
                       step={6}
-                    />
+                    /> */}
+                    <BookingViewAllBookings singleInvoice={singleInvioce} />
                     {params.bookingId ? (
                       <Grid justify="flex-end" py="md">
                         <Grid.Col xs={6} sm={3} md={3} lg={3}>

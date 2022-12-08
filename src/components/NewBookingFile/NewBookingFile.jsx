@@ -200,7 +200,7 @@ const NewBookingFile = () => {
   const [idOfSelectedMenu, setIdOfSelectedMenu] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
   const menuObject = {};
-  menuObject.selectedMenu.menu = selectedMenu;
+  menuObject?.selectedMenu?.menu = selectedMenu;
   const [menuPrice, setMenuPrice] = useState(0);
   console.log("Totalprice", totalPrice);
   console.log("menuPrice", menuPrice);

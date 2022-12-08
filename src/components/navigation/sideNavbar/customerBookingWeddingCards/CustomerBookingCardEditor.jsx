@@ -281,7 +281,7 @@ const CustomerBookingCardEditor = () => {
                 </Anchor>
               </Group>
 
-              <Title order={4}>Choose Image Or upload</Title>
+              <Title order={4}>Choose an Image </Title>
               <Group position="left">
                 {pictureBackground?.map((image, index) => {
                   return (

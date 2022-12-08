@@ -814,7 +814,7 @@ const NewVendorBookingFile = () => {
             <Group position="center">
               <Button
                 component={Link}
-                to="/shahrukhTest/bookings"
+                to="/dashboard/vendorBookings"
                 mt="md"
                 leftIcon={<IconX />}
                 color="green"

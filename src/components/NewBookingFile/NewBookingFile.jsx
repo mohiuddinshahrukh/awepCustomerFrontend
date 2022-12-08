@@ -2145,7 +2145,10 @@ const NewBookingFile = () => {
 
                       <Text weight="bold" color="red" size="xl" py="md">
                         Total Cost Rs.{" "}
-                        {totalPrice + hallCharges + menuPrice * noOfGuests}
+                        {totalPrice +
+                          stagePrice +
+                          hallCharges +
+                          menuPrice * noOfGuests}
                       </Text>
                     </Group>
                     <BookingReviewInvoice

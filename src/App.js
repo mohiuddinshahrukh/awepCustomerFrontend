@@ -46,6 +46,7 @@ import VendorFeedbacks from "./components/navigation/sideNavbar/feedbacks/Vendor
 import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFeedbacks";
 import AddComplaint from "./components/AddComplaint/AddComplaint";
 import DashboardStats from "./components/DashboardStats/DashboardStats";
+import CustomerBookingCardEditor from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingCardEditor";
 function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const [signedIn, setSignedIn] = useState(false);
@@ -161,7 +162,10 @@ function App() {
                 />
 
                 <Route path="/" element={<LandingPageMain />} />
-                <Route path="/cardEditor" element={<CustomerCardEditor />} />
+                <Route
+                  path="/cardEditor"
+                  element={<CustomerBookingCardEditor />}
+                />
                 <Route path="/allVendors" element={<AllVendorsPage />} />
                 {/* <Route path="/allVenues/date/:date" element={<AllVenuesPage />} /> */}
                 {/* <Route path="/allVenues/date/:date/time/:time" element={<AllVenuesPage />} /> */}

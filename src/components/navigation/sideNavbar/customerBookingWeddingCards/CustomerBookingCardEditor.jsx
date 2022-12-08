@@ -53,38 +53,22 @@ const pictureBackground = [
 ];
 // COMPONENT
 let id = "";
-const CustomerBookingCardEditor = ({ selectedBooking }) => {
+const CustomerBookingCardEditor = () => {
   const [qrCode, setQrCode] = useState("");
   const canvas = useRef(null);
   const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
   // HOOKS
   const [image, setImage] = useState(pictureBackground[0]);
-  const [eventType, setEventType] = useState(
-    selectedBooking.eventType !== undefined ? selectedBooking.eventType : ""
-  );
+  const [eventType, setEventType] = useState("");
   const [eventTypeOther, setEventTypeOther] = useState("");
-  const [invitationName, setInvitationName] = useState(
-    selectedBooking.customerName !== undefined
-      ? selectedBooking.customerName
-      : ""
-  );
+  const [invitationName, setInvitationName] = useState("");
   const [eventTimeDuration, setEventTimeDuration] = useState("LUNCH");
   const [groomName, setGroomName] = useState("");
   const [brideName, setBrideName] = useState("");
-  const [eventTime, setEventTime] = useState(
-    selectedBooking.bookingTime !== undefined ? selectedBooking.bookingTime : ""
-  );
-  const [eventDate, setEventDate] = useState(
-    selectedBooking.bookingDate !== undefined
-      ? selectedBooking.bookingDate.split("T")[0]
-      : Date.now()
-  );
+  const [eventTime, setEventTime] = useState("");
+  const [eventDate, setEventDate] = useState(Date.now());
   const [eventRsvpName, setEventRsvpName] = useState("");
-  const [venueName, setVenueName] = useState(
-    selectedBooking.venueName !== undefined
-      ? selectedBooking.venueName + " " + selectedBooking.venueId.venueAddress
-      : ""
-  );
+  const [venueName, setVenueName] = useState("");
 
   //  Y AXIS VALUES
   const [eventTypeY, setEventTypeY] = useState(100);
@@ -268,7 +252,6 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
     groomNameX,
     groomNameY,
     image,
-    selectedBooking?._id,
   ]);
 
   return (
@@ -542,6 +525,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                   setEventTypeX(eventTypeX + e);
                   setInvitationFromX(invitationFromX + e);
                   setGroomNameX(groomNameX + e);
+                  setEventTimeDurationX(eventTimeDurationY + e);
                   setBrideNameX(brideNameX + e);
                   setEventTimeX(eventTimeX + e);
                   setEventDateX(eventDateX + e);
@@ -645,6 +629,7 @@ const CustomerBookingCardEditor = ({ selectedBooking }) => {
                   setEventTypeY(eventTypeY + e);
                   setInvitationFromY(invitationFromY + e);
                   setGroomNameY(groomNameY + e);
+                  setEventTimeDurationY(eventTimeDurationY + e);
                   setBrideNameY(brideNameY + e);
                   setEventTimeY(eventTimeY + e);
                   setEventDateY(eventDateY + e);

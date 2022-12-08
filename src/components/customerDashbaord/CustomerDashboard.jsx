@@ -85,7 +85,6 @@ const CustomerDashboard = () => {
           </ActionIcon>
         </Group>
       )}
-
       {!matches1200 && <Divider my="lg" />}
       {allowView && (
         <Group

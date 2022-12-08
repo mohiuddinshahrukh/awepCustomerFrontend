@@ -199,8 +199,7 @@ const NewBookingFile = () => {
   console.log("hall charges are", hallCharges);
   const [idOfSelectedMenu, setIdOfSelectedMenu] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
-  // const menuObject = {};
-  // menuObject.selectedMenu.menu = selectedMenu;
+
   const [menuPrice, setMenuPrice] = useState(0);
   console.log("Totalprice", totalPrice);
   console.log("menuPrice", menuPrice);
@@ -228,6 +227,7 @@ const NewBookingFile = () => {
   const makeInvoice = () => {
     let customerData = JSON.parse(localStorage.getItem("customerData"));
     let singleInvioceData = {
+      venueName: venueDetails?.venueName,
       subVenueBookingCharges: hallCharges,
       selectedVenueServices: selectedVenueServiceObject,
       venueId: venueDetails,
@@ -244,9 +244,16 @@ const NewBookingFile = () => {
       )[0]?.subVenueName,
       hallCharges: hallCharges,
       numberOfGuests: noOfGuests,
-      // selectedMenu: menuObject,
-      selectedTheme: selectedTheme,
-      selectedStage: selectedStage,
+      selectedMenu: {
+        menu: selectedMenu,
+        price: menuPrice,
+      },
+      selectedTheme: {
+        theme: selectedTheme,
+      },
+      selectedStage: {
+        stage: selectedStage,
+      },
       bookingDescription: description,
       hallCharges: hallCharges,
       price: {

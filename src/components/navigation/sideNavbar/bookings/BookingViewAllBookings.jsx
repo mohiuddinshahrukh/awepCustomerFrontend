@@ -91,7 +91,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
       : 0
   );
   const [menuCharges, setMenuCharges] = useState(
-    singleInvoice?.selectedMenu?.length > 0
+    singleInvoice?.selectedMenu
       ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
       : 0
   );
@@ -108,9 +108,10 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             )
             .reduce((a, b) => a + b, 0)
         : 0) +
-      (singleInvoice?.selectedMenu?.length > 0
+      (singleInvoice?.selectedMenu
         ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
-        : 0)
+        : 0) +
+      (singleInvoice?.selectedStage ? singleInvoice?.selectedStage?.price : 0)
   );
 
   let iconSize = 20;
@@ -502,7 +503,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             )}
           </>
         )}
-        {singleInvoice?.selectedMenu?.length > 0 && (
+        {singleInvoice?.selectedMenu && (
           <>
             <InvoiceHeaders title={"Menu Details"} />
 
@@ -593,7 +594,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             )}
           </>
         )}
-        {singleInvoice?.selectedVenueTheme?.theme !== "" && (
+        {singleInvoice?.selectedVenueTheme && (
           <>
             <InvoiceHeaders title={"Theme Details"} />
             <Table striped withBorder withColumnBorders>
@@ -625,7 +626,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           </>
         )}
 
-        {singleInvoice?.selectedStage?.stage?.length > 0 && (
+        {singleInvoice?.selectedStage && (
           <>
             <InvoiceHeaders title={"Stage Details"} />
             <Table striped withBorder withColumnBorders>

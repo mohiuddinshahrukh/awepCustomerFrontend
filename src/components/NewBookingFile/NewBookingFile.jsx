@@ -58,6 +58,7 @@ import MenusOfSpecificVenueForBooking from "../MenusOfSpecifcVenue/MenusOfSpecif
 import ThemesOfSpecificVenueForBooking from "../ThemesOfSpecificVenue/ThemesOfSpecificVenueForBooking";
 import BookingReviewInvoice from "../InvoiceGenerator/BookingReviewInvoice";
 import StripePromise from "../paymentGateways/StripePromise";
+import StagesOfSpecificVenueForBooking from "../StagesOfSpecificVenue/StagesOfSpecificVenueForBooking";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -210,6 +211,10 @@ const NewBookingFile = () => {
 
   const [idOfSelectedTheme, setIdOfSelectedTheme] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
+
+  const [idOfSelectedStage, setIdOfSelectedStage] = useState("");
+  const [selectedStage, setSelectedStage] = useState("");
+  const [stagePrice, setStagePrice] = useState(0);
   console.log("selected theme", selectedTheme);
   const [bookingPercentage, setBookingPercentage] = useState(0.2);
   const [taxPercentage, setTaxPercentage] = useState(0.17);
@@ -956,7 +961,6 @@ const NewBookingFile = () => {
                 <Group position="apart">
                   <Text>Discount</Text>
                   <Text>
-                    -{" "}
                     <b>
                       {(
                         (hallCharges +
@@ -1520,7 +1524,11 @@ const NewBookingFile = () => {
                   <Text weight="bold" size="xl" py="md" color="red">
                     Total{" "}
                     <b>
-                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                      Rs.{" "}
+                      {hallCharges +
+                        totalPrice +
+                        stagePrice +
+                        menuPrice * noOfGuests}
                     </b>
                   </Text>
                 </Group>
@@ -1786,7 +1794,10 @@ const NewBookingFile = () => {
                         Total{" "}
                         <b>
                           Rs.{" "}
-                          {hallCharges + totalPrice + menuPrice * noOfGuests}
+                          {hallCharges +
+                            totalPrice +
+                            stagePrice +
+                            menuPrice * noOfGuests}
                         </b>
                       </Text>
                     </Group>
@@ -1872,7 +1883,10 @@ const NewBookingFile = () => {
                         Total{" "}
                         <b>
                           Rs.{" "}
-                          {hallCharges + totalPrice + menuPrice * noOfGuests}
+                          {hallCharges +
+                            totalPrice +
+                            stagePrice +
+                            menuPrice * noOfGuests}{" "}
                         </b>
                       </Text>
                     </Group>
@@ -1921,6 +1935,76 @@ const NewBookingFile = () => {
                   </Grid>
                 </Stepper.Step>
               )}
+              {venueDetails?.stages?.length !== 0 && (
+                <Stepper.Step
+                  color={!stepperDisabled ? "grape" : "gray"}
+                  label="Stage Selection"
+                  description="Select A Stage"
+                  allowStepSelect={active > 2}
+                  disabled={stepperDisabled}
+                >
+                  <Paper pb="xl">
+                    <Group position="apart">
+                      <Text weight="bold" size="xl" py="md">
+                        Stage Selection
+                      </Text>
+                      <Text weight="bold" size="xl" py="md" color="red">
+                        Total{" "}
+                        <b>
+                          Rs.{" "}
+                          {hallCharges +
+                            totalPrice +
+                            stagePrice +
+                            menuPrice * noOfGuests}
+                        </b>
+                      </Text>
+                    </Group>
+                    {idOfSelectedTheme === "" && (
+                      <Text size="xl" color="red" weight="bold">
+                        Please Select A Stage{" "}
+                      </Text>
+                    )}
+                  </Paper>
+
+                  <StagesOfSpecificVenueForBooking
+                    setStagePrice={setStagePrice}
+                    stages={venueDetails?.stages}
+                    setIdOfSelectedStage={setIdOfSelectedStage}
+                    idOfSelectedStage={idOfSelectedStage}
+                    setSelectedStage={setSelectedStage}
+                    selectedStage={selectedStage}
+                  />
+
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        // disabled={loading}
+                        leftIcon={<IconArrowLeft />}
+                        onClick={prevStep}
+                      >
+                        BACK
+                      </Button>
+                    </Grid.Col>
+
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        rightIcon={<IconArrowRight />}
+                        onClick={nextStep}
+                      >
+                        NEXT
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </Stepper.Step>
+              )}
 
               <Stepper.Step
                 color={!stepperDisabled ? "grape" : "gray"}
@@ -1936,7 +2020,11 @@ const NewBookingFile = () => {
                   <Text weight="bold" size="xl" py="md" color="red">
                     Total{" "}
                     <b>
-                      Rs. {hallCharges + totalPrice + menuPrice * noOfGuests}
+                      Rs.{" "}
+                      {hallCharges +
+                        totalPrice +
+                        stagePrice +
+                        menuPrice * noOfGuests}
                     </b>
                   </Text>
                 </Group>
@@ -2156,13 +2244,16 @@ const NewBookingFile = () => {
                               // start={start}
                               amountPayable={
                                 (hallCharges +
+                                  stagePrice +
                                   totalPrice +
                                   menuPrice * noOfGuests +
                                   (hallCharges +
+                                    stagePrice +
                                     totalPrice +
                                     menuPrice * noOfGuests) *
                                     taxPercentage -
                                   (hallCharges +
+                                    stagePrice +
                                     totalPrice +
                                     menuPrice * noOfGuests) *
                                     discountPercentage) *

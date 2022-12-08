@@ -43,6 +43,7 @@ import Carousal_Panorama from "../Carousal/Carousal_Panorama";
 import Carousal_Stage from "../Carousal/Carousal_Stage";
 import { useMediaQuery } from "@mantine/hooks";
 import { socket } from "../Socket/Socket";
+import CarouselOfStages from "../StagesOfSpecificVenue/CarouselOfStages";
 const useStyles = createStyles(() => ({
   stickySThings: {
     position: "-webkit-sticky",
@@ -409,6 +410,11 @@ const SpecificVenueDetails = ({ signedIn, setSignedIn }) => {
                     Themes
                   </Tabs.Tab>
                 )}
+                {venueDetails?.stages?.length !== 0 && (
+                  <Tabs.Tab icon={<IconSettings size={14} />} value="Stages">
+                    Stages
+                  </Tabs.Tab>
+                )}
                 <Tabs.Tab icon={<IconSettings size={14} />} value="Reviews">
                   Reviews
                 </Tabs.Tab>
@@ -477,6 +483,13 @@ const SpecificVenueDetails = ({ signedIn, setSignedIn }) => {
               <Tabs.Panel value="Themes">
                 <CarouselOfThemes
                   themes={venueDetails?.themes ? venueDetails?.themes : [{}]}
+                />
+              </Tabs.Panel>
+            )}
+            {venueDetails?.stages?.length !== 0 && (
+              <Tabs.Panel value="Stages">
+                <CarouselOfStages
+                  stages={venueDetails?.stages ? venueDetails?.stages : [{}]}
                 />
               </Tabs.Panel>
             )}

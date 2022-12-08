@@ -883,6 +883,20 @@ const NewBookingFile = () => {
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
         });
+
+        socket.socket.emit("viewAllChatsOnStartConversation", {
+          participant: {
+            _id: venueDetails?.venueOwnerId,
+            type: "venue",
+          },
+        });
+        socket.socket.emit("viewAllChatsOnStartConversation", {
+          participant: {
+            _id: JSON.parse(localStorage.getItem("customerData")).id,
+            type: "user",
+          },
+        });
+
         // socket.socket.emit("generateNotification", {
         //   userId: "634912abc5ba3ae82a86412c",
         //   title: "Subvenue Booking Successful",

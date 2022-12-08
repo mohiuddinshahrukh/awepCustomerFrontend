@@ -636,7 +636,7 @@ const ChatScreen = () => {
                     <Box
                       key={conversation._id}
                       className={
-                        selectedChatHead?.id === conversation?.chatHead1?.id
+                        selectedChatHead?.id === conversation?.chatHead2?.id
                           ? "selectedChat"
                           : "unSelectedChat"
                       }

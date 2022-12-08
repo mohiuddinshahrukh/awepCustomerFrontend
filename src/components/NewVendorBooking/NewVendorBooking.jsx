@@ -578,7 +578,7 @@ const NewVendorBookingFile = () => {
         showNotification({
           color: "green",
           title: `Successfully`,
-          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+          message: `VENDOR BOOKED SUCCESSFULLY!!`,
         });
         setConfirmBooking(true);
         setVisible(false);

@@ -220,19 +220,26 @@ const NewBookingFile = () => {
   const [bookingPercentage, setBookingPercentage] = useState(0.2);
   const [taxPercentage, setTaxPercentage] = useState(0.17);
   const [discountPercentage, setDiscountPercentage] = useState(0);
+  const [singleInvioce, setSingleInvioce] = useState({});
+  console.log("singleInvioce", singleInvioce);
 
-  const singleInvioce = {
-    subVenueBookingCharges: hallCharges,
-    serviceCharge: totalPrice,
-    menuCharge: menuPrice * noOfGuests,
-    subTotalCharges:
-      hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
-    selectedVenueServices: [selectedVenueServices],
-    selectedMenu: selectedMenu,
-    selectedTheme: selectedTheme,
-    selectedStage: selectedStage,
-    noOfGuests: noOfGuests,
-    venueName: venue,
+  const makeInvoice = () => {
+    let singleInvioceData = {
+      subVenueBookingCharges: hallCharges,
+      selectedVenueServices: selectedVenueServiceObject,
+
+      serviceCharge: totalPrice,
+      menuCharge: menuPrice * noOfGuests,
+      subTotalCharges:
+        hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
+      selectedMenu: selectedMenu,
+      selectedTheme: selectedTheme,
+      selectedStage: selectedStage,
+      noOfGuests: noOfGuests,
+      venueId: venueDetails,
+    };
+    setSingleInvioce(singleInvioceData);
+    nextStep();
   };
 
   const data = [
@@ -409,8 +416,8 @@ const NewBookingFile = () => {
     setPhone(phone);
     setEmail(email);
     setDescription(description);
+    makeInvoice();
 
-    nextStep();
     // makeVenueBooking();
   };
 

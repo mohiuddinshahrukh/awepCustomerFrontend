@@ -84,7 +84,8 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
       ? singleInvoice?.selectedVenueServices
           ?.map(
             (service) =>
-              service.servicePrice * (service.duration === "Per Event" ? 1 : 3)
+              service?.servicePrice *
+              (service?.duration === "Per Event" ? 1 : 3)
           )
           .reduce((a, b) => a + b, 0)
       : 0
@@ -102,8 +103,8 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
         ? singleInvoice?.selectedVenueServices
             ?.map(
               (service) =>
-                service.servicePrice *
-                (service.duration === "Per Event" ? 1 : 3)
+                service?.servicePrice *
+                (service?.duration === "Per Event" ? 1 : 3)
             )
             .reduce((a, b) => a + b, 0)
         : 0) +
@@ -202,7 +203,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             </td>*/}
           <td align="right">
             <Text>
-              {service?.servicePrice.toLocaleString()}
+              {service?.servicePrice?.toLocaleString()}
               {service?.duration === "Per Event" ? (
                 <span
                   component={Text}
@@ -222,8 +223,8 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           </td>
           <td align="right">
             {service?.duration === "Per Event"
-              ? service?.servicePrice.toLocaleString()
-              : (service?.servicePrice * 3).toLocaleString()}
+              ? service?.servicePrice?.toLocaleString()
+              : (service?.servicePrice * 3)?.toLocaleString()}
           </td>
         </tr>
       );
@@ -461,7 +462,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                         <Group position="apart" spacing={3}>
                           {" "}
                           <Text>
-                            {service?.servicePrice.toLocaleString()}
+                            {service?.servicePrice?.toLocaleString()}
                             {service?.duration === "Per Event" ? (
                               <span
                                 component={Text}
@@ -480,8 +481,8 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                           </Text>
                           <Text align="right">
                             {service?.duration === "Per Event"
-                              ? service?.servicePrice.toLocaleString()
-                              : (service?.servicePrice * 3).toLocaleString()}
+                              ? service?.servicePrice?.toLocaleString()
+                              : (service?.servicePrice * 3)?.toLocaleString()}
                           </Text>
                         </Group>
                         {/*          <td>
@@ -530,7 +531,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     </td>
 
                     <td align="right">
-                      {singleInvoice?.selectedMenu?.price.toLocaleString()}
+                      {singleInvoice?.selectedMenu?.price?.toLocaleString()}
                     </td>
                   </tr>
                   <tr>
@@ -541,7 +542,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                       <Text> Persons X Menu Cost Per Head</Text>
                       <Text>
                         Total Menu Cost Rs.{" "}
-                        <b>{menuCharges.toLocaleString()}</b>
+                        <b>{menuCharges?.toLocaleString()}</b>
                       </Text>
                     </td>
                   </tr>
@@ -570,7 +571,9 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 <Group position="apart">
                   <Text>Menu Cost Per Head</Text>
                   <Text>
-                    <b>{singleInvoice?.selectedMenu?.price.toLocaleString()}</b>
+                    <b>
+                      {singleInvoice?.selectedMenu?.price?.toLocaleString()}
+                    </b>
                   </Text>
                 </Group>
                 <Group position="apart">
@@ -583,7 +586,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 <Group position="apart">
                   <Text> Total Menu Cost Rs</Text>
                   <Text>
-                    <b>{menuCharges.toLocaleString()}</b>
+                    <b>{menuCharges?.toLocaleString()}</b>
                   </Text>
                 </Group>
               </Paper>
@@ -727,7 +730,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                       {(
                         singleInvoice?.price?.totalPrice *
                         singleInvoice?.price?.discountPercentage
-                      ).toLocaleString()}
+                      )?.toLocaleString()}
                     </b>
                   </td>
                 </tr>
@@ -741,7 +744,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                       {(
                         singleInvoice?.price?.totalPrice *
                         singleInvoice?.price?.taxPercentage
-                      ).toLocaleString()}
+                      )?.toLocaleString()}
                     </b>
                   </td>
                 </tr>

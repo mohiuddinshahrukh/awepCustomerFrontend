@@ -169,16 +169,23 @@ const DashboardStats = () => {
           }
         />
       </Grid.Col>
-      <Grid.Col md={4}>
-        <Text>Recent Bookings</Text>
+      <Grid.Col md={4} pt="lg">
+        <Text size="lg" weight="bold">
+          Recent Bookings
+        </Text>
         <RecentBookings processedBookings={processedBookings} />
       </Grid.Col>
-      <Grid.Col md={4}>
-        <Text>Upcoming Bookings</Text>
+      <Grid.Col md={4} pt="lg">
+        <Text size="lg" weight="bold">
+          Upcoming Bookings
+        </Text>
         <UpcomingBookings processedUpcomingBookings={upcomingBookings} />
       </Grid.Col>
-      <Grid.Col md={4}>
-        <Center mb="md">
+      <Grid.Col md={4} p="lg">
+        <Text size="lg" weight="bold">
+          Bookings Calender
+        </Text>
+        <Center pt="lg">
           <BookingCalendar
             size={"md"}
             initialMonth={new Date()}

@@ -47,6 +47,8 @@ import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFe
 import AddComplaint from "./components/AddComplaint/AddComplaint";
 import DashboardStats from "./components/DashboardStats/DashboardStats";
 function App() {
+  const [hookEmail, setHookEmail] = useState();
+  const [hookPassword, setHookPassword] = useState();
   const [colorScheme, setColorScheme] = useState("light");
   const [signedIn, setSignedIn] = useState(false);
   const toggleColorScheme = (value) =>
@@ -87,7 +89,15 @@ function App() {
                     <SignIn signedIn={signedIn} setSignedIn={setSignedIn} />
                   }
                 />
-                <Route path="/signUp" element={<SignUp />} />
+                <Route
+                  path="/signUp"
+                  element={
+                    <SignUp
+                      setHookEmail={setHookEmail}
+                      setHookPassword={setHookPassword}
+                    />
+                  }
+                />
                 <Route
                   path="/venueBooking/:eventType/:date/:time/:guests/:venueId"
                   element={<NewBookingFile />}

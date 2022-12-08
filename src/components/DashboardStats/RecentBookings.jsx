@@ -42,9 +42,9 @@ const RecentBookings = ({ processedBookings }) => {
   const { classes } = useStyles();
   return (
     <div>
-      <ScrollArea style={{ height: 500 }} py="sm" scrollHideDelay={0}>
+      <ScrollArea style={{ height: 500 }} py="sm"  pr="lg" scrollHideDelay={0}>
         {processedBookings.slice(0, 5).map((booking, index) => (
-          <Paper withBorder radius="lg" p="md" my="md">
+          <Paper withBorder radius="lg" p="md" my="md" >
             {console.log("BOOKING ", index, booking)}
             <Group position="apart">
               <Text size="lg" weight={500} className={classes.name}>
@@ -102,6 +102,17 @@ const RecentBookings = ({ processedBookings }) => {
             </Group>
           </Paper>
         ))}
+        <Text
+          pr={16}
+          align="right"
+          size="lg"
+          weight="bold"
+          color={"red"}
+          // onClick={() => navigate("/viewbookings")}
+          style={{ cursor: "pointer" }}
+        >
+          + View All
+        </Text>
       </ScrollArea>
     </div>
   );

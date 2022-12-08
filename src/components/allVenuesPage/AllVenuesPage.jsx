@@ -314,6 +314,8 @@ const AllVenuesPage = () => {
               );
               dateMatch = true;
             }
+          } else if (!subVenue.bookedOn) {
+            dateMatch = true;
           }
         });
         if (!dateMatch) {

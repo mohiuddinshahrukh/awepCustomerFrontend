@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { ContactIconsList } from "./ContactIcons";
 import bg from "./bg.svg";
+import { useState } from "react";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm");
@@ -190,6 +191,9 @@ const useStyles = createStyles((theme) => {
 
 const ContactUs = () => {
   const { classes, cx } = useStyles();
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
 
   return (
     <Paper>
@@ -240,6 +244,8 @@ const ContactUs = () => {
                     label="Your email"
                     placeholder="Enter Your Email"
                     required
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                   />
                 </SimpleGrid>
 
@@ -248,6 +254,8 @@ const ContactUs = () => {
                   label="Subject"
                   placeholder="Subject"
                   required
+                  value={subject}
+                  onChange={(event) => setSubject(event.target.value)}
                 />
 
                 <Textarea
@@ -255,6 +263,8 @@ const ContactUs = () => {
                   label="Your message"
                   placeholder="Please include all relevant information"
                   minRows={7}
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
                 />
 
                 <Group position="right" mt="md">

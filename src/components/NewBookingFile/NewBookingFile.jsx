@@ -206,6 +206,7 @@ const NewBookingFile = () => {
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
+  console.log("descriptiasdasdon", description);
   const [hidden, setHidden] = useState(true);
   const [hideSelectButton, setHideSelectButton] = useState(false);
   // const { start, clear } = useTimeout(() => setConfirmBooking(false), 10000);
@@ -227,6 +228,8 @@ const NewBookingFile = () => {
   const makeInvoice = () => {
     let customerData = JSON.parse(localStorage.getItem("customerData"));
     let singleInvioceData = {
+      bookingDescription: description,
+
       venueName: venueDetails?.venueName,
       subVenueBookingCharges: hallCharges,
       selectedVenueServices: selectedVenueServiceObject,
@@ -254,7 +257,7 @@ const NewBookingFile = () => {
       selectedStage: {
         stage: selectedStage,
       },
-      bookingDescription: description,
+      paymentStatus: "ADVANCE PAID",
       hallCharges: hallCharges,
       price: {
         discountPercentage: discountPercentage,

@@ -14,6 +14,9 @@ import {
 import { ContactIconsList } from "./ContactIcons";
 import bg from "./bg.svg";
 import { useState } from "react";
+import { showNotification } from "@mantine/notifications";
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm");
@@ -190,10 +193,58 @@ const useStyles = createStyles((theme) => {
 });
 
 const ContactUs = () => {
+  const navigate = useNavigate();
   const { classes, cx } = useStyles();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
+
+  const makeVenueBooking = async () => {
+    console.log("MAKING THE BOOKING");
+    const body = {
+      name: name,
+      email: email,
+      message: message,
+      subject: subject,
+    };
+
+    console.log("@@@body", body);
+
+    const headers = {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("customerToken"),
+    };
+    try {
+      const response = await axios({
+        method: "post",
+        url: "https://a-wep.herokuapp.com/auth/user/contactEmail",
+        data: body,
+        headers: headers,
+      });
+
+      console.log("THIS IS THE RESPONSE OBJECT:   ", response);
+
+      if (response.data.status === "error") {
+        showNotification({
+          title: `ERROR`,
+          color: "red",
+          message: `${response.data.error?.message || response.data.error}`,
+        });
+        console.log("error", response.data.error.message);
+        console.log("error", response.data.error);
+      } else {
+        showNotification({
+          color: "green",
+          title: `Successfully`,
+          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+        });
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Paper>
@@ -228,7 +279,7 @@ const ContactUs = () => {
 
             <form
               className={classes.form}
-              onSubmit={(event) => event.preventDefault()}
+              onSubmit={(event) => console.log("SUBMITTED", event)}
             >
               <Title align="center" className={classes.title}>
                 Get in touch
@@ -239,7 +290,12 @@ const ContactUs = () => {
                   cols={1}
                   breakpoints={[{ maxWidth: "sm", cols: 1 }]}
                 >
-                  <TextInput label="Your name" placeholder="Your name" />
+                  <TextInput
+                    label="Your name"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                  />
                   <TextInput
                     label="Your email"
                     placeholder="Enter Your Email"
@@ -274,6 +330,7 @@ const ContactUs = () => {
                     className="button"
                     type="submit"
                     uppercase
+                    onClick={() => makeVenueBooking()}
                   >
                     Send message
                   </Button>

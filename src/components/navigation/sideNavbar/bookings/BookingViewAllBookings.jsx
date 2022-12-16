@@ -594,7 +594,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
             )}
           </>
         )}
-        {singleInvoice?.selectedVenueTheme && (
+        {singleInvoice?.selectedVenueTheme?.theme !== "" && (
           <>
             <InvoiceHeaders title={"Theme Details"} />
             <Table striped withBorder withColumnBorders>
@@ -607,10 +607,12 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     {singleInvoice?.selectedVenueTheme?.theme?.themeTitle}
                   </td>
                   <td>
-                    {singleInvoice?.selectedVenueTheme?.theme?.themeColors[0]}
+                    {singleInvoice?.selectedVenueTheme?.theme
+                      ?.themeColors?.[0] || "red"}
                   </td>
                   <td>
-                    {singleInvoice?.selectedVenueTheme?.theme?.themeColors[1]}
+                    {singleInvoice?.selectedVenueTheme?.theme
+                      ?.themeColors?.[1] || "red"}
                   </td>
                   <td align="right">
                     <Text>
@@ -669,15 +671,17 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           {" "}
           <Grid.Col hidden={matches500 ? false : true} span={6}>
             <Center>
-              <Image
-                height={300}
-                width={300}
-                src={
-                  singleInvoice.paymentStatus === "ADVANCE PAID"
-                    ? AdvanceStamp
-                    : CompleteStamp
-                }
-              />
+              {singleInvoice.paymentStatus && (
+                <Image
+                  height={300}
+                  width={300}
+                  src={
+                    singleInvoice.paymentStatus === "ADVANCE PAID"
+                      ? AdvanceStamp
+                      : CompleteStamp
+                  }
+                />
+              )}
             </Center>
             <Text>Paid Via Stripe</Text>
             <Text>Advance Amount is Not Refundable</Text>

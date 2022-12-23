@@ -5,6 +5,7 @@ import {
   Group,
   Menu,
   Modal,
+  Paper,
   Table,
   Text,
   Title,
@@ -12,7 +13,6 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import {
   IconBrandStripe,
-  IconChevronDown,
   IconEdit,
   IconEye,
   IconMessage,
@@ -21,73 +21,80 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
 import BookingViewAllBookings from "./BookingViewAllBookings";
 import moment from "moment";
 import StripePromise from "./stripe/StripePromise";
 import { showNotification } from "@mantine/notifications";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 
-const fetchAllVenues = async () => {
-  console.log("Fetching alasdasl venues");
-  try {
-    console.log("Fetchinasdasdg alasdasl venues");
-    const apiResponse = await axios({
-      method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
-      headers: {
-        token: localStorage.getItem("customerToken"),
-      },
-    });
-    console.log("$!@#API RESPONSE: ", apiResponse);
-    console.log("API RESPONSE: ", apiResponse.data);
-
-    if (apiResponse.data.status === "success") {
-      console.log("Successfully fetched all venues:", apiResponse.data.data);
-      apiResponse.data.data.map((Booking) => {
-        if (Booking.bookingStatus === "IN PROGRESS") {
-          const daysTillBookings = moment(Booking.bookingDate)
-            .diff(Date.now(), "days")
-            .toString();
-          if (daysTillBookings < 0) {
-            Booking.BOOKING_STATUS = "PAST";
-            Booking.BOOKING_STATUS_COLOR = "red";
-          } else if (daysTillBookings > 7) {
-            Booking.BOOKING_STATUS = "PENDING";
-            Booking.BOOKING_STATUS_COLOR = "orange";
-          } else if (daysTillBookings > 1) {
-            Booking.BOOKING_STATUS = "UPCOMING";
-            Booking.BOOKING_STATUS_COLOR = "yellow";
-          } else {
-            Booking.BOOKING_STATUS = "IN PROGRESS";
-            Booking.BOOKING_STATUS_COLOR = "blue";
-          }
-        }
-      });
-
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venues");
-    } else {
-      console.log("Failed to fetch all venues, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
 const CustomerVenueBookings = () => {
   let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
-  const [visible, setVisible] = useState(true);
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
   const [viewPaymentModal, setViewPaymentModal] = useState(false);
   const [amountPayable, setAmountPayable] = useState({});
   const [confirmBooking, setConfirmBooking] = useState(false);
   const [paidSuccessfully, setPaidSuccessfully] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(true);
+  const [visible, setVisible] = useState(true);
   const [venueBookings, setVenueBookings] = useState([]);
+  const fetchAllVenues = async () => {
+    console.log("Fetching alasdasl venues");
+    try {
+      console.log("Fetchinasdasdg alasdasl venues");
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("$!@#API RESPONSE: ", apiResponse);
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log("Successfully fetched all venues:", apiResponse.data.data);
+        apiResponse.data.data.map((Booking) => {
+          if (Booking.bookingStatus === "IN PROGRESS") {
+            const daysTillBookings = moment(Booking.bookingDate)
+              .diff(Date.now(), "days")
+              .toString();
+            if (daysTillBookings < 0) {
+              Booking.BOOKING_STATUS = "PAST";
+              Booking.BOOKING_STATUS_COLOR = "red";
+            } else if (daysTillBookings > 7) {
+              Booking.BOOKING_STATUS = "PENDING";
+              Booking.BOOKING_STATUS_COLOR = "orange";
+            } else if (daysTillBookings > 1) {
+              Booking.BOOKING_STATUS = "UPCOMING";
+              Booking.BOOKING_STATUS_COLOR = "yellow";
+            } else {
+              Booking.BOOKING_STATUS = "IN PROGRESS";
+              Booking.BOOKING_STATUS_COLOR = "blue";
+            }
+          }
+        });
+        setVisible(false);
+
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+
+        console.log("Error while fetching all venues");
+      } else {
+        setVisible(false);
+
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      setVisible(false);
+
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
   useEffect(() => {
-    fetchAllVenues().then(setVenueBookings).then(setVisible(false));
+    fetchAllVenues().then(setVenueBookings);
   }, [refresh]);
   const updateStatus = async (id, name) => {
     console.log("updating status", id, name);
@@ -143,6 +150,8 @@ const CustomerVenueBookings = () => {
         console.log("navigated");
       }
     } catch (err) {
+      setVisible(false);
+
       console.log(err);
     }
   };
@@ -171,12 +180,19 @@ const CustomerVenueBookings = () => {
         setViewPaymentModal(false);
         setRefresh(!refresh);
         setPaidSuccessfully(false);
+        setVisible(false);
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+
         console.log("Error while fetching all venues");
       } else {
+        setVisible(false);
+
         console.log("Failed to fetch all venues, dont know this error");
       }
     } catch (e) {
+      setVisible(false);
+
       console.log("ERROR in fetching all venues:", e);
     }
   };
@@ -396,7 +412,9 @@ const CustomerVenueBookings = () => {
     </tr>
   );
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <Paper style={{ width: "100%" }}>
+      <LoaderAWEP visible={visible} />
+
       <Modal
         title={<Title order={2}>Complete Payment</Title>}
         size={"lg"}
@@ -413,7 +431,7 @@ const CustomerVenueBookings = () => {
           amountPayable={amountPayable?.price?.remainingAmount}
         />
       </Modal>
-      <CustomeLoadingOverlay visible={visible} />
+
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"
@@ -428,7 +446,7 @@ const CustomerVenueBookings = () => {
         <thead>{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
-    </div>
+    </Paper>
   );
 };
 

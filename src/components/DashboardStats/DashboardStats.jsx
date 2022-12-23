@@ -1,7 +1,8 @@
-import { Center, Container, Grid, Paper, Text } from "@mantine/core";
+import { Center, Grid, Paper, Text } from "@mantine/core";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import LoaderAWEP from "../LoaderAWEP/LoaderAWEP";
 import BookingCalendar from "./Calendar";
 import FinanceStats from "./FinanceStats";
 import RecentBookings from "./RecentBookings";
@@ -55,6 +56,7 @@ const DashboardStats = () => {
   const [dashboardStats, setDashboardStats] = useState({});
   const [processedBookings, setProcessedBookings] = useState([]);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
+  const [visible, setVisible] = useState(true);
   console.log("dashboardStats", dashboardStats);
   const fetchAllvenueFeedbacks = async () => {
     try {
@@ -72,13 +74,19 @@ const DashboardStats = () => {
           "Successfully fetched dashboard stats:",
           apiResponse.data.data
         );
+        setVisible(false);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
         console.log("Error while fetching dashboard stats");
       } else {
+        setVisible(false);
+
         console.log("Failed to fetch dashboard stats, dont know this error");
       }
     } catch (e) {
+      setVisible(false);
+
       console.log("ERROR in fetching all venues:", e);
     }
   };
@@ -134,66 +142,69 @@ const DashboardStats = () => {
     });
   }, []);
   return (
-    <Grid style={{ width: "100%" }}>
-      <Grid.Col md={12}>
-        <FinanceStats
-          venueBookings={
-            dashboardStats?.subVenueBookingsCount
-              ? dashboardStats?.subVenueBookingsCount
-              : 0
-          }
-          vendorBookings={
-            dashboardStats?.vendorBookingsCount
-              ? dashboardStats?.vendorBookingsCount
-              : 0
-          }
-          paidVenueAmount={
-            dashboardStats?.venueExpenses
-              ? parseInt(dashboardStats?.venueExpenses)
-              : 0
-          }
-          paidVendorAmount={
-            dashboardStats?.vendorExpenses
-              ? parseInt(dashboardStats?.vendorExpenses)
-              : 0
-          }
-          remainingVenueAmount={
-            dashboardStats?.venueRemaining
-              ? parseInt(dashboardStats?.venueRemaining)
-              : 0
-          }
-          remainingVendorAmount={
-            dashboardStats?.vendorRemaining
-              ? parseInt(dashboardStats?.vendorRemaining)
-              : 0
-          }
-        />
-      </Grid.Col>
-      <Grid.Col md={4} pt="lg">
-        <Text size="lg" weight="bold">
-          Recent Bookings
-        </Text>
-        <RecentBookings processedBookings={processedBookings} />
-      </Grid.Col>
-      <Grid.Col md={4} pt="lg">
-        <Text size="lg" weight="bold">
-          Upcoming Bookings
-        </Text>
-        <UpcomingBookings processedUpcomingBookings={upcomingBookings} />
-      </Grid.Col>
-      <Grid.Col md={4} p="lg">
-        <Text size="lg" weight="bold">
-          Bookings Calender
-        </Text>
-        <Center pt="lg">
-          <BookingCalendar
-            size={"md"}
-            initialMonth={new Date()}
-            bookingData={bookingDatesObject}
+    <Paper>
+      <LoaderAWEP visible={visible} />
+      <Grid style={{ width: "100%" }}>
+        <Grid.Col md={12}>
+          <FinanceStats
+            venueBookings={
+              dashboardStats?.subVenueBookingsCount
+                ? dashboardStats?.subVenueBookingsCount
+                : 0
+            }
+            vendorBookings={
+              dashboardStats?.vendorBookingsCount
+                ? dashboardStats?.vendorBookingsCount
+                : 0
+            }
+            paidVenueAmount={
+              dashboardStats?.venueExpenses
+                ? parseInt(dashboardStats?.venueExpenses)
+                : 0
+            }
+            paidVendorAmount={
+              dashboardStats?.vendorExpenses
+                ? parseInt(dashboardStats?.vendorExpenses)
+                : 0
+            }
+            remainingVenueAmount={
+              dashboardStats?.venueRemaining
+                ? parseInt(dashboardStats?.venueRemaining)
+                : 0
+            }
+            remainingVendorAmount={
+              dashboardStats?.vendorRemaining
+                ? parseInt(dashboardStats?.vendorRemaining)
+                : 0
+            }
           />
-        </Center>
-      </Grid.Col>
-    </Grid>
+        </Grid.Col>
+        <Grid.Col md={4} pt="lg">
+          <Text size="lg" weight="bold">
+            Recent Bookings
+          </Text>
+          <RecentBookings processedBookings={processedBookings} />
+        </Grid.Col>
+        <Grid.Col md={4} pt="lg">
+          <Text size="lg" weight="bold">
+            Upcoming Bookings
+          </Text>
+          <UpcomingBookings processedUpcomingBookings={upcomingBookings} />
+        </Grid.Col>
+        <Grid.Col md={4} p="lg">
+          <Text size="lg" weight="bold">
+            Bookings Calender
+          </Text>
+          <Center pt="lg">
+            <BookingCalendar
+              size={"md"}
+              initialMonth={new Date()}
+              bookingData={bookingDatesObject}
+            />
+          </Center>
+        </Grid.Col>
+      </Grid>
+    </Paper>
   );
 };
 

@@ -1,19 +1,18 @@
 import {
   ActionIcon,
-  Badge,
   Group,
   Modal,
+  Paper,
   Rating,
   Table,
   Text,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { showNotification } from "@mantine/notifications";
-import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
+import { IconEye } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 import VendorFeedbackModal from "./VendorFeedbackModal";
 // import ViewVendorComplaintModal from "./ViewVendorComplaintModal";
 
@@ -37,7 +36,7 @@ const fetchAllVendorComplaints = async () => {
     } else if (apiResponse.data.status === "error") {
       console.log("Error while fetching all vendor bookings");
     } else {
-      console.log("Failed to fetch all vendor bookings, dont know this error");
+      console.log("Failed to fetch all vendor bookings, don't know this error");
     }
   } catch (e) {
     console.log("ERROR in fetching all venues:", e);
@@ -46,50 +45,13 @@ const fetchAllVendorComplaints = async () => {
 
 const SystemFeedbacks = () => {
   const [viewVendorReviewModal, setViewVendorReviewModal] = useState(false);
-  const matches500 = useMediaQuery("(min-width: 500px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
   const [visible, setVisible] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [viewReviewData, setViewReviewData] = useState({});
   const [AWEPFeedbacks, setAWEPFeedbacks] = useState([]);
   console.log("AWEP FEEDBACKS: ", AWEPFeedbacks);
-  const deleteVendorComplaint = async (id) => {
-    console.log("ID: ", id);
-    try {
-      const apiResponse = await axios({
-        method: "delete",
-        url: `https://a-wep.herokuapp.com/auth/user/deleteSystemFeedback/${id}`,
-        headers: {
-          token: localStorage.getItem("customerToken"),
-        },
-      });
-      console.log("API RESPONSE: ", apiResponse.data);
 
-      if (apiResponse.data.status === "success") {
-        console.log(
-          "Successfully fetched all vendor bookings:",
-          apiResponse.data.data
-        );
-        showNotification({
-          title: "Complian Deleted",
-          message: "Complaint deleted successfully",
-          color: "green",
-        });
-
-        setRefresh(!refresh);
-        setVisible(true);
-        return apiResponse.data.status;
-      } else if (apiResponse.data.status === "error") {
-        console.log("Error while fetching all vendor bookings");
-      } else {
-        console.log(
-          "Failed to fetch all vendor bookings, dont know this error"
-        );
-      }
-    } catch (e) {
-      console.log("ERROR in fetching all venues:", e);
-    }
-  };
   useEffect(() => {
     fetchAllVendorComplaints().then(setAWEPFeedbacks).then(setVisible(false));
   }, [refresh]);
@@ -147,7 +109,8 @@ const SystemFeedbacks = () => {
     </tr>
   );
   return (
-    <div>
+    <Paper>
+      <LoaderAWEP visible={visible} />
       <Modal
         styles={{
           close: {
@@ -181,11 +144,10 @@ const SystemFeedbacks = () => {
         withBorder
         withColumnBorders
       >
-        <CustomeLoadingOverlay visible={visible} />
         <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
-    </div>
+    </Paper>
   );
 };
 

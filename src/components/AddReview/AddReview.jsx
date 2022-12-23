@@ -13,13 +13,14 @@ import {
 import { IconInfoCircle } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import ReviewImage from "./image2.jpg";
-import { Button, createStyles } from "@mantine/core";
+import { Button } from "@mantine/core";
 import React from "react";
 import axios from "axios";
 import { cleanNotifications, showNotification } from "@mantine/notifications";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 import logo from "../../assets/awepLogo/3a.png";
+import LoaderAWEP from "../LoaderAWEP/LoaderAWEP";
 
 const onSelect = (rating) => {
   if (rating.hoverValue > 0 && rating.value > 0) {
@@ -89,8 +90,9 @@ const starColor = (rating) => {
 };
 
 const AddReview = () => {
+  const params = useParams();
   const [feedbackDetails, setFeedbackDetails] = useState({});
-  console.log("deererere", feedbackDetails);
+  const [visible, setVisible] = useState(params.feedbackId ? true : false);
   const fetchReviewDetails = async () => {
     try {
       let url;
@@ -111,16 +113,20 @@ const AddReview = () => {
         let specificVendorReview = retrievedData.filter((review) => {
           return review._id === params.feedbackId;
         });
+        setVisible(false);
         return specificVendorReview[0];
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
         console.log(
           "Error while fetching all venue services",
           apiResponse.data.error
         );
       } else {
+        setVisible(false);
         console.log("Unknown Error: ", apiResponse.data.error);
       }
     } catch (error) {
+      setVisible(false);
       console.log("Error in fetchAllVenueServices catch block", error);
     }
   };
@@ -150,7 +156,6 @@ const AddReview = () => {
   }, []);
   const matches1200 = useMediaQuery("(min-width: 1200px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
-  const params = useParams();
   console.log("MY PARAMS: ", params);
 
   useEffect(() => {
@@ -194,6 +199,7 @@ const AddReview = () => {
 
   let navigate = useNavigate();
   const handleSubmit = async () => {
+    setVisible(true);
     console.log("MAKING THE BOOKING");
     let body;
     if (params.provider === "venue") {
@@ -271,6 +277,7 @@ const AddReview = () => {
         console.log("success", response.data);
       }
     } catch (err) {
+      setVisible(false);
       console.log(err);
     }
   };
@@ -330,11 +337,12 @@ const AddReview = () => {
         });
         console.log("error", response.data.error.message);
         console.log("error", response.data.error);
+        setVisible(false);
       } else {
         showNotification({
           color: "green",
           title: `SUCCESS`,
-          message: `FEEDBACK UPDATED SUCCSSFULLY!!`,
+          message: `FEEDBACK UPDATED SUCCESSFULLY!!`,
         });
         params.provider === "venue"
           ? navigate("/dashboard/venueFeedbacks")
@@ -349,123 +357,126 @@ const AddReview = () => {
   };
   const currentTheme = useMantineTheme();
   return localStorage.getItem("customerToken") ? (
-    <Grid
-      style={{
-        width: "100%",
-        backgroundColor:
-          currentTheme.colorScheme === "dark"
-            ? currentTheme.colors.dark[7]
-            : currentTheme.white,
-        boxSizing: "border-box",
-        margin: 0,
-        padding: 0,
-      }}
-    >
-      <Grid.Col
-        style={{ boxSizing: "border-box", margin: 0, padding: 0 }}
-        lg={6}
+    <>
+      <LoaderAWEP visible={visible} />
+      <Grid
+        style={{
+          width: "100%",
+          backgroundColor:
+            currentTheme.colorScheme === "dark"
+              ? currentTheme.colors.dark[7]
+              : currentTheme.white,
+          boxSizing: "border-box",
+          margin: 0,
+          padding: 0,
+        }}
       >
-        <Paper
-          radius={0}
-          sx={{
-            backgroundImage: `url(${ReviewImage})`,
-            height: matches1200 ? "100vh" : "50vh",
-          }}
-          style={{
-            boxSizing: "border-box",
-            margin: 0,
-            padding: 0,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        <Grid.Col
+          style={{ boxSizing: "border-box", margin: 0, padding: 0 }}
+          lg={6}
         >
-          <Stack px={matches800 ? 60 : "md"}>
-            <Text
-              size={30}
-              weight="bold"
-              color="white"
-              pr={matches800 ? 150 : "md"}
-            >
-              Review You Wedding Supplier
-            </Text>
+          <Paper
+            radius={0}
+            sx={{
+              backgroundImage: `url(${ReviewImage})`,
+              height: matches1200 ? "100vh" : "50vh",
+            }}
+            style={{
+              boxSizing: "border-box",
+              margin: 0,
+              padding: 0,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Stack px={matches800 ? 60 : "md"}>
+              <Text
+                size={30}
+                weight="bold"
+                color="white"
+                pr={matches800 ? 150 : "md"}
+              >
+                Review You Wedding Supplier
+              </Text>
 
-            <Text size={20} color="white" pr={matches800 ? 100 : "md"}>
-              Sharing your experience by writing a review helps other couples
-              choose their supplier.
+              <Text size={20} color="white" pr={matches800 ? 100 : "md"}>
+                Sharing your experience by writing a review helps other couples
+                choose their supplier.
+              </Text>
+            </Stack>
+          </Paper>
+        </Grid.Col>
+        <Grid.Col lg={6}>
+          <Container size="xl" px={matches800 ? 60 : "sm"} pt={60}>
+            <Group my={"xl"} position="center">
+              <Image fit="contain" height={150} width={200} src={logo} />
+            </Group>
+            <Text size={25} pb="md">
+              Share your experience! Your review helps other Users choose their
+              suppliers.
             </Text>
-          </Stack>
-        </Paper>
-      </Grid.Col>
-      <Grid.Col lg={6}>
-        <Container size="xl" px={matches800 ? 60 : "sm"} pt={60}>
-          <Group my={"xl"} position="center">
-            <Image fit="contain" height={150} width={200} src={logo} />
-          </Group>
-          <Text size={25} pb="md">
-            Share your experience! Your review helps other Users choose their
-            suppliers.
-          </Text>
-          {params.provider !== "admin" && (
-            <>
-              <RatingComponent
-                title="Service Quality"
-                rating={quality}
-                setRating={setQuality}
-              />
-              <RatingComponent
-                title="Responsiveness"
-                rating={response}
-                setRating={setResponse}
-              />
-              <RatingComponent
-                title="Professionalism"
-                rating={professionalism}
-                setRating={setProfessionalism}
-              />
-              <RatingComponent
-                title="Value For Money"
-                rating={valueForMoney}
-                setRating={setValueForMoney}
-              />
-              <RatingComponent
-                title="Flexibility"
-                rating={flexibility}
-                setRating={setFlexibility}
-              />
-            </>
-          )}
-          <Textarea
-            py="xl"
-            size="md"
-            label="Write a Review"
-            value={review}
-            maxLength={400}
-            onChange={(e) => setReview(e.currentTarget.value)}
-            placeholder="Write at least 25 characters about your experience. Include any details that will help other couples make their hiring decision."
-            autosize
-            minRows={params.provider === "admin" ? 8 : 3}
-            maxRows={params.provider === "admin" ? 8 : 4}
-          />
-          <Group position="right">
-            <Button
-              className="button"
-              onClick={() => {
-                if (params.feedbackId) {
-                  handleUpdate();
-                } else {
-                  handleSubmit();
-                }
-              }}
-            >
-              {params.feedbackId ? "Update" : "Submit"}
-            </Button>
-          </Group>
-        </Container>
-      </Grid.Col>
-    </Grid>
+            {params.provider !== "admin" && (
+              <>
+                <RatingComponent
+                  title="Service Quality"
+                  rating={quality}
+                  setRating={setQuality}
+                />
+                <RatingComponent
+                  title="Responsiveness"
+                  rating={response}
+                  setRating={setResponse}
+                />
+                <RatingComponent
+                  title="Professionalism"
+                  rating={professionalism}
+                  setRating={setProfessionalism}
+                />
+                <RatingComponent
+                  title="Value For Money"
+                  rating={valueForMoney}
+                  setRating={setValueForMoney}
+                />
+                <RatingComponent
+                  title="Flexibility"
+                  rating={flexibility}
+                  setRating={setFlexibility}
+                />
+              </>
+            )}
+            <Textarea
+              py="xl"
+              size="md"
+              label="Write a Review"
+              value={review}
+              maxLength={400}
+              onChange={(e) => setReview(e.currentTarget.value)}
+              placeholder="Write at least 25 characters about your experience. Include any details that will help other couples make their hiring decision."
+              autosize
+              minRows={params.provider === "admin" ? 8 : 3}
+              maxRows={params.provider === "admin" ? 8 : 4}
+            />
+            <Group position="right">
+              <Button
+                className="button"
+                onClick={() => {
+                  if (params.feedbackId) {
+                    handleUpdate();
+                  } else {
+                    handleSubmit();
+                  }
+                }}
+              >
+                {params.feedbackId ? "Update" : "Submit"}
+              </Button>
+            </Group>
+          </Container>
+        </Grid.Col>
+      </Grid>
+    </>
   ) : (
     <></>
   );

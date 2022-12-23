@@ -3,6 +3,7 @@ import {
   Badge,
   Group,
   Modal,
+  Paper,
   Table,
   Text,
   Title,
@@ -13,50 +14,23 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 import ViewVenueComplaintModal from "./ViewVenueComplaintModal";
-
-const fetchAllvenueComplaints = async () => {
-  try { 
-    const apiResponse = await axios({
-      method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getMySubVenueBookingComplaints",
-      headers: {
-        token: localStorage.getItem("customerToken"),
-      },
-    });
-    console.log("API RESPONSE: ", apiResponse.data);
-
-    if (apiResponse.data.status === "success") {
-      console.log(
-        "Successfully fetched all venue bookings:",
-        apiResponse.data.data
-      );
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venue bookings");
-    } else {
-      console.log("Failed to fetch all venue bookings, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
 
 const VenueComplaints = () => {
   const navigate = useNavigate();
-  const [viewvenueComplaintModal, setViewvenueComplaintModal] = useState(false);
+  const [viewVenueComplaintModal, setViewVenueComplaintModal] = useState(false);
   const matches500 = useMediaQuery("(min-width: 500px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
   const [visible, setVisible] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [viewComplaintData, setViewComplaintData] = useState({});
   const [venueBookings, setVenueBookings] = useState([]);
-  const deleteVenueComplaint = async (id) => {
+  const fetchAllVenueComplaints = async () => {
     try {
       const apiResponse = await axios({
-        method: "delete",
-        url: `https://a-wep.herokuapp.com/customer//deleteSubVenueBookingComplaint/${id}`,
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMySubVenueBookingComplaints",
         headers: {
           token: localStorage.getItem("customerToken"),
         },
@@ -68,25 +42,57 @@ const VenueComplaints = () => {
           "Successfully fetched all venue bookings:",
           apiResponse.data.data
         );
+        setVisible(false);
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+        console.log("Error while fetching all venue bookings");
+      } else {
+        setVisible(false);
+        console.log("Failed to fetch all venue bookings, don't know this error");
+      }
+    } catch (e) {
+      setVisible(false);
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
+  const deleteVenueComplaint = async (id) => {
+    try {
+      const apiResponse = await axios({
+        method: "delete",
+        url: `https://a-wep.herokuapp.com/customer//deleteSubVenueBookingComplaint/${id}`,
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "Successfully fetched all venue bookings:",
+          apiResponse.data.data
+        );
         showNotification({
-          title: "Complian Deleted",
+          title: "Compliant Deleted",
           message: "Complaint deleted successfully",
           color: "green",
         });
-
+        setVisible(false);
         setRefresh(!refresh);
         return apiResponse.data.status;
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
         console.log("Error while fetching all venue bookings");
       } else {
-        console.log("Failed to fetch all venue bookings, dont know this error");
+        setVisible(false);
+        console.log("Failed to fetch all venue bookings, don't know this error");
       }
     } catch (e) {
+      setVisible(false);
       console.log("ERROR in fetching all venues:", e);
     }
   };
   useEffect(() => {
-    fetchAllvenueComplaints().then(setVenueBookings).then(setVisible(false));
+    fetchAllVenueComplaints().then(setVenueBookings);
   }, [refresh]);
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
@@ -130,7 +136,7 @@ const VenueComplaints = () => {
             onClick={() => {
               console.log("Clicked on view button");
               setViewComplaintData(row);
-              setViewvenueComplaintModal(true);
+              setViewVenueComplaintModal(true);
             }}
           >
             <IconEye />
@@ -138,7 +144,7 @@ const VenueComplaints = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on edit button");
-              navigate(`/updatecomplaint/${"venue"}/${row._id}`);
+              navigate(`/updateComplaint/${"venue"}/${row._id}`);
             }}
           >
             <IconEdit />
@@ -181,7 +187,8 @@ const VenueComplaints = () => {
     </tr>
   );
   return (
-    <div style={{ width: "100%" }}>
+    <Paper style={{ width: "100%" }}>
+      <LoaderAWEP visible={visible} />
       <Modal
         styles={{
           close: {
@@ -200,9 +207,9 @@ const VenueComplaints = () => {
         overlayBlur={3}
         size={matches800 ? "60%" : "lg"}
         title={<Title>Venue Complaint</Title>}
-        opened={viewvenueComplaintModal}
+        opened={viewVenueComplaintModal}
         onClose={() => {
-          setViewvenueComplaintModal(!viewvenueComplaintModal);
+          setViewVenueComplaintModal(!viewVenueComplaintModal);
         }}
       >
         <ViewVenueComplaintModal complaintView={viewComplaintData} />
@@ -214,11 +221,10 @@ const VenueComplaints = () => {
         withBorder
         withColumnBorders
       >
-        <CustomeLoadingOverlay visible={visible} />
         <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
-    </div>
+    </Paper>
   );
 };
 

@@ -5,6 +5,7 @@ import {
   Grid,
   Group,
   Image,
+  Loader,
   Modal,
   Paper,
   Select,
@@ -46,6 +47,7 @@ import img13 from "../../assets/searchBackgroundCarouselImages/13.jpg";
 import img14 from "../../assets/searchBackgroundCarouselImages/14.jpg";
 import img15 from "../../assets/searchBackgroundCarouselImages/15.jpg";
 import { IconFilter, IconSearch, IconX } from "@tabler/icons";
+import LoaderAWEP from "../LoaderAWEP/LoaderAWEP";
 const AllVenuesPage = () => {
   const params = useParams();
   console.log("PARAMS:", params);
@@ -104,16 +106,19 @@ const AllVenuesPage = () => {
       console.log("API Response", apiResponse);
       if (apiResponse.data.status === "success") {
         setRefresh(false);
+
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
         console.log(
           "Error while fetching all venue services",
           apiResponse.data.error
         );
+        setVisible(false);
       } else {
         console.log("Unknown Error: ", apiResponse.data.error);
       }
     } catch (error) {
+      setVisible(false);
       console.log("Error in fetchAllVenueServices catch block", error);
     }
   };
@@ -144,14 +149,18 @@ const AllVenuesPage = () => {
         setMaxPrice(max);
         setRangeValue([min, max]);
 
+        setVisible(false);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
         console.log("Error while fetching all venues");
+        setVisible(false);
       } else {
         console.log("Failed to fetch all venues, dont know this error");
+        setVisible(false);
       }
     } catch (e) {
       console.log("ERROR in fetching all venues:", e);
+      setVisible(false);
     }
   };
 
@@ -398,9 +407,15 @@ const AllVenuesPage = () => {
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");
   const matches992 = useMediaQuery("(max-width: 992px)");
+  const [visible, setVisible] = useState(true);
 
   return (
-    <Paper>
+    <Paper
+      style={{
+        position: "relative",
+      }}
+    >
+      <LoaderAWEP visible={visible} />
       <Paper
         withBorder
         style={{

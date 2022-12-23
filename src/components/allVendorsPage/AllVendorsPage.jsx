@@ -49,6 +49,7 @@ import FiveCardsSkeleton from "../skeletons/SixCardsSkeleton";
 import SearchBackgroundOpacityDiv from "../landingPage/searchAndBG/SearchBackgroundOpacityDiv";
 import { Carousel } from "@mantine/carousel";
 import { IconFilter, IconSearch, IconX } from "@tabler/icons";
+import LoaderAWEP from "../LoaderAWEP/LoaderAWEP";
 
 const AllVendorsPage = () => {
   const params = useParams();
@@ -103,13 +104,20 @@ const AllVendorsPage = () => {
         setMaxPrice(max);
         setRefresh(false);
         setRangeValue([min, max]);
+        setVisible(false);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+
         console.log("Error while fetching all vendors");
       } else {
+        setVisible(false);
+
         console.log("Failed to fetch all vendors, dont know this error");
       }
     } catch (e) {
+      setVisible(false);
+
       console.log("ERROR in fetching all vendors:", e);
     }
   };
@@ -238,8 +246,15 @@ const AllVendorsPage = () => {
   const autoplay = useRef(Autoplay({ delay: 10000 }));
   const matches1026 = useMediaQuery("(max-width: 1026px)");
   const matches992 = useMediaQuery("(max-width: 992px)");
+  const [visible, setVisible] = useState(true);
+
   return (
-    <Paper>
+    <Paper
+      style={{
+        position: "relative",
+      }}
+    >
+      <LoaderAWEP visible={visible} />
       <Paper
         withBorder
         style={{

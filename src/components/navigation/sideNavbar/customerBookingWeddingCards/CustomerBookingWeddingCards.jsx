@@ -1,21 +1,11 @@
-import {
-  ActionIcon,
-  Badge,
-  Group,
-  Modal,
-  Paper,
-  ScrollArea,
-  Table,
-} from "@mantine/core";
+import { ActionIcon, Badge, Group, Modal } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconCheck, IconEdit, IconEye } from "@tabler/icons";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import { IconCheck } from "@tabler/icons";
+import React, { useState } from "react";
 // import BookingViewAllBookings from "./BookingViewAllBookings";
 import moment from "moment";
 import CustomerBookingCardEditor from "./CustomerBookingCardEditor";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 
 // const fetchAllVenues = async () => {
 //   try {
@@ -34,7 +24,7 @@ import CustomerBookingCardEditor from "./CustomerBookingCardEditor";
 //     } else if (apiResponse.data.status === "error") {
 //       console.log("Error while fetching all venues");
 //     } else {
-//       console.log("Failed to fetch all venues, dont know this error");
+//       console.log("Failed to fetch all venues, don't know this error");
 //     }
 //   } catch (e) {
 //     console.log("ERROR in fetching all venues:", e);
@@ -42,10 +32,8 @@ import CustomerBookingCardEditor from "./CustomerBookingCardEditor";
 // };
 
 const CustomerBookingWEddingCards = () => {
-  let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
   const [visible, setVisible] = useState(true);
-  const [singleInvoice, setSingleInvoice] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState({});
 
   const [viewBookingModal, setViewBookingModal] = useState(false);
@@ -133,9 +121,8 @@ const CustomerBookingWEddingCards = () => {
   );
   return (
     <div style={{ position: "relative", width: "100%" }}>
-      {/*
-      <CustomeLoadingOverlay visible={visible} />
-    */}
+      <LoaderAWEP visible={visible} />
+
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"

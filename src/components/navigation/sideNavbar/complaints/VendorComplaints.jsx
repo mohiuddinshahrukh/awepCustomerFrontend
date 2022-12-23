@@ -13,35 +13,8 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 import ViewVendorComplaintModal from "./ViewVendorComplaintModal";
-
-const fetchAllVendorComplaints = async () => {
-  try {
-    const apiResponse = await axios({
-      method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getMyVendorPackageBookingComplaints",
-      headers: {
-        token: localStorage.getItem("customerToken"),
-      },
-    });
-    console.log("API RESPONSE: ", apiResponse.data);
-
-    if (apiResponse.data.status === "success") {
-      console.log(
-        "Successfully fetched all vendor bookings:",
-        apiResponse.data.data
-      );
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all vendor bookings");
-    } else {
-      console.log("Failed to fetch all vendor bookings, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
 
 const VendorComplaints = () => {
   const navigate = useNavigate();
@@ -54,6 +27,38 @@ const VendorComplaints = () => {
   const [refresh, setRefresh] = useState(false);
   const [viewComplaintData, setViewComplaintData] = useState({});
   const [vendorBookings, setVendorBookings] = useState([]);
+  const fetchAllVendorComplaints = async () => {
+    try {
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMyVendorPackageBookingComplaints",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "Successfully fetched all vendor bookings:",
+          apiResponse.data.data
+        );
+        setVisible(false);
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+        console.log("Error while fetching all vendor bookings");
+      } else {
+        setVisible(false);
+        console.log(
+          "Failed to fetch all vendor bookings, don't know this error"
+        );
+      }
+    } catch (e) {
+      setVisible(false);
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
   const deleteVendorComplaint = async (id) => {
     try {
       const apiResponse = await axios({
@@ -71,26 +76,29 @@ const VendorComplaints = () => {
           apiResponse.data.data
         );
         showNotification({
-          title: "Complian Deleted",
+          title: "Compliant Deleted",
           message: "Complaint deleted successfully",
           color: "green",
         });
-
+        setVisible(false);
         setRefresh(!refresh);
         return apiResponse.data.status;
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
         console.log("Error while fetching all vendor bookings");
       } else {
+        setVisible(false);
         console.log(
-          "Failed to fetch all vendor bookings, dont know this error"
+          "Failed to fetch all vendor bookings, don't know this error"
         );
       }
     } catch (e) {
+      setVisible(false);
       console.log("ERROR in fetching all venues:", e);
     }
   };
   useEffect(() => {
-    fetchAllVendorComplaints().then(setVendorBookings).then(setVisible(false));
+    fetchAllVendorComplaints().then(setVendorBookings);
   }, [refresh]);
   const rows = vendorBookings?.map((row, index) => (
     <tr key={index}>
@@ -138,7 +146,7 @@ const VendorComplaints = () => {
           <ActionIcon
             onClick={() => {
               console.log("Clicked on edit button");
-              navigate(`/updatecomplaint/${"vendor"}/${row._id}`);
+              navigate(`/updateComplaint/${"vendor"}/${row._id}`);
             }}
           >
             <IconEdit />
@@ -182,6 +190,7 @@ const VendorComplaints = () => {
   );
   return (
     <div style={{ width: "100%" }}>
+      <LoaderAWEP visible={visible} />
       <Modal
         styles={{
           close: {
@@ -214,7 +223,6 @@ const VendorComplaints = () => {
         withBorder
         withColumnBorders
       >
-        <CustomeLoadingOverlay visible={visible} />
         <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>

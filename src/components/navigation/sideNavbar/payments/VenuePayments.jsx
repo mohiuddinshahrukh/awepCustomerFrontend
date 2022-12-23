@@ -1,16 +1,17 @@
-import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
+import { ActionIcon, Badge, Group, Modal, Paper, Table } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconEye } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 import BookingViewAllBookings from "../bookings/BookingViewAllBookings";
 
 const VenuePayments = () => {
   const [venueBookings, setVenueBookings] = useState([]);
+  const [visible, setVisible] = useState(true);
+
   console.log("VENUE Payments: ", venueBookings);
-  // <CustomeLoadingOverlay visible={visible} />
   // FETCH ALL VENUES
   useEffect(() => {
     fetchAllVenuePayments().then(setVenueBookings);
@@ -30,16 +31,24 @@ const VenuePayments = () => {
 
       if (apiResponse.data.status === "success") {
         console.log(
-          "@Successfully fetched all venue payemnts:",
+          "@Successfully fetched all venue payments:",
           apiResponse.data.data
         );
+        setVisible(false);
+
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+
         console.log("Error while fetching all venues");
       } else {
-        console.log("Failed to fetch all venues, dont know this error");
+        setVisible(false);
+
+        console.log("Failed to fetch all venues, don't know this error");
       }
     } catch (e) {
+      setVisible(false);
+
       console.log("ERROR in fetching all venues:", e);
     }
   };
@@ -101,7 +110,9 @@ const VenuePayments = () => {
     </tr>
   );
   return (
-    <div style={{ width: "100%" }}>
+    <Paper style={{ width: "100%" }}>
+      <LoaderAWEP visible={visible} />
+
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"
@@ -116,7 +127,7 @@ const VenuePayments = () => {
         <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
-    </div>
+    </Paper>
   );
 };
 

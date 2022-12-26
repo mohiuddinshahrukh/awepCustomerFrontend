@@ -323,14 +323,14 @@ const SignUp = ({
                 </Grid.Col>
                 <Grid.Col></Grid.Col>
 
-                <Grid.Col>
+                {/* <Grid.Col>
                   <Group
                     position="center"
                     id="signInDiv"
                     hidden={hiddenButton}
                     style={{ transition: "2s", minHeight: "40px" }}
                   ></Group>
-                </Grid.Col>
+                </Grid.Col> */}
 
                 <Grid.Col>
                   <div

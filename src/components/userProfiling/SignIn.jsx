@@ -50,15 +50,6 @@ import GoogleSignUpButon from "./GoogleSignUpButon";
 import { socket } from "../Socket/Socket";
 import { io } from "socket.io-client";
 
-const pictureBackground = [
-  new URL("./customerIMG1.png", import.meta.url),
-  //   new URL("./menuBackground4.png", import.meta.url),
-  //   new URL("./menuBackground5.png", import.meta.url),
-  //   new URL("./menuBackground.png", import.meta.url),
-  //   new URL("./menuBackground.png", import.meta.url),
-  //
-];
-// NAVIGATION
 const SignIn = ({
   email,
   password,
@@ -550,29 +541,6 @@ const SignIn = ({
       console.error(e);
     }
   };
-  // const forPasswordStep3 = async (values) => {
-  //   setForgotPasswordButtonStateStep3(true);
-  //   const response = await axios.post(
-  //     "https://a-wep.herokuapp.com/auth/generateEmailForPasswordReset",
-  //     { email: values.forgotPasswordEmail }
-  //   );
-  //   console.log("RESPONSE: ", response);
-  //   if (response.data.status === "success") {
-  //     // console.log("RESPONSE", response.data.data);
-  //     setForgotPasswordButtonStateStep3(false);
-  //     nextStep();
-  //   } else if (
-  //     response.data.status === "error" &&
-  //     response.data.error.title === "INVALID_EMAIL"
-  //   ) {
-  //     forgotPasswordFormStep3.setFieldError(
-  //       "forgotPasswordEmail",
-  //       "This email is not registered"
-  //     );
-  //     setForgotPasswordButtonStateStep3(false);
-  //   } else {
-  //   }
-  // };
 
   const form1 = useForm({
     initialValues: {

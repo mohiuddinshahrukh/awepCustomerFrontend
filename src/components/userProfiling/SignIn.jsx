@@ -1027,7 +1027,8 @@ const SignIn = ({
                     Use our social sign in
                   </Text>
                 </Grid.Col>
-                <Grid.Col>
+                {/*
+<Grid.Col>
                   <Group
                     position="center"
                     id="signInDiv"
@@ -1036,6 +1037,7 @@ const SignIn = ({
                     <GoogleSignUpButon />
                   </Group>
                 </Grid.Col>
+*/}
                 <Grid.Col>
                   <div
                     style={{

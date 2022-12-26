@@ -651,34 +651,34 @@ const SignIn = ({
     socialSignUpFunction(response.credential);
   }
   // USEEFFECT
-  useEffect(() => {
-    console.count();
-    console.log("HERE IN USEEFFECT");
-    if (refresh) {
-      /*global google */
-      google.accounts.id.initialize({
-        client_id:
-          "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
-        callback: handleCallbackResponse,
-      });
+  // useEffect(() => {
+  //   console.count();
+  //   console.log("HERE IN USEEFFECT");
+  //   if (refresh) {
+  //     /*global google */
+  //     google.accounts.id.initialize({
+  //       client_id:
+  //         "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
+  //       callback: handleCallbackResponse,
+  //     });
 
-      google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-        theme: "filled_blue",
-        size: "large",
-        shape: "rectangular",
-        width: "400",
-        text: "continue_with",
-      });
-      setRefresh(false);
-    }
+  //     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+  //       theme: "filled_blue",
+  //       size: "large",
+  //       shape: "rectangular",
+  //       width: "400",
+  //       text: "continue_with",
+  //     });
+  //     setRefresh(false);
+  //   }
 
-    let token = localStorage.getItem("superAdminToken");
-    if (token !== null && token !== "") {
-      navigate("/");
-    }
+  //   let token = localStorage.getItem("superAdminToken");
+  //   if (token !== null && token !== "") {
+  //     navigate("/");
+  //   }
 
-    return console.log("THIS IS OUR CLEAN UP");
-  }, [refresh]);
+  //   return console.log("THIS IS OUR CLEAN UP");
+  // }, [refresh]);
 
   const [active, setActive] = useState(0);
   const nextStep = () =>

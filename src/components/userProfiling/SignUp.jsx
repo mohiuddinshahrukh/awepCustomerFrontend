@@ -275,33 +275,33 @@ const SignUp = ({
   }
 
   // USEEFFECT
-  useEffect(() => {
-    console.count();
-    console.log("USE EFFECT");
-    /*global google */
+  // useEffect(() => {
+  //   console.count();
+  //   console.log("USE EFFECT");
+  //   /*global google */
 
-    google.accounts.id.initialize({
-      client_id:
-        "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
-      callback: handleCallbackResponse,
-    });
+  //   google.accounts.id.initialize({
+  //     client_id:
+  //       "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
+  //     callback: handleCallbackResponse,
+  //   });
 
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "filled_blue",
-      size: "large",
-      shape: "rectangular",
-      text: "continue_with",
-      width: "400",
-    });
+  //   google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+  //     theme: "filled_blue",
+  //     size: "large",
+  //     shape: "rectangular",
+  //     text: "continue_with",
+  //     width: "400",
+  //   });
 
-    setHiddenButton(false);
-    let token = localStorage.getItem("superAdminToken");
-    if (token !== null && token !== "") {
-      navigate("/");
-    } else {
-      return;
-    }
-  }, []);
+  //   setHiddenButton(false);
+  //   let token = localStorage.getItem("superAdminToken");
+  //   if (token !== null && token !== "") {
+  //     navigate("/");
+  //   } else {
+  //     return;
+  //   }
+  // }, []);
   return (
     <MantineProvider withNormalizeCSS withGlobalStyles>
       <NotificationsProvider>

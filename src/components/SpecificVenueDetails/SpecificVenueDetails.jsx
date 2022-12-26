@@ -447,6 +447,15 @@ const SpecificVenueDetails = ({ signedIn, setSignedIn }) => {
                 website={
                   venueDetails?.websiteHandle ? venueDetails?.websiteHandle : ""
                 }
+                email={venueDetails?.infoEmail ? venueDetails?.infoEmail : ""}
+                phone={
+                  venueDetails?.contactPhone ? venueDetails?.contactPhone : ""
+                }
+                whatsApp={
+                  venueDetails?.contactWhatsApp
+                    ? venueDetails?.contactWhatsApp
+                    : ""
+                }
               />
               <Divider mt="xl" />
             </Tabs.Panel>

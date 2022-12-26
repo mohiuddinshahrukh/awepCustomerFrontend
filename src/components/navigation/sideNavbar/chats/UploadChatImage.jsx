@@ -140,7 +140,7 @@
 //           color: 'red',
 //           title: `ERROR`,
 
-//           message: `THIS FILE TYPE IS NOT SUPPORTED`,
+//           message: `FILE SIZE IS TOO LARGE OR FILE TYPE IS NOT SUPPORTED`,
 //         })
 //       }}
 //       activateOnDrag={false}
@@ -301,7 +301,7 @@ const UploadCoverImage = (props) => {
             color: "red",
             title: `COULD NOT UPLOAD`,
 
-            message: `IMAGE SIZE IS TOO LARGE OR THIS FILE TYPE IS NOT SUPPORTED`,
+            message: `IMAGE SIZE IS TOO LARGE OR FILE SIZE IS TOO LARGE OR FILE TYPE IS NOT SUPPORTED`,
           });
         }}
         // radius={120}

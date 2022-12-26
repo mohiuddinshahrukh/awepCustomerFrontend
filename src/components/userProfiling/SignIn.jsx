@@ -655,23 +655,24 @@ const SignIn = ({
     console.count();
     console.log("HERE IN USEEFFECT");
     if (refresh) {
-      //   /*global google */
-      //   google.accounts.id.initialize({
-      //     client_id:
-      //       "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
-      //     callback: handleCallbackResponse,
-      //   });
-      //   google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      //     theme: "filled_blue",
-      //     size: "large",
-      //     shape: "rectangular",
-      //     width: "400",
-      //     text: "continue_with",
-      //   });
-      //   setRefresh(false);
+      /*global google */
+      google.accounts.id.initialize({
+        client_id:
+          "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
+        callback: handleCallbackResponse,
+      });
+
+      google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+        theme: "filled_blue",
+        size: "large",
+        shape: "rectangular",
+        width: "400",
+        text: "continue_with",
+      });
+      setRefresh(false);
     }
 
-    let token = localStorage.getItem("customerToken");
+    let token = localStorage.getItem("superAdminToken");
     if (token !== null && token !== "") {
       navigate("/");
     }
@@ -1027,17 +1028,13 @@ const SignIn = ({
                     Use our social sign in
                   </Text>
                 </Grid.Col>
-                {/*
-<Grid.Col>
+                <Grid.Col>
                   <Group
                     position="center"
                     id="signInDiv"
                     style={{ height: "50", width: "400" }}
-                  >
-                    <GoogleSignUpButon />
-                  </Group>
+                  ></Group>
                 </Grid.Col>
-*/}
                 <Grid.Col>
                   <div
                     style={{

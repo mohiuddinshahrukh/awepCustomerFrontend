@@ -121,8 +121,6 @@ const CustomerBookingWEddingCards = () => {
   );
   return (
     <div style={{ position: "relative", width: "100%" }}>
-      <LoaderAWEP visible={visible} />
-
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"

@@ -187,7 +187,7 @@ const VenueComplaints = () => {
     </tr>
   );
   return (
-    <Paper style={{ width: "100%" }}>
+    <Paper style={{ width: "100%", position: "relative" }}>
       <LoaderAWEP visible={visible} />
       <Modal
         styles={{

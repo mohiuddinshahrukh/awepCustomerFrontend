@@ -399,6 +399,7 @@ const CustomerProfile = () => {
           style={{
             width: "80%",
             height: "100%",
+            position: "relative",
           }}
         >
           <LoaderAWEP visible={visible} />

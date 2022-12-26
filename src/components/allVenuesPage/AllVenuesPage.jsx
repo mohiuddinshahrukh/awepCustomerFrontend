@@ -168,7 +168,7 @@ const AllVenuesPage = () => {
     console.log("Filtering venues", params.city);
 
     //filter venues according to the filter options
-    let filteredVenues = allVenues.filter((venue) => {
+    let filteredVenues = allVenues?.filter((venue) => {
       //filter by venue city
 
       if (city !== "" && city !== "all") {
@@ -410,12 +410,7 @@ const AllVenuesPage = () => {
   const [visible, setVisible] = useState(true);
 
   return (
-    <Paper
-      style={{
-        position: "relative",
-      }}
-    >
-      <LoaderAWEP visible={visible} />
+    <Paper>
       <Paper
         withBorder
         style={{
@@ -768,7 +763,13 @@ const AllVenuesPage = () => {
               {/* <AdvanceFilterHallCharges /> */}
             </Stack>
           </Grid.Col>
-          <Grid.Col span={matches1026 ? 12 : 9}>
+          <Grid.Col
+            span={matches1026 ? 12 : 9}
+            style={{
+              position: "relative",
+            }}
+          >
+            <LoaderAWEP visible={visible} />
             {allVenues?.length > 0 ? (
               <AllVenuesGrid
                 date={date}

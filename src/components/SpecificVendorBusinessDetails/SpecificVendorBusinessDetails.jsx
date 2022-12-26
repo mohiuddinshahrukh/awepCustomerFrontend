@@ -56,7 +56,7 @@ const SpecificVendorBusinessDetails = () => {
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [eventType, setEventType] = useState("");
-  const [ date, setDate] = useState(params.date ? new Date(params.date) : null);
+  const [date, setDate] = useState(params.date ? new Date(params.date) : null);
   const [time, setTime] = useState(params.time ? params.time : "");
   const [guests, setGuests] = useState();
   const [isSignIn, setIsSignIn] = useState(false);
@@ -308,6 +308,19 @@ const SpecificVendorBusinessDetails = () => {
                     instagram={
                       vendorDetails?.instagramHandle
                         ? vendorDetails?.instagramHandle
+                        : ""
+                    }
+                    email={
+                      vendorDetails?.infoEmail ? vendorDetails?.infoEmail : ""
+                    }
+                    phone={
+                      vendorDetails?.contactPhone
+                        ? vendorDetails?.contactPhone
+                        : ""
+                    }
+                    whatsApp={
+                      vendorDetails?.contactWhatsApp
+                        ? vendorDetails?.contactWhatsApp
                         : ""
                     }
                   />

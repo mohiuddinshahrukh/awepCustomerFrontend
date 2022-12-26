@@ -1028,13 +1028,13 @@ const SignIn = ({
                     Use our social sign in
                   </Text>
                 </Grid.Col>
-                <Grid.Col>
+                {/* <Grid.Col>
                   <Group
                     position="center"
                     id="signInDiv"
                     style={{ height: "50", width: "400" }}
                   ></Group>
-                </Grid.Col>
+                </Grid.Col> */}
                 <Grid.Col>
                   <div
                     style={{

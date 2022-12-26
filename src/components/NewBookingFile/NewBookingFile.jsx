@@ -251,13 +251,13 @@ const NewBookingFile = () => {
         menu: selectedMenu,
         price: menuPrice,
       },
-      selectedTheme: {
+      selectedVenueTheme: {
         theme: selectedTheme,
       },
       selectedStage: {
         stage: selectedStage,
       },
-      paymentStatus: "ADVANCE PAID",
+      // paymentStatus: "NOT PAID",
       hallCharges: hallCharges,
       price: {
         discountPercentage: discountPercentage,

@@ -1,16 +1,7 @@
-import {
-  ActionIcon,
-  Button,
-  Container,
-  Divider,
-  Drawer,
-  Group,
-  Paper,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Divider, Drawer, Group, Paper, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
-import { IconCurrentLocation, IconMenu2 } from "@tabler/icons";
+import { IconMenu2 } from "@tabler/icons";
 
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";

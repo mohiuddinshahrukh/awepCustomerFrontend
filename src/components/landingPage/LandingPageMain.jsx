@@ -28,27 +28,11 @@ import FeaturedVendorServicesSection from "../featuredVendorServices/FeaturedVen
 import FeaturedMenus from "../featuredMenusSection/FeaturedMenus";
 import LandingPageStats from "../landingPageStats/LandingPageStats";
 import { useIntersection } from "@mantine/hooks";
-
-const fetchVenuesMethod = async () => {
-  try {
-    const apiResponse = await axios.get(
-      "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
-    );
-    if (apiResponse.data.status === "success") {
-      console.log("12345 API RESPONSE SUCCESS: ", apiResponse);
-      return apiResponse.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("API RESPONSE SUCCESS: ", apiResponse);
-    } else {
-      console.log("DONT KNOW THE ERROR, THIS SHOULDNT PRINT!");
-    }
-  } catch (error) {
-    console.log("fetchVenuesMethod API CALLING ERROR:", error);
-  }
-};
+import LoaderAWEP from "../LoaderAWEP/LoaderAWEP";
 
 const LandingPageMain = () => {
   const [allData, setAllData] = useState([]);
+  const [visible, setVisible] = useState(true);
   useEffect(() => {
     fetchVenuesMethod().then(setAllData);
   }, []);
@@ -58,8 +42,30 @@ const LandingPageMain = () => {
     root: containerRef.current,
     threshold: 1,
   });
+  const fetchVenuesMethod = async () => {
+    try {
+      const apiResponse = await axios.get(
+        "https://a-wep.herokuapp.com/auth/user/getHomeScreenData"
+      );
+      if (apiResponse.data.status === "success") {
+        setVisible(false);
+        console.log("12345 API RESPONSE SUCCESS: ", apiResponse);
+        return apiResponse.data;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+        console.log("API RESPONSE SUCCESS: ", apiResponse);
+      } else {
+        setVisible(false);
+        console.log("DON'T KNOW THE ERROR, THIS SHOULDN'T PRINT!");
+      }
+    } catch (error) {
+      setVisible(false);
+      console.log("fetchVenuesMethod API CALLING ERROR:", error);
+    }
+  };
   return (
     <Paper>
+      <LoaderAWEP visible={visible} />
       <SearchBackground
         carouselImages={[
           { src: img1 },

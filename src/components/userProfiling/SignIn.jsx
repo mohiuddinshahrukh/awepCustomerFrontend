@@ -1,9 +1,7 @@
 // IMPORTS
 import { Stepper, Container } from "@mantine/core";
-
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import InputMask from "react-input-mask";
 import { useForm } from "@mantine/form";
 import jwt_decode from "jwt-decode";
@@ -27,13 +25,10 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-
 import {
   NotificationsProvider,
   showNotification,
 } from "@mantine/notifications";
-// import { Email } from "@material-ui/icons";
-import FooterComponenet from "./FooterComponenet";
 import SignUpSignInCarousel from "./SignUpSignInCarousel";
 import {
   IconAt,
@@ -63,7 +58,6 @@ const SignIn = ({
   const dispatch = useDispatch();
   let navigate = useNavigate();
   // HOOKS
-  const [opened, setOpened] = useState();
   const [refresh, setRefresh] = useState(true);
   const [visible, setVisible] = useState(false);
   const [getUserType, setUserType] = useState("");
@@ -88,16 +82,11 @@ const SignIn = ({
     useState(false);
   const [forgotPasswordButtonStateStep2, setForgotPasswordButtonStateStep2] =
     useState(false);
-  const [forgotPasswordButtonStateStep3, setForgotPasswordButtonStateStep3] =
-    useState(false);
-
   const [verificationModal, setVerificationModal] = useState(false);
-
   // MODAL
   const [phoneAccordion, setPhoneAccordion] = useState(false);
   const [emailAccordion, setEmailAccordion] = useState(false);
   const [verificationCodeButton, setVerificationCodeButton] = useState(false);
-
   // FUNCTIONS
   const submitVerificationCode = async (values) => {
     setVerificationCodeButton(true);

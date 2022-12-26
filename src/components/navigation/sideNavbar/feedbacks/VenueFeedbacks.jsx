@@ -1,8 +1,8 @@
 import {
   ActionIcon,
-  Badge,
   Group,
   Modal,
+  Paper,
   Rating,
   Table,
   Text,
@@ -14,45 +14,47 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 import VenueFeedbackModal from "./VenueFeedbackModal";
-
-const fetchAllvenueFeedbacks = async () => {
-  try {
-    const apiResponse = await axios({
-      method: "get",
-      url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
-      headers: {
-        token: localStorage.getItem("customerToken"),
-      },
-    });
-    console.log("API RESPONSE: ", apiResponse.data);
-
-    if (apiResponse.data.status === "success") {
-      console.log(
-        "Successfully fetched all venue bookings:",
-        apiResponse.data.data
-      );
-      return apiResponse.data.data;
-    } else if (apiResponse.data.status === "error") {
-      console.log("Error while fetching all venue bookings");
-    } else {
-      console.log("Failed to fetch all venue bookings, dont know this error");
-    }
-  } catch (e) {
-    console.log("ERROR in fetching all venues:", e);
-  }
-};
 
 const VenueFeedbacks = () => {
   const navigate = useNavigate();
   const [viewVenueReviewModal, setViewVenueReviewModal] = useState(false);
-  const matches500 = useMediaQuery("(min-width: 500px)");
   const matches800 = useMediaQuery("(min-width: 800px)");
   const [visible, setVisible] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [viewFeedbackData, setViewFeedbackData] = useState({});
   const [venueBookings, setVenueBookings] = useState([]);
+  const fetchAllVenueFeedbacks = async () => {
+    try {
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMyVenueFeedbacks",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "Successfully fetched all venue bookings:",
+          apiResponse.data.data
+        );
+        setVisible(false);
+        return apiResponse.data.data;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+        console.log("Error while fetching all venue bookings");
+      } else {
+        setVisible(false);
+        console.log("Failed to fetch all venue bookings, don't know this error");
+      }
+    } catch (e) {
+      setVisible(false);
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
   const deleteVenueComplaint = async (id) => {
     try {
       const apiResponse = await axios({
@@ -70,24 +72,28 @@ const VenueFeedbacks = () => {
           apiResponse.data.data
         );
         showNotification({
-          title: "Complian Deleted",
+          title: "Compliant Deleted",
           message: "Complaint deleted successfully",
           color: "green",
         });
 
-        setRefresh(!refresh);
+        setRefresh(false);
         return apiResponse.data.status;
       } else if (apiResponse.data.status === "error") {
+        setRefresh(false);
         console.log("Error while fetching all venue bookings");
       } else {
-        console.log("Failed to fetch all venue bookings, dont know this error");
+        setRefresh(false);
+
+        console.log("Failed to fetch all venue bookings, don't know this error");
       }
     } catch (e) {
+      setRefresh(false);
       console.log("ERROR in fetching all venues:", e);
     }
   };
   useEffect(() => {
-    fetchAllvenueFeedbacks().then(setVenueBookings).then(setVisible(false));
+    fetchAllVenueFeedbacks().then(setVenueBookings);
   }, [refresh]);
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
@@ -166,7 +172,8 @@ const VenueFeedbacks = () => {
     </tr>
   );
   return (
-    <div style={{ width: "100%" }}>
+    <Paper style={{ width: "100%" }}>
+      <LoaderAWEP visible={visible} />
       <Modal
         styles={{
           close: {
@@ -200,12 +207,9 @@ const VenueFeedbacks = () => {
         withColumnBorders
       >
         <thead className="bgColor">{headers}</thead>
-        <tbody>
-          <CustomeLoadingOverlay visible={visible} />
-          {rows}
-        </tbody>
+        <tbody>{rows}</tbody>
       </Table>
-    </div>
+    </Paper>
   );
 };
 

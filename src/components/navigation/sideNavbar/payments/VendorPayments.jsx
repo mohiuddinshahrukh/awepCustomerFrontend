@@ -1,16 +1,16 @@
-import { ActionIcon, Badge, Group, Modal, Table } from "@mantine/core";
+import { ActionIcon, Group, Modal, Paper, Table } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconEdit, IconEye } from "@tabler/icons";
+import { IconEye } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import CustomeLoadingOverlay from "../../../customLoadingOverlay/CustomeLoadingOverlay";
-import BookingViewAllBookings from "../bookings/BookingViewAllBookings";
+
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 import ViewAllVendorPaymentReceipts from "../bookings/ViewAllVendorPaymentReceipts";
 const VendorPayments = ({}) => {
   const [vendorBookings, setVendorBookings] = useState([]);
+  const [visible, setVisible] = useState(true);
+
   console.log("VENUE Payments: ", vendorBookings);
-  // <CustomeLoadingOverlay visible={visible} />
   // FETCH ALL VENUES
   useEffect(() => {
     fetchAllVenuePayments().then(setVendorBookings);
@@ -30,21 +30,24 @@ const VendorPayments = ({}) => {
 
       if (apiResponse.data.status === "success") {
         console.log(
-          "@Successfully fetched all venue payemnts:",
+          "@Successfully fetched all venue payments:",
           apiResponse.data.data
         );
+        setVisible(false);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
+        setVisible(false);
         console.log("Error while fetching all venues");
       } else {
-        console.log("Failed to fetch all venues, dont know this error");
+        setVisible(false);
+        console.log("Failed to fetch all venues, don't know this error");
       }
     } catch (e) {
+      setVisible(false);
       console.log("ERROR in fetching all venues:", e);
     }
   };
   console.log("VENUE BOOKINGS: ", vendorBookings);
-  let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
 
   const [singleInvoice, setSingleInvoice] = useState([]);
@@ -100,7 +103,9 @@ const VendorPayments = ({}) => {
     </tr>
   );
   return (
-    <div style={{ width: "100%" }}>
+    <Paper style={{ width: "100%" }}>
+      <LoaderAWEP visible={visible} />
+
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"
@@ -115,7 +120,7 @@ const VendorPayments = ({}) => {
         <thead className="bgColor">{headers}</thead>
         <tbody>{rows}</tbody>
       </Table>
-    </div>
+    </Paper>
   );
 };
 

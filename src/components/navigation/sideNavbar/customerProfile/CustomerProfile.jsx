@@ -8,19 +8,16 @@ import {
   Button,
   PasswordInput,
   TextInput,
-  NativeSelect,
   LoadingOverlay,
   Center,
   Avatar,
   Progress,
   Input,
-  Image,
   Group,
   Accordion,
   Text,
-  Loader,
 } from "@mantine/core";
-import { Modal, useMantineTheme } from "@mantine/core";
+import { Modal } from "@mantine/core";
 
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -36,8 +33,9 @@ import {
   IconTrashOff,
   IconX,
 } from "@tabler/icons";
+import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
 
-// COMPONNET
+// COMPONENT
 const CustomerProfile = () => {
   // CURRENT LOCATION
   // NAVIGATE STATE
@@ -70,7 +68,6 @@ const CustomerProfile = () => {
   const [getCurrentPassword, setCurrentPassword] = useState("");
   const [getNewPassword, setNewPassword] = useState("");
   const [getConfirmPassword, setConfirmPassword] = useState("");
-  // const [urls, setUrls] = useState(PROFILEIMAGE);
 
   const [urls, setUrls] = useState();
   const [profileData, setProfileData] = useState({});
@@ -105,7 +102,7 @@ const CustomerProfile = () => {
       } else if (apiResponse.data.status === "error") {
         console.log("Error while fetching all venues");
       } else {
-        console.log("Failed to fetch all venues, dont know this error");
+        console.log("Failed to fetch all venues, don't know this error");
       }
     } catch (e) {
       console.log("ERROR in fetching all venues:", e);
@@ -320,7 +317,7 @@ const CustomerProfile = () => {
         showNotification({
           title: "THIS ERROR SHOULD NOT HAVE OCCURRED",
           color: "red",
-          message: "DONT KNOW WHAT WENT WRONG!",
+          message: "DON'T KNOW WHAT WENT WRONG!",
         });
         setVisible(false);
       }
@@ -404,13 +401,7 @@ const CustomerProfile = () => {
             height: "100%",
           }}
         >
-          <LoadingOverlay
-            visible={visible}
-            loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
-            overlayOpacity={0.5}
-            overlayColor="#c5c5c5"
-            zIndex={1}
-          />
+          <LoaderAWEP visible={visible} />
           <Modal
             styles={{
               close: {
@@ -685,7 +676,7 @@ const CustomerProfile = () => {
                           ) {
                             form1.setFieldError(
                               "confirmPassword",
-                              "New password and confrim password don't match"
+                              "New password and confirm password don't match"
                             );
                           } else {
                             form1.setFieldError("confirmPassword", "");

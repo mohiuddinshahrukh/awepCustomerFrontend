@@ -2,23 +2,18 @@
 import { ColorSchemeProvider, MantineProvider, Paper } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddReview from "./components/AddReview/AddReview";
 import AllVendorsPage from "./components/allVendorsPage/AllVendorsPage";
 import AllVenuesPage from "./components/allVenuesPage/AllVenuesPage";
 import InvalidRoutePage from "./components/brokenRoutesAndPages/404Page/InvalidRoutePage";
-import CustomerCardEditor from "./components/customerCardEditor/CustomerCardEditor";
-import CustomerDashboard from "./components/customerDashbaord/CustomerDashboard";
-// import ShahrukhsDevTest from "./components/devTestFolder/ShahrukhsDevTest";
+import CustomerDashboard from "./components/customerDashboard/CustomerDashboard";
 import LandingPageMain from "./components/landingPage/LandingPageMain";
 import BottomNavbar from "./components/navigation/bottomNavbar/BottomNavbar";
-import CustomerBookings from "./components/navigation/sideNavbar/bookings/CustomerBookings";
 import ChatScreen from "./components/navigation/sideNavbar/chats/ChatScreen";
-import Complaints from "./components/navigation/sideNavbar/complaints/Complaints";
 import CustomerProfile from "./components/navigation/sideNavbar/customerProfile/CustomerProfile";
-import CustomerPayments from "./components/navigation/sideNavbar/payments/CustomerPayments";
 import TopNavbar from "./components/navigation/topNavbar/TopNavbar";
 import NewBookingFile from "./components/NewBookingFile/NewBookingFile";
 import NewVendorBookingFile from "./components/NewVendorBooking/NewVendorBooking";
@@ -30,7 +25,6 @@ import {
   socket,
   socketContext as SocketContext,
 } from "./components/Socket/Socket";
-import Feedbacks from "./components/navigation/sideNavbar/feedbacks/Feedbacks";
 import ContactUs from "./components/contactUs/ContactUs.jsx";
 import AboutUs from "./components/aboutUs/AboutUs";
 import FiveCardsSkeleton from "./components/skeletons/SixCardsSkeleton";
@@ -150,24 +144,24 @@ function App() {
                   element={<NewVendorBookingFile />}
                 />
                 <Route
-                  path="/addreview/:provider/:bookingId"
+                  path="/addReview/:provider/:bookingId"
                   element={<AddReview />}
                 />
-                <Route path="/addreview/:provider" element={<AddReview />} />
+                <Route path="/addReview/:provider" element={<AddReview />} />
                 <Route
                   path="/updateReview/:provider/:feedbackId"
                   element={<AddReview />}
                 />
                 <Route
-                  path="/addcomplaint/:provider/:bookingId"
+                  path="/addComplaint/:provider/:bookingId"
                   element={<AddComplaint />}
                 />
                 <Route
-                  path="/addcomplaint/:provider"
+                  path="/addComplaint/:provider"
                   element={<AddComplaint />}
                 />
                 <Route
-                  path="/updatecomplaint/:provider/:complaintId"
+                  path="/updateComplaint/:provider/:complaintId"
                   element={<AddComplaint />}
                 />
 
@@ -317,7 +311,7 @@ function App() {
 
                 <Route path="/contactUs" element={<ContactUs />} />
                 <Route path="/aboutUs" element={<AboutUs />} />
-                <Route path="/skeletontest" element={<FiveCardsSkeleton />} />
+                <Route path="/skeletonTest" element={<FiveCardsSkeleton />} />
 
                 <Route path="/dashboard" element={<CustomerDashboard />}>
                   <Route path="/dashboard" element={<DashboardStats />} />

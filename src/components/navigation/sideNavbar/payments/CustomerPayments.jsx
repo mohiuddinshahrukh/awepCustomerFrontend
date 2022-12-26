@@ -23,14 +23,14 @@ const fetchAllVenuePayments = async () => {
 
     if (apiResponse.data.status === "success") {
       console.log(
-        "@Successfully fetched all venue payemnts:",
+        "@Successfully fetched all venue payments:",
         apiResponse.data.data
       );
       return apiResponse.data.data;
     } else if (apiResponse.data.status === "error") {
       console.log("Error while fetching all venues");
     } else {
-      console.log("Failed to fetch all venues, dont know this error");
+      console.log("Failed to fetch all venues, don't know this error");
     }
   } catch (e) {
     console.log("ERROR in fetching all venues:", e);
@@ -39,7 +39,6 @@ const fetchAllVenuePayments = async () => {
 const CustomerPayments = () => {
   const [venueBookings, setVenueBookings] = useState([]);
   const [visible, setVisible] = useState(true);
-  // <CustomeLoadingOverlay visible={visible} />
   // FETCH ALL VENUES
   useEffect(() => {
     fetchAllVenuePayments().then(setVenueBookings).then(setVisible(false));
@@ -47,7 +46,7 @@ const CustomerPayments = () => {
   return (
     <Tabs
       mt={"lg"}
-      defaultValue="subvenuePayments"
+      defaultValue="subVenuePayments"
       variant="default"
       style={{
         width: "100%",
@@ -55,7 +54,7 @@ const CustomerPayments = () => {
     >
       <Tabs.List>
         <Tabs.Tab
-          value="subvenuePayments"
+          value="subVenuePayments"
           icon={<IconBuildingFortress size={14} />}
         >
           Sub Venue Payments
@@ -68,7 +67,7 @@ const CustomerPayments = () => {
         </Tabs.Tab>*/}
       </Tabs.List>
 
-      <Tabs.Panel value="subvenuePayments" pt="xs">
+      <Tabs.Panel value="subVenuePayments" pt="xs">
         <VenuePayments venueBookings={venueBookings.subVenueBookingPayments} />
       </Tabs.Panel>
 

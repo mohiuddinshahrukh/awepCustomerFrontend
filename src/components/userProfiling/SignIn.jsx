@@ -686,476 +686,473 @@ const SignIn = ({
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
   return (
-    <MantineProvider withNormalizeCSS withGlobalStyles>
-      <NotificationsProvider>
-        {/* Forgot Password Modal*/}
-        <Modal
-          closeOnClickOutside={false}
-          title={<Title align="left">Forgot Your Password?</Title>}
-          opened={forgotPasswordModal}
-          onClose={() => {
-            setNewForgotPasswordEmail("");
-            setForgotPasswordFourDigitCode("");
-            forgotPasswordFormStep3.setFieldValue("confirmPassword", "");
-            forgotPasswordFormStep3.setFieldValue("newPassword", "");
-            setForgotPasswordModal(false);
-            setActive(0);
-          }}
-          styles={{
-            close: {
-              color: "black",
-              backgroundColor: "#EAEAEA",
-              borderRadius: "50%",
-              "&:hover": {
-                transition: "50ms",
-                color: "white",
-                backgroundColor: "red",
-              },
+    // <MantineProvider withNormalizeCSS withGlobalStyles>
+    //   <NotificationsProvider>
+    //Forgot Password Modal
+    <Paper>
+      <Modal
+        closeOnClickOutside={false}
+        title={<Title align="left">Forgot Your Password?</Title>}
+        opened={forgotPasswordModal}
+        onClose={() => {
+          setNewForgotPasswordEmail("");
+          setForgotPasswordFourDigitCode("");
+          forgotPasswordFormStep3.setFieldValue("confirmPassword", "");
+          forgotPasswordFormStep3.setFieldValue("newPassword", "");
+          setForgotPasswordModal(false);
+          setActive(0);
+        }}
+        styles={{
+          close: {
+            color: "black",
+            backgroundColor: "#EAEAEA",
+            borderRadius: "50%",
+            "&:hover": {
+              transition: "50ms",
+              color: "white",
+              backgroundColor: "red",
             },
-          }}
-          centered
-          padding="lg"
-          size={`xl` * 2}
-        >
-          <Text size="xl" my="md">
-            No Worries! We Will Help You Recover Your Account In <b>3</b> Simple
-            Steps
-          </Text>
-          <Container>
-            <Stepper
-              size={inputSize}
-              color="pink"
-              my="md"
-              active={active}
-              // onStepClick={setActive}
-              breakpoint="sm"
-            >
-              <Stepper.Step label="Enter Your Email">
-                <form
-                  onSubmit={forgotPasswordFormStep1.onSubmit((values) => {
-                    console.log("Values: ", values);
-                    forPasswordStep1(values);
-                  })}
-                >
-                  <TextInput
-                    icon={<IconAt />}
-                    size={inputSize}
-                    py={paddingSize}
-                    label="Enter Email"
-                    placeholder="Enter Email"
-                    required
-                    value={newForgotPasswordEmail}
-                    error={forgotPasswordError}
-                    onInput={(e) => {
-                      console.log("VALUE OF E", e.currentTarget.value);
-                      setNewForgotPasswordEmail(e.currentTarget.value);
-                    }}
-                    {...forgotPasswordFormStep1.getInputProps(
-                      "forgotPasswordEmail"
-                    )}
-                  />
-
-                  <Group position="right" mt="sm">
-                    <Button
-                      className="button"
-                      rightIcon={<IconAt />}
-                      size={inputSize}
-                      loading={forgotPasswordButtonStateStep1}
-                      type="submit"
-                      uppercase
-                    >
-                      Submit email
-                    </Button>
-                  </Group>
-                </form>
-              </Stepper.Step>
-              <Stepper.Step label="Get the activation code" description="">
-                <form
-                  onSubmit={forgotPasswordFormStep2.onSubmit((values) => {
-                    console.log("Values: ", values);
-                    forPasswordStep2(values);
-                  })}
-                >
-                  <TextInput
-                    size={inputSize}
-                    py={paddingSize}
-                    required
-                    label="4 Digit Code"
-                    placeholder="Enter 4 Digit Code"
-                    icon={<IconShieldLock />}
-                    component={InputMask}
-                    value={forgotPasswordFourDigitCode}
-                    mask="9999"
-                    onInput={(e) => {
-                      console.log("VALUE OF E", e.currentTarget.value);
-                      setForgotPasswordFourDigitCode(e.currentTarget.value);
-                    }}
-                    {...forgotPasswordFormStep2.getInputProps("fourDigitCode")}
-                  />
-
-                  <Group position="right" mt="sm">
-                    <Button
-                      className="button"
-                      rightIcon={<IconShieldLock />}
-                      size={inputSize}
-                      loading={forgotPasswordButtonStateStep2}
-                      type="submit"
-                      uppercase
-                    >
-                      Submit Code
-                    </Button>
-                  </Group>
-                </form>
-              </Stepper.Step>
-              <Stepper.Step label="Set A New Password">
-                <form
-                  onSubmit={forgotPasswordFormStep3.onSubmit((values) =>
-                    updatePasswordMethod(values)
+          },
+        }}
+        centered
+        padding="lg"
+        size={`xl` * 2}
+      >
+        <Text size="xl" my="md">
+          No Worries! We Will Help You Recover Your Account In <b>3</b> Simple
+          Steps
+        </Text>
+        <Container>
+          <Stepper
+            size={inputSize}
+            color="pink"
+            my="md"
+            active={active}
+            // onStepClick={setActive}
+            breakpoint="sm"
+          >
+            <Stepper.Step label="Enter Your Email">
+              <form
+                onSubmit={forgotPasswordFormStep1.onSubmit((values) => {
+                  console.log("Values: ", values);
+                  forPasswordStep1(values);
+                })}
+              >
+                <TextInput
+                  icon={<IconAt />}
+                  size={inputSize}
+                  py={paddingSize}
+                  label="Enter Email"
+                  placeholder="Enter Email"
+                  required
+                  value={newForgotPasswordEmail}
+                  error={forgotPasswordError}
+                  onInput={(e) => {
+                    console.log("VALUE OF E", e.currentTarget.value);
+                    setNewForgotPasswordEmail(e.currentTarget.value);
+                  }}
+                  {...forgotPasswordFormStep1.getInputProps(
+                    "forgotPasswordEmail"
                   )}
-                >
-                  <PasswordInput
-                    size="md"
-                    placeholder="New Password"
-                    label="New Password"
-                    required
-                    onInput={(event) => {
-                      if (
-                        event.target.value !==
-                        forgotPasswordFormStep3.values.confirmPassword
-                      ) {
-                        forgotPasswordFormStep3.setFieldError(
-                          "confirmPassword",
-                          "Passwords do not match"
-                        );
-                      } else {
-                        forgotPasswordFormStep3.setFieldError(
-                          "confirmPassword",
-                          ""
-                        );
-                      }
-                    }}
-                    {...forgotPasswordFormStep3.getInputProps("newPassword")}
-                  />
-                  <PasswordInput
-                    size="md"
-                    placeholder="Confirm Password"
-                    label="Confirm Password"
-                    required
-                    onInput={(event) => {}}
-                    {...forgotPasswordFormStep3.getInputProps(
-                      "confirmPassword"
-                    )}
-                  />
-                  <Group position="right">
-                    <Button
-                      className="button"
-                      my="md"
-                      size="md"
-                      type="submit"
-                      uppercase
-                      disabled={
-                        forgotPasswordFormStep3.values.confirmPassword &&
-                        forgotPasswordFormStep3.values.newPassword &&
-                        forgotPasswordFormStep3.values.newPassword &&
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-                          forgotPasswordFormStep3.values.newPassword
-                        ) &&
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
-                          forgotPasswordFormStep3.values.confirmPassword
-                        ) &&
-                        forgotPasswordFormStep3.values.newPassword ===
-                          forgotPasswordFormStep3.values.confirmPassword
-                          ? false
-                          : true
-                      }
-                      rightIcon={<IconEdit />}
-                    >
-                      Update Password
-                    </Button>
-                  </Group>
-                </form>
-              </Stepper.Step>
-              <Stepper.Completed>
-                Completed, click back button to get to previous step
-              </Stepper.Completed>
-            </Stepper>
-          </Container>
-        </Modal>
-        {/* Verification Modal*/}
-        <Modal
-          styles={{
-            close: {
-              color: "black",
-              backgroundColor: "#EAEAEA",
-              borderRadius: "50%",
-              "&:hover": {
-                transition: "50ms",
-                color: "white",
-                backgroundColor: "red",
-              },
-            },
-          }}
-          centered
-          size="xl"
-          onClose={() => setVerificationModal(false)}
-          opened={verificationModal}
-        >
-          <Title>User Verification </Title>
-          <Paper p="xl">
-            <Accordion variant="separated">
-              {!emailAccordion && (
-                <Accordion.Item value="email">
-                  <Accordion.Control
-                    icon={<IconUserX color="red" />}
-                    disabled={emailAccordion}
+                />
+
+                <Group position="right" mt="sm">
+                  <Button
+                    className="button"
+                    rightIcon={<IconAt />}
+                    size={inputSize}
+                    loading={forgotPasswordButtonStateStep1}
+                    type="submit"
+                    uppercase
                   >
-                    <Text>Verify Email</Text>
-                    <Text color="dimmed">
-                      {" "}
-                      To start using AWEP verify your email address!
+                    Submit email
+                  </Button>
+                </Group>
+              </form>
+            </Stepper.Step>
+            <Stepper.Step label="Get the activation code" description="">
+              <form
+                onSubmit={forgotPasswordFormStep2.onSubmit((values) => {
+                  console.log("Values: ", values);
+                  forPasswordStep2(values);
+                })}
+              >
+                <TextInput
+                  size={inputSize}
+                  py={paddingSize}
+                  required
+                  label="4 Digit Code"
+                  placeholder="Enter 4 Digit Code"
+                  icon={<IconShieldLock />}
+                  component={InputMask}
+                  value={forgotPasswordFourDigitCode}
+                  mask="9999"
+                  onInput={(e) => {
+                    console.log("VALUE OF E", e.currentTarget.value);
+                    setForgotPasswordFourDigitCode(e.currentTarget.value);
+                  }}
+                  {...forgotPasswordFormStep2.getInputProps("fourDigitCode")}
+                />
+
+                <Group position="right" mt="sm">
+                  <Button
+                    className="button"
+                    rightIcon={<IconShieldLock />}
+                    size={inputSize}
+                    loading={forgotPasswordButtonStateStep2}
+                    type="submit"
+                    uppercase
+                  >
+                    Submit Code
+                  </Button>
+                </Group>
+              </form>
+            </Stepper.Step>
+            <Stepper.Step label="Set A New Password">
+              <form
+                onSubmit={forgotPasswordFormStep3.onSubmit((values) =>
+                  updatePasswordMethod(values)
+                )}
+              >
+                <PasswordInput
+                  size="md"
+                  placeholder="New Password"
+                  label="New Password"
+                  required
+                  onInput={(event) => {
+                    if (
+                      event.target.value !==
+                      forgotPasswordFormStep3.values.confirmPassword
+                    ) {
+                      forgotPasswordFormStep3.setFieldError(
+                        "confirmPassword",
+                        "Passwords do not match"
+                      );
+                    } else {
+                      forgotPasswordFormStep3.setFieldError(
+                        "confirmPassword",
+                        ""
+                      );
+                    }
+                  }}
+                  {...forgotPasswordFormStep3.getInputProps("newPassword")}
+                />
+                <PasswordInput
+                  size="md"
+                  placeholder="Confirm Password"
+                  label="Confirm Password"
+                  required
+                  onInput={(event) => {}}
+                  {...forgotPasswordFormStep3.getInputProps("confirmPassword")}
+                />
+                <Group position="right">
+                  <Button
+                    className="button"
+                    my="md"
+                    size="md"
+                    type="submit"
+                    uppercase
+                    disabled={
+                      forgotPasswordFormStep3.values.confirmPassword &&
+                      forgotPasswordFormStep3.values.newPassword &&
+                      forgotPasswordFormStep3.values.newPassword &&
+                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+                        forgotPasswordFormStep3.values.newPassword
+                      ) &&
+                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,100}$/.test(
+                        forgotPasswordFormStep3.values.confirmPassword
+                      ) &&
+                      forgotPasswordFormStep3.values.newPassword ===
+                        forgotPasswordFormStep3.values.confirmPassword
+                        ? false
+                        : true
+                    }
+                    rightIcon={<IconEdit />}
+                  >
+                    Update Password
+                  </Button>
+                </Group>
+              </form>
+            </Stepper.Step>
+            <Stepper.Completed>
+              Completed, click back button to get to previous step
+            </Stepper.Completed>
+          </Stepper>
+        </Container>
+      </Modal>
+      <Modal
+        styles={{
+          close: {
+            color: "black",
+            backgroundColor: "#EAEAEA",
+            borderRadius: "50%",
+            "&:hover": {
+              transition: "50ms",
+              color: "white",
+              backgroundColor: "red",
+            },
+          },
+        }}
+        centered
+        size="xl"
+        onClose={() => setVerificationModal(false)}
+        opened={verificationModal}
+      >
+        <Title>User Verification </Title>
+        <Paper p="xl">
+          <Accordion variant="separated">
+            {!emailAccordion && (
+              <Accordion.Item value="email">
+                <Accordion.Control
+                  icon={<IconUserX color="red" />}
+                  disabled={emailAccordion}
+                >
+                  <Text>Verify Email</Text>
+                  <Text color="dimmed">
+                    {" "}
+                    To start using AWEP verify your email address!
+                  </Text>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <Group position="left" align="flex-end">
+                    <Text>
+                      To resend verification email at <b>{modalEmail}</b> click
+                      resend
                     </Text>
-                  </Accordion.Control>
-                  <Accordion.Panel>
-                    <Group position="left" align="flex-end">
-                      <Text>
-                        To resend verification email at <b>{modalEmail}</b>{" "}
-                        click resend
-                      </Text>
+                    <Button
+                      rightIcon={<IconMail />}
+                      disabled={modalButtonEmail}
+                      uppercase
+                      size={inputSize}
+                      onClick={() => {
+                        sendVerificationEmail();
+                      }}
+                    >
+                      resend
+                    </Button>
+                    <Text hidden={!modalButtonEmail} color="dimmed">
+                      This button will be available after 1 minute
+                    </Text>
+                  </Group>
+                </Accordion.Panel>
+              </Accordion.Item>
+            )}
+
+            {!phoneAccordion && (
+              <Accordion.Item value="phone">
+                <Accordion.Control
+                  icon={<IconPhoneX color="red" />}
+                  disabled={phoneAccordion}
+                >
+                  <Text> Verify Phone Number</Text>
+                  <Text color="dimmed">
+                    To start using AWEP verify your phone number now!
+                  </Text>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <form
+                    style={{ width: "100%", height: "100%" }}
+                    onSubmit={form1.onSubmit((values) => {
+                      submitVerificationCode(values);
+                    })}
+                  >
+                    <Group position="apart" align="flex-end">
+                      <Group position="left" align="flex-end">
+                        <NumberInput
+                          label="Enter 4 digit code"
+                          required
+                          placeholder="Enter verification code"
+                          description="Enter the 4 digit code sent on your contact number"
+                          hideControls
+                          component={InputMask}
+                          mask="9999"
+                          size={inputSize}
+                          {...form1.getInputProps("code")}
+                        />
+                        <Button
+                          disabled={verificationCodeButton}
+                          type="submit"
+                          uppercase
+                          size={inputSize}
+                          color="green"
+                          rightIcon={<IconCheck />}
+                        >
+                          Verify
+                        </Button>
+                      </Group>
+
                       <Button
-                        rightIcon={<IconMail />}
-                        disabled={modalButtonEmail}
+                        disabled={modalButtonCode}
                         uppercase
                         size={inputSize}
+                        rightIcon={<IconMessage />}
                         onClick={() => {
-                          sendVerificationEmail();
+                          sendVerificationCode();
                         }}
                       >
                         resend
                       </Button>
-                      <Text hidden={!modalButtonEmail} color="dimmed">
+                      <Text hidden={!verificationCodeButton} color="dimmed">
                         This button will be available after 1 minute
                       </Text>
                     </Group>
-                  </Accordion.Panel>
-                </Accordion.Item>
-              )}
-
-              {!phoneAccordion && (
-                <Accordion.Item value="phone">
-                  <Accordion.Control
-                    icon={<IconPhoneX color="red" />}
-                    disabled={phoneAccordion}
-                  >
-                    <Text> Verify Phone Number</Text>
-                    <Text color="dimmed">
-                      To start using AWEP verify your phone number now!
-                    </Text>
-                  </Accordion.Control>
-                  <Accordion.Panel>
-                    <form
-                      style={{ width: "100%", height: "100%" }}
-                      onSubmit={form1.onSubmit((values) => {
-                        submitVerificationCode(values);
-                      })}
-                    >
-                      <Group position="apart" align="flex-end">
-                        <Group position="left" align="flex-end">
-                          <NumberInput
-                            label="Enter 4 digit code"
-                            required
-                            placeholder="Enter verification code"
-                            description="Enter the 4 digit code sent on your contact number"
-                            hideControls
-                            component={InputMask}
-                            mask="9999"
-                            size={inputSize}
-                            {...form1.getInputProps("code")}
-                          />
-                          <Button
-                            disabled={verificationCodeButton}
-                            type="submit"
-                            uppercase
-                            size={inputSize}
-                            color="green"
-                            rightIcon={<IconCheck />}
-                          >
-                            Verify
-                          </Button>
-                        </Group>
-
-                        <Button
-                          disabled={modalButtonCode}
-                          uppercase
-                          size={inputSize}
-                          rightIcon={<IconMessage />}
-                          onClick={() => {
-                            sendVerificationCode();
-                          }}
-                        >
-                          resend
-                        </Button>
-                        <Text hidden={!verificationCodeButton} color="dimmed">
-                          This button will be available after 1 minute
-                        </Text>
-                      </Group>
-                    </form>
-                  </Accordion.Panel>
-                </Accordion.Item>
-              )}
-            </Accordion>
-          </Paper>
-        </Modal>
-
-        {/* REST OF THE PAGE */}
-        <Container size="xl" mt={"xl"}>
-          <Grid>
-            <Grid.Col lg={6}>
-              <Grid>
-                <Grid.Col>
-                  <SignUpSignInCarousel />
-                </Grid.Col>
-              </Grid>
-            </Grid.Col>
-            <Grid.Col lg={6} style={{ position: "relative" }}>
-              <Grid>
-                <Grid.Col>
-                  <Text align="center" size={40}>
-                    Sign in with us
-                  </Text>
-                </Grid.Col>
-                <Grid.Col>
-                  <Text align="center" size={20}>
-                    Use our social sign in
-                  </Text>
-                </Grid.Col>
-                {/* <Grid.Col>
-                  <Group
-                    position="center"
-                    id="signInDiv"
-                    style={{ height: "50", width: "400" }}
-                  ></Group>
-                </Grid.Col> */}
-                <Grid.Col>
-                  <div
+                  </form>
+                </Accordion.Panel>
+              </Accordion.Item>
+            )}
+          </Accordion>
+        </Paper>
+      </Modal>
+      <Container size="xl" mt={"xl"}>
+        <Grid>
+          <Grid.Col lg={6}>
+            <Grid>
+              <Grid.Col>
+                <SignUpSignInCarousel />
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
+          <Grid.Col lg={6} style={{ position: "relative" }}>
+            <Grid>
+              <Grid.Col>
+                <Text align="center" size={40}>
+                  Sign in with us
+                </Text>
+              </Grid.Col>
+              <Grid.Col>
+                <Text align="center" size={20}>
+                  Use our social sign in
+                </Text>
+              </Grid.Col>
+              {/* <Grid.Col>
+                <Group
+                  position="center"
+                  id="signInDiv"
+                  style={{ height: "50", width: "400" }}
+                ></Group>
+              </Grid.Col> */}
+              <Grid.Col>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "20px",
+                    borderBottom: "1px solid #eaeaea",
+                    textAlign: "center",
+                  }}
+                >
+                  <span
                     style={{
-                      width: "100%",
-                      height: "20px",
-                      borderBottom: "1px solid #eaeaea",
-                      textAlign: "center",
+                      fontSize: "20px",
+                      backgroundColor: "#F3F5F6",
+                      padding: "0 10px",
+                      borderRadius: "100%",
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: "20px",
-                        backgroundColor: "#F3F5F6",
-                        padding: "0 10px",
-                        borderRadius: "100%",
-                      }}
-                    >
-                      OR
-                    </span>
-                  </div>
-                </Grid.Col>
-                <Grid.Col md={12} lg={12} p="md">
-                  <form
-                    style={{ padding: 0, margin: 0 }}
-                    onSubmit={form.onSubmit((values) => signInFunction(values))}
+                    OR
+                  </span>
+                </div>
+              </Grid.Col>
+              <Grid.Col md={12} lg={12} p="md">
+                <form
+                  style={{ padding: 0, margin: 0 }}
+                  onSubmit={form.onSubmit((values) => signInFunction(values))}
+                >
+                  <LoadingOverlay
+                    loaderProps={{
+                      size: "xl",
+                      color: "pink",
+                      variant: "bars",
+                    }}
+                    overlayOpacity={0.5}
+                    overlayColor="#c5c5c5"
+                    visible={visible}
+                  />
+                  <TextInput
+                    icon={<IconAt />}
+                    size={inputSize}
+                    py={paddingSize}
+                    label="Enter Email Address"
+                    placeholder="Enter Email Address"
+                    required
+                    value={forgotPasswordEmail}
+                    onInput={(e) =>
+                      setForgotPasswordEmail(e.currentTarget.value)
+                    }
+                    {...form.getInputProps("email")}
+                  />
+                  <PasswordInput
+                    icon={<IconKey />}
+                    py={paddingSize}
+                    size={inputSize}
+                    placeholder="Enter Password"
+                    label="Password"
+                    required
+                    {...form.getInputProps("password")}
+                  />
+                  <Button
+                    className="button"
+                    my="md"
+                    size={inputSize}
+                    uppercase
+                    fullWidth
+                    type="submit"
                   >
-                    <LoadingOverlay
-                      loaderProps={{
-                        size: "xl",
-                        color: "pink",
-                        variant: "bars",
+                    Sign In
+                  </Button>
+                </form>
+              </Grid.Col>
+              <Grid.Col lg={12}>
+                <Group mt={0} p="sm" position="apart">
+                  <Box
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Text
+                      color="dimmed"
+                      onClick={() => {
+                        setModalEmail("");
+                        setModalPhoneNumber("");
+                        setUserType("");
+                        setVerificationCode("");
+                        if (closeModal) {
+                          setIsSignUp(true);
+                          setIsSignIn(false);
+                        } else {
+                          navigate("/signup");
+                        }
                       }}
-                      overlayOpacity={0.5}
-                      overlayColor="#c5c5c5"
-                      visible={visible}
-                    />
-                    <TextInput
-                      icon={<IconAt />}
-                      size={inputSize}
-                      py={paddingSize}
-                      label="Enter Email Address"
-                      placeholder="Enter Email Address"
-                      required
-                      value={forgotPasswordEmail}
-                      onInput={(e) =>
-                        setForgotPasswordEmail(e.currentTarget.value)
-                      }
-                      {...form.getInputProps("email")}
-                    />
-                    <PasswordInput
-                      icon={<IconKey />}
-                      py={paddingSize}
-                      size={inputSize}
-                      placeholder="Enter Password"
-                      label="Password"
-                      required
-                      {...form.getInputProps("password")}
-                    />
-                    <Button
-                      className="button"
-                      my="md"
-                      size={inputSize}
-                      uppercase
-                      fullWidth
-                      type="submit"
+                      size={18}
                     >
-                      Sign In
-                    </Button>
-                  </form>
-                </Grid.Col>
-                <Grid.Col lg={12}>
-                  <Group mt={0} p="sm" position="apart">
-                    <Box
-                      style={{
-                        cursor: "pointer",
+                      SIGN UP
+                    </Text>
+                  </Box>
+                  <Box
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Text
+                      size={18}
+                      color="dimmed"
+                      onClick={() => {
+                        // forgotPasswordFunction
+                        console.log("FOROGOT PASSWORD CALLED");
+                        setForgotPasswordModal(true);
                       }}
                     >
-                      <Text
-                        color="dimmed"
-                        onClick={() => {
-                          setModalEmail("");
-                          setModalPhoneNumber("");
-                          setUserType("");
-                          setVerificationCode("");
-                          if (closeModal) {
-                            setIsSignUp(true);
-                            setIsSignIn(false);
-                          } else {
-                            navigate("/signup");
-                          }
-                        }}
-                        size={18}
-                      >
-                        SIGN UP
-                      </Text>
-                    </Box>
-                    <Box
-                      style={{
-                        cursor: "pointer",
-                      }}
-                    >
-                      <Text
-                        size={18}
-                        color="dimmed"
-                        onClick={() => {
-                          // forgotPasswordFunction
-                          console.log("FOROGOT PASSWORD CALLED");
-                          setForgotPasswordModal(true);
-                        }}
-                      >
-                        FORGOT PASSWORD?
-                      </Text>
-                    </Box>
-                  </Group>
-                </Grid.Col>
-              </Grid>
-            </Grid.Col>
-          </Grid>
-        </Container>
-      </NotificationsProvider>
-    </MantineProvider>
+                      FORGOT PASSWORD?
+                    </Text>
+                  </Box>
+                </Group>
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
+        </Grid>
+      </Container>
+    </Paper>
+    //   </NotificationsProvider>
+    // </MantineProvider>
   );
 };
 

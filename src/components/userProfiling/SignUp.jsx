@@ -10,6 +10,7 @@ import {
   PasswordInput,
   NumberInput,
   Container,
+  Paper,
 } from "@mantine/core";
 import jwt_decode from "jwt-decode";
 import { Box } from "@mantine/core";
@@ -303,234 +304,232 @@ const SignUp = ({
   //   }
   // }, []);
   return (
-    <MantineProvider withNormalizeCSS withGlobalStyles>
-      <NotificationsProvider>
-        <Container size="xl" mt={"xl"}>
-          <Grid align={"center"}>
-            <Grid.Col lg={6}>
-              <Grid>
-                <Grid.Col>
-                  <SignUpSignInCarousel />
-                </Grid.Col>
-              </Grid>
-            </Grid.Col>
-            <Grid.Col style={{ position: "relative" }} lg={6}>
-              <Grid>
-                <Grid.Col>
-                  <Text align="center" size={40}>
-                    Sign-Up
-                  </Text>
-                </Grid.Col>
-                <Grid.Col></Grid.Col>
+    // <MantineProvider withNormalizeCSS withGlobalStyles>
+    //   <NotificationsProvider>
+    <Paper>
+      <Container size="xl" mt={"xl"}>
+        <Grid align={"center"}>
+          <Grid.Col lg={6}>
+            <Grid>
+              <Grid.Col>
+                <SignUpSignInCarousel />
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
+          <Grid.Col style={{ position: "relative" }} lg={6}>
+            <Grid>
+              <Grid.Col>
+                <Text align="center" size={40}>
+                  Sign-Up
+                </Text>
+              </Grid.Col>
+              <Grid.Col></Grid.Col>
 
-                {/* <Grid.Col>
-                  <Group
-                    position="center"
-                    id="signInDiv"
-                    hidden={hiddenButton}
-                    style={{ transition: "2s", minHeight: "40px" }}
-                  ></Group>
-                </Grid.Col> */}
+              {/* <Grid.Col>
+                <Group
+                  position="center"
+                  id="signInDiv"
+                  hidden={hiddenButton}
+                  style={{ transition: "2s", minHeight: "40px" }}
+                ></Group>
+              </Grid.Col> */}
 
-                <Grid.Col>
-                  <div
+              <Grid.Col>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "20px",
+                    borderBottom: "1px solid #eaeaea",
+                    textAlign: "center",
+                  }}
+                >
+                  <span
                     style={{
-                      width: "100%",
-                      height: "20px",
-                      borderBottom: "1px solid #eaeaea",
-                      textAlign: "center",
+                      fontSize: "20px",
+                      backgroundColor: "#F3F5F6",
+                      padding: "0 10px",
+                      borderRadius: "100%",
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: "20px",
-                        backgroundColor: "#F3F5F6",
-                        padding: "0 10px",
-                        borderRadius: "100%",
-                      }}
-                    >
-                      OR
-                    </span>
-                  </div>
-                </Grid.Col>
+                    OR
+                  </span>
+                </div>
+              </Grid.Col>
 
-                <Grid.Col md={12} lg={12} p="md">
-                  <form
-                    style={{
-                      padding: 0,
-                      margin: 0,
+              <Grid.Col md={12} lg={12} p="md">
+                <form
+                  style={{
+                    padding: 0,
+                    margin: 0,
+                  }}
+                  onSubmit={form.onSubmit((values) => signUpFunction(values))}
+                >
+                  <LoadingOverlay
+                    loaderProps={{
+                      size: "xl",
+                      color: "pink",
+                      variant: "bars",
                     }}
-                    onSubmit={form.onSubmit((values) => signUpFunction(values))}
-                  >
-                    <LoadingOverlay
-                      loaderProps={{
-                        size: "xl",
-                        color: "pink",
-                        variant: "bars",
-                      }}
-                      overlayOpacity={0.5}
-                      overlayColor="#c5c5c5"
-                      visible={loading}
-                    />
-                    <NativeSelect
-                      icon={<IconUser />}
-                      py={paddingSize}
-                      label="Select User Type"
-                      required
-                      size={inputSize}
-                      placeholder={
-                        <Text style={{ color: "red" }}>Select User Type</Text>
-                      }
-                      value={userType}
-                      data={getUserTypes}
-                      onChange={(event) =>
-                        setUserType(event.currentTarget.value)
-                      }
-                    />
-                    <TextInput
-                      icon={<IconAt />}
-                      py={paddingSize}
-                      size={inputSize}
-                      required
-                      disabled={blockedEmailField}
-                      value={socialSignUpEmail}
-                      label="Enter Email"
-                      placeholder={
-                        blockedEmailField ? socialSignUpEmail : "Enter Email"
-                      }
-                      {...form.getInputProps("email")}
-                    />
-                    <TextInput
-                      icon={<IconUser />}
-                      py={paddingSize}
-                      size={inputSize}
-                      required
-                      disabled={blockedUserNameField}
-                      value={socialSignUpName}
-                      placeholder={
-                        blockedUserNameField
-                          ? socialSignUpName
-                          : "Enter Full Name"
-                      }
-                      label="Enter Full Name"
-                      {...form.getInputProps("fullName")}
-                    />
-                    <TextInput
-                      icon={<IconPhone />}
-                      py={paddingSize}
-                      size={inputSize}
-                      required
-                      placeholder="Enter Mobile Number"
-                      component={InputMask}
-                      mask="03999999999"
-                      label="Enter Mobile Number"
-                      {...form.getInputProps("phoneNumber")}
-                    />
-                    <NumberInput
-                      icon={<IconId />}
-                      py={paddingSize}
-                      size={inputSize}
-                      label="Enter CNIC Number"
-                      required
-                      placeholder="Enter CNIC Number"
-                      onInput={(e) => {
-                        console.log(e.target.value);
-                        setCNIC(e.target.value);
-                      }}
-                      component={InputMask}
-                      mask="9999999999999"
-                      hideControls
-                      {...form.getInputProps("CNIC")}
-                    />
-                    <Grid>
-                      <Grid.Col lg={6}>
-                        {" "}
-                        <PasswordInput
-                          icon={<IconKey />}
-                          py={paddingSize}
-                          size={inputSize}
-                          placeholder="Enter Password"
-                          label="Password"
-                          required
-                          onInput={(e) => {
-                            if (
-                              e.target.value !== form.values.confirmPassword
-                            ) {
-                              form.setFieldError(
-                                "confirmPassword",
-                                "Passwords Do Not Match"
-                              );
-                            } else {
-                              form.setFieldError("confirmPassword", "");
-                            }
-                          }}
-                          {...form.getInputProps("password")}
-                        />
-                      </Grid.Col>
-                      <Grid.Col lg={6}>
-                        <PasswordInput
-                          icon={<IconKey />}
-                          py={paddingSize}
-                          // error={renderErrorMessage("cpassword")}
-                          size="md"
-                          required
-                          label="Confirm Password"
-                          // disabled={disabled}
-                          placeholder="Re-Enter Password"
-                          value={cpassword}
-                          errorProps={(v) => {
-                            return v !== password;
-                          }}
-                          onChange={(e) => {
-                            console.log("SHIT", e.target.value);
-                            setCPassword(e.target.value);
-                          }}
-                          {...form.getInputProps("confirmPassword")}
-                        />
-                      </Grid.Col>
-                    </Grid>
-                    <Button
-                      className="button"
-                      my="md"
-                      size={inputSize}
-                      fullWidth
-                      type="submit"
-                      uppercase
-                    >
-                      Sign Up
-                    </Button>
-                  </form>
-                </Grid.Col>
-                <Grid.Col lg={12}>
-                  <Group mt={0} p="sm">
-                    <Box
-                      style={{
-                        cursor: "pointer",
-                      }}
-                    >
-                      <Text
-                        color="dimmed"
-                        onClick={() => {
-                          if (closeModal) {
-                            setIsSignIn(true);
-                            setIsSignUp(false);
+                    overlayOpacity={0.5}
+                    overlayColor="#c5c5c5"
+                    visible={loading}
+                  />
+                  <NativeSelect
+                    icon={<IconUser />}
+                    py={paddingSize}
+                    label="Select User Type"
+                    required
+                    size={inputSize}
+                    placeholder={
+                      <Text style={{ color: "red" }}>Select User Type</Text>
+                    }
+                    value={userType}
+                    data={getUserTypes}
+                    onChange={(event) => setUserType(event.currentTarget.value)}
+                  />
+                  <TextInput
+                    icon={<IconAt />}
+                    py={paddingSize}
+                    size={inputSize}
+                    required
+                    disabled={blockedEmailField}
+                    value={socialSignUpEmail}
+                    label="Enter Email"
+                    placeholder={
+                      blockedEmailField ? socialSignUpEmail : "Enter Email"
+                    }
+                    {...form.getInputProps("email")}
+                  />
+                  <TextInput
+                    icon={<IconUser />}
+                    py={paddingSize}
+                    size={inputSize}
+                    required
+                    disabled={blockedUserNameField}
+                    value={socialSignUpName}
+                    placeholder={
+                      blockedUserNameField
+                        ? socialSignUpName
+                        : "Enter Full Name"
+                    }
+                    label="Enter Full Name"
+                    {...form.getInputProps("fullName")}
+                  />
+                  <TextInput
+                    icon={<IconPhone />}
+                    py={paddingSize}
+                    size={inputSize}
+                    required
+                    placeholder="Enter Mobile Number"
+                    component={InputMask}
+                    mask="03999999999"
+                    label="Enter Mobile Number"
+                    {...form.getInputProps("phoneNumber")}
+                  />
+                  <NumberInput
+                    icon={<IconId />}
+                    py={paddingSize}
+                    size={inputSize}
+                    label="Enter CNIC Number"
+                    required
+                    placeholder="Enter CNIC Number"
+                    onInput={(e) => {
+                      console.log(e.target.value);
+                      setCNIC(e.target.value);
+                    }}
+                    component={InputMask}
+                    mask="9999999999999"
+                    hideControls
+                    {...form.getInputProps("CNIC")}
+                  />
+                  <Grid>
+                    <Grid.Col lg={6}>
+                      {" "}
+                      <PasswordInput
+                        icon={<IconKey />}
+                        py={paddingSize}
+                        size={inputSize}
+                        placeholder="Enter Password"
+                        label="Password"
+                        required
+                        onInput={(e) => {
+                          if (e.target.value !== form.values.confirmPassword) {
+                            form.setFieldError(
+                              "confirmPassword",
+                              "Passwords Do Not Match"
+                            );
                           } else {
-                            navigate("/signin");
+                            form.setFieldError("confirmPassword", "");
                           }
                         }}
-                        size={18}
-                      >
-                        SIGN IN
-                      </Text>
-                    </Box>
-                  </Group>
-                </Grid.Col>
-              </Grid>
-            </Grid.Col>
-          </Grid>
-        </Container>
-      </NotificationsProvider>
-    </MantineProvider>
+                        {...form.getInputProps("password")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col lg={6}>
+                      <PasswordInput
+                        icon={<IconKey />}
+                        py={paddingSize}
+                        // error={renderErrorMessage("cpassword")}
+                        size="md"
+                        required
+                        label="Confirm Password"
+                        // disabled={disabled}
+                        placeholder="Re-Enter Password"
+                        value={cpassword}
+                        errorProps={(v) => {
+                          return v !== password;
+                        }}
+                        onChange={(e) => {
+                          console.log("SHIT", e.target.value);
+                          setCPassword(e.target.value);
+                        }}
+                        {...form.getInputProps("confirmPassword")}
+                      />
+                    </Grid.Col>
+                  </Grid>
+                  <Button
+                    className="button"
+                    my="md"
+                    size={inputSize}
+                    fullWidth
+                    type="submit"
+                    uppercase
+                  >
+                    Sign Up
+                  </Button>
+                </form>
+              </Grid.Col>
+              <Grid.Col lg={12}>
+                <Group mt={0} p="sm">
+                  <Box
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Text
+                      color="dimmed"
+                      onClick={() => {
+                        if (closeModal) {
+                          setIsSignIn(true);
+                          setIsSignUp(false);
+                        } else {
+                          navigate("/signin");
+                        }
+                      }}
+                      size={18}
+                    >
+                      SIGN IN
+                    </Text>
+                  </Box>
+                </Group>
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
+        </Grid>
+      </Container>
+    </Paper>
+    //   </NotificationsProvider>
+    // </MantineProvider>
   );
 };
 

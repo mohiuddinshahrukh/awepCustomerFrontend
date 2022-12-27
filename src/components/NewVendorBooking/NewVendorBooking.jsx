@@ -182,14 +182,71 @@ const NewVendorBookingFile = () => {
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
+  const [eventAddress, setEventAddress] = useState("");
+  const [venueBooking, setVenueBooking] = useState("");
+  const [allVenueBookings, setAllVenueBookings] = useState([]);
   const [hidden, setHidden] = useState(true);
   const [hideSelectButton, setHideSelectButton] = useState(false);
   const [bookingResponse, setBookingResponse] = useState({});
   console.log("bookingResponse hai ye to", bookingResponse);
 
   const [selectedTheme, setSelectedTheme] = useState("");
+  console.log("value1", value1);
+  console.log(
+    "bookingDate",
+    allVenueBookings.map((venue) => moment(venue.bookingDate))
+  );
   console.log("selected theme", selectedTheme);
+  const fetchVenueBookings = async () => {
+    try {
+      console.log("Fetchinasdasdg alasdasl venues");
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("$!@#API RESPONSE: ", apiResponse);
+      console.log("API RESPONSE: ", apiResponse.data);
 
+      if (apiResponse.data.status === "success") {
+        console.log("Successfully fetched all venues:", apiResponse.data.data);
+
+        setVisible(false);
+
+        setAllVenueBookings(apiResponse.data.data);
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+
+        console.log("Error while fetching all venues");
+      } else {
+        setVisible(false);
+
+        console.log("Failed to fetch all venues, dont know this error");
+      }
+    } catch (e) {
+      setVisible(false);
+
+      console.log("ERROR in fetching all venues:", e);
+    }
+  };
+
+  const venueBookingsData = allVenueBookings
+    ?.filter((item) => moment(item.bookingDate) == value1)
+
+    ?.map((item) => ({
+      value: item._id,
+      label:
+        item.venueName +
+        " " +
+        item.subVenueName +
+        " (" +
+        item?.bookingDate?.split("T")?.[0] +
+        " " +
+        item.bookingTime +
+        ") ",
+    }));
   const data = [
     {
       percent: bookingPercentage * 100,
@@ -294,12 +351,19 @@ const NewVendorBookingFile = () => {
   const form = useForm({
     validateInputOnChange: ["phone", "email"],
     initialValues: {
+      eventAddress: "",
       phone: customerPhone,
       email: customerEmail,
       description: "",
     },
 
     validate: {
+      eventAddress: (value) =>
+        value?.length > 10
+          ? // && /^[a-zA-Z0-9\s]*$/.test(value.trim())
+            null
+          : "Address must be at least 10 characters",
+
       phone: (value) =>
         /^(03)(\d{9})$/.test(value)
           ? null
@@ -333,21 +397,22 @@ const NewVendorBookingFile = () => {
     onChange(date);
 
     if (idOfSelectedPackage === "") {
-      setError("Please Select A Venue To Proceed");
+      setError("Please Select A Vendor Package To Proceed");
       setDisabled(true);
       return;
     } else {
       onChange(new moment(form1.values.date).format().split("T")[0]);
+      fetchVenueBookings();
       nextStep();
     }
   };
   const handleSubmit1 = async (event) => {
-    var { phone, email, description } = event;
+    var { phone, email, description, eventAddress } = event;
     console.log("phone", phone);
     console.log("email", email);
     console.log("description", description);
     console.log(event);
-
+    setEventAddress(eventAddress);
     setPhone(phone);
     setEmail(email);
     setDescription(description);
@@ -390,6 +455,7 @@ const NewVendorBookingFile = () => {
             form.setFieldValue("phone", response?.pointOfContact?.phone);
             form.setFieldValue("email", response?.pointOfContact?.email);
             form.setFieldValue("description", response?.bookingDescription);
+            form.setFieldValue("eventAddress", response?.eventAddress);
 
             setPrice(response?.price);
 
@@ -491,6 +557,7 @@ const NewVendorBookingFile = () => {
       vendorPackageId: idOfSelectedPackage,
       bookingDate: moment(value1).format(),
       bookingTime: time,
+      eventAddress: eventAddress,
       eventType: eventType,
       eventDuration: time,
       pointOfContact: {
@@ -599,6 +666,7 @@ const NewVendorBookingFile = () => {
     setVisible(true);
     const body = {
       bookingDate: moment(value1).format(),
+      eventAddress: eventAddress,
       eventType: eventType,
       eventDuration: time,
       pointOfContact: {
@@ -1184,6 +1252,39 @@ const NewVendorBookingFile = () => {
                           {...form.getInputProps("email")}
                         />
                       </Grid.Col>
+                      <Grid.Col lg={6}>
+                        <Select
+                          size="md"
+                          required
+                          label="Select Venue Booking"
+                          placeholder={"Select Vendor City To Select Vendor"}
+                          // limit={Infinity}
+                          searchable
+                          value={venueBooking}
+                          onChange={(e) => {
+                            setVenueBooking(e);
+                          }}
+                          nothingFound="No One Found"
+                          data={venueBookingsData}
+                        />
+                      </Grid.Col>
+                      <Grid.Col md={12} lg={12}>
+                        <Textarea
+                          size="md"
+                          placeholder="Event Address"
+                          value={eventAddress}
+                          required
+                          minRows={3}
+                          maxRows={10}
+                          maxLength={1000}
+                          autosize
+                          // disabled={disabled}
+                          label="Enter Event Address"
+                          onChange={(e) => setEventAddress(e.target.value)}
+                          {...form.getInputProps("eventAddress")}
+                        />
+                      </Grid.Col>
+
                       <Grid.Col md={12} lg={12}>
                         <Textarea
                           size="md"
@@ -1279,7 +1380,7 @@ const NewVendorBookingFile = () => {
                     <ViewAllVendorPaymentTableReceipts
                       bookedDateAndTime={bookedDateAndTime}
                       vendorTitle={vendorDetails?.vendorBusinessTitle}
-                      vendorAddress={vendorDetails?.address}
+                      vendorAddress={vendorDetails?.eventAddress}
                       vendorEmail={vendorDetails?.infoEmail}
                       vendorPhone={vendorDetails?.contactPhone}
                       vendorWhatsapp={vendorDetails?.contactWhatsApp}

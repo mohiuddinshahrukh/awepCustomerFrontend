@@ -41,7 +41,6 @@ import {
   IconShieldLock,
   IconUserX,
 } from "@tabler/icons";
-import GoogleSignUpButon from "./GoogleSignUpButon";
 import { socket } from "../Socket/Socket";
 import { io } from "socket.io-client";
 
@@ -651,34 +650,36 @@ const SignIn = ({
     socialSignUpFunction(response.credential);
   }
   // USEEFFECT
-  // useEffect(() => {
-  //   console.count();
-  //   console.log("HERE IN USEEFFECT");
-  //   if (refresh) {
-  //     /*global google */
-  //     google.accounts.id.initialize({
-  //       client_id:
-  //         "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
-  //       callback: handleCallbackResponse,
-  //     });
+  useEffect(() => {
+    if (process.env.React_App_Mobile_View) {
+      console.count();
+      console.log("HERE IN USEEFFECT");
+      if (refresh) {
+        /*global google */
+        google.accounts.id.initialize({
+          client_id:
+            "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
+          callback: handleCallbackResponse,
+        });
 
-  //     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-  //       theme: "filled_blue",
-  //       size: "large",
-  //       shape: "rectangular",
-  //       width: "400",
-  //       text: "continue_with",
-  //     });
-  //     setRefresh(false);
-  //   }
+        google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+          theme: "filled_blue",
+          size: "large",
+          shape: "rectangular",
+          width: "400",
+          text: "continue_with",
+        });
+        setRefresh(false);
+      }
 
-  //   let token = localStorage.getItem("superAdminToken");
-  //   if (token !== null && token !== "") {
-  //     navigate("/");
-  //   }
+      let token = localStorage.getItem("superAdminToken");
+      if (token !== null && token !== "") {
+        navigate("/");
+      }
 
-  //   return console.log("THIS IS OUR CLEAN UP");
-  // }, [refresh]);
+      return console.log("THIS IS OUR CLEAN UP");
+    }
+  }, [refresh]);
 
   const [active, setActive] = useState(0);
   const nextStep = () =>
@@ -1019,39 +1020,43 @@ const SignIn = ({
                   Sign in with us
                 </Text>
               </Grid.Col>
-              <Grid.Col>
-                <Text align="center" size={20}>
-                  Use our social sign in
-                </Text>
-              </Grid.Col>
-              {/* <Grid.Col>
-                <Group
-                  position="center"
-                  id="signInDiv"
-                  style={{ height: "50", width: "400" }}
-                ></Group>
-              </Grid.Col> */}
-              <Grid.Col>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "20px",
-                    borderBottom: "1px solid #eaeaea",
-                    textAlign: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: "20px",
-                      backgroundColor: "#F3F5F6",
-                      padding: "0 10px",
-                      borderRadius: "100%",
-                    }}
-                  >
-                    OR
-                  </span>
-                </div>
-              </Grid.Col>
+              {process.env.React_App_Mobile_View && (
+                <>
+                  <Grid.Col>
+                    <Text align="center" size={20}>
+                      Use our social sign in
+                    </Text>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <Group
+                      position="center"
+                      id="signInDiv"
+                      style={{ height: "50", width: "400" }}
+                    ></Group>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "20px",
+                        borderBottom: "1px solid #eaeaea",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "20px",
+                          backgroundColor: "#F3F5F6",
+                          padding: "0 10px",
+                          borderRadius: "100%",
+                        }}
+                      >
+                        OR
+                      </span>
+                    </div>
+                  </Grid.Col>
+                </>
+              )}
               <Grid.Col md={12} lg={12} p="md">
                 <form
                   style={{ padding: 0, margin: 0 }}
@@ -1137,7 +1142,7 @@ const SignIn = ({
                       color="dimmed"
                       onClick={() => {
                         // forgotPasswordFunction
-                        console.log("FOROGOT PASSWORD CALLED");
+                        console.log("FORGOT PASSWORD CALLED");
                         setForgotPasswordModal(true);
                       }}
                     >

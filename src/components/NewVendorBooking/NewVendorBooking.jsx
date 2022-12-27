@@ -185,6 +185,7 @@ const NewVendorBookingFile = () => {
   const [eventAddress, setEventAddress] = useState("");
   const [venueBooking, setVenueBooking] = useState("");
   const [allVenueBookings, setAllVenueBookings] = useState([]);
+  console.log("allVenueBookings", allVenueBookings);
   const [hidden, setHidden] = useState(true);
   const [hideSelectButton, setHideSelectButton] = useState(false);
   const [bookingResponse, setBookingResponse] = useState({});
@@ -194,7 +195,7 @@ const NewVendorBookingFile = () => {
   console.log("value1", value1);
   console.log(
     "bookingDate",
-    allVenueBookings.map((venue) => moment(venue.bookingDate))
+    allVenueBookings.map((venue) => new Date(venue.bookingDate))
   );
   console.log("selected theme", selectedTheme);
   const fetchVenueBookings = async () => {
@@ -232,8 +233,9 @@ const NewVendorBookingFile = () => {
     }
   };
 
-  const venueBookingsData = allVenueBookings
-    ?.filter((item) => moment(item.bookingDate) == value1)
+  {
+    /*const venueBookingsData = allVenueBookings
+    // ?.filter((item) => moment(item.bookingDate) == value1)
 
     ?.map((item) => ({
       value: item._id,
@@ -242,11 +244,13 @@ const NewVendorBookingFile = () => {
         " " +
         item.subVenueName +
         " (" +
-        item?.bookingDate?.split("T")?.[0] +
+        // item?.bookingDate?.split("T")?.[0] +
+        moment(item?.bookingDate).format() +
         " " +
         item.bookingTime +
         ") ",
-    }));
+    }));*/
+  }
   const data = [
     {
       percent: bookingPercentage * 100,
@@ -402,7 +406,7 @@ const NewVendorBookingFile = () => {
       return;
     } else {
       onChange(new moment(form1.values.date).format().split("T")[0]);
-      fetchVenueBookings();
+      // fetchVenueBookings();
       nextStep();
     }
   };
@@ -1252,22 +1256,22 @@ const NewVendorBookingFile = () => {
                           {...form.getInputProps("email")}
                         />
                       </Grid.Col>
-                      <Grid.Col lg={6}>
-                        <Select
-                          size="md"
-                          required
-                          label="Select Venue Booking"
-                          placeholder={"Select Vendor City To Select Vendor"}
-                          // limit={Infinity}
-                          searchable
-                          value={venueBooking}
-                          onChange={(e) => {
-                            setVenueBooking(e);
-                          }}
-                          nothingFound="No One Found"
-                          data={venueBookingsData}
-                        />
-                      </Grid.Col>
+                      {/*<Grid.Col lg={6}>
+                      <Select
+                        size="md"
+                        required
+                        label="Select Venue Booking"
+                        placeholder={"Select Vendor City To Select Vendor"}
+                        // limit={Infinity}
+                        searchable
+                        value={venueBooking}
+                        onChange={(e) => {
+                          setVenueBooking(e);
+                        }}
+                        nothingFound="No One Found"
+                        data={venueBookingsData}
+                      />
+                    </Grid.Col>*/}
                       <Grid.Col md={12} lg={12}>
                         <Textarea
                           size="md"

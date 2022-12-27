@@ -65,7 +65,6 @@ const LandingPageMain = () => {
   };
   return (
     <Paper>
-      <LoaderAWEP visible={visible} />
       <SearchBackground
         carouselImages={[
           { src: img1 },

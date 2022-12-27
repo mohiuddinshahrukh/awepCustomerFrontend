@@ -142,7 +142,7 @@ const DashboardStats = () => {
     });
   }, []);
   return (
-    <Paper>
+    <Paper style={{ position: "relative" }}>
       <LoaderAWEP visible={visible} />
       <Grid style={{ width: "100%" }}>
         <Grid.Col md={12}>

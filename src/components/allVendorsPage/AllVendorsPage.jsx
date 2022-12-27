@@ -249,12 +249,7 @@ const AllVendorsPage = () => {
   const [visible, setVisible] = useState(true);
 
   return (
-    <Paper
-      style={{
-        position: "relative",
-      }}
-    >
-      <LoaderAWEP visible={visible} />
+    <Paper>
       <Paper
         withBorder
         style={{
@@ -545,7 +540,13 @@ const AllVendorsPage = () => {
               <AllRatingFilter rating={rating} setRating={setRating} />
             </Stack>
           </Grid.Col>
-          <Grid.Col span={matches1026 ? 12 : 9}>
+          <Grid.Col
+            span={matches1026 ? 12 : 9}
+            style={{
+              position: "relative",
+            }}
+          >
+            <LoaderAWEP visible={visible} />
             {allVendors?.length > 0 ? (
               <AllVendorsGrid
                 allVendors={filteredVendors}

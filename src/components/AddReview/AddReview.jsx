@@ -357,7 +357,7 @@ const AddReview = () => {
   };
   const currentTheme = useMantineTheme();
   return localStorage.getItem("customerToken") ? (
-    <>
+    <Paper style={{ position: "relative" }}>
       <LoaderAWEP visible={visible} />
       <Grid
         style={{
@@ -476,7 +476,7 @@ const AddReview = () => {
           </Container>
         </Grid.Col>
       </Grid>
-    </>
+    </Paper>
   ) : (
     <></>
   );

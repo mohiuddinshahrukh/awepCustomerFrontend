@@ -189,7 +189,7 @@ const VendorComplaints = () => {
     </tr>
   );
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", position: "relative" }}>
       <LoaderAWEP visible={visible} />
       <Modal
         styles={{

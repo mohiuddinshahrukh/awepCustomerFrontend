@@ -19,7 +19,7 @@ import {
   NotificationsProvider,
   showNotification,
 } from "@mantine/notifications";
-// import signupBGimage from "./customerIMG.svg";
+import signupBGimage from "./customerIMG.svg";
 
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
@@ -38,7 +38,6 @@ import {
 import GoogleSignUpButon from "./GoogleSignUpButon";
 
 // NAVIGATION
-
 const SignUp = ({
   setHookEmail,
   setHookPassword,
@@ -46,6 +45,34 @@ const SignUp = ({
   setIsSignUp,
   setIsSignIn,
 }) => {
+  // USEEFFECT
+  useEffect(() => {
+    console.count();
+    console.log("USE EFFECT");
+    /*global google */
+
+    google.accounts.id.initialize({
+      client_id:
+        "945681414378-gvgimi542ebg5d2q97i90j1sdf2tten9.apps.googleusercontent.com",
+      callback: handleCallbackResponse,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "filled_blue",
+      size: "large",
+      shape: "rectangular",
+      text: "continue_with",
+      width: "400",
+    });
+
+    setHiddenButton(false);
+    let token = localStorage.getItem("superAdminToken");
+    if (token !== null && token !== "") {
+      navigate("/");
+    } else {
+      return;
+    }
+  }, []);
   // HOOKS
   let navigate = useNavigate();
   const [password, setPassword] = useState("");
@@ -325,37 +352,40 @@ const SignUp = ({
               </Grid.Col>
               <Grid.Col></Grid.Col>
 
-              {/* <Grid.Col>
-                <Group
-                  position="center"
-                  id="signInDiv"
-                  hidden={hiddenButton}
-                  style={{ transition: "2s", minHeight: "40px" }}
-                ></Group>
-              </Grid.Col> */}
-
-              <Grid.Col>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "20px",
-                    borderBottom: "1px solid #eaeaea",
-                    textAlign: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: "20px",
-                      backgroundColor: "#F3F5F6",
-                      padding: "0 10px",
-                      borderRadius: "100%",
-                    }}
-                  >
-                    OR
-                  </span>
-                </div>
-              </Grid.Col>
-
+              {process.env.React_App_Mobile_View && (
+                <>
+                  {" "}
+                  <Grid.Col>
+                    <Group
+                      position="center"
+                      id="signInDiv"
+                      hidden={hiddenButton}
+                      style={{ transition: "2s", minHeight: "40px" }}
+                    ></Group>
+                  </Grid.Col>
+                  <Grid.Col>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "20px",
+                        borderBottom: "1px solid #eaeaea",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "20px",
+                          backgroundColor: "#F3F5F6",
+                          padding: "0 10px",
+                          borderRadius: "100%",
+                        }}
+                      >
+                        OR
+                      </span>
+                    </div>
+                  </Grid.Col>
+                </>
+              )}
               <Grid.Col md={12} lg={12} p="md">
                 <form
                   style={{

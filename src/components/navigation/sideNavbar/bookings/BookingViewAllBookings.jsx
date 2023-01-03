@@ -71,15 +71,10 @@ const stageHeadCells = [
 ];
 
 const BookingViewAllBookings = ({ singleInvoice }) => {
-  //
-
+  console.log("MODAL OPENED: ", singleInvoice);
   const matches500 = useMediaQuery("(min-width: 500px)");
-  //
-
-  const [hallCharges, setHallCharges] = useState(
-    singleInvoice?.subVenueBookingCharges
-  );
-  const [serviceCharges, setServiceCharges] = useState(
+  const hallCharges = singleInvoice?.subVenueBookingCharges;
+  const serviceCharges =
     singleInvoice?.selectedVenueServices?.length > 0
       ? singleInvoice?.selectedVenueServices
           ?.map(
@@ -88,31 +83,31 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
               (service?.duration === "Per Event" ? 1 : 3)
           )
           .reduce((a, b) => a + b, 0)
-      : 0
-  );
-  const [menuCharges, setMenuCharges] = useState(
-    singleInvoice?.selectedMenu
-      ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
-      : 0
-  );
-  const [subtotalCharges, setSubtotalCharges] = useState(
+      : 0;
+
+  const menuCharges = singleInvoice?.selectedMenu
+    ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+    : 0;
+
+  const subtotalCharges =
     (singleInvoice?.subVenueBookingCharges
       ? singleInvoice?.subVenueBookingCharges
       : 0) +
-      (singleInvoice?.selectedVenueServices?.length > 0
-        ? singleInvoice?.selectedVenueServices
-            ?.map(
-              (service) =>
-                service?.servicePrice *
-                (service?.duration === "Per Event" ? 1 : 3)
-            )
-            .reduce((a, b) => a + b, 0)
-        : 0) +
-      (singleInvoice?.selectedMenu
-        ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
-        : 0) +
-      (singleInvoice?.selectedStage ? singleInvoice?.selectedStage?.price : 0)
-  );
+    (singleInvoice?.selectedVenueServices?.length > 0
+      ? singleInvoice?.selectedVenueServices
+          ?.map(
+            (service) =>
+              service?.servicePrice *
+              (service?.duration === "Per Event" ? 1 : 3)
+          )
+          .reduce((a, b) => a + b, 0)
+      : 0) +
+    (singleInvoice?.selectedMenu
+      ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+      : 0) +
+    (singleInvoice?.selectedStage.price
+      ? singleInvoice?.selectedStage?.price
+      : 0);
 
   let iconSize = 20;
   let awepLogoSize = 40;
@@ -628,7 +623,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           </>
         )}
 
-        {singleInvoice?.selectedStage && (
+        {singleInvoice?.selectedStage?.price && (
           <>
             <InvoiceHeaders title={"Stage Details"} />
             <Table striped withBorder withColumnBorders>
@@ -721,6 +716,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 <tr>
                   <td align="left">Subtotal</td>
                   <td align="right">
+                    {console.log(`subtotalCharges +${subtotalCharges}`)}
                     <b>{subtotalCharges?.toLocaleString()}</b>
                   </td>
                 </tr>

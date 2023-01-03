@@ -513,7 +513,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                     <td>
                       {/*<Group spacing={3}>*/}
                       <List>
-                        {singleInvoice?.selectedMenu?.menu?.dishes?.map(
+                        {singleInvoice?.selectedMenu?.modifiedMenu?.dishes?.map(
                           (dish, index) => {
                             return (
                               <List.Item p={0} m={0} key={index}>
@@ -552,7 +552,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                 <Text mb={3}>
                   {/*<Group spacing={3}>*/}
                   <List>
-                    {singleInvoice?.selectedMenu?.menu?.dishes?.map(
+                    {singleInvoice?.selectedMenu?.modifiedMenu?.dishes?.map(
                       (dish, index) => {
                         return (
                           <List.Item p={0} m={0} key={index}>

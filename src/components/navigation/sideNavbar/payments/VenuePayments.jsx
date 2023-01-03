@@ -34,6 +34,10 @@ const VenuePayments = () => {
           "@Successfully fetched all venue payments:",
           apiResponse.data.data
         );
+        console.log(
+          "apiResponse.data.data.createdAt",
+          apiResponse.data.data.createdAt
+        );
         setVisible(false);
 
         return apiResponse.data.data;
@@ -77,8 +81,12 @@ const VenuePayments = () => {
         <Group spacing={0} noWrap align={"center"} position="center">
           <ActionIcon
             onClick={() => {
+              row = {
+                ...row?.subVenueBookingObject,
+                createdAt: row?.createdAt,
+              };
               console.log("Clicked on view button");
-              setSingleInvoice(row?.subVenueBookingObject);
+              setSingleInvoice(row);
               setViewBookingModal(true);
             }}
           >

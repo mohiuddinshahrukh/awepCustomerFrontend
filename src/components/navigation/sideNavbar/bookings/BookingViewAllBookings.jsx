@@ -12,7 +12,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -54,6 +54,7 @@ const menuHeadCells = [
 const billHeadCells = [
   { title: "Item ", align: "left" },
   { title: "Item Cost Rs.", align: "right" },
+  { title: "Per Head", align: "right" },
 ];
 
 const themeHeadCells = [
@@ -114,7 +115,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   let invoiceTextBG = "#1ABD9C";
   let invoiceTextColor = "white";
   let invoiceTextSize = 26;
-  let randomInvoiceNumber = "23456789asbd";
+  // let randomInvoiceNumber = "23456789asbd";
   //   let randomAccountNumber = "173281sdba12d";
 
   const subvenueHeaders = (
@@ -695,6 +696,13 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                   <td align="right">
                     <b>{hallCharges?.toLocaleString()}</b>
                   </td>
+                  <td align="right">
+                    <b>
+                      {(
+                        hallCharges / singleInvoice?.numberOfGuests
+                      ).toLocaleString()}
+                    </b>
+                  </td>
                 </tr>
                 <tr>
                   <td align="left" style={{ whiteSpace: "nowrap" }}>
@@ -702,6 +710,13 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                   </td>
                   <td align="right" style={{ whiteSpace: "nowrap" }}>
                     <b>{serviceCharges?.toLocaleString()}</b>
+                  </td>
+                  <td align="right" style={{ whiteSpace: "nowrap" }}>
+                    <b>
+                      {(
+                        serviceCharges / singleInvoice?.numberOfGuests
+                      ).toLocaleString()}
+                    </b>
                   </td>
                 </tr>
                 <tr>
@@ -711,6 +726,13 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                   <td align="right" style={{ whiteSpace: "nowrap" }}>
                     <b>{menuCharges?.toLocaleString()}</b>
                   </td>
+                  <td align="right" style={{ whiteSpace: "nowrap" }}>
+                    <b>
+                      {(
+                        menuCharges / singleInvoice?.numberOfGuests
+                      ).toLocaleString()}
+                    </b>
+                  </td>
                 </tr>
 
                 <tr>
@@ -718,6 +740,13 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                   <td align="right">
                     {console.log(`subtotalCharges +${subtotalCharges}`)}
                     <b>{subtotalCharges?.toLocaleString()}</b>
+                  </td>
+                  <td align="right">
+                    <b>
+                      {(
+                        subtotalCharges / singleInvoice?.numberOfGuests
+                      ).toLocaleString()}
+                    </b>
                   </td>
                 </tr>
                 <tr>
@@ -731,6 +760,16 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                       {(
                         singleInvoice?.price?.totalPrice *
                         singleInvoice?.price?.discountPercentage
+                      )?.toLocaleString()}
+                    </b>
+                  </td>
+                  <td align="right">
+                    -
+                    <b>
+                      {(
+                        (singleInvoice?.price?.totalPrice *
+                          singleInvoice?.price?.discountPercentage) /
+                        singleInvoice?.numberOfGuests
                       )?.toLocaleString()}
                     </b>
                   </td>
@@ -748,6 +787,16 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                       )?.toLocaleString()}
                     </b>
                   </td>
+                  <td align="right">
+                    +
+                    <b>
+                      {(
+                        (singleInvoice?.price?.totalPrice *
+                          singleInvoice?.price?.taxPercentage) /
+                        singleInvoice?.numberOfGuests
+                      )?.toLocaleString()}
+                    </b>
+                  </td>
                 </tr>
                 <tr>
                   <td align="left">Total</td>
@@ -756,12 +805,21 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                       {singleInvoice?.price?.totalPriceAfterTaxAndDiscount?.toLocaleString()}
                     </b>
                   </td>
+                  <td align="right">
+                    <b>
+                      {(
+                        singleInvoice?.price?.totalPriceAfterTaxAndDiscount /
+                        singleInvoice?.numberOfGuests
+                      )?.toLocaleString()}
+                    </b>
+                  </td>
                 </tr>
+
                 <tr>
                   <td align="left">
                     Deposit <b>PAID</b>
                   </td>
-                  <td align="right">
+                  <td align="right" colSpan={2}>
                     <b>{singleInvoice?.price?.paidAmount?.toLocaleString()}</b>
                   </td>
                 </tr>
@@ -769,7 +827,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
                   <td align="left">
                     Deposit <b>REMAINING</b>
                   </td>
-                  <td align="right">
+                  <td align="right" colSpan={2}>
                     <b>
                       {singleInvoice?.price?.remainingAmount?.toLocaleString()}
                     </b>

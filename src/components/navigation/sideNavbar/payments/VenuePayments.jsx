@@ -1,12 +1,48 @@
-import { ActionIcon, Badge, Group, Modal, Paper, Table } from "@mantine/core";
+import { Modal, Paper } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconEdit, IconEye } from "@tabler/icons";
+
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
+import TableComponent from "../../../tableComponenet/TableComponent";
 import BookingViewAllBookings from "../bookings/BookingViewAllBookings";
 
+let headCells = [
+  { id: "id", numeric: true, disablePadding: true, label: "ID" },
+  {
+    id: "venueName",
+    numeric: false,
+    disablePadding: true,
+    label: "Venue Name",
+  },
+  {
+    id: "subVenueName",
+    numeric: false,
+    disablePadding: true,
+    label: "Sub Venue Name",
+  },
+  {
+    id: "paymentMethod",
+    numeric: false,
+    disablePadding: true,
+    label: "Method",
+  },
+  {
+    id: "paymentAmount",
+    numeric: true,
+    disablePadding: true,
+    label: "Amount",
+  },
+  {
+    id: "createdAt",
+    date: true,
+    numeric: false,
+    disablePadding: true,
+    label: "Lodging date",
+  },
+  // { id: "action", numeric: false, disablePadding: true, label: "Action" },
+];
 const VenuePayments = () => {
   const [venueBookings, setVenueBookings] = useState([]);
   const [visible, setVisible] = useState(true);
@@ -34,12 +70,12 @@ const VenuePayments = () => {
           "@Successfully fetched all venue payments:",
           apiResponse.data.data
         );
-        console.log(
-          "apiResponse.data.data.createdAt",
-          apiResponse.data.data.createdAt
-        );
-        setVisible(false);
 
+        apiResponse.data.data.subVenueBookingPayments.map((item, index) => {
+          item.id = index + 1;
+        });
+
+        setVisible(false);
         return apiResponse.data.data;
       } else if (apiResponse.data.status === "error") {
         setVisible(false);
@@ -57,70 +93,14 @@ const VenuePayments = () => {
     }
   };
 
-  console.log("VENUE BOOKINGS: ", venueBookings);
-  let navigate = useNavigate();
   const matches500 = useMediaQuery("(min-width: 500px)");
 
   const [singleInvoice, setSingleInvoice] = useState([]);
   const [viewBookingModal, setViewBookingModal] = useState(false);
 
-  console.log("venueBookings", venueBookings);
-  const rows = venueBookings?.subVenueBookingPayments?.map((row, index) => (
-    <tr key={index}>
-      <td align="center">{index + 1}</td>
-      <td>{row.venueName}</td>
-      <td>{row.subVenueName}</td>
-      <td>{row.paymentMethod}</td>
-      <td align="right">{row?.paymentAmount?.toLocaleString()}</td>
-      <td>
-        {row.createdAt?.split("T")[0] +
-          " " +
-          row.createdAt?.split("T")[1]?.split(".")[0]}
-      </td>
-      <td align="center">
-        <Group spacing={0} noWrap align={"center"} position="center">
-          <ActionIcon
-            onClick={() => {
-              row = {
-                ...row?.subVenueBookingObject,
-                createdAt: row?.createdAt,
-              };
-              console.log("Clicked on view button");
-              setSingleInvoice(row);
-              setViewBookingModal(true);
-            }}
-          >
-            <IconEye />
-          </ActionIcon>
-        </Group>
-      </td>
-    </tr>
-  ));
-
-  const headerData = [
-    "ID",
-    "Venue Name",
-    "Sub Venue Name",
-    "Method",
-    "Amount",
-    "Lodging date",
-    "Action",
-  ];
-  const headers = (
-    <tr>
-      {headerData?.map((header, index) => {
-        return (
-          <th key={index}>
-            <span className="fgColor">{header}</span>
-          </th>
-        );
-      })}
-    </tr>
-  );
   return (
     <Paper style={{ width: "100%" }}>
       <LoaderAWEP visible={visible} />
-
       <Modal
         size={matches500 ? "calc(100vw-30vw)" : "sm"}
         radius="sm"
@@ -131,10 +111,12 @@ const VenuePayments = () => {
       >
         <BookingViewAllBookings singleInvoice={singleInvoice} />
       </Modal>
-      <Table striped withBorder withColumnBorders>
-        <thead className="bgColor">{headers}</thead>
-        <tbody>{rows}</tbody>
-      </Table>
+      {venueBookings?.subVenueBookingPayments && (
+        <TableComponent
+          headCells={headCells}
+          rowData={venueBookings?.subVenueBookingPayments}
+        />
+      )}
     </Paper>
   );
 };

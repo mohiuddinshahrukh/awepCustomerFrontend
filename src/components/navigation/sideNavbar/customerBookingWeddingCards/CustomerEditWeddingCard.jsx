@@ -40,6 +40,7 @@ import moment from "moment";
 import dayjs from "dayjs";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
+import { useLocation } from "react-router-dom";
 let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
@@ -55,7 +56,63 @@ const pictureBackground = [
 ];
 // COMPONENT
 
-const CustomerBookingCardEditor = () => {
+const CustomerEditWeddingCard = () => {
+  const [selectedCard, setSelectedCard] = useState({});
+
+  const [refresh, setRefresh] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const location = useLocation();
+
+  //
+
+  useEffect(() => {
+    fetchAllWeddingCards().then(setSelectedCard);
+  }, [refresh]);
+  const fetchAllWeddingCards = async () => {
+    console.log("Fetching all Wedding Cards");
+    try {
+      console.log("Fetching all Wedding Cards try");
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMyWeddingCards",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "@Successfully fetched all Wedding Cards:",
+          apiResponse.data.data
+        );
+        apiResponse.data.data.map((item, index) => {
+          item.id = index + 1;
+        });
+
+        let editCard = apiResponse.data.data.filter((card) => {
+          if (card._id === location?.state?.data._id) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        console.log("Edit Card ", editCard[0].fullCardData);
+        setVisible(false);
+        return editCard[0].fullCardData;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+        console.log("Error while fetching all Wedding Cards");
+      } else {
+        setVisible(false);
+        console.log("Failed to fetch all wedding cards, don't know this error");
+      }
+    } catch (e) {
+      setVisible(false);
+      console.log("ERROR in fetching all Wedding Cards:", e);
+    }
+  };
+  //
+
   const [qrCode, setQrCode] = useState("");
   const canvas = useRef(null);
   const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
@@ -64,33 +121,33 @@ const CustomerBookingCardEditor = () => {
   const [eventType, setEventType] = useState("");
   const [eventTypeOther, setEventTypeOther] = useState("");
   const [invitationName, setInvitationName] = useState("");
-  const [eventTimeDuration, setEventTimeDuration] = useState("LUNCH");
+  const [eventTimeDuration, setEventTimeDuration] = useState("");
   const [groomName, setGroomName] = useState("");
   const [brideName, setBrideName] = useState("");
   const [eventTime, setEventTime] = useState("");
-  const [eventDate, setEventDate] = useState(Date.now());
+  const [eventDate, setEventDate] = useState(new Date(""));
   const [eventRsvpName, setEventRsvpName] = useState("");
   const [venueName, setVenueName] = useState("");
 
   //  Y AXIS VALUES
-  const [eventTypeY, setEventTypeY] = useState(100);
-  const [invitationFromY, setInvitationFromY] = useState(150);
-  const [eventTimeDurationY, setEventTimeDurationY] = useState(175);
-  const [groomNameY, setGroomNameY] = useState(200);
-  const [brideNameY, setBrideNameY] = useState(250);
-  const [eventTimeY, setEventTimeY] = useState(300);
-  const [eventDateY, setEventDateY] = useState(350);
-  const [venueNameY, setVenueNameY] = useState(400);
-  const [eventRsvpNameY, setEventRsvpNameY] = useState(450);
+  const [eventTypeY, setEventTypeY] = useState("");
+  const [invitationFromY, setInvitationFromY] = useState("");
+  const [eventTimeDurationY, setEventTimeDurationY] = useState("");
+  const [groomNameY, setGroomNameY] = useState("");
+  const [brideNameY, setBrideNameY] = useState("");
+  const [eventTimeY, setEventTimeY] = useState("");
+  const [eventDateY, setEventDateY] = useState("");
+  const [venueNameY, setVenueNameY] = useState("");
+  const [eventRsvpNameY, setEventRsvpNameY] = useState("");
 
   // const [rsvpName, setRsvpName] = useState("Enter RSVP Name");
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState("");
   const [downloadLink, setDownload] = useState("");
   // CANVAS FONT
-  const [getFontSize, setFontSize] = useState(22);
+  const [getFontSize, setFontSize] = useState("");
   // CANVAS HEIGHT & WIDTH
-  const [getWidth, setWidth] = useState(450);
-  const [getHeight, setHeight] = useState(650);
+  const [getWidth, setWidth] = useState("");
+  const [getHeight, setHeight] = useState("");
   // ALIGNMENT FUNTION
   const alignTextHorizontalFunction = (position) => {
     if (position === "left") {
@@ -254,6 +311,7 @@ const CustomerBookingCardEditor = () => {
     groomNameY,
     image,
     qrCode,
+    selectedCard,
   ]);
 
   const saveMyCard = async () => {
@@ -425,7 +483,7 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 placeholder="Enter Event Type"
                 label="Event Name"
-                value={eventType}
+                value={selectedCard.eventType}
                 onChange={setEventType}
               />
             </Grid.Col>
@@ -435,7 +493,7 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 placeholder="Enter Event Type"
                 label="Event Name "
-                value={eventTypeOther}
+                value={selectedCard.eventTypeOther}
                 onChange={(e) => {
                   setEventTypeOther(e.target.value);
                 }}
@@ -456,8 +514,8 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Select Event Time"
                 styles={{ input: { textAlign: "center" } }}
                 label="Event Time"
-                defaultValue={eventTimeDuration}
-                value={eventTimeDuration}
+                defaultValue={selectedCard.eventTimeDuration}
+                value={selectedCard.eventTimeDuration}
                 onChange={setEventTimeDuration}
               />
             </Grid.Col>
@@ -466,7 +524,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Invitation From"
                 styles={{ input: { textAlign: "center" } }}
                 label="Invitaiton From"
-                value={invitationName}
+                value={selectedCard.invitationName}
                 onChange={(event) => {
                   setInvitationName(event.target.value);
                 }}
@@ -478,7 +536,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Groom Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="Groom Name"
-                value={groomName}
+                value={selectedCard.groomName}
                 onChange={(event) => {
                   setGroomName(event.target.value);
                 }}
@@ -489,7 +547,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Bride Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="Bride Name"
-                value={brideName}
+                value={selectedCard.brideName}
                 onChange={(event) => {
                   setBrideName(event.target.value);
                 }}
@@ -511,7 +569,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Event Date"
                 styles={{ input: { textAlign: "center" } }}
                 label="Event Date"
-                value={eventDate}
+                value={new Date(selectedCard.eventDate)}
                 onChange={setEventDate}
                 minDate={dayjs(new Date())
                   .startOf("month")
@@ -526,7 +584,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Venue Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="Venue Name"
-                value={venueName}
+                value={selectedCard.venueName}
                 onChange={(event) => {
                   setVenueName(event.target.value);
                 }}
@@ -537,7 +595,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Rsvp Name"
                 styles={{ input: { textAlign: "center" } }}
                 label="RSVP"
-                value={eventRsvpName}
+                value={selectedCard.eventRsvpName}
                 onChange={(event) => setEventRsvpName(event.target.value)}
               />
             </Grid.Col>
@@ -546,7 +604,7 @@ const CustomerBookingCardEditor = () => {
                 placeholder="Enter Location For QR Code"
                 styles={{ input: { textAlign: "center" } }}
                 label="URL"
-                value={qrCode}
+                value={selectedCard.qrCode}
                 onChange={(event) => setQrCode(event.target.value)}
               />
             </Grid.Col>
@@ -582,7 +640,7 @@ const CustomerBookingCardEditor = () => {
               <NumberInput
                 label="Font size"
                 min={12}
-                value={getFontSize}
+                value={selectedCard.getFontSize}
                 max={50}
                 onChange={setFontSize}
               />
@@ -590,7 +648,7 @@ const CustomerBookingCardEditor = () => {
             <Grid.Col className="colorPicker" span={3}>
               <ColorInput
                 label="Font Color"
-                value={color}
+                value={selectedCard.color}
                 onChange={setColor}
               />
             </Grid.Col>
@@ -618,7 +676,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your EVENT name X Axis"
                 color="grape"
                 label="Set Event Type X Axis"
-                value={eventTypeX}
+                value={selectedCard.eventTypeX}
                 max={getHeight}
                 setX={setEventTypeX}
                 min={getFontSize}
@@ -627,7 +685,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust Event Time X Axis"
                 color="grape"
                 label="Set Event Time X Axis"
-                value={eventTimeDurationX}
+                value={selectedCard.eventTimeDurationX}
                 max={getHeight}
                 setX={setEventTimeDurationX}
                 min={getFontSize}
@@ -636,7 +694,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust Invitation From X Axis"
                 color="grape"
                 label="Set Invitation From X Axis"
-                value={invitationFromX}
+                value={selectedCard.invitationFromX}
                 max={getHeight}
                 setX={setInvitationFromX}
                 min={getFontSize}
@@ -645,7 +703,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust GROOM NAME X Axis"
                 color="grape"
                 label="Set GROOM NAME X Axis"
-                value={groomNameX}
+                value={selectedCard.groomNameX}
                 max={getHeight}
                 setX={setGroomNameX}
                 min={getFontSize}
@@ -654,7 +712,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your BRIDE NAME X Axis"
                 color="grape"
                 label="Set BRIDE NAME X Axis"
-                value={brideNameX}
+                value={selectedCard.brideNameX}
                 max={getHeight}
                 setX={setBrideNameX}
                 min={getFontSize}
@@ -674,7 +732,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your EVENT DATE X Axis"
                 color="grape"
                 label="Set EVENT DATE X Axis"
-                value={eventDateX}
+                value={selectedCard.eventDateX}
                 max={getWidth}
                 setX={setEventDateX}
                 min={getFontSize}
@@ -683,7 +741,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your VENUE name X Axis"
                 color="grape"
                 label="Set Venue VENUE X Axis"
-                value={venueNameX}
+                value={selectedCard.venueNameX}
                 max={getWidth}
                 setX={setVenueNameX}
                 min={getFontSize}
@@ -692,7 +750,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your RSVP NAME X Axis"
                 color="grape"
                 label="Set Venue RSVP NAME X Axis"
-                value={eventRsvpNameX}
+                value={selectedCard.eventRsvpNameX}
                 max={getWidth}
                 setX={setEventRsvpNameX}
                 min={getFontSize}
@@ -722,7 +780,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your EVENT name Y Axis"
                 color="grape"
                 label="Set Event Type Y Axis"
-                value={eventTypeY}
+                value={selectedCard.eventTypeY}
                 max={getHeight}
                 setX={setEventTypeY}
                 min={getFontSize}
@@ -731,7 +789,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust Event Time Y Axis"
                 color="grape"
                 label="Set Event Time Y Axis"
-                value={eventTimeDurationY}
+                value={selectedCard.eventTimeDurationY}
                 max={getHeight}
                 setX={setEventTimeDurationY}
                 min={getFontSize}
@@ -740,7 +798,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust Invitation From Y Axis"
                 color="grape"
                 label="Set Invitation From Y Axis"
-                value={invitationFromY}
+                value={selectedCard.invitationFromY}
                 max={getHeight}
                 setX={setInvitationFromY}
                 min={getFontSize}
@@ -749,7 +807,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust GROOM NAME Y Axis"
                 color="grape"
                 label="Set GROOM NAME Y Axis"
-                value={groomNameY}
+                value={selectedCard.groomNameY}
                 max={getHeight}
                 setX={setGroomNameY}
                 min={getFontSize}
@@ -758,7 +816,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your BRIDE NAME Y Axis"
                 color="grape"
                 label="Set BRIDE NAME Y Axis"
-                value={brideNameY}
+                value={selectedCard.brideNameY}
                 max={getHeight}
                 setX={setBrideNameY}
                 min={getFontSize}
@@ -768,7 +826,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your EVENT TIME Y Axis"
                 color="grape"
                 label="Set EVENT TIME Y Axis"
-                value={eventTimeY}
+                value={selectedCard.eventTimeY}
                 max={getHeight}
                 setX={setEventTimeY}
                 min={getFontSize}
@@ -778,7 +836,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your EVENT DATE Y Axis"
                 color="grape"
                 label="Set EVENT DATE Y Axis"
-                value={eventDateY}
+                value={selectedCard.eventDateY}
                 max={getHeight}
                 setX={setEventDateY}
                 min={getFontSize}
@@ -788,7 +846,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your venue name Y Axis"
                 color="grape"
                 label="Set Venue Name Y Axis"
-                value={venueNameY}
+                value={selectedCard.venueNameY}
                 max={getHeight}
                 setX={setVenueNameY}
                 min={getFontSize}
@@ -797,7 +855,7 @@ const CustomerBookingCardEditor = () => {
                 text="Adjust your RSVP NAME X Axis"
                 color="grape"
                 label="Adjust your RSVP NAME X Axis"
-                value={eventRsvpNameY}
+                value={selectedCard.eventRsvpNameY}
                 max={getHeight}
                 setX={setEventRsvpNameY}
                 min={getFontSize}
@@ -810,4 +868,4 @@ const CustomerBookingCardEditor = () => {
   );
 };
 
-export default CustomerBookingCardEditor;
+export default CustomerEditWeddingCard;

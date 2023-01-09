@@ -106,14 +106,19 @@ const TopNavbarUserProfileIcon = ({ signedIn, setSignedIn }) => {
             if (
               [
                 "/dashboard",
-                "/dashboard/bookings",
+                "/dashboard/venueBookings",
+                "/dashboard/vendorBookings",
                 "/dashboard/chats",
-                "/dashboard/weddingCards",
-                "/dashboard/complaintsAndFeedback",
-                "/dashboard/payments",
-                "/dashboard/complaints",
-                // "/dashboard/FAQsAndHelp",
-                // "/dashboard/invite",
+                "/dashboard/addWeddingCards",
+                "/dashboard/viewWeddingCards",
+                "/dashboard/venueComplaints",
+                "/dashboard/vendorComplaints",
+                "/dashboard/vendorPayments",
+                "/dashboard/venuePayments",
+                "/dashboard/venueFeedbacks",
+                "/dashboard/vendorFeedbacks",
+                "/dashboard/FAQsAndHelp",
+                "/dashboard/invite",
                 "/dashboard/profile",
               ].includes(currentLocation.pathname.toString())
             ) {

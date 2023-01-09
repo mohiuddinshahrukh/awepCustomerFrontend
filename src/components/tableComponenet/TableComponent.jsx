@@ -1,4 +1,11 @@
-import { Group, Paper, Table, Text, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  Paper,
+  Table,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { IconArrowDown, IconArrowUp, IconSearch } from "@tabler/icons";
 import React, { useState } from "react";
 
@@ -101,7 +108,18 @@ const TableComponent = ({ headCells, rowData }) => {
             return (
               <tr>
                 {headCells?.map((head) => {
-                  return (
+                  return head.id === "actions" ? (
+                    <td>
+                      <ActionIcon
+                        onClick={() => {
+                          console.log("I have been clicked");
+                          console.log(row);
+                        }}
+                      >
+                        {head.view}
+                      </ActionIcon>
+                    </td>
+                  ) : (
                     <td
                       align={
                         typeof row[head?.id] === "number" ? "right" : "left"

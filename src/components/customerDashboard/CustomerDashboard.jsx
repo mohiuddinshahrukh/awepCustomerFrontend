@@ -1,6 +1,19 @@
-import { ActionIcon, Divider, Drawer, Group, Paper, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Divider,
+  Drawer,
+  Group,
+  Notification,
+  Paper,
+  Text,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { showNotification } from "@mantine/notifications";
+import {
+  cleanNotifications,
+  cleanNotificationsQueue,
+  NotificationsProvider,
+  showNotification,
+} from "@mantine/notifications";
 import { IconMenu2 } from "@tabler/icons";
 
 import React, { useEffect, useState } from "react";
@@ -9,6 +22,7 @@ import Sidebar from "../navigation/sideNavbar/bookings/Sidebar";
 
 const CustomerDashboard = () => {
   const currentLocation = useLocation();
+  console.log(currentLocation + " " + currentLocation.pathname);
   const navigate = useNavigate();
   const [allowView, setAllowView] = useState(false);
   useEffect(() => {
@@ -18,7 +32,8 @@ const CustomerDashboard = () => {
         "/dashboard/venueBookings",
         "/dashboard/vendorBookings",
         "/dashboard/chats",
-        "/dashboard/weddingCards",
+        "/dashboard/addWeddingCards",
+        "/dashboard/viewWeddingCards",
         "/dashboard/venueComplaints",
         "/dashboard/vendorComplaints",
         "/dashboard/vendorPayments",
@@ -39,9 +54,10 @@ const CustomerDashboard = () => {
         message: "You will be redirected to the signin page",
         color: "red",
       });
+      setAllowView(false);
       navigate({ pathname: "/signin" });
     }
-  });
+  }, []);
 
   const matches1200 = useMediaQuery("(min-width: 1200px)");
   const [opened, setOpened] = useState(false);

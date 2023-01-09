@@ -41,6 +41,8 @@ import VenueFeedbacks from "./components/navigation/sideNavbar/feedbacks/VenueFe
 import AddComplaint from "./components/AddComplaint/AddComplaint";
 import DashboardStats from "./components/DashboardStats/DashboardStats";
 import CustomerBookingCardEditor from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerBookingCardEditor";
+import CustomerViewWeddingCard from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerViewWeddingCard";
+import CustomerEditWeddingCard from "./components/navigation/sideNavbar/customerBookingWeddingCards/CustomerEditWeddingCard";
 function App() {
   const [hookEmail, setHookEmail] = useState();
   const [hookPassword, setHookPassword] = useState();
@@ -325,8 +327,16 @@ function App() {
                   />
                   <Route path="chats" element={<ChatScreen />} />
                   <Route
-                    path="weddingCards"
+                    path="addWeddingCards"
                     element={<CustomerBookingWEddingCards />}
+                  />
+                  <Route
+                    path="EditWeddingCards/id/:id"
+                    element={<CustomerEditWeddingCard />}
+                  />
+                  <Route
+                    path="viewWeddingCards"
+                    element={<CustomerViewWeddingCard />}
                   />
                   {/* <Route path="complaints" element={<Complaints />} /> */}
                   <Route path="venueComplaints" element={<VenueComplaints />} />

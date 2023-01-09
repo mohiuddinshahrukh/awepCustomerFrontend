@@ -1,7 +1,5 @@
 import { useState } from "react";
 import {
-  IconFingerprint,
-  IconActivity,
   IconChevronRight,
   IconSettings,
   IconLayoutGrid,
@@ -13,6 +11,8 @@ import {
   IconUserExclamation,
   IconBuildingStore,
   IconBuildingFortress,
+  IconPlus,
+  IconEye,
 } from "@tabler/icons";
 import { Box, NavLink, Paper } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -43,7 +43,24 @@ const data = [
     ],
   },
   { icon: IconMessage, label: "Chats", path: "chats" },
-  { icon: IconCards, label: "My Cards", path: "weddingCards" },
+  {
+    icon: IconCards,
+    label: "My Cards",
+    path: "#",
+
+    subNav: [
+      {
+        icon: IconPlus,
+        label: "Add Card ",
+        path: "addWeddingCards",
+      },
+      {
+        icon: IconEye,
+        label: "View Cards",
+        path: "viewWeddingCards",
+      },
+    ],
+  },
   {
     icon: IconBrandStripe,
     label: "Payments",

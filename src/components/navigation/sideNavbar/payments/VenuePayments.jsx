@@ -1,5 +1,6 @@
-import { Modal, Paper } from "@mantine/core";
+import { ActionIcon, Modal, Paper } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { IconEye } from "@tabler/icons";
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -40,6 +41,12 @@ let headCells = [
     numeric: false,
     disablePadding: true,
     label: "Lodging date",
+  },
+  {
+    id: "actions",
+    view: <IconEye />,
+    numeric: false,
+    label: "Actions",
   },
   // { id: "action", numeric: false, disablePadding: true, label: "Action" },
 ];

@@ -140,7 +140,11 @@ const CustomerViewWeddingCard = () => {
     }
   };
   const headRows = headCells.map((data, index) => {
-    return <td key={index}>{data.label}</td>;
+    return (
+      <th key={index}>
+        <span className="fgColor">{data.label}</span>
+      </th>
+    );
   });
 
   const bodyRows = viewWeddingCards?.map((data, index) => {
@@ -215,7 +219,7 @@ const CustomerViewWeddingCard = () => {
       </Modal>
       <Table striped withBorder withColumnBorders>
         <thead>
-          <tr>{headRows}</tr>
+          <tr className="bgColor">{headRows}</tr>
         </thead>
         <tbody>{bodyRows}</tbody>
       </Table>

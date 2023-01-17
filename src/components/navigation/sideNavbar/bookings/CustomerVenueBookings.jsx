@@ -7,7 +7,6 @@ import {
   Modal,
   Paper,
   Table,
-  Text,
   Title,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";

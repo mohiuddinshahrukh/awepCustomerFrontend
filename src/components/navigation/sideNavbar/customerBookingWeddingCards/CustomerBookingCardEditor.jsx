@@ -7,6 +7,8 @@ import {
   ColorInput,
   Container,
   Group,
+  Input,
+  Modal,
   //   Image as mantineImage,
   NumberInput,
   Select,
@@ -40,6 +42,9 @@ import moment from "moment";
 import dayjs from "dayjs";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
+import { Link } from "react-router-dom";
+import UploadCoverImage from "../../../UploadCoverImage/UploadCoverImage";
+
 let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
@@ -62,6 +67,8 @@ const CustomerBookingCardEditor = () => {
   // HOOKS
   const [image, setImage] = useState(pictureBackground[0]);
   const [eventType, setEventType] = useState("");
+  const [eventTypeError, setEventTypeError] = useState("");
+
   const [eventTypeOther, setEventTypeOther] = useState("");
   const [invitationName, setInvitationName] = useState("");
   const [eventTimeDuration, setEventTimeDuration] = useState("LUNCH");
@@ -82,6 +89,8 @@ const CustomerBookingCardEditor = () => {
   const [eventDateY, setEventDateY] = useState(350);
   const [venueNameY, setVenueNameY] = useState(400);
   const [eventRsvpNameY, setEventRsvpNameY] = useState(450);
+
+  const [weddingCardModal, setWeddingCardModal] = useState(false);
 
   // const [rsvpName, setRsvpName] = useState("Enter RSVP Name");
   const [color, setColor] = useState("#000000");
@@ -139,6 +148,16 @@ const CustomerBookingCardEditor = () => {
   const [eventDateX, setEventDateX] = useState(getWidth / 2);
   const [eventRsvpNameX, setEventRsvpNameX] = useState(getWidth / 2);
   const [venueNameX, setVenueNameX] = useState(getWidth / 2);
+
+  // UPLOAD IMAGE LOGIC
+  const [error, setError] = useState("");
+  const [images, setImages] = useState([]);
+  const [percentages, setPercentages] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [urls, setUrls] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const [disabled2, setDisabled2] = useState(true);
+  const [disabled3, setDisabled3] = useState(false);
 
   CanvasRenderingContext2D.prototype.wrapText = function (
     text,
@@ -258,70 +277,132 @@ const CustomerBookingCardEditor = () => {
 
   const saveMyCard = async () => {
     console.log("Inside api call");
-    try {
-      const apiResponse = await axios({
-        method: "POST",
-        url: "https://a-wep.herokuapp.com/customer/saveWeddingCard",
-        data: {
-          ownedBy: JSON.parse(localStorage.getItem("customerData")).id,
-          eventType: eventType,
-          type: "template",
-          fullCardData: {
-            eventType,
-            eventTypeOther,
-            eventTimeDuration,
-            invitationName,
-            groomName,
-            brideName,
-            eventTime,
-            eventDate,
-            venueName,
-            eventRsvpName,
-            image,
-            qrCode,
-            canvasAllTextAlign,
-            color,
-            eventTypeX,
-            eventTypeY,
-            eventTimeDurationX,
-            eventTimeDurationY,
-            invitationFromX,
-            invitationFromY,
-            groomNameX,
-            groomNameY,
-            brideNameX,
-            brideNameY,
-            eventTimeX,
-            eventTimeY,
-            eventDateX,
-            eventDateY,
-            venueNameX,
-            venueNameY,
-            eventRsvpNameX,
-            eventRsvpNameY,
-            getWidth,
-            getHeight,
-            getFontSize,
-          },
-        },
-
-        headers: {
-          "Content-Type": "application/json",
-          token: localStorage.getItem("customerToken"),
-        },
-      });
-      console.log("API RESPONSE", apiResponse);
-    } catch (error) {
-      console.log("An error occured");
+    if (eventType === "") {
       showNotification({
-        title: "Error",
-        message: "An error occured",
+        title: "error",
+        message: "Please select event type",
         color: "red",
       });
+      setEventTypeError(true);
+    } else {
+      setEventTypeError(false);
+      try {
+        const apiResponse = await axios({
+          method: "POST",
+          url: "https://a-wep.herokuapp.com/customer/saveWeddingCard",
+          data: {
+            ownedBy: JSON.parse(localStorage.getItem("customerData")).id,
+            eventType: eventType,
+            type: "template",
+            fullCardData: {
+              eventType,
+              eventTypeOther,
+              eventTimeDuration,
+              invitationName,
+              groomName,
+              brideName,
+              eventTime,
+              eventDate,
+              venueName,
+              eventRsvpName,
+              image,
+              qrCode,
+              canvasAllTextAlign,
+              color,
+              eventTypeX,
+              eventTypeY,
+              eventTimeDurationX,
+              eventTimeDurationY,
+              invitationFromX,
+              invitationFromY,
+              groomNameX,
+              groomNameY,
+              brideNameX,
+              brideNameY,
+              eventTimeX,
+              eventTimeY,
+              eventDateX,
+              eventDateY,
+              venueNameX,
+              venueNameY,
+              eventRsvpNameX,
+              eventRsvpNameY,
+              getWidth,
+              getHeight,
+              getFontSize,
+            },
+          },
+
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("customerToken"),
+          },
+        });
+        console.log("API RESPONSE", apiResponse);
+        console.log("API RESPONSE", apiResponse.data);
+
+        if (apiResponse.data.status === "success") {
+          showNotification({
+            title: "Success",
+            message: "Card saved successfully",
+            color: "green",
+          });
+          setWeddingCardModal(true);
+        } else {
+          showNotification({
+            title: "Error",
+            message: "An error occured, card not saved",
+            color: "red",
+          });
+        }
+      } catch (error) {
+        console.log("An error occured");
+        showNotification({
+          title: "Error",
+          message: "An error occured",
+          color: "red",
+        });
+      }
     }
   };
   return (
     <Container size={"xl"} style={{ position: "relative" }} mb="xl">
+      <Modal
+        centered
+        opened={weddingCardModal}
+        onClose={() => {
+          setWeddingCardModal(false);
+        }}
+      >
+        <Title order={2} align={"center"}>
+          Do you want to stay on this page or go to all cards page?
+        </Title>
+        <Grid mt={20}>
+          <Grid.Col span={6}>
+            <Button
+              fullWidth
+              className="button"
+              uppercase
+              onClick={() => {
+                setWeddingCardModal(false);
+              }}
+            >
+              Stay
+            </Button>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            {" "}
+            <Button
+              fullWidth
+              uppercase
+              component={Link}
+              to={"/dashboard/viewWeddingCards"}
+            >
+              Leave
+            </Button>
+          </Grid.Col>
+        </Grid>
+      </Modal>
       <Title my={"lg"} align="center">
         Wedding Card Editor
       </Title>
@@ -349,6 +430,25 @@ const CustomerBookingCardEditor = () => {
                     />
                   );
                 })}
+                <Input.Wrapper size="md" label="Profile Image" error={error}>
+                  <UploadCoverImage
+                    error={error}
+                    setError={setError}
+                    disabled={disabled}
+                    setDisabled={setDisabled}
+                    disabled3={disabled3}
+                    setDisabled3={setDisabled3}
+                    disabled2={disabled2}
+                    setDisabled2={setDisabled2}
+                    images={images}
+                    setImages={setImages}
+                    percentages={percentages}
+                    setPercentages={setPercentages}
+                    urls={urls}
+                    setUrls={setUrls}
+                    folderName="venueService"
+                  />
+                </Input.Wrapper>
               </Group>
             </Grid.Col>
           </Grid>
@@ -377,17 +477,19 @@ const CustomerBookingCardEditor = () => {
             </div>
           </Group>
           <Group position="center">
-            <Button
-              uppercase
-              rightIcon={<IconFilePlus />}
-              onClick={() => {
-                console.log("Do the apicall");
+            {localStorage.getItem("customerToken") && (
+              <Button
+                uppercase
+                rightIcon={<IconFilePlus />}
+                onClick={() => {
+                  console.log("Do the apicall");
 
-                saveMyCard();
-              }}
-            >
-              Save Card
-            </Button>
+                  saveMyCard();
+                }}
+              >
+                Save Card
+              </Button>
+            )}
 
             <Anchor variant="text" href={downloadLink} download>
               <Button uppercase rightIcon={<IconArrowDown />}>
@@ -425,6 +527,7 @@ const CustomerBookingCardEditor = () => {
                 styles={{ input: { textAlign: "center" } }}
                 placeholder="Enter Event Type"
                 label="Event Name"
+                error={eventTypeError ? "Please select an event type" : ""}
                 value={eventType}
                 onChange={setEventType}
               />

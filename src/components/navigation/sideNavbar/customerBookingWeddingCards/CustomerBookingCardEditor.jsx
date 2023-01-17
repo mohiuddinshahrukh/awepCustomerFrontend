@@ -40,7 +40,6 @@ import storage from "../../../fireBase/FB";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
-let url = "";
 // PICTURE BACKGROUNDS
 const pictureBackground = [
   new URL("./imgs/1.jpg", import.meta.url),
@@ -60,7 +59,7 @@ const CustomerBookingCardEditor = () => {
   const canvas = useRef(null);
   const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
   // HOOKS
-  const [image, setImage] = useState(pictureBackground[0]);
+  const [image, setImage] = useState("");
   const [eventType, setEventType] = useState("");
   const [eventTypeError, setEventTypeError] = useState("");
   const [eventTypeOther, setEventTypeOther] = useState("");
@@ -259,9 +258,17 @@ const CustomerBookingCardEditor = () => {
   useEffect(() => {
     const ctx = canvas.current.getContext("2d");
     let img = new Image();
+    img.crossOrigin = "Anonymous";
     img.src = image;
+    console.log("@@@IMAGE 1", image);
+    console.log("@@@IMAGE 2", img, img.src);
+    console.log("@@@IMAGE 3", img.src);
+
     img.onload = function () {
       ctx.textAlign = `${canvasAllTextAlign}`;
+      //clear canvas
+      ctx.clearRect(0, 0, getWidth, getHeight);
+      console.log("Current2123222222", canvas.current);
       ctx.drawImage(img, 0, 0, getWidth, getHeight);
       ctx.font = `${getFontSize}px Poppins`;
       ctx.fillStyle = color;
@@ -293,6 +300,7 @@ const CustomerBookingCardEditor = () => {
       ctx.wrapText(`${groomName}`, groomNameX, groomNameY, 500, 40);
       ctx.wrapText(`${brideName}`, brideNameX, brideNameY, 500, 40);
       ctx.wrapText(`${eventTime}`, eventTimeX, eventTimeY, 500, 40);
+
       ctx.wrapText(
         `${moment(new Date(eventDate)).format("DD-MMMM-YYYY")}`,
         eventDateX,
@@ -300,11 +308,9 @@ const CustomerBookingCardEditor = () => {
         500,
         40
       );
+
       ctx.wrapText(`${venueName}`, venueNameX, venueNameY, 500, 40);
       ctx.wrapText(`${eventRsvpName}`, eventRsvpNameX, eventRsvpNameY, 500, 40);
-
-      url = "";
-      url += canvas.current.toDataURL();
       setDownload(canvas.current.toDataURL());
     };
   }, [

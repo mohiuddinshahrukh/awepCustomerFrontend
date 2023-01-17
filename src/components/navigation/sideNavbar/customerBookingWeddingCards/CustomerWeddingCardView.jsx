@@ -64,8 +64,10 @@ const CustomerWeddingCardView = ({ selectedCard }) => {
     }
   };
   useEffect(() => {
+    //allow cross origin
     const ctx = canvas.current.getContext("2d");
     let img = new Image();
+    img.crossOrigin = "Anonymous";
     img.src = selectedCard.image;
     img.onload = function () {
       ctx.textAlign = `${selectedCard.canvasAllTextAlign}`;

@@ -3,29 +3,22 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
   Anchor,
+  Avatar,
   Button,
   ColorInput,
   Container,
   Group,
   Input,
   Modal,
-  //   Image as mantineImage,
   NumberInput,
+  Progress,
   Select,
   Slider,
-  //   Slider,
   Text,
   TextInput,
   Title,
 } from "@mantine/core";
-// import img1 from "./imgs/1.jpg";
-// import img2 from "./imgs/2.jpg";
-// import img3 from "./imgs/3.jpg";
-// import img4 from "./imgs/4.jpg";
-// import img5 from "./imgs/5.jpg";
-// import slider from "./slider";
-// import "./Card.css";
-// import { RangeSlider } from "@mantine/core";
+
 import { Grid } from "@mantine/core";
 import SliderComponent from "./SliderComponent";
 import {
@@ -43,7 +36,9 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
 import { Link } from "react-router-dom";
-import UploadCoverImage from "../../../UploadCoverImage/UploadCoverImage";
+import storage from "../../../fireBase/FB";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
 
 let url = "";
 // PICTURE BACKGROUNDS
@@ -58,8 +53,8 @@ const pictureBackground = [
   new URL("./imgs/8.jpg", import.meta.url),
   new URL("./imgs/9.jpg", import.meta.url),
 ];
-// COMPONENT
 
+// COMPONENT
 const CustomerBookingCardEditor = () => {
   const [qrCode, setQrCode] = useState("");
   const canvas = useRef(null);
@@ -68,7 +63,6 @@ const CustomerBookingCardEditor = () => {
   const [image, setImage] = useState(pictureBackground[0]);
   const [eventType, setEventType] = useState("");
   const [eventTypeError, setEventTypeError] = useState("");
-
   const [eventTypeOther, setEventTypeOther] = useState("");
   const [invitationName, setInvitationName] = useState("");
   const [eventTimeDuration, setEventTimeDuration] = useState("LUNCH");
@@ -89,9 +83,20 @@ const CustomerBookingCardEditor = () => {
   const [eventDateY, setEventDateY] = useState(350);
   const [venueNameY, setVenueNameY] = useState(400);
   const [eventRsvpNameY, setEventRsvpNameY] = useState(450);
-
   const [weddingCardModal, setWeddingCardModal] = useState(false);
+  //
 
+  const [disabled, setDisabled] = useState(false);
+  const [disabled2, setDisabled2] = useState(false);
+  const [percentages, setPercentages] = useState([]);
+  const [refresh2, setRefresh2] = useState(true);
+  const [refresh3, setRefresh3] = useState(true);
+  const [changed, setChanged] = useState(false);
+  const [error, setError] = useState("");
+  const [images, setImages] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [urls, setUrls] = useState();
+  //
   // const [rsvpName, setRsvpName] = useState("Enter RSVP Name");
   const [color, setColor] = useState("#000000");
   const [downloadLink, setDownload] = useState("");
@@ -149,15 +154,80 @@ const CustomerBookingCardEditor = () => {
   const [eventRsvpNameX, setEventRsvpNameX] = useState(getWidth / 2);
   const [venueNameX, setVenueNameX] = useState(getWidth / 2);
 
-  // UPLOAD IMAGE LOGIC
-  const [error, setError] = useState("");
-  const [images, setImages] = useState([]);
-  const [percentages, setPercentages] = useState([]);
-  const [refresh, setRefresh] = useState(false);
-  const [urls, setUrls] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const [disabled2, setDisabled2] = useState(true);
-  const [disabled3, setDisabled3] = useState(false);
+  // UPLOAD IMAGES METHOD
+  const handleUpload = (images) => {
+    setError("");
+    setPercentages([]);
+    setDisabled(true);
+    setDisabled2(true);
+
+    if (images.length <= 0) {
+      alert("Please choose a file first!");
+    }
+    var percent = 0;
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      // alert("IN2");
+      const storageRef = ref(
+        storage,
+        `/users/${image.name}+${Math.random(999999)}`
+      );
+      const uploadTask = uploadBytesResumable(storageRef, image);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+          percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+        },
+        (err) => console.log(err),
+        () => {
+          // download url
+          let Percentages = percentages;
+          Percentages[i] = percent;
+          // alert(i);
+          console.log(Percentages);
+          //   alert(Percentages)
+          setPercentages(Percentages);
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setUrls(url);
+            setRefresh(!refresh);
+            setDisabled(false);
+            setDisabled2(false);
+            setError("");
+            setImage(url);
+          });
+        }
+      );
+    }
+    // alert("OUT");
+  };
+  const previews = images?.map((file, index) => {
+    const imageUrl = URL.createObjectURL(file);
+    return (
+      <div>
+        <Avatar
+          key={index}
+          src={imageUrl}
+          size={140}
+          radius={120}
+          mx="auto"
+          imageProps={{
+            onLoad: () => URL.revokeObjectURL(imageUrl),
+          }}
+        />
+        <Progress
+          animate={percentages[index] === 100 ? false : true}
+          value={percentages[index] === 100 ? 100 : 100}
+          label={percentages[index] === 100 && "100% Completed"}
+          size="xl"
+          radius="xl"
+          color={percentages[index] === 100 ? "green" : "gray"}
+        />
+      </div>
+    );
+  });
 
   CanvasRenderingContext2D.prototype.wrapText = function (
     text,
@@ -430,27 +500,79 @@ const CustomerBookingCardEditor = () => {
                     />
                   );
                 })}
-                <Input.Wrapper size="md" label="Profile Image" error={error}>
-                  <UploadCoverImage
-                    error={error}
-                    setError={setError}
-                    disabled={disabled}
-                    setDisabled={setDisabled}
-                    disabled3={disabled3}
-                    setDisabled3={setDisabled3}
-                    disabled2={disabled2}
-                    setDisabled2={setDisabled2}
-                    images={images}
-                    setImages={setImages}
-                    percentages={percentages}
-                    setPercentages={setPercentages}
-                    urls={urls}
-                    setUrls={setUrls}
-                    folderName="venueService"
-                  />
-                </Input.Wrapper>
               </Group>
             </Grid.Col>
+            <Grid justify="flex-start">
+              <Grid.Col lg={12}>
+                <Input.Wrapper size="md" label="Upload Image" error={error}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      // alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Dropzone
+                      style={{
+                        height: "180px",
+                        width: "200px",
+                        backgroundColor: "#E0E0E0",
+                      }}
+                      // radius={120}
+                      onDrop={(e) => {
+                        setImages(e);
+                        handleUpload(e);
+                      }}
+                      maxSize={3 * 1024 ** 2}
+                      maxFiles={1}
+                      multiple={false}
+                      disabled={disabled}
+                      accept={[
+                        MIME_TYPES.jpeg,
+                        MIME_TYPES.jpg,
+                        MIME_TYPES.png,
+                        MIME_TYPES.svg,
+                        MIME_TYPES.gif,
+                      ]}
+                    >
+                      {images.length < 1 && (
+                        <Avatar
+                          // key={index}
+                          src={urls}
+                          size={150}
+                          radius={120}
+                          mx="auto"
+                        />
+                      )}
+                      {previews}
+                    </Dropzone>
+                    <Button
+                      size="sm"
+                      mt="sm"
+                      compact
+                      style={{
+                        width: "200px",
+                      }}
+                      color="red"
+                      hidden={disabled2}
+                      onClick={() => {
+                        setImages([]);
+                        setUrls(
+                          "https://firebasestorage.googleapis.com/v0/b/awep-dummy.appspot.com/o/defaultAvatar%2FDefaultAvatarForAllUsersWith%20No%20Profile%20Image.jpg%2B0.4989565837086003?alt=media&token=86eb4791-707e-4409-b6e8-dcc47caa2461"
+                        );
+                        setDisabled(false);
+                        setDisabled2(true);
+                        setImage(pictureBackground[0]);
+                        // setRemove(false);
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </Input.Wrapper>
+              </Grid.Col>
+            </Grid>
           </Grid>
         </Grid.Col>
         <Grid.Col lg={6}>
@@ -598,17 +720,7 @@ const CustomerBookingCardEditor = () => {
                 }}
               />
             </Grid.Col>
-            {/*            <Grid.Col lg={6}>
-              <TextInput
-                placeholder="Enter Event Time"
-                styles={{ input: { textAlign: "center" } }}
-                label="Time"
-                value={eventTime}
-                onChange={(event) => {
-                  setEventTime(event.target.value);
-                }}
-              />
-            </Grid.Col>*/}
+
             <Grid.Col lg={12}>
               <DatePicker
                 placeholder="Enter Event Date"

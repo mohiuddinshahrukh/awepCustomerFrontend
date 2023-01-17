@@ -16,3 +16,4 @@ const AWEPFirebaseConfig = {
 const app1 = initializeApp(AWEPFirebaseConfig);
 const FB = getStorage(app1);
 export default FB;
+

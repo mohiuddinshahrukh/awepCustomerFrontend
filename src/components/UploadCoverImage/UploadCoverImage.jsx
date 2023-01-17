@@ -1,15 +1,15 @@
 import React from "react";
 import { Avatar, Button, Progress } from "@mantine/core";
-import storage from "../fireBase/FB";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { showNotification } from "@mantine/notifications";
+import storage from "../fireBase/FB";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const UploadCoverImage = (props) => {
   const previews = props.images?.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
-      <div>
+      <div key={index}>
         <Avatar
           key={index}
           src={imageUrl}
@@ -33,49 +33,43 @@ const UploadCoverImage = (props) => {
   });
 
   const handleUpload = (images) => {
-    props.setError("");
-    props.setPercentages([]);
-    props.setDisabled(true);
-    props.setDisabled3(true);
-    props.setDisabled2(true);
+    // setError("");
+    // setPercentages([]);
+    // setDisabled(true);
+    // setDisabled2(true);
+
     if (images.length <= 0) {
       alert("Please choose a file first!");
     }
-    var percent = 0;
+
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       // alert("IN2");
+      console.log("ITNI C BAAT ", storage);
       const storageRef = ref(
         storage,
-        `/${props.folderName}/${image.name}+${Math.random(999999)}`
+        // `/users/${image.name}+${Math.random(999999)}`
+        "/ASDA"
       );
       const uploadTask = uploadBytesResumable(storageRef, image);
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           console.log(snapshot);
-          percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
+          // percent = Math.round(
+          //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          // );
         },
         (err) => console.log(err),
         () => {
-          let Percentages = props.percentages;
-          Percentages[i] = percent;
-          console.log(Percentages);
-          props.setPercentages(Percentages);
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            props.setUrls(url);
-            // props.setRefresh(!props.refresh);
-            props.setDisabled(false);
-            props.setDisabled3(false);
-            props.setDisabled2(false);
-            props.setError("");
-          });
+          // download url
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {});
         }
       );
     }
+    // alert("OUT");
   };
+
   return (
     <div
       style={{
@@ -126,7 +120,7 @@ const UploadCoverImage = (props) => {
           });
         }}
         maxSize={3 * 1024 ** 3}
-        disabled={props.disabled}
+        // disabled={props.disabled}
         maxFiles={1}
         multiple={false}
         accept={[

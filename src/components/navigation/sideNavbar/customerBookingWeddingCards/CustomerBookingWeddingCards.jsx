@@ -1,37 +1,14 @@
 import { ActionIcon, Badge, Group, Modal } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconCheck } from "@tabler/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import BookingViewAllBookings from "./BookingViewAllBookings";
 import moment from "moment";
 import CustomerBookingCardEditor from "./CustomerBookingCardEditor";
-import LoaderAWEP from "../../../LoaderAWEP/LoaderAWEP";
-
-// const fetchAllVenues = async () => {
-//   try {
-//     const apiResponse = await axios({
-//       method: "get",
-//       url: "https://a-wep.herokuapp.com/customer/getSubVenueBookings",
-//       headers: {
-//         token: localStorage.getItem("customerToken"),
-//       },
-//     });
-//     console.log("API RESPONSE: ", apiResponse.data);
-
-//     if (apiResponse.data.status === "success") {
-//       console.log("Successfully fetched all venues:", apiResponse.data.data);
-//       return apiResponse.data.data;
-//     } else if (apiResponse.data.status === "error") {
-//       console.log("Error while fetching all venues");
-//     } else {
-//       console.log("Failed to fetch all venues, don't know this error");
-//     }
-//   } catch (e) {
-//     console.log("ERROR in fetching all venues:", e);
-//   }
-// };
+import { useLocation } from "react-router-dom";
 
 const CustomerBookingWEddingCards = () => {
+  //
   const matches500 = useMediaQuery("(min-width: 500px)");
   const [visible, setVisible] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState({});

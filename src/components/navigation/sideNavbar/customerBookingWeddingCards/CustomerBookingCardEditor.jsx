@@ -35,7 +35,7 @@ import moment from "moment";
 import dayjs from "dayjs";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import storage from "../../../fireBase/FB";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { ref, uploadBytesResumable, getDownloadURL } from "@firebase/storage";
@@ -55,6 +55,8 @@ const pictureBackground = [
 
 // COMPONENT
 const CustomerBookingCardEditor = () => {
+  const params = useParams();
+  console.log("Params", params);
   const [qrCode, setQrCode] = useState("");
   const canvas = useRef(null);
   const [canvasAllTextAlign, setCanvasAllTextAlign] = useState("center");
@@ -202,6 +204,7 @@ const CustomerBookingCardEditor = () => {
     }
     // alert("OUT");
   };
+
   const previews = images?.map((file, index) => {
     const imageUrl = URL.createObjectURL(file);
     return (
@@ -351,6 +354,91 @@ const CustomerBookingCardEditor = () => {
     qrCode,
   ]);
 
+  const [selectedCard, setSelectedCard] = useState({});
+  const [visible, setVisible] = useState(false);
+  const location = useLocation();
+  //
+  // GET CALL FOR EDIT
+  useEffect(() => {
+    fetchAllWeddingCards().then(setSelectedCard);
+  }, [refresh]);
+  const fetchAllWeddingCards = async () => {
+    console.log("Fetching all Wedding Cards");
+    try {
+      console.log("Fetching all Wedding Cards try");
+      const apiResponse = await axios({
+        method: "get",
+        url: "https://a-wep.herokuapp.com/customer/getMyWeddingCards",
+        headers: {
+          token: localStorage.getItem("customerToken"),
+        },
+      });
+      console.log("API RESPONSE: ", apiResponse.data);
+      if (apiResponse.data.status === "success") {
+        console.log(
+          "@Successfully fetched all Wedding Cards:",
+          apiResponse.data.data
+        );
+        apiResponse.data.data.map((item, index) => {
+          item.id = index + 1;
+        });
+
+        let editCard = apiResponse.data.data.filter((card) => {
+          if (card._id === location?.state?.data._id) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        console.log("Edit Card ", editCard[0].fullCardData);
+        setQrCode(editCard[0].fullCardData.qrCode);
+        setImage(editCard[0].fullCardData.image);
+
+        setVenueName(editCard[0].fullCardData.venueName);
+        setEventType(editCard[0].fullCardData.eventType);
+        setInvitationName(editCard[0].fullCardData.invitationName);
+        setEventTimeDuration(editCard[0].fullCardData.eventTimeDuration);
+        setGroomName(editCard[0].fullCardData.groomName);
+        setBrideName(editCard[0].fullCardData.brideName);
+        setEventTime(editCard[0].fullCardData.eventTime);
+        setEventDate(new Date(editCard[0].fullCardData.eventDate));
+        setEventRsvpName(editCard[0].fullCardData.eventRsvpName);
+        setEventTypeY(editCard[0].fullCardData.eventTypeY);
+        setInvitationFromY(editCard[0].fullCardData.invitationFromY);
+        setEventTimeDurationY(editCard[0].fullCardData.eventTimeDurationY);
+        setGroomNameY(editCard[0].fullCardData.groomNameY);
+        setBrideNameY(editCard[0].fullCardData.brideNameY);
+        setEventTimeY(editCard[0].fullCardData.eventTimeY);
+        setEventDateY(editCard[0].fullCardData.eventDateY);
+        setVenueNameY(editCard[0].fullCardData.venueNameY);
+        setEventRsvpNameY(editCard[0].fullCardData.eventRsvpNameY);
+        setEventTypeX(editCard[0].fullCardData.eventTypeX);
+        setInvitationFromX(editCard[0].fullCardData.invitationFromX);
+        setEventTimeDurationX(editCard[0].fullCardData.eventTimeDurationX);
+        setGroomNameX(editCard[0].fullCardData.groomNameX);
+        setBrideNameX(editCard[0].fullCardData.brideNameX);
+        setEventTimeX(editCard[0].fullCardData.eventTimeX);
+        setEventDateX(editCard[0].fullCardData.eventDateX);
+        setVenueNameX(editCard[0].fullCardData.venueNameX);
+        setEventRsvpNameX(editCard[0].fullCardData.eventRsvpNameX);
+        setCanvasAllTextAlign(editCard[0].fullCardData.canvasAllTextAlign);
+
+        setVisible(false);
+        return editCard[0].fullCardData;
+      } else if (apiResponse.data.status === "error") {
+        setVisible(false);
+        console.log("Error while fetching all Wedding Cards");
+      } else {
+        setVisible(false);
+        console.log("Failed to fetch all wedding cards, don't know this error");
+      }
+    } catch (e) {
+      setVisible(false);
+      console.log("ERROR in fetching all Wedding Cards:", e);
+    }
+  };
+  //
+
   const saveMyCard = async () => {
     console.log("Inside api call");
     if (eventType === "") {
@@ -409,6 +497,95 @@ const CustomerBookingCardEditor = () => {
             },
           },
 
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("customerToken"),
+          },
+        });
+        console.log("API RESPONSE", apiResponse);
+        console.log("API RESPONSE", apiResponse.data);
+
+        if (apiResponse.data.status === "success") {
+          showNotification({
+            title: "Success",
+            message: "Card saved successfully",
+            color: "green",
+          });
+          setWeddingCardModal(true);
+        } else {
+          showNotification({
+            title: "Error",
+            message: "An error occured, card not saved",
+            color: "red",
+          });
+        }
+      } catch (error) {
+        console.log("An error occured");
+        showNotification({
+          title: "Error",
+          message: "An error occured",
+          color: "red",
+        });
+      }
+    }
+  };
+  const editMyCard = async () => {
+    console.log("Inside api call");
+    if (eventType === "") {
+      showNotification({
+        title: "error",
+        message: "Please select event type",
+        color: "red",
+      });
+      setEventTypeError(true);
+    } else {
+      setEventTypeError(false);
+      try {
+        const apiResponse = await axios({
+          method: "patch",
+          url: `https://a-wep.herokuapp.com/customer/updateMyWeddingCard/${params.id}`,
+          data: {
+            ownedBy: JSON.parse(localStorage.getItem("customerData")).id,
+            eventType: eventType,
+            type: "template",
+            fullCardData: {
+              eventType,
+              eventTypeOther,
+              eventTimeDuration,
+              invitationName,
+              groomName,
+              brideName,
+              eventTime,
+              eventDate,
+              venueName,
+              eventRsvpName,
+              image,
+              qrCode,
+              canvasAllTextAlign,
+              color,
+              eventTypeX,
+              eventTypeY,
+              eventTimeDurationX,
+              eventTimeDurationY,
+              invitationFromX,
+              invitationFromY,
+              groomNameX,
+              groomNameY,
+              brideNameX,
+              brideNameY,
+              eventTimeX,
+              eventTimeY,
+              eventDateX,
+              eventDateY,
+              venueNameX,
+              venueNameY,
+              eventRsvpNameX,
+              eventRsvpNameY,
+              getWidth,
+              getHeight,
+              getFontSize,
+            },
+          },
           headers: {
             "Content-Type": "application/json",
             token: localStorage.getItem("customerToken"),
@@ -606,17 +783,33 @@ const CustomerBookingCardEditor = () => {
           </Group>
           <Group position="center">
             {localStorage.getItem("customerToken") && (
-              <Button
-                uppercase
-                rightIcon={<IconFilePlus />}
-                onClick={() => {
-                  console.log("Do the apicall");
+              <>
+                {!location.pathname.includes("EditWeddingCards") ? (
+                  <Button
+                    uppercase
+                    rightIcon={<IconFilePlus />}
+                    onClick={() => {
+                      console.log("Do the apicall");
 
-                  saveMyCard();
-                }}
-              >
-                Save Card
-              </Button>
+                      saveMyCard();
+                    }}
+                  >
+                    Save Card
+                  </Button>
+                ) : (
+                  <Button
+                    uppercase
+                    rightIcon={<IconFilePlus />}
+                    onClick={() => {
+                      console.log("Do the apicall");
+
+                      editMyCard();
+                    }}
+                  >
+                    Edit Card
+                  </Button>
+                )}
+              </>
             )}
 
             <Anchor variant="text" href={downloadLink} download>

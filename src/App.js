@@ -332,7 +332,7 @@ function App() {
                   />
                   <Route
                     path="EditWeddingCards/id/:id"
-                    element={<CustomerEditWeddingCard />}
+                    element={<CustomerBookingWEddingCards />}
                   />
                   <Route
                     path="viewWeddingCards"

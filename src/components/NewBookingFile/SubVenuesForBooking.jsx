@@ -394,7 +394,7 @@ const SubVenuesForBooking = ({
           <Text size="lg" align="center" color="red">
             No Sub Venues Available For Your Selection. Please Select Another
             Date Or Time To Proceed Or Contact The Vendor For More Details On
-            Availability On The Selected Date And Time . Thank You !
+            Availability On The Selected Date And Time . Thank You !!
           </Text>
         </>
       )}

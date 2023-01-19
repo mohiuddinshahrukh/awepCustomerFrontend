@@ -9,7 +9,12 @@ import {
 import { IconArrowDown, IconArrowUp, IconSearch } from "@tabler/icons";
 import React, { useState } from "react";
 
-const TableComponent = ({ headCells, rowData }) => {
+const TableComponent = ({
+  headCells,
+  rowData,
+  setSingleInvoice,
+  setViewBookingModal,
+}) => {
   console.log("Row Data", rowData);
   const [rowDatas, setRowDatas] = useState(rowData);
   const [sorted, setSorted] = useState({ sorted: "", reversed: false });
@@ -114,6 +119,8 @@ const TableComponent = ({ headCells, rowData }) => {
                         onClick={() => {
                           console.log("I have been clicked");
                           console.log(row);
+                          setViewBookingModal(true);
+                          setSingleInvoice(row?.subVenueBookingObject);
                         }}
                       >
                         {head.view}

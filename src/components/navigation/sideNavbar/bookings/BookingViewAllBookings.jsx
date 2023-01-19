@@ -80,34 +80,23 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           ?.reduce((a, b) => a + b, 0)
       : 0;
 
-  const subvenueServiceCharges =
-    typeof Object.values(singleInvoice?.subVenueAndDataObject)
-      ?.map((services) => {
-        if (services?.selectedSubVenueServices?.length > 0) {
-          return services?.selectedSubVenueServices
-            ?.map((service) => {
-              return service?.duration === "Per Event"
-                ? service?.servicePrice
-                : service?.servicePrice * 3;
-            })
-            ?.reduce((a, b) => a + b, 0);
-        } else return 0;
-      })
-      ?.reduce((a, b) => a + b, 0) === "number"
-      ? Object.values(singleInvoice?.subVenueAndDataObject)
-          ?.map((services) => {
-            if (services?.selectedSubVenueServices?.length > 0) {
-              return services?.selectedSubVenueServices
-                ?.map((service) => {
-                  return service?.duration === "Per Event"
-                    ? service?.servicePrice
-                    : service?.servicePrice * 3;
-                })
-                ?.reduce((a, b) => a + b, 0);
-            } else return 0;
+  const subvenueServiceCharges = Object.values(
+    singleInvoice?.subVenueAndDataObject
+  )
+    ?.map((services) => {
+      if (services?.selectedSubVenueServices?.length > 0) {
+        return services?.selectedSubVenueServices
+          ?.map((service) => {
+            return service?.duration === "Per Event"
+              ? service?.servicePrice
+              : service?.servicePrice * 3;
           })
-          ?.reduce((a, b) => a + b, 0)
-      : 0;
+          ?.reduce((a, b) => a + b, 0);
+      } else {
+        return 0;
+      }
+    })
+    ?.reduce((a, b) => a + b, 0);
 
   const menuCharges = singleInvoice.selectedMenu
     ? typeof (

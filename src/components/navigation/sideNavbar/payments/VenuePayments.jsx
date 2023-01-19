@@ -122,6 +122,8 @@ const VenuePayments = () => {
         <TableComponent
           headCells={headCells}
           rowData={venueBookings?.subVenueBookingPayments}
+          setViewBookingModal={setViewBookingModal}
+          setSingleInvoice={setSingleInvoice}
         />
       )}
     </Paper>

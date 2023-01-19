@@ -476,7 +476,69 @@ const NewBookingFile = () => {
 
     let venueId = allVenues?.[0];
 
-    const tempBody = {
+    let tempBody = {
+      venueName: venueId.venueName,
+      venueId: venueId,
+
+      hallCharges: hallCharges,
+      city: venueCity,
+      subVenues: idOfSelectedSubVenue,
+
+      customerId: customer,
+      customerName: customerName[0],
+      bookingDate: moment(eventDate).format(),
+      bookingTime: time,
+
+      selectedStage: {
+        design: selectedStage || null,
+      },
+      selectedVenueTheme: {
+        theme: selectedTheme,
+      },
+      selectedMenu: {
+        menu: idOfSelectedMenu,
+        price: menuPrice,
+        modifiedMenu: selectedMenu,
+      },
+      pointOfContact: {
+        email: email,
+        phone: phone,
+      },
+      price: {
+        totalPrice: totalAmountWithoutTaxAndDiscount,
+        paidAmount: paidAmount,
+        remainingAmount: remainingAmount,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount: totalAmount,
+      },
+
+      selectedVenueServices: selectedVenueServiceObject,
+      bookingDescription: description,
+      numberOfGuests: noOfGuests,
+      eventType: eventType,
+    };
+    tempBody.subVenueAndDataObject = {};
+
+    for (let index in idOfSelectedSubVenue) {
+      tempBody.subVenueAndDataObject[idOfSelectedSubVenue[index]] = {
+        subVenueId: idOfSelectedSubVenue[index],
+        subVenueName: subVenue[index].subVenueName,
+        minimumBookingCharges: subVenue[index].minimumBookingCharges,
+        selectedSubVenueServices:
+          selectedSubVenueServiceObject[idOfSelectedSubVenue[index]],
+      };
+    }
+    if (idOfSelectedMenu === "") {
+      delete tempBody.selectedMenu;
+    }
+    customerName = allCustomers
+      .filter((e) => e._id === customer)
+      .map((e) => e.name);
+
+    venueId = allVenues.filter((e) => e._id === venue)[0];
+
+    tempBody = {
       venueName: venueId.venueName,
       venueId: venueId,
 

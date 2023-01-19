@@ -206,7 +206,7 @@ const CustomerVenueBookings = () => {
   const rows = venueBookings?.map((row, index) => (
     <tr key={index}>
       <td align="center">{index + 1}</td>
-      <td>{row.subVenueName}</td>
+      <td>{row.subVenues?.map((e) => e.subVenueName)}</td>
       <td>{row.eventType}</td>
       <td>
         {row.createdAt.split("T")[0] +
@@ -332,9 +332,7 @@ const CustomerVenueBookings = () => {
             <ActionIcon
               onClick={() => {
                 console.log("Clicked on edit button");
-                navigate(
-                  `/updateVenueBooking/${row.eventType}/${row.bookingDate}/${row.bookingTime}/${row.numberOfGuests}/${row.venueId._id}/${row.subVenueId._id}/${row._id}`
-                );
+                navigate(`/updateVenueBooking/${row.venueId._id}/${row._id}`);
               }}
             >
               <IconEdit />

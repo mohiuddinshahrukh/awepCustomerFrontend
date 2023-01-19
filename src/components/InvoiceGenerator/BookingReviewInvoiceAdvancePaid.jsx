@@ -16,13 +16,7 @@ import moment from "moment";
 // import { useReactToPrint } from "react-to-print";
 import WaterMark from "./AWEP_WATERMARK.svg";
 import AdvanceStamp from "./AWEP_ADVANCE_PAID_STAMP.svg";
-import {
-  BrandWhatsapp,
-  DeviceMobile,
-  Mail,
-  MapPin,
-  Phone,
-} from "tabler-icons-react";
+
 import InvoiceHeaders from "./InvoiceHeaders";
 // import borderLeftRight from "./AWEP_BORDER_LOGO_LEFT_RIGHT.svg";
 // import borderTopBottom from "./AWEP_BORDER_LOGO_TOP_BOTTOM.svg";

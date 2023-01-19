@@ -1,10 +1,7 @@
 import axios from "axios";
 import "./styling.css";
-
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useTimeout } from "@mantine/hooks";
-
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Grid,
   Paper,
@@ -15,50 +12,46 @@ import {
   LoadingOverlay,
   Stepper,
   Checkbox,
-  Avatar,
   Group,
   Select,
   SimpleGrid,
-  Image,
   Center,
   Textarea,
-  Divider,
   createStyles,
   RingProgress,
   useMantineTheme,
-  Stack,
-  Badge,
-  Container,
+  NumberInput,
+  Switch,
 } from "@mantine/core";
 import { Modal } from "@mantine/core";
 import moment from "moment";
 import dayjs from "dayjs";
+
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { DatePicker } from "@mantine/dates";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
+import SubVenuesForBooking from "../SubVenuesForBooking/SubVenuesForBooking";
+import StripePromise from "../paymentGateways/StripePromise";
 import { useMediaQuery } from "@mantine/hooks";
-import Congrats from "./Congrats.png";
 import { useScrollIntoView } from "@mantine/hooks";
 import { socket } from "../Socket/Socket";
+import ServiceSelection from "./ServiceSelection";
+// import BookingResponse from "./BookingResponse";
+import MenusOfSpecificVenueForBooking from "../MenusOfSpecifcVenue/MenusOfSpecificVenueForBooking";
+import ThemesOfSpecificVenueForBooking from "../ThemesOfSpecificVenue/ThemesOfSpecificVenueForBooking";
+import StagesOfSpecificVenueForBooking from "../StagesOfSpecificVenue/StagesOfSpecificVenueForBooking";
+import BookingViewAllBookings from "../InvoiceGenerator/BookingViewAllBookings";
 import {
   IconArrowDown,
   IconArrowLeft,
   IconArrowRight,
-  IconCalendar,
-  IconChevronDown,
-  IconDownload,
   IconTrash,
   IconTrashOff,
   IconX,
 } from "@tabler/icons";
-import SubVenuesForBooking from "./SubVenuesForBooking";
-import MenusOfSpecificVenueForBooking from "../MenusOfSpecifcVenue/MenusOfSpecificVenueForBooking";
-import ThemesOfSpecificVenueForBooking from "../ThemesOfSpecificVenue/ThemesOfSpecificVenueForBooking";
-import BookingReviewInvoice from "../InvoiceGenerator/BookingReviewInvoice";
-import StripePromise from "../paymentGateways/StripePromise";
-import StagesOfSpecificVenueForBooking from "../StagesOfSpecificVenue/StagesOfSpecificVenueForBooking";
-import BookingViewAllBookings from "../navigation/sideNavbar/bookings/BookingViewAllBookings";
+import { IconCalendar, IconChevronDown } from "@tabler/icons";
+import BookingResponse from "./BookingResponse";
+// import BookingResponse from "./BookingResponse";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -113,9 +106,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const NewBookingFile = () => {
-  const currentLocation = useLocation();
   const params = useParams();
-  console.log("MY PARAMS: ", params);
+
+  const [body, setBody] = useState({});
+  console.log("BOOOOOOOOOODY state", body);
   const theme = useMantineTheme();
 
   const { scrollIntoView, targetRef } = useScrollIntoView({ offset: 60 });
@@ -124,28 +118,12 @@ const NewBookingFile = () => {
   // paymentSuccesful
   const [paidSuccessfully, setPaidSuccessfully] = useState(false);
   //CODE FOR PRINTING
-  const [printingTriggered, setPrintingTriggered] = useState(false);
   const componentRef = useRef(null);
   const onBeforeGetContentResolve = useRef(null);
-  const [loading, setLoading] = useState(false);
+  const [bookingResponse, setBookingResponse] = useState({});
+  console.log("bookingResponse", bookingResponse);
   const [text, setText] = useState("old boring text");
-  const handleAfterPrint = useCallback(() => {
-    console.log("`onAfterPrint` called");
-  }, []);
-  const handleBeforePrint = useCallback(() => {
-    console.log("`onBeforePrint` called");
-  }, []);
-  const handleOnBeforeGetContent = useCallback(() => {
-    console.log("`onBeforeGetContent` called");
-    setLoading(true);
-    setText("Loading new text...");
-    return new Promise((resolve) => {
-      onBeforeGetContentResolve.current = resolve;
-      resolve();
-    });
-  }, [setLoading, setText]);
-  //
-  const [errorMessages, setErrorMessages] = useState({});
+
   const [error, setError] = useState("");
   const [active, setActive] = useState(0);
   const nextStep = () =>
@@ -160,53 +138,74 @@ const NewBookingFile = () => {
 
   const [stepperDisabled, setStepperDisabled] = useState(false);
   const [confirmBooking, setConfirmBooking] = useState(false);
-  const [bookingResponse, setBookingResponse] = useState({});
-  const [bookingDetails, setBookingDetails] = useState({});
-  console.log("bookingDetails", bookingDetails);
 
-  const [venueDetails, setVenueDetails] = useState({});
-  console.log("VENUE DETAILS: ", venueDetails);
+  const [allCustomers, setAllCustomers] = useState([]);
+  const [allSubVenues, setAllSubVenues] = useState([]);
+  console.log("allSubVenues", allSubVenues);
+  const [alterServiceSelection, setAlterServiceSelection] = useState("");
+  const [allVenues, setAllVenues] = useState([]);
   const [customer, setCustomer] = useState("");
   const [venue, setVenue] = useState("");
   const [venueCity, setVenueCity] = useState("");
-  const [value2, setValue2] = useState("");
-  const [value1, onChange] = useState(null);
-  console.log("VALUE1.1: ", moment(value1).format());
-  console.log("VALUE1.5: ", moment(value1).format());
-  const [time, setTime] = useState("");
-  const [noOfGuests, setNoOfGuests] = useState("");
-  const [filterSubVenues, setFilterSubVenues] = useState([]);
-  const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState("");
+  const [eventDate, setEventDate] = useState(undefined);
+  const [time, setTime] = useState(params?.time ? params?.time : "");
+  const [noOfGuests, setNoOfGuests] = useState(
+    params?.guests ? params?.guests : 0
+  );
+  const [idOfSelectedSubVenue, setIdOfSelectedSubVenue] = useState([]);
+  const [subVenue, setSubVenue] = useState([]);
+
   const [chargesError, setChargesError] = useState("");
-  const [eventType, setEventType] = useState("");
-  console.log("event type is", eventType);
+  const [fulfillmentMessage, setFulfillmentMessage] = useState(
+    "Select A Sub Venue And Press Next"
+  );
+  const [totalAvailableCapacity, setTotalAvailableCapacity] = useState(0);
+
+  const [checkForMultiBooking, setCheckForMultiBooking] = useState(false);
+  const [messageColor, setMessageColor] = useState("grey");
+  const [eventType, setEventType] = useState(
+    params?.eventType ? params?.eventType : ""
+  );
+
+  const [selectedSubVenueServices, setSelectedSubVenueServices] = useState({});
   const [selectedVenueServices, setSelectedVenueServices] = useState([]);
+
   const [alterPrice, setAlterPrice] = useState(false);
+  const [alterPriceId, setAlterPriceId] = useState("");
   const [serviceTitle, setServiceTitle] = useState("");
   const [oldServicePrice, setOldServicePrice] = useState();
   const [freeService, setFreeService] = useState(false);
 
-  console.log("oldServicePrice", oldServicePrice);
-  console.log("selected service to be edited is", serviceTitle);
-  console.log("selected venue services", selectedVenueServices);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [price, setPrice] = useState({});
+
+  const [selectedSubVenueServiceObject, setSelectedSubVenueServiceObject] =
+    useState({});
   const [selectedVenueServiceObject, setSelectedVenueServiceObject] = useState(
     []
   );
-  const [checked, setChecked] = useState(false);
+
+  const [subVenueWiseServicePrices, setSubVenueWiseServicePrices] = useState(
+    {}
+  );
+  const [venueWiseServicePrices, setVenueWiseServicePrices] = useState(0);
+
+  const [bookingPercentage, setBookingPercentage] = useState(0.2);
+  const [taxPercentage, setTaxPercentage] = useState(0.17);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
+
+  const [checked, setChecked] = useState({});
+  const [checkedVenueServices, setCheckedVenueServices] = useState(false);
+
   const [hallCharges, setHallCharges] = useState(0);
-  console.log("hall charges are", hallCharges);
+  console.log("hallCharges", hallCharges);
   const [idOfSelectedMenu, setIdOfSelectedMenu] = useState("");
   const [selectedMenu, setSelectedMenu] = useState("");
-
   const [menuPrice, setMenuPrice] = useState(0);
-  console.log("Totalprice", totalPrice);
-  console.log("menuPrice", menuPrice);
+  const [menuPolicy, setMenuPolicy] = useState(false);
+
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
-  console.log("descriptiasdasdon", description);
   const [hidden, setHidden] = useState(true);
   const [hideSelectButton, setHideSelectButton] = useState(false);
   // const { start, clear } = useTimeout(() => setConfirmBooking(false), 10000);
@@ -216,97 +215,20 @@ const NewBookingFile = () => {
 
   const [idOfSelectedStage, setIdOfSelectedStage] = useState("");
   const [selectedStage, setSelectedStage] = useState("");
-  console.log("selected selectedStage", selectedStage);
+
   const [stagePrice, setStagePrice] = useState(0);
-  console.log("selected theme", selectedTheme);
-  const [bookingPercentage, setBookingPercentage] = useState(0.2);
-  const [taxPercentage, setTaxPercentage] = useState(0.17);
-  const [discountPercentage, setDiscountPercentage] = useState(0);
-  const [singleInvioce, setSingleInvioce] = useState({});
-  console.log("singleInvioce", singleInvioce);
-
-  const makeInvoice = () => {
-    let customerData = JSON.parse(localStorage.getItem("customerData"));
-    let singleInvioceData = {
-      bookingDescription: description,
-
-      venueName: venueDetails?.venueName,
-      subVenueBookingCharges: hallCharges,
-      selectedVenueServices: selectedVenueServiceObject,
-      venueId: venueDetails,
-      createdAt: new Date(),
-      customerName: customerData?.name,
-      pointOfContact: {
-        phone: customerData?.phone,
-        email: customerData?.email,
-      },
-      bookingDate: value1,
-      bookingTime: time,
-      subVenueName: venueDetails?.subVenues?.filter(
-        (e) => e._id === idOfSelectedSubVenue
-      )[0]?.subVenueName,
-      hallCharges: hallCharges,
-      numberOfGuests: noOfGuests,
-      selectedMenu: {
-        menu: selectedMenu,
-        price: menuPrice,
-      },
-      selectedVenueTheme: {
-        theme: selectedTheme,
-      },
-      selectedStage: {
-        stage: selectedStage,
-      },
-      // paymentStatus: "NOT PAID",
-      hallCharges: hallCharges,
-      price: {
-        discountPercentage: discountPercentage,
-        totalPrice:
-          hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
-        taxPercentage: taxPercentage,
-        totalPriceAfterTaxAndDiscount:
-          hallCharges +
-          stagePrice +
-          totalPrice +
-          menuPrice * noOfGuests +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            taxPercentage -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            discountPercentage,
-        paidAmount: 0,
-        remainingAmount:
-          hallCharges +
-          stagePrice +
-          totalPrice +
-          menuPrice * noOfGuests +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            taxPercentage -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            discountPercentage,
-      },
-
-      serviceCharge: totalPrice,
-      menuCharges: menuPrice * noOfGuests,
-      subTotalCharges:
-        hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
-
-      selectedStage: selectedStage,
-    };
-    setSingleInvioce(singleInvioceData);
-    nextStep();
-  };
 
   const data = [
     {
       percent: bookingPercentage * 100,
       Amount: (
         (hallCharges +
-          stagePrice +
           totalPrice +
+          stagePrice +
           menuPrice * noOfGuests +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
             taxPercentage -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
             discountPercentage) *
         bookingPercentage
       ).toLocaleString(),
@@ -320,19 +242,18 @@ const NewBookingFile = () => {
       percent: (1 - bookingPercentage) * 100,
       Amount: (
         hallCharges +
-        stagePrice +
         totalPrice +
         menuPrice * noOfGuests -
-        (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+        (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
           discountPercentage +
-        (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+        (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
           taxPercentage -
         (hallCharges +
           totalPrice +
           menuPrice * noOfGuests -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
             discountPercentage +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
+          (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
             taxPercentage) *
           bookingPercentage
       ).toLocaleString(),
@@ -343,7 +264,7 @@ const NewBookingFile = () => {
       } % Payment is Required 7 Days Before The Event Date`,
     },
   ];
-  const items = data?.map((item, index) => (
+  const items = data.map((item, index) => (
     <div className={classes.item} key={index}>
       <Group position="center">
         <RingProgress
@@ -384,6 +305,12 @@ const NewBookingFile = () => {
     </div>
   ));
 
+  const refreshStates = () => {
+    setTotalPrice(0);
+    setSelectedSubVenueServices([]);
+    setSelectedSubVenueServiceObject([]);
+  };
+
   let navigate = useNavigate();
 
   const form1 = useForm({
@@ -405,16 +332,19 @@ const NewBookingFile = () => {
         value === "" ? "Please Select an Event Type" : null,
     },
   });
-  let customerData = JSON.parse(localStorage.getItem("customerData"));
-  let localCustomerEmail = customerData?.email;
-  let localCustomerPhone = customerData?.phone;
+  const alterPriceForm = useForm({
+    validateInputOnChange: true,
+    initialValues: {
+      newPrice: 0,
+    },
+    validate: {
+      newPrice: (value) =>
+        value >= 0 ? null : "Please Enter Valid Service Price",
+    },
+  });
   const form = useForm({
     validateInputOnChange: ["phone", "email"],
-    initialValues: {
-      phone: params.bookingId ? phone : localCustomerPhone,
-      email: params.bookingId ? email : localCustomerEmail,
-      description: params.bookingId ? description : "",
-    },
+    initialValues: { phone: "", email: "", description: "" },
 
     validate: {
       phone: (value) =>
@@ -434,503 +364,365 @@ const NewBookingFile = () => {
     },
   });
   const bookedDateAndTime =
-    moment(form1.values.date).format().split("T")[0] + form1.values.time;
-  console.log("testing date and time", bookedDateAndTime);
-  const bookingDateAndTime =
-    bookingDetails?.bookingDate && bookingDetails?.bookingTime
-      ? moment(bookingDetails?.bookingDate).format().split("T")[0] +
-        bookingDetails?.bookingTime
-      : null;
-  console.log("testing date and time bookingDateAndTime", bookingDateAndTime);
+    new moment(form1.values.date).format().split("T")[0] + time;
+
+  const handleAlterPrice = async (event) => {
+    var { newPrice } = event;
+    if (alterServiceSelection === "venue") {
+      selectedVenueServiceObject
+        ?.filter((e) => e.serviceTitle === serviceTitle)
+        .map((e) => (e.servicePrice = parseInt(newPrice)));
+
+      //changing price of totalPrice
+      let priceChange = newPrice - oldServicePrice;
+      setTotalPrice(totalPrice + priceChange);
+      //changing price of venueWiseServicePrices
+
+      setVenueWiseServicePrices((prev) => prev + priceChange);
+
+      // allVenues.filter((e) => e._id === venue)[0]. = parseInt(
+    } else if (alterServiceSelection === "subVenue") {
+      // setAllVenueServices(allVenueServices);
+      selectedSubVenueServiceObject?.[alterPriceId]
+        ?.filter((e) => e.serviceTitle === serviceTitle)
+        .map((e) => (e.servicePrice = parseInt(newPrice)));
+
+      //changing price of totalPrice
+      let priceChange = newPrice - oldServicePrice;
+      setTotalPrice(totalPrice + priceChange);
+
+      setSubVenueWiseServicePrices((prev) => ({
+        ...prev,
+        [alterPriceId]: prev[alterPriceId] + priceChange,
+      }));
+    }
+
+    alterPriceForm.reset();
+
+    setAlterPrice(false);
+  };
 
   const handleSubmit = async (event) => {
-    var { noOfGuests, eventType, time, date } = event;
+    var { noOfGuests, eventType } = event;
     setNoOfGuests(noOfGuests);
     setEventType(eventType);
-    setTime(time);
-    onChange(date);
 
-    if (idOfSelectedSubVenue === "") {
+    if (idOfSelectedSubVenue.length === 0) {
       setError("Please Select A Venue To Proceed");
       setDisabled(true);
       return;
     } else {
-      onChange(moment(form1.values.date).format().split("T")[0]);
+      setEventDate(new moment(form1.values.date).format().split("T")[0]);
+
+      let servicesOfVenue = allVenues?.[0]?.providedVenueServices?.filter((e) =>
+        selectedVenueServices?.includes(e.serviceTitle)
+      );
+      setSelectedVenueServiceObject(servicesOfVenue);
+      let providedVenueServices = allVenues?.[0]?.providedVenueServices?.filter(
+        (service) => !service.isAlsoSubVenueService
+      );
+
+      if (selectedVenueServices?.length === providedVenueServices?.length) {
+        setCheckedVenueServices(true);
+      }
+
+      let servicesOfSubVenue = {};
+      let subVenueServicesAllChecked = {};
+      allSubVenues
+        ?.filter((e) => idOfSelectedSubVenue.includes(e._id))
+        .map((subVenue) => {
+          servicesOfSubVenue[subVenue._id] = subVenue?.subVenueServices?.filter(
+            (f) => {
+              return selectedSubVenueServices[subVenue._id]?.includes(
+                f.serviceTitle
+              );
+            }
+          );
+          subVenue.subVenueServices.length ===
+            servicesOfSubVenue[subVenue._id].length &&
+            (subVenueServicesAllChecked[subVenue._id] = true);
+        });
+      setChecked(subVenueServicesAllChecked);
+
+      setSelectedSubVenueServiceObject(servicesOfSubVenue);
+
       nextStep();
     }
   };
   const handleSubmit1 = async (event) => {
     var { phone, email, description } = event;
-    console.log("phone", phone);
-    console.log("email", email);
-    console.log("description", description);
-    console.log("customer is isiisisi", description);
-    console.log(event);
 
     setPhone(phone);
     setEmail(email);
     setDescription(description);
-    makeInvoice();
+    let customer = JSON.parse(localStorage.getItem("customerData"));
+    console.log("hiii", customer);
+    setCustomer(customer?.id);
+    let totalAmountWithoutTaxAndDiscount =
+      hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests;
+    let totalAmount =
+      totalAmountWithoutTaxAndDiscount +
+      totalAmountWithoutTaxAndDiscount * taxPercentage -
+      totalAmountWithoutTaxAndDiscount * discountPercentage;
+    let paidAmount = 0;
+    if (params.bookingId) {
+      paidAmount = bookingDetails.price.paidAmount;
+    } else {
+      paidAmount = totalAmount * bookingPercentage;
+    }
+    let remainingAmount = totalAmount - paidAmount;
 
+    let customerName = customer?.name;
+
+    let venueId = allVenues?.[0];
+
+    const tempBody = {
+      venueName: venueId.venueName,
+      venueId: venueId,
+
+      hallCharges: hallCharges,
+      city: venueCity,
+      subVenues: idOfSelectedSubVenue,
+
+      customerId: customer,
+      customerName: customerName[0],
+      bookingDate: moment(eventDate).format(),
+      bookingTime: time,
+
+      selectedStage: {
+        design: selectedStage || null,
+      },
+      selectedVenueTheme: {
+        theme: selectedTheme,
+      },
+      selectedMenu: {
+        menu: idOfSelectedMenu,
+        price: menuPrice,
+        modifiedMenu: selectedMenu,
+      },
+      pointOfContact: {
+        email: email,
+        phone: phone,
+      },
+      price: {
+        totalPrice: totalAmountWithoutTaxAndDiscount,
+        paidAmount: paidAmount,
+        remainingAmount: remainingAmount,
+        discountPercentage: discountPercentage,
+        taxPercentage: taxPercentage,
+        totalPriceAfterTaxAndDiscount: totalAmount,
+      },
+
+      selectedVenueServices: selectedVenueServiceObject,
+      bookingDescription: description,
+      numberOfGuests: noOfGuests,
+      eventType: eventType,
+    };
+    tempBody.subVenueAndDataObject = {};
+
+    for (let index in idOfSelectedSubVenue) {
+      tempBody.subVenueAndDataObject[idOfSelectedSubVenue[index]] = {
+        subVenueId: idOfSelectedSubVenue[index],
+        subVenueName: subVenue[index].subVenueName,
+        minimumBookingCharges: subVenue[index].minimumBookingCharges,
+        selectedSubVenueServices:
+          selectedSubVenueServiceObject[idOfSelectedSubVenue[index]],
+      };
+    }
+    if (idOfSelectedMenu === "") {
+      delete tempBody.selectedMenu;
+    }
+    setBody(tempBody);
+    nextStep();
     // makeVenueBooking();
   };
 
-  const checkLogin = () => {
-    console.log("CHECKING ROUTES");
-    console.log("currentLocation", currentLocation);
+  const [venueDetails, setVenueDetails] = useState({});
+  console.log("hello venue Details", venueDetails);
 
-    if (localStorage.getItem("customerToken") === null || undefined || "") {
-      showNotification({
-        title: "Please Sign In First",
-        message: "You need to Sign In First",
-        color: "red",
-      });
-      navigate("/signin");
-    }
+  const getVenueDetails = () => {
+    const url = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.venueId}`;
+    axios.get(url).then((res) => {
+      if (res.data.status === "success") {
+        res.data.data.subVenues.map((e) => {
+          e.venueId = {
+            _id: res.data.data._id,
+            venueName: res.data.data.venueName,
+            venueCity: res.data.data.venueCity,
+          };
+        });
+        setVenueDetails(res.data.data);
+        setAllVenues([res.data.data]);
+        setVenueCity(res.data.data.venueCity);
+
+        setAllSubVenues(res.data.data?.subVenues);
+        setRefresh(false);
+        setVisible(false);
+      } else {
+        alert("Error");
+      }
+    });
   };
 
   useEffect(() => {
-    checkLogin();
-  }, []);
-
-  useEffect(() => {
-    const url2 = `https://a-wep.herokuapp.com/customer/getSpecificVenueDetails/${params.venueId}`;
-    if (refresh) {
-      try {
-        //if we have booking id we will fetch the booking in this if statement
-        if (params.bookingId) {
-          const headers = {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("customerToken"),
-          };
-          axios({
-            method: "get",
-            url: `https://a-wep.herokuapp.com/customer/getSubVenueBooking/${params.bookingId}`,
-            headers: headers,
-          }).then((res) => {
-            console.log(res.data);
-            if (res.data.status === "success") {
-              const response = res.data.data;
-              console.log("THIS IS THE RESPONSE OBJECT:   ", response);
-              setBookingDetails(response);
-              setIdOfSelectedSubVenue(params.subVenueId);
-              setIdOfSelectedMenu(response?.selectedMenu?.menu?._id);
-              setIdOfSelectedTheme(response?.selectedVenueTheme?.theme?._id);
-              setIdOfSelectedStage(response?.selectedStage?.stage?._id);
-              setSelectedVenueServices(
-                response?.selectedVenueServices.map(
-                  (service) => service.serviceTitle
-                )
-              );
-              setSelectedVenueServiceObject(response?.selectedVenueServices);
-              setNoOfGuests(response?.numberOfGuests);
-              setEventType(response?.eventType);
-              setTime(response?.bookingTime);
-              onChange(response?.bookingDate);
-              setPhone(response?.pointOfContact?.phone);
-              setEmail(response?.pointOfContact?.email);
-              setDescription(response?.bookingDescription);
-              form.setFieldValue("phone", response?.pointOfContact?.phone);
-              form.setFieldValue("email", response?.pointOfContact?.email);
-              form.setFieldValue("description", response?.bookingDescription);
-              setSelectedStage(response?.selectedStage?.stage);
-              setStagePrice(response?.selectedStage?.stage?.price);
-              setSelectedMenu(response?.selectedMenu?.menu);
-              setSelectedTheme(response?.selectedVenueTheme?.theme);
-              setPrice(response?.price);
-              setMenuPrice(response?.selectedMenu?.menu?.price);
-              setTotalPrice(
-                response?.selectedVenueServices?.reduce((acc, curr) => {
-                  const price =
-                    curr.duration === "Per Hour"
-                      ? acc + curr.servicePrice * 3
-                      : acc + curr.servicePrice;
-                  return price;
-                }, 0)
-              );
-
-              setRefresh(false);
-              setVisible(false);
-            } else {
-              // alert("Error");
-            }
-          });
-        }
-
-        axios.get(url2).then((res) => {
-          console.log(res.data);
-          if (res.data.status === "success") {
-            console.log("we are here in api call");
-            setVenueDetails(res.data.data);
-            setRefresh(false);
-            setVisible(false);
-          } else {
-            // alert("Error");
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    }
+    getVenueDetails();
   }, [refresh]);
 
   useEffect(() => {
     if (paidSuccessfully) {
-      console.log("DO THE AXIOS CALL");
       makeVenueBooking();
       setStepperDisabled(true);
     }
   }, [paidSuccessfully]);
 
-  // PRINTING USE EFFECT
+  const [bookingDetails, setBookingDetails] = useState({});
+
+  // local prices
   useEffect(() => {
-    if (
-      text === "New, Updated Text!" &&
-      typeof onBeforeGetContentResolve.current === "function"
-    ) {
-      onBeforeGetContentResolve.current();
-    }
-  }, [onBeforeGetContentResolve.current, text]);
-
-  // const reactToPrintContent = useCallback(() => {
-  //   return componentRef.current;
-  // }, [componentRef.current]);
-
-  const reactToPrintTrigger = useCallback(() => {
-    // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
-    // to the root node of the returned component as it will be overwritten.
-
-    // Bad: the `onClick` here will be overwritten by `react-to-print`
-    // return <button onClick={() => alert('This will not work')}>Print this out!</button>;
-
-    // Good
-
-    return (
-      <Button
-        size="md"
-        fullWidth
-        variant="filled"
-        color="dark"
-        type="submit"
-        // disabled={disabled}
-        // loading={loading}
-        rightIcon={<IconDownload />}
-        onClick={() => {
-          console.log("Print");
-          setPrintingTriggered(true);
-        }}
-        uppercase
-      >
-        print invoice
-      </Button>
-    );
-  }, []);
-  //
-
-  useEffect(() => {
-    if (
-      form1.values.eventType === "" ||
-      form1.values.time === "" ||
-      form1.values.date === "" ||
-      form1.values.noOfGuests < 50
-    ) {
-      console.log("@TEST in if", form1.values);
-      setHideSelectButton(true);
-      return;
-    } else {
-      console.log("we are here in use effect of if");
-      setHideSelectButton(false);
-      return;
-    }
-  }, [
-    form1.values.eventType,
-    form1.values.date,
-    form1.values.time,
-    form1.values.noOfGuests,
-  ]);
-  useEffect(() => {
-    if (
-      venueDetails?.subVenues?.filter((e) => e._id === idOfSelectedSubVenue)[0]
-        ?.subVenueServices?.length > 0
-    ) {
-      if (
-        selectedVenueServices?.length ===
-        venueDetails?.subVenues?.filter(
-          (e) => e._id === idOfSelectedSubVenue
-        )[0]?.subVenueServices?.length
-      ) {
-        setChecked(true);
-      } else {
-        setChecked(false);
-      }
-    } else {
-      setChecked(false);
-    }
-  }, [selectedVenueServices]);
-
-  const updateSubVenueBooking = async () => {
-    setVisible(true);
-
-    const body = {
-      bookingDate: moment(value1).format(),
-      subVenueBookingCharges: hallCharges,
-      selectedStage: {
-        stage: selectedStage,
-      },
-
-      bookingTime: time,
-      eventType: eventType,
-      pointOfContact: {
-        email: email,
-        phone: phone,
-      },
-      //   selectedSubVenueServices: selectedFilteredSubVenueServices,
-      price: {
-        totalPrice:
-          hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests,
-        paidAmount: price.paidAmount,
-        remainingAmount:
-          hallCharges +
-          stagePrice +
-          totalPrice +
-          menuPrice * noOfGuests -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            discountPercentage +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            taxPercentage -
-          price.paidAmount,
-        discountPercentage: discountPercentage,
-        taxPercentage: taxPercentage,
-        totalPriceAfterTaxAndDiscount:
-          hallCharges +
-          stagePrice +
-          totalPrice +
-          menuPrice * noOfGuests +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            taxPercentage -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            discountPercentage,
-        paymentHistory: price.paymentHistory,
-      },
-      selectedVenueTheme: {
-        theme: selectedTheme,
-      },
-      selectedMenu: {
-        menu: idOfSelectedMenu,
-        price: menuPrice,
-        modifiedMenu: selectedMenu,
-      },
-
-      selectedVenueServices: selectedVenueServiceObject,
-      bookingDescription: description,
-      numberOfGuests: noOfGuests,
-    };
-    if (idOfSelectedMenu === "" || idOfSelectedMenu === undefined) {
-      delete body.selectedMenu;
-    }
-    console.log("body");
-    console.log("bosyyyy in update", body);
-    const headers = {
-      "Content-Type": "application/json",
-      token: localStorage.getItem("customerToken"),
-    };
-    try {
-      const response = await axios({
-        method: "patch",
-        url: `https://a-wep.herokuapp.com/customer/updateSubVenueBooking/${params.bookingId}`,
-        data: body,
-        headers: headers,
+    let subVenueWiseServicePrices = {};
+    Object.entries(selectedSubVenueServiceObject).map(([key, value]) => {
+      value.map((e) => {
+        subVenueWiseServicePrices[key] =
+          (subVenueWiseServicePrices[key] || 0) +
+          e.servicePrice * (e.duration === "Per Hour" ? 3 : 1);
       });
-      // setLoading(false);
-      console.log(response.data);
+    });
 
-      if (response.data.status === "error") {
-        console.log("error", response.data);
-        showNotification({
-          color: "yellow",
-          title: `${response.data.error}`,
-          message: `${response.data.message}`,
-        });
-        setVisible(false);
-
-        console.log(response.data.error);
-      } else {
-        socket.emit("generateNotification", {
-          userId: JSON.parse(localStorage.getItem("customerData")).id,
-          title: "Subvenue Booking Successful",
-          message: `Successfully Created a booking for ${email}`,
-          link: "https://awep-customer-frontend.vercel.app/dashboard/venueBookings",
-        });
-        showNotification({
-          color: "green",
-          title: `Successfully`,
-
-          message: `BOOKING DETAILS UPDATED!!`,
-        });
-        console.log("navigating");
-        navigate("/dashboard/venueBookings");
-        // setOpened(true);
-        console.log("navigated");
-        // navigate(-1);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    setSubVenueWiseServicePrices(subVenueWiseServicePrices);
+  }, [selectedSubVenueServiceObject]);
+  // local prices
+  useEffect(() => {
+    setVenueWiseServicePrices(
+      selectedVenueServiceObject.reduce((acc, curr) => {
+        return (acc += curr.servicePrice);
+      }, 0)
+    );
+  }, [selectedVenueServiceObject]);
 
   const makeVenueBooking = async () => {
     setVisible(true);
+    // let totalAmountWithoutTaxAndDiscount =
+    //   hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests;
+    // let totalAmount =
+    //   totalAmountWithoutTaxAndDiscount +
+    //   totalAmountWithoutTaxAndDiscount * taxPercentage -
+    //   totalAmountWithoutTaxAndDiscount * discountPercentage;
+    // let paidAmount = 0;
+    // if (params.bookingId) {
+    //   paidAmount = bookingDetails.price.paidAmount;
+    // } else {
+    //   paidAmount = totalAmount * bookingPercentage;
+    // }
+    // let remainingAmount = totalAmount - paidAmount;
 
-    console.log("MAKING THE BOOKING");
-    const body = {
-      subVenueBookingCharges: hallCharges,
-      subVenueId: idOfSelectedSubVenue,
-      bookingDate: moment(value1).format(),
-      bookingTime: time,
-      selectedVenueTheme: {
-        theme: selectedTheme,
-      },
-      selectedStage: {
-        stage: selectedStage,
-      },
-      selectedMenu: {
-        menu: idOfSelectedMenu,
-        price: menuPrice,
-        modifiedMenu: selectedMenu,
-      },
+    // let customerName = allCustomers
+    //   .filter((e) => e._id === customer)
+    //   .map((e) => e.name);
 
-      pointOfContact: {
-        email: email,
-        phone: phone,
-      },
-      price: {
-        totalPrice: hallCharges + totalPrice + menuPrice * noOfGuests,
-        paidAmount:
-          (hallCharges +
-            stagePrice +
-            totalPrice +
-            menuPrice * noOfGuests +
-            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-              taxPercentage -
-            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-              discountPercentage) *
-          bookingPercentage,
-        remainingAmount:
-          hallCharges +
-          stagePrice +
-          totalPrice +
-          menuPrice * noOfGuests -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            discountPercentage +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            taxPercentage -
-          (hallCharges +
-            stagePrice +
-            totalPrice +
-            menuPrice * noOfGuests -
-            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-              discountPercentage +
-            (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-              taxPercentage) *
-            bookingPercentage,
-        discountPercentage: discountPercentage,
-        taxPercentage: taxPercentage,
-        totalPriceAfterTaxAndDiscount:
-          hallCharges +
-          stagePrice +
-          totalPrice +
-          menuPrice * noOfGuests +
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            taxPercentage -
-          (hallCharges + stagePrice + totalPrice + menuPrice * noOfGuests) *
-            discountPercentage,
-      },
-      //   selectedSubVenueServices: selectedFilteredSubVenueServices,
-      selectedVenueServices: selectedVenueServiceObject,
-      bookingDescription: description,
-      numberOfGuests: noOfGuests,
-      eventType: eventType,
-    };
-    if (idOfSelectedMenu === "" || idOfSelectedMenu === undefined) {
-      delete body.selectedMenu;
-    }
-    console.log("@@@body", body);
+    // const body = {
+    //   hallCharges: hallCharges,
+    //   city: venueCity,
+    //   subVenues: idOfSelectedSubVenue,
+
+    //   customerId: customer,
+    //   customerName: customerName[0],
+    //   bookingDate: moment(eventDate).format(),
+    //   bookingTime: time,
+
+    //   selectedStage: {
+    //     design: selectedStage || null,
+    //   },
+    //   selectedVenueTheme: {
+    //     theme: selectedTheme,
+    //   },
+    //   selectedMenu: {
+    //     menu: idOfSelectedMenu,
+    //     price: menuPrice,
+    //     modifiedMenu: selectedMenu,
+    //   },
+    //   pointOfContact: {
+    //     email: email,
+    //     phone: phone,
+    //   },
+    //   price: {
+    //     totalPrice: totalAmountWithoutTaxAndDiscount,
+    //     paidAmount: paidAmount,
+    //     remainingAmount: remainingAmount,
+    //     discountPercentage: discountPercentage,
+    //     taxPercentage: taxPercentage,
+    //     totalPriceAfterTaxAndDiscount: totalAmount,
+    //   },
+
+    //   selectedVenueServices: selectedVenueServiceObject,
+    //   bookingDescription: description,
+    //   numberOfGuests: noOfGuests,
+    //   eventType: eventType,
+    // };
+    // body.subVenueAndDataObject = {};
+
+    // for (let index in idOfSelectedSubVenue) {
+    //   body.subVenueAndDataObject[idOfSelectedSubVenue[index]] = {
+    //     subVenueId: idOfSelectedSubVenue[index],
+    //     subVenueName: subVenue[index].subVenueName,
+    //     minimumBookingCharges: subVenue[index].minimumBookingCharges,
+    //     selectedSubVenueServices:
+    //       selectedSubVenueServiceObject[idOfSelectedSubVenue[index]],
+    //   };
+    // }
+    // if (idOfSelectedMenu === "") {
+    //   delete body.selectedMenu;
+    // }
 
     const headers = {
       "Content-Type": "application/json",
       token: localStorage.getItem("customerToken"),
     };
     try {
+      let url = params?.bookingId
+        ? `https://a-wep.herokuapp.com/customer/updateSubVenueBooking/${params.bookingId}`
+        : "https://a-wep.herokuapp.com/customer/bookSubVenue";
+
       const response = await axios({
-        method: "post",
-        url: "https://a-wep.herokuapp.com/customer/bookSubVenue",
+        method: params?.bookingId ? "PATCH" : "POST",
+        url: url,
         data: body,
         headers: headers,
       });
 
-      console.log("THIS IS THE RESPONSE OBJECT:   ", response);
-
       if (response.data.status === "error") {
+        console.log("this is rspons error", response);
+
         showNotification({
-          title: `ERROR`,
+          title: `${response.data.message}`,
           color: "red",
-          message: `${response.data.error?.message || response.data.error}`,
+          message: `${response.data.error.message}`,
         });
-        console.log("error", response.data.error.message);
-        console.log("error", response.data.error);
+
         setVisible(false);
-        setLoading(false);
       } else {
+        console.log("this is rspons", response);
+        setBookingResponse(response.data.data);
+        setConfirmBooking(true);
         socket.socket.emit("generateNotification", {
-          userId: JSON.parse(localStorage.getItem("customerData")).id,
-          title: "Subvenue Booking Successful",
-          message: `Customer For Booking: ${email}`,
-          link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
-        });
-        socket.socket.emit("generateNotification", {
-          userId: venueDetails?.venueOwnerId,
+          userId: JSON.parse(localStorage.getItem("superAdminData")).id,
           title: "Subvenue Booking Successful",
           message: `Customer For Booking: ${email}`,
           link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
         });
 
-        socket.socket.emit("viewAllChatsOnStartConversation", {
-          participant: {
-            _id: venueDetails?.venueOwnerId,
-            type: "venue",
-          },
-        });
-        socket.socket.emit("viewAllChatsOnStartConversation", {
-          participant: {
-            _id: JSON.parse(localStorage.getItem("customerData")).id,
-            type: "user",
-          },
-        });
-
-        // socket.socket.emit("generateNotification", {
-        //   userId: "634912abc5ba3ae82a86412c",
-        //   title: "Subvenue Booking Successful",
-        //   message: `Customer For Booking: ${email}`,
-        //   link: "https://awep-superadmin-team-awep.vercel.app/viewbookings",
-        // });
-        setBookingResponse(response.data?.data);
         showNotification({
           color: "green",
           title: `Successfully`,
-          message: `SUB VENUE BOOKED SUCCESSFULLY!!`,
+          message: params?.bookingId
+            ? `BOOKING UPDATED SUCCESSFULLY!!`
+            : `SUB VENUE BOOKED SUCCESSFULLY!!`,
         });
-        setConfirmBooking(true);
 
         nextStep();
         setVisible(false);
-        // navigate(-1);
-        setLoading(false);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
     setVisible(false);
-    setLoading(false);
   };
 
   const handleMenuSelect = () => {
@@ -946,26 +738,406 @@ const NewBookingFile = () => {
       nextStep();
     }
   };
+  useEffect(() => {
+    if (params.bookingId) {
+      getBookingDetails(params.bookingId);
+    }
+  }, []);
+  const getBookingDetails = async (bookingId) => {
+    if (params.bookingId) {
+      const headers = {
+        "Content-Type": "application/json",
+        token: localStorage.getItem("customerToken"),
+      };
+      axios({
+        method: "get",
+        url: `https://a-wep.herokuapp.com/customer/getSubVenueBooking/${params.bookingId}`,
+        headers: headers,
+      }).then((res) => {
+        if (res.data.status === "success") {
+          console.log("this is res", res);
+          const response = res.data.data;
+          setBookingDetails(response);
+          setTime(response.bookingTime);
+          setNoOfGuests(response.numberOfGuests);
+          form1.setFieldValue("noOfGuests", response.numberOfGuests);
+          form1.setFieldValue("time", response.bookingTime);
+          form1.setFieldValue("date", new Date(response.bookingDate));
+          form1.setFieldValue("eventType", response.eventType);
+          form.setFieldValue("customer", response.customerId?._id);
+          form.setFieldValue("phone", response.pointOfContact?.phone);
+          form.setFieldValue("email", response.pointOfContact?.email);
+          form.setFieldValue("description", response.bookingDescription);
+          setPhone(response.pointOfContact?.phone);
+          setEmail(response.pointOfContact?.email);
+          setDescription(response.bookingDescription);
+          setEventDate(new Date(response.bookingDate));
+          let serviceTitles = response.selectedVenueServices.map(
+            (service) => service.serviceTitle
+          );
+          setSelectedVenueServices(serviceTitles);
+
+          let venueServices = {}; // venue services that user selected in booking
+          // save all venue services in venueServices object and then compare with selectedVenueServices
+          response.venueId?.providedVenueServices?.map(
+            (service) => (venueServices[service.serviceTitle] = true)
+          );
+
+          // if a selectedVenueService is not in venueServices object then add it to venueServices
+          response.selectedVenueServices.map((service) => {
+            if (!venueServices[service.serviceTitle]) {
+              response.venueId?.providedVenueServices?.push(service);
+            }
+          });
+
+          let subVenueServices = {}; // subVenue services that user selected in booking
+          // save all subVenue services in subVenueServices object and then compare with selectedSubVenueServices
+          response.subVenues.map((subVenue) => {
+            subVenueServices[subVenue._id] = {};
+
+            subVenue?.subVenueServices?.map(
+              (service) =>
+                (subVenueServices[subVenue._id][service.serviceTitle] = true)
+            );
+          });
+
+          // if a selectedSubVenueService is not in subVenueServices object then add it to subVenueServices
+          Object.entries(response.subVenueAndDataObject).forEach(
+            ([key, value], index) => {
+              value.selectedSubVenueServices?.map((service) => {
+                if (!subVenueServices[key][service.serviceTitle]) {
+                  response.subVenues[index]?.subVenueServices?.push(service);
+                }
+              });
+            }
+          );
+
+          //////MODIFY SERVICE PRICES///////////////////////////////////////////////////////////
+          let venueServicePrices = {};
+          for (let service of response.selectedVenueServices) {
+            venueServicePrices[service.serviceTitle] = service.servicePrice;
+          }
+          console.log("GANGA NAHAEY", response.venueId);
+          console.log("GANGA NAHAEY", response.venueId.providedVenueServices);
+          response.venueId?.providedVenueServices.map((service) => {
+            service.servicePrice =
+              venueServicePrices[service.serviceTitle] || service.servicePrice;
+          });
+
+          // change price of subVenue services according to selectedVenueServices
+          let servicePrices = {};
+          Object.entries(response.subVenueAndDataObject).forEach(
+            ([key, value], index) => {
+              let services = {};
+              for (let service of value.selectedSubVenueServices) {
+                services[service.serviceTitle] = service.servicePrice;
+              }
+              servicePrices[key] = services;
+            }
+          );
+          Object.entries(response.subVenueAndDataObject).forEach(
+            ([key, value], index) => {
+              let services = {};
+              for (let service of value.selectedSubVenueServices) {
+                services[service.serviceTitle] = service.servicePrice;
+              }
+              servicePrices[key] = services;
+            }
+          );
+
+          response.subVenues.forEach((subVenue) => {
+            subVenue.subVenueServices.map((service) => {
+              service.servicePrice =
+                servicePrices[subVenue._id]?.[service.serviceTitle] ||
+                service.servicePrice;
+            });
+          });
+
+          Object.entries(response.subVenueAndDataObject).forEach(
+            ([key, value]) => {
+              let serviceTitles = value.selectedSubVenueServices.map(
+                (service) => service.serviceTitle
+              );
+
+              setSelectedSubVenueServices((prevState) => ({
+                ...prevState,
+                [key]: serviceTitles,
+              }));
+
+              setSelectedSubVenueServiceObject((prevState) => ({
+                ...prevState,
+                [key]: value.selectedSubVenueServices,
+              }));
+            }
+          );
+
+          //////////////////////////////////////
+          let totalPrice = response.price?.totalPrice || 0;
+          let menuPrice = response.selectedMenu?.price || 0;
+          let stagePrice = response.selectedStage?.design?.price || 0;
+          let hallCharges = response?.hallCharges || 0;
+          let newPrice =
+            totalPrice -
+            menuPrice * response?.numberOfGuests -
+            stagePrice -
+            hallCharges;
+          setTotalPrice(newPrice);
+          setHallCharges(hallCharges);
+          setMenuPolicy(response?.venueId?.menuPolicy);
+          setAllCustomers([response?.customerId]);
+          setCustomer(response?.customerId?._id);
+          setSelectedStage(response.selectedStage?.design || null);
+          setSelectedTheme(response.selectedVenueTheme?.theme || null);
+          setIdOfSelectedTheme(response?.selectedVenueTheme?.theme?._id);
+          setIdOfSelectedStage(response?.selectedStage?.design?._id);
+          setVenueCity(response.city);
+          setAllVenues([response?.venueId]);
+          setVenue(response?.venueId?._id);
+          setEventType(response?.eventType);
+          setStagePrice(response.selectedStage?.design?.price || 0);
+          setIdOfSelectedMenu(response?.selectedMenu?.menu?._id);
+          setSelectedMenu(response?.selectedMenu?.modifiedMenu || null);
+          let idsOfSelectedSubVenue = [];
+          for (let index in response?.subVenues) {
+            idsOfSelectedSubVenue.push(response.subVenues[index]._id);
+          }
+          setAllSubVenues(response.subVenues);
+          setMenuPrice(response.selectedMenu?.price || 0);
+          setIdOfSelectedSubVenue(idsOfSelectedSubVenue);
+          setSubVenue(response.subVenues);
+          setVisible(false);
+          setRefresh(false);
+        } else {
+          console.log("error", res.data);
+          // alert("Error");
+        }
+      });
+    }
+  };
+
+  //calling useEffect for sub venue hall charges
+
+  useEffect(() => {
+    // if (!params.bookingId) {
+    console.log("@@@sub venue hall charges", subVenue);
+    console.log("@@@menupolicy", menuPolicy);
+
+    let minCapacity =
+      subVenue.reduce((a, b) => a + b.subVenueMinCapacity, 0) || 0;
+    console.log("@@@minCapacity", minCapacity);
+
+    let perHeadWithMenu =
+      subVenue.reduce((a, b) => a + b.perHeadWithMenu, 0) || 0;
+    let averagePerHeadWithMenu = perHeadWithMenu / subVenue.length || 0;
+    console.log("@@@perHeadWithMenu", perHeadWithMenu);
+    let perHeadWithoutMenu =
+      subVenue.reduce((a, b) => a + b.perHeadWithoutMenu, 0) || 0;
+    let averagePerHeadWithoutMenu = perHeadWithoutMenu / subVenue.length || 0;
+    console.log("@@@perHeadWithoutMenu", perHeadWithoutMenu);
+
+    if (menuPolicy) {
+      console.log("@@@menuPolicy", menuPolicy);
+      if (minCapacity > noOfGuests) {
+        console.log("@@@menuPolicy2 if", menuPolicy);
+
+        // idOfSelectedMenu === ""
+        //   ?
+        setChargesError(
+          "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
+            minCapacity +
+            " or Extra charges will be applied of Rs. " +
+            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+        );
+        // : setChargesError(
+        //     "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
+        //       minCapacity +
+        //       " or Extra charges will be applied of Rs. " +
+        //       averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+        //   );
+
+        console.log(
+          "@@@T-DEBUG",
+          idOfSelectedMenu === "" || idOfSelectedMenu === undefined
+        );
+        console.log("@@@T-DEBUG", averagePerHeadWithoutMenu * minCapacity);
+        console.log(
+          "@@@T-DEBUG",
+          averagePerHeadWithMenu * noOfGuests +
+            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+        );
+        idOfSelectedMenu === "" || idOfSelectedMenu === undefined
+          ? setHallCharges(averagePerHeadWithoutMenu * minCapacity)
+          : setHallCharges(
+              averagePerHeadWithMenu * noOfGuests +
+                averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+            );
+      } else {
+        console.log("@@@menuPolicy3 else", menuPolicy);
+
+        setChargesError("");
+        idOfSelectedMenu === "" || idOfSelectedMenu === undefined
+          ? setHallCharges(averagePerHeadWithoutMenu * noOfGuests)
+          : setHallCharges(averagePerHeadWithMenu * noOfGuests);
+      }
+    } else {
+      console.log("@@@menuPolicy4 false else", menuPolicy);
+
+      console.log("menu policy false");
+      if (minCapacity > noOfGuests) {
+        console.log("@@@menuPolicy false else if5", menuPolicy);
+
+        // idOfSelectedMenu === "" ||
+        //   (idOfSelectedMenu === undefined &&
+        setChargesError(
+          "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
+            minCapacity +
+            " or Extra charges will be applied of Rs. " +
+            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+        );
+        // : setChargesError(
+        //     "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
+        //       minCapacity +
+        //       " or Extra charges will be applied of Rs. " +
+        //       averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+        //   );
+        idOfSelectedMenu === "" || idOfSelectedMenu === undefined
+          ? setHallCharges(averagePerHeadWithoutMenu * minCapacity)
+          : setHallCharges(
+              averagePerHeadWithoutMenu * noOfGuests +
+                averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+            );
+      } else {
+        console.log("@@@menuPolicy6 else else esle", menuPolicy);
+
+        setChargesError("");
+        idOfSelectedMenu === "" || idOfSelectedMenu === undefined
+          ? setHallCharges(averagePerHeadWithMenu * noOfGuests)
+          : setHallCharges(averagePerHeadWithoutMenu * noOfGuests);
+      }
+      // }
+    }
+  }, [noOfGuests, idOfSelectedSubVenue, subVenue, idOfSelectedMenu]);
 
   return (
-    <Container size="xl">
-      {localStorage.getItem("customerToken") ? (
-        <Paper
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "relative",
-          }}
-          // p={0}
-        >
-          <LoadingOverlay
-            visible={visible}
-            loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
-            overlayOpacity={0.5}
-            overlayColor="#c5c5c5"
-            zIndex={1}
-          />
+    <Paper
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+      }}
+      p={0}
+    >
+      <LoadingOverlay
+        visible={visible}
+        loaderProps={{ size: "xl", color: "pink", variant: "bars" }}
+        overlayOpacity={0.5}
+        overlayColor="#c5c5c5"
+        zIndex={1}
+      />
+      <Modal
+        styles={{
+          close: {
+            color: "black",
+            backgroundColor: "#EAEAEA",
+            borderRadius: "50%",
+            "&:hover": {
+              transition: "50ms",
+              color: "white",
+              backgroundColor: "red",
+            },
+          },
+        }}
+        title={
+          <Title align="center" order={3}>
+            Booking Logged Successfully!!
+          </Title>
+        }
+        closeOnClickOutside={false}
+        opened={confirmBooking}
+        transition="rotate-left"
+        transitionDuration={600}
+        centered
+        zIndex={1000}
+        size={600}
+        transitionTimingFunction="ease"
+        onClose={() => {
+          setConfirmBooking(false);
+          navigate("/dashboard/venueBookings");
+        }}
+      >
+        <BookingResponse bookingResponse={bookingResponse} />
 
+        <Group position="center">
+          <Button
+            component={Link}
+            to="/"
+            mt="md"
+            leftIcon={<IconX />}
+            color="green"
+            // fullWidth
+            onClick={() => setConfirmBooking(false)}
+            uppercase
+          >
+            Close
+          </Button>
+        </Group>
+      </Modal>
+      <Modal
+        overlayColor={
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[9]
+            : theme.colors.gray[2]
+        }
+        title="Alter Service Price"
+        overlayOpacity={0.55}
+        overlayBlur={3}
+        opened={alterPrice}
+        padding={50}
+        size="lg"
+        onClose={() => setAlterPrice(false)}
+      >
+        <form
+          onSubmit={alterPriceForm.onSubmit((values) =>
+            handleAlterPrice(values)
+          )}
+        >
+          <Checkbox
+            checked={freeService}
+            label="Free Service"
+            size="md"
+            onChange={(event) => {
+              setFreeService(event.currentTarget.checked);
+              alterPriceForm.setFieldValue("newPrice", 0);
+            }}
+          />
+          <NumberInput
+            size="md"
+            required
+            // type="number"
+            min={0}
+            disabled={freeService}
+            hideControls
+            max={100000}
+            label={`Enter New Price of ${serviceTitle}`}
+            description={`Original Price: ${oldServicePrice}`}
+            {...alterPriceForm.getInputProps("newPrice")}
+          />
+          <Center py="md">
+            <Button type="submit">Change Price</Button>
+          </Center>
+        </form>
+      </Modal>
+      <Center>
+        <Paper
+          // py="xl"
+          style={{
+            width: "90%",
+            height: "100%",
+          }}
+        >
+          <Title order={2} align="center" py="xl">
+            Sub Venue Booking
+          </Title>
           <Modal
             styles={{
               close: {
@@ -979,740 +1151,497 @@ const NewBookingFile = () => {
                 },
               },
             }}
-            title={
-              <Title align="center" order={3}>
-                Booking Logged Successfully!!
-              </Title>
-            }
-            closeOnClickOutside={false}
-            opened={confirmBooking}
+            opened={opened}
             transition="rotate-left"
             transitionDuration={600}
-            centered
-            zIndex={1000}
             size={600}
             transitionTimingFunction="ease"
-            onClose={() => {
-              setConfirmBooking(false);
-              navigate("/dashboard/venueBookings");
-            }}
+            onClose={() => setOpened(false)}
           >
-            <Stack>
-              <Group position="apart">
-                <Group position="left">
-                  <Text weight={900}>
-                    Booking ID: {bookingResponse?.trackingId}
-                  </Text>
-                </Group>
-                <Badge size="lg">New Booking</Badge>
-              </Group>
-              <Paper
-                withBorder
-                p="xl"
-                shadow="md"
-                sx={{
-                  ":hover": {
-                    transform: `scale(1.05)`,
-                    transition: "0.3s",
-                  },
-                }}
-              >
-                <Grid>
-                  <Grid.Col span={6}>
-                    <Text>{bookingResponse?.subVenueName}</Text>
-
-                    <Group position="left">
-                      <Text>
-                        {moment(value1).format().split("T")[0]} / {time}
-                      </Text>
-                    </Group>
-
-                    <Group position="left">
-                      <Text>{eventType}</Text>
-                    </Group>
-                    <Group position="left">
-                      <Text>
-                        {noOfGuests} <b>Persons</b>
-                      </Text>
-                    </Group>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Image height={125} src={Congrats} />
-                  </Grid.Col>
-                </Grid>
-              </Paper>
-              <Paper
-                withBorder
-                p="xl"
-                shadow="md"
-                sx={{
-                  ":hover": {
-                    transform: `scale(1.05)`,
-                    transition: "0.3s",
-                  },
-                }}
-              >
-                <Group position="apart">
-                  <Text>Subtotal</Text>
-                  <Text>
-                    <b>
-                      {bookingResponse?.price?.totalPrice?.toLocaleString()}
-                    </b>
-                  </Text>
-                </Group>
-                <Group position="apart">
-                  <Text>Discount</Text>
-                  <Text>
-                    <b>
-                      {(
-                        bookingResponse?.price?.totalPrice *
-                        bookingResponse?.price?.discountPercentage
-                      )?.toLocaleString()}
-                    </b>
-                  </Text>
-                </Group>
-                <Group position="apart">
-                  <Text>Tax</Text>
-                  <Text>
-                    +
-                    <b>
-                      {(
-                        bookingResponse?.price?.totalPrice *
-                        bookingResponse?.price?.taxPercentage
-                      )?.toLocaleString()}
-                    </b>
-                  </Text>
-                </Group>
-                <Group position="apart">
-                  <Text>Total</Text>
-                  <Text>
-                    <b>
-                      {bookingResponse?.price?.totalPriceAfterTaxAndDiscount?.toLocaleString()}
-                    </b>
-                  </Text>
-                </Group>
-                <Divider />
-                <Group position="apart">
-                  <Text>Amount Paid</Text>
-                  <Text>
-                    <b>
-                      {bookingResponse?.price?.paidAmount
-                        ?.toLocaleString()
-                        ?.toLocaleString()}
-                    </b>
-                  </Text>
-                </Group>
-                <Divider />
-                <Group position="apart">
-                  <Text>Amount Remaining: </Text>
-                  <Text>
-                    {bookingResponse?.price?.remainingAmount?.toLocaleString()}
-                  </Text>
-                </Group>
-                <Divider />
-              </Paper>
-            </Stack>
-
-            <Group position="center">
-              <Button
-                component={Link}
-                to="/"
-                mt="md"
-                leftIcon={<IconX />}
-                color="green"
-                // fullWidth
-                onClick={() => setConfirmBooking(false)}
-                uppercase
-              >
-                Close
-              </Button>
-            </Group>
+            <Title align="center" order={3}>
+              Are You Sure You Want To Cancel?
+            </Title>
+            <Grid align="center" justify="space-around" p="md">
+              <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
+                <Button
+                  align="center"
+                  color="light"
+                  leftIcon={<IconTrashOff size={14} />}
+                  onClick={() => setOpened(false)}
+                >
+                  No, Don't Cancel
+                </Button>
+              </Grid.Col>
+              <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
+                <Button
+                  align="center"
+                  color="red"
+                  leftIcon={<IconTrash size={14} />}
+                  onClick={() => navigate("/dashboard/venueBookings")}
+                >
+                  Yes, Cancel
+                </Button>
+              </Grid.Col>
+            </Grid>
           </Modal>
-
-          <Paper
-            py="xl"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
+          <Stepper
+            active={active}
+            onStepClick={setActive}
+            breakpoint="lg"
+            // pt="xl"
           >
-            {params.bookingId ? (
-              <Title order={2} align="center" py="xl">
-                Sub Venue Booking Update
-              </Title>
-            ) : (
-              <Title order={2} align="center" py="xl">
-                Sub Venue Booking
-              </Title>
-            )}
-            <Modal
-              styles={{
-                close: {
-                  color: "black",
-                  backgroundColor: "#EAEAEA",
-                  borderRadius: "50%",
-                  "&:hover": {
-                    transition: "50ms",
-                    color: "white",
-                    backgroundColor: "red",
-                  },
-                },
-              }}
-              opened={opened}
-              transition="rotate-left"
-              transitionDuration={600}
-              size={600}
-              transitionTimingFunction="ease"
-              onClose={() => setOpened(false)}
+            <Stepper.Step
+              color={!stepperDisabled ? "grape" : "gray"}
+              label="Booking Details"
+              description="General Booking Details"
+              allowStepSelect={active > 0}
+              disabled={stepperDisabled}
             >
-              <Title align="center" order={3}>
-                Are You Sure You Want To Cancel?
-              </Title>
-              <Grid align="center" justify="space-around" p="md">
-                <Grid.Col align="center" xs={3} sm={3} md={4} lg={4}>
+              <Paper
+                // p="xl"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <Group position="apart">
+                  <Text weight="bold" size="xl" py="md">
+                    General Booking Details
+                  </Text>
                   <Button
-                    align="center"
-                    color="light"
-                    leftIcon={<IconTrashOff size={14} />}
-                    onClick={() => setOpened(false)}
-                  >
-                    No, Don't Cancel
-                  </Button>
-                </Grid.Col>
-                <Grid.Col align="center" xs={5} sm={4} md={4} lg={4}>
-                  <Button
-                    align="center"
+                    hidden={params?.bookingId}
+                    size="md"
+                    disabled={venueCity === ""}
+                    variant="filled"
                     color="red"
-                    leftIcon={<IconTrash size={14} />}
-                    onClick={() => navigate("/dashboard/venueBookings")}
+                    // disabled={loading}
+                    // leftIcon={<IconX />}
+                    onClick={() => {
+                      setVenueCity("");
+                      setVenue("");
+                      setEventType(params?.eventType ? params?.eventType : "");
+                      setTime("");
+                      setNoOfGuests(0);
+                      // form1.setFieldValue("noOfGuests", "");
+                      setIdOfSelectedSubVenue([]);
+                      setSelectedSubVenueServices([]);
+                      setSelectedSubVenueServiceObject([]);
+                      setIdOfSelectedMenu("");
+                      setIdOfSelectedTheme("");
+                      setTotalPrice(0);
+                      setMenuPrice(0);
+                      setChargesError("");
+                      setHallCharges(0);
+                      setHidden(true);
+                      setChecked({});
+                      setEventDate(new Date());
+                      form1.reset();
+                    }}
                   >
-                    Yes, Cancel
+                    RESET
                   </Button>
-                </Grid.Col>
-              </Grid>
-            </Modal>
-            <Stepper
-              active={active}
-              onStepClick={setActive}
-              breakpoint="lg"
-              pt="xl"
+                </Group>
+
+                <form
+                  onSubmit={form1.onSubmit((values) => handleSubmit(values))}
+                >
+                  <Grid justify="space-around" py="md">
+                    <Grid.Col lg={6}>
+                      <Select
+                        required
+                        size="md"
+                        disabled={idOfSelectedSubVenue?.length !== 0}
+                        label="Event Type"
+                        placeholder="Event Type"
+                        value={eventType}
+                        onChange={(e) => {
+                          setEventType(e);
+                        }}
+                        data={[
+                          {
+                            value: "MEHNDI",
+                            label: "MEHNDI",
+                          },
+                          {
+                            value: "BARAT",
+                            label: "BARAT",
+                          },
+                          {
+                            value: "WALIMA",
+                            label: "WALIMA",
+                          },
+                          {
+                            value: "SEMINAR",
+                            label: "SEMINAR",
+                          },
+                          {
+                            value: "OTHER",
+                            label: "OTHER",
+                          },
+                        ]}
+                        rightSection={<IconChevronDown size={14} />}
+                        rightSectionWidth={40}
+                        {...form1.getInputProps("eventType")}
+                      />
+                    </Grid.Col>
+
+                    <Grid.Col lg={6}>
+                      <DatePicker
+                        inputFormat="YYYY-MM-DD"
+                        size="md"
+                        required
+                        disabled={idOfSelectedSubVenue?.length !== 0}
+                        minDate={dayjs(new Date())
+                          .startOf("month")
+                          .add(new Date().getDate(), "days")
+                          .toDate()}
+                        maxDate={dayjs(new Date()).add(365, "days").toDate()}
+                        placeholder="Pick date"
+                        label="Event Date"
+                        icon={<IconCalendar size={16} />}
+                        value={eventDate}
+                        // onChange={onChange}
+                        onInput={(e) => {
+                          setEventDate(e);
+                          setIdOfSelectedSubVenue([]);
+                          setIdOfSelectedMenu("");
+                          setTotalPrice(0);
+                          setHidden(true);
+                          setMenuPrice(0);
+                        }}
+                        {...form1.getInputProps("date")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col lg={6}>
+                      <Select
+                        required
+                        size="md"
+                        label="Event Time"
+                        disabled={idOfSelectedSubVenue?.length !== 0}
+                        placeholder="Time"
+                        value={time}
+                        onChange={(e) => {
+                          setTime(e);
+                          setIdOfSelectedSubVenue([]);
+                          setIdOfSelectedMenu("");
+                          setMenuPrice(0);
+                          setChargesError("");
+                          setHidden(true);
+                          setTotalPrice(0);
+                        }}
+                        data={[
+                          {
+                            value: "LUNCH",
+                            label: "Lunch",
+                          },
+                          {
+                            value: "DINNER",
+                            label: "Dinner",
+                          },
+                        ]}
+                        rightSection={<IconChevronDown size={14} />}
+                        rightSectionWidth={40}
+                        {...form1.getInputProps("time")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col lg={6}>
+                      <TextInput
+                        type="number"
+                        size="md"
+                        min={49}
+                        required
+                        disabled={params?.bookingId}
+                        value={noOfGuests}
+                        label="Number of Guests"
+                        placeholder="Enter Number of Guests"
+                        onInput={(e) => {
+                          setTotalAvailableCapacity(0);
+                          setNoOfGuests(e.target.value);
+                          setIdOfSelectedSubVenue([]);
+                          setMenuPrice(0);
+                          setChargesError("");
+                          setHallCharges(0);
+                          setIdOfSelectedMenu("");
+                          setTotalPrice(0);
+                        }}
+                        onChange={(e) => {
+                          setNoOfGuests(e.target.value);
+                        }}
+                        {...form1.getInputProps("noOfGuests")}
+                      />
+                    </Grid.Col>
+                  </Grid>
+                  <div hidden={params.bookingId}>
+                    <Text align="center" color="dimmed" pt="md">
+                      <b>Did You Know?</b>
+                    </Text>
+                    {/* <Center>
+                      <Group noWrap align="center">
+                        <Text color="dimmed">
+                          Sub Venues That Can Accommodate Your Number Of Guests
+                          Are
+                        </Text>
+                        <Text style={{ color: "#e60084" }}>Marked In Pink</Text>
+                      </Group>
+                    </Center> */}
+                    <Text color="dimmed" align="center" pt="md">
+                      You Can Also Book Multiple Venues If A Single SubVenue
+                      Does Not Facilitate Your Number Of Guest.
+                    </Text>
+                  </div>
+                  <Center hidden={params.bookingId}>
+                    <Group py="md">
+                      <Text
+                        style={{
+                          color: !checkForMultiBooking ? "purple" : "dimgray",
+                          fontWeight: !checkForMultiBooking ? "bold" : "normal",
+                          padding: "5px",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        Book Single SubVenue
+                      </Text>
+                      <Switch
+                        // disabled={
+
+                        // }
+                        checked={checkForMultiBooking}
+                        onChange={(event) => {
+                          setIdOfSelectedSubVenue([]);
+                          setIdOfSelectedMenu("");
+
+                          setTotalAvailableCapacity(0);
+                          setCheckForMultiBooking(event.currentTarget.checked);
+                          setFulfillmentMessage("");
+                          setChargesError("");
+                        }}
+                        color="grape"
+                        size="md"
+                        styles={{
+                          track: {
+                            backgroundColor: "#61467b",
+                          },
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: checkForMultiBooking ? "purple" : "dimgray",
+                          fontWeight: checkForMultiBooking ? "bold" : "normal",
+                          padding: "5px",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        Book Multiple SubVenues
+                      </Text>
+                    </Group>
+                  </Center>
+                  <Text
+                    align="center"
+                    color={messageColor}
+                    weight={messageColor === "grey" ? "bolder" : "normal"}
+                  >
+                    {fulfillmentMessage}
+                  </Text>
+
+                  {allSubVenues.length > 0 && (
+                    <SubVenuesForBooking
+                      isUpdate={params.bookingId ? true : false}
+                      setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
+                      allSubVenues={allSubVenues}
+                      setSubVenue={setSubVenue}
+                      subVenue={subVenue}
+                      idOfSelectedSubVenue={idOfSelectedSubVenue}
+                      refreshStates={refreshStates}
+                      bookedDateAndTime={bookedDateAndTime}
+                      noOfGuests={noOfGuests}
+                      venueCity={venueCity}
+                      venue={params.venueId}
+                      setHidden={setHidden}
+                      error={error}
+                      setError={setError}
+                      setDisabled={setDisabled}
+                      setChargesError={setChargesError}
+                      hallCharges={hallCharges}
+                      setHallCharges={setHallCharges}
+                      setVenueCity={setVenueCity}
+                      setVenue={setVenue}
+                      setNoOfGuests={setNoOfGuests}
+                      hideSelectButton={hideSelectButton}
+                      time={time}
+                      form1={form1}
+                      fulfillmentMessage={fulfillmentMessage}
+                      setFulfillmentMessage={setFulfillmentMessage}
+                      allVenues={allVenues}
+                      messageColor={messageColor}
+                      setMessageColor={setMessageColor}
+                      checkForMultiBooking={checkForMultiBooking}
+                      setCheckForMultiBooking={setCheckForMultiBooking}
+                      totalAvailableCapacity={totalAvailableCapacity}
+                      setTotalAvailableCapacity={setTotalAvailableCapacity}
+                      idOfSelectedMenu={idOfSelectedMenu}
+                      setMenuPolicy={setMenuPolicy}
+                      menuPolicy={menuPolicy}
+                    />
+                  )}
+                  <Text align="center" color="red">
+                    {chargesError}
+                  </Text>
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        leftIcon={<IconX />}
+                        onClick={() => setOpened(true)}
+                      >
+                        CANCEL
+                      </Button>
+                    </Grid.Col>
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        type="submit"
+                        disabled={
+                          (disabled || totalAvailableCapacity < noOfGuests) &&
+                          !params.bookingId
+                        }
+                        rightIcon={<IconArrowRight />}
+                      >
+                        NEXT
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </form>
+              </Paper>
+            </Stepper.Step>
+            <Stepper.Step
+              color={!stepperDisabled ? "grape" : "gray"}
+              label="Select Services"
+              description="Select Venue Services"
+              allowStepSelect={active > 1}
+              disabled={stepperDisabled}
             >
+              <ServiceSelection
+                alterServiceSelection={alterServiceSelection}
+                setAlterServiceSelection={setAlterServiceSelection}
+                allSubVenues={allSubVenues}
+                allVenues={allVenues}
+                venue={venue}
+                setVenue={setVenue}
+                idOfSelectedSubVenue={idOfSelectedSubVenue}
+                selectedSubVenueServices={selectedSubVenueServices}
+                setSelectedSubVenueServices={setSelectedSubVenueServices}
+                selectedSubVenueServiceObject={selectedSubVenueServiceObject}
+                setSelectedSubVenueServiceObject={
+                  setSelectedSubVenueServiceObject
+                }
+                selectedVenueServices={selectedVenueServices}
+                setSelectedVenueServices={setSelectedVenueServices}
+                selectedVenueServiceObject={selectedVenueServiceObject}
+                setSelectedVenueServiceObject={setSelectedVenueServiceObject}
+                subVenueWiseServicePrices={subVenueWiseServicePrices}
+                setSubVenueWiseServicePrices={setSubVenueWiseServicePrices}
+                venueWiseServicePrices={venueWiseServicePrices}
+                setVenueWiseServicePrices={setVenueWiseServicePrices}
+                hallCharges={hallCharges}
+                totalPrice={totalPrice}
+                setTotalPrice={setTotalPrice}
+                noOfGuests={noOfGuests}
+                menuPrice={menuPrice}
+                checked={checked}
+                setChecked={setChecked}
+                checkedVenueServices={checkedVenueServices}
+                setCheckedVenueServices={setCheckedVenueServices}
+                setHidden={setHidden}
+                setOldServicePrice={setOldServicePrice}
+                setServiceTitle={setServiceTitle}
+                setFreeService={setFreeService}
+                matches1200={matches1200}
+                setAlterPrice={setAlterPrice}
+                setAlterPriceId={setAlterPriceId}
+                stagePrice={stagePrice}
+                prevStep={prevStep}
+                nextStep={nextStep}
+              />
+            </Stepper.Step>
+            {venueDetails?.menus?.length !== 0 && (
               <Stepper.Step
                 color={!stepperDisabled ? "grape" : "gray"}
-                label="Booking Details"
-                description="General Booking Details"
-                allowStepSelect={active > 0}
+                label="Menu Selection"
+                description="Select A Menu"
+                allowStepSelect={active > 2}
                 disabled={stepperDisabled}
               >
-                <Paper
-                  // p="xl"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
+                <Paper pb="xl">
                   <Group position="apart">
                     <Text weight="bold" size="xl" py="md">
-                      General Booking Details
+                      Menu Selection
                     </Text>
+                    <Text weight="bold" size="xl" py="md" color="red">
+                      Total without Tax and Discount :{" "}
+                      <b>
+                        Rs.{" "}
+                        {hallCharges +
+                          totalPrice +
+                          stagePrice +
+                          menuPrice * noOfGuests}
+                      </b>
+                    </Text>
+                  </Group>
+                  {idOfSelectedMenu === "" && (
+                    <Text size="xl" color="red" weight="bold">
+                      Please Select A Menu{" "}
+                    </Text>
+                  )}
+                </Paper>
+
+                <MenusOfSpecificVenueForBooking
+                  menus={venueDetails?.menus}
+                  setIdOfSelectedMenu={setIdOfSelectedMenu}
+                  idOfSelectedMenu={idOfSelectedMenu}
+                  setMenuPrice={setMenuPrice}
+                  setSelectedMenu={setSelectedMenu}
+                  noOfGuests={noOfGuests}
+                />
+                <Grid justify="flex-end" py="md">
+                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
                     <Button
                       size="md"
-                      hidden={params.bookingId}
-                      // disabled={eventType === ""}
+                      fullWidth
                       variant="filled"
                       color="red"
                       // disabled={loading}
-                      // leftIcon={<X />}
-                      onClick={() => {
-                        setEventType("");
-                        form1.setFieldValue("eventType", "");
-                        form1.setFieldValue("date", null);
-                        form1.setFieldValue("time", "");
-                        form1.setFieldValue("noOfGuests", "");
-
-                        setTime("");
-                        setNoOfGuests("");
-
-                        setIdOfSelectedSubVenue("");
-                        setSelectedVenueServices([]);
-                        setSelectedVenueServiceObject([]);
-                        setIdOfSelectedMenu("");
-                        setIdOfSelectedTheme("");
-                        setTotalPrice(0);
-                        setMenuPrice(0);
-                        setChargesError("");
-                        setHallCharges(0);
-                        setHidden(true);
-                        setChecked(false);
-                        onChange("");
-                        setError("");
-                        setDisabled(false);
-
-                        // form1.reset();
-                      }}
+                      leftIcon={<IconArrowLeft />}
+                      onClick={prevStep}
                     >
-                      RESET
+                      BACK
                     </Button>
-                  </Group>
+                  </Grid.Col>
 
-                  <form
-                    onSubmit={form1.onSubmit((values) => handleSubmit(values))}
-                  >
-                    <Grid justify="space-around" py="md">
-                      <Grid.Col lg={6}>
-                        <Select
-                          size="md"
-                          disabled={
-                            params.subVenueId
-                              ? false
-                              : idOfSelectedSubVenue !== ""
-                          }
-                          label="Event Type"
-                          placeholder="Event Type"
-                          value={eventType}
-                          // onChange={(e) => {
-                          //   console.log("event is ", e);
-                          //   setEventType(e.target.value);
-                          //   //   setValue2([]);
-                          // }}
-                          data={[
-                            {
-                              value: "MEHNDI",
-                              label: "MEHNDI",
-                            },
-                            {
-                              value: "BARAT",
-                              label: "BARAT",
-                            },
-                            {
-                              value: "WALIMA",
-                              label: "WALIMA",
-                            },
-                            {
-                              value: "SEMINAR",
-                              label: "SEMINAR",
-                            },
-                            {
-                              value: "OTHER",
-                              label: "OTHER",
-                            },
-                          ]}
-                          rightSection={<IconChevronDown size={14} />}
-                          rightSectionWidth={40}
-                          {...form1.getInputProps("eventType")}
-                        />
-                      </Grid.Col>
-
-                      <Grid.Col lg={6}>
-                        <DatePicker
-                          inputFormat="YYYY-MM-DD"
-                          size="md"
-                          disabled={
-                            params.subVenueId
-                              ? false
-                              : idOfSelectedSubVenue !== ""
-                          }
-                          minDate={dayjs(new Date())
-                            .startOf("month")
-                            .add(new Date().getDate(), "days")
-                            .toDate()}
-                          maxDate={dayjs(new Date()).add(365, "days").toDate()}
-                          placeholder="Pick date"
-                          label="Event Date"
-                          icon={<IconCalendar size={16} />}
-                          value={value1}
-                          // onChange={onChange}
-                          onInput={(e) => {
-                            onChange(e);
-                            if (!params.bookingId) {
-                              setIdOfSelectedSubVenue("");
-                              setMenuPrice(0);
-                              setHallCharges(0);
-                              setIdOfSelectedMenu("");
-                              setTotalPrice(0);
-                              setHidden(true);
-                            }
-                          }}
-                          {...form1.getInputProps("date")}
-                        />
-                      </Grid.Col>
-                      <Grid.Col lg={6}>
-                        <Select
-                          size="md"
-                          label="Event Time"
-                          disabled={
-                            params.subVenueId
-                              ? false
-                              : idOfSelectedSubVenue !== ""
-                          }
-                          placeholder="Time"
-                          value={time}
-                          onInput={(e) => {
-                            if (!params.bookingId) {
-                              setIdOfSelectedSubVenue("");
-                              setMenuPrice(0);
-                              setHallCharges(0);
-                              setIdOfSelectedMenu("");
-                              setTotalPrice(0);
-                            }
-                          }}
-                          data={[
-                            {
-                              value: "LUNCH",
-                              label: "Lunch",
-                            },
-                            {
-                              value: "DINNER",
-                              label: "Dinner",
-                            },
-                          ]}
-                          rightSection={<IconChevronDown size={14} />}
-                          rightSectionWidth={40}
-                          {...form1.getInputProps("time")}
-                        />
-                      </Grid.Col>
-                      <Grid.Col lg={6}>
-                        <TextInput
-                          type="number"
-                          size="md"
-                          min={49}
-                          // disabled={idOfSelectedSubVenue !== ""}
-                          value={noOfGuests}
-                          label="Number of Guests"
-                          placeholder="Enter Number of Guests"
-                          onInput={(e) => {
-                            setNoOfGuests(e.currentTarget.value);
-                            if (!params.bookingId) {
-                              setIdOfSelectedSubVenue("");
-                              setMenuPrice(0);
-                              setHallCharges(0);
-                              setIdOfSelectedMenu("");
-                              setTotalPrice(0);
-                            }
-                            setChargesError("");
-                          }}
-                          onChange={(e) => {
-                            setNoOfGuests(e.currentTarget.value);
-                          }}
-                          {...form1.getInputProps("noOfGuests")}
-                        />
-                      </Grid.Col>
-                    </Grid>
-
-                    {venueDetails?.subVenues && (
-                      <SubVenuesForBooking
-                        isUpdate={params.bookingId ? true : false}
-                        subvenueDetails={
-                          venueDetails?.subVenues ? venueDetails?.subVenues : []
-                        }
-                        setIdOfSelectedSubVenue={setIdOfSelectedSubVenue}
-                        idOfSelectedSubVenue={
-                          params.subVenueId || idOfSelectedSubVenue
-                        }
-                        bookedDateAndTime={bookedDateAndTime}
-                        bookingDateAndTime={bookingDateAndTime}
-                        noOfGuests={form1.values.noOfGuests}
-                        setHidden={setHidden}
-                        error={error}
-                        setError={setError}
-                        setDisabled={setDisabled}
-                        setChargesError={setChargesError}
-                        hallCharges={hallCharges}
-                        setHallCharges={setHallCharges}
-                        setNoOfGuests={setNoOfGuests}
-                        hideSelectButton={hideSelectButton}
-                        time={time}
-                        form1={form1}
-                      />
-                    )}
-
-                    <Text align="center" color="red">
-                      {chargesError}
-                    </Text>
-                    <Grid justify="flex-end" py="md">
-                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                        <Button
-                          size="md"
-                          fullWidth
-                          variant="filled"
-                          color="red"
-                          leftIcon={<IconX />}
-                          onClick={() => setOpened(true)}
-                        >
-                          CANCEL
-                        </Button>
-                      </Grid.Col>
-                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                        <Button
-                          size="md"
-                          fullWidth
-                          variant="filled"
-                          color="dark"
-                          type="submit"
-                          disabled={disabled || !idOfSelectedSubVenue}
-                          // loading={loading}
-                          rightIcon={<IconArrowRight />}
-                          // onClick={nextStep}
-                        >
-                          NEXT
-                        </Button>
-                      </Grid.Col>
-                    </Grid>
-                  </form>
-                </Paper>
-              </Stepper.Step>
-              <Stepper.Step
-                color={!stepperDisabled ? "grape" : "gray"}
-                label="Select Services"
-                description="Select Venue Services"
-                allowStepSelect={active > 1}
-                disabled={stepperDisabled}
-              >
-                <Group position="apart">
-                  <Text weight="bold" size="xl" py="md">
-                    What Services Do You Want To Avail?
-                  </Text>
-                  <Text weight="bold" size="xl" py="md" color="red">
-                    Total{" "}
-                    <b>
-                      Rs.{" "}
-                      {hallCharges +
-                        totalPrice +
-                        stagePrice +
-                        menuPrice * noOfGuests}
-                    </b>
-                  </Text>
-                </Group>
-                <Paper pb="xl">
-                  <Grid>
-                    <Grid.Col lg={hidden ? 12 : 6}>
-                      <Checkbox
+                  {idOfSelectedMenu === "" ? (
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
                         size="md"
-                        label="Select All"
-                        checked={checked}
-                        onChange={(event) =>
-                          setChecked(event.currentTarget.checked)
-                        }
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        rightIcon={<IconArrowRight />}
                         onClick={() => {
-                          const SelectedVenueServiceObjects =
-                            venueDetails?.subVenues?.filter(
-                              (f) => f._id === idOfSelectedSubVenue
-                            )[0]?.subVenueServices;
-                          if (!checked) {
-                            setSelectedVenueServices(
-                              venueDetails?.subVenues
-                                ?.filter(
-                                  (f) => f._id === idOfSelectedSubVenue
-                                )[0]
-                                ?.subVenueServices.map((m) => m.serviceTitle)
-                            );
-
-                            console.log("555555", SelectedVenueServiceObjects);
-                            setSelectedVenueServiceObject(
-                              SelectedVenueServiceObjects
-                            );
-
-                            setTotalPrice(
-                              SelectedVenueServiceObjects.reduce(
-                                (acc, curr) => {
-                                  const price =
-                                    curr.duration === "Per Hour"
-                                      ? acc + curr.servicePrice * 3
-                                      : acc + curr.servicePrice;
-                                  return price;
-                                },
-                                0
-                              )
-                            );
-                          } else {
-                            setSelectedVenueServices([]);
-                            setSelectedVenueServiceObject([]);
-                            setTotalPrice(
-                              totalPrice -
-                                SelectedVenueServiceObjects.reduce(
-                                  (acc, curr) => {
-                                    const price =
-                                      curr.duration === "Per Hour"
-                                        ? acc + curr.servicePrice * 3
-                                        : acc + curr.servicePrice;
-                                    return price;
-                                  },
-                                  0
-                                )
-                            );
-                          }
+                          setMenuPrice(0);
+                          setIdOfSelectedMenu("");
+                          setSelectedMenu("");
+                          nextStep();
                         }}
-                      />
-                      <Checkbox.Group
-                        value={selectedVenueServices}
-                        onChange={(e) => {
-                          if (e.length > 0) {
-                            setHidden(false);
-                          } else {
-                            setHidden(true);
-                          }
-                          setSelectedVenueServices(e);
-                          const SelectedVenueServiceObjects =
-                            venueDetails?.subVenues
-                              ?.filter((f) => f._id === idOfSelectedSubVenue)[0]
-                              ?.subVenueServices.filter((g) =>
-                                e.includes(g.serviceTitle)
-                              );
-                          console.log("555555", SelectedVenueServiceObjects);
-                          setSelectedVenueServiceObject(
-                            SelectedVenueServiceObjects
-                          );
-
-                          setTotalPrice(
-                            SelectedVenueServiceObjects.reduce((acc, curr) => {
-                              const price =
-                                curr.duration === "Per Hour"
-                                  ? acc + curr.servicePrice * 3
-                                  : acc + curr.servicePrice;
-                              return price;
-                            }, 0)
-                          );
-                        }}
-                        size="md"
-                        pb="xl"
                       >
-                        <Grid>
-                          {venueDetails?.subVenues
-                            ?.filter((e) => e._id === idOfSelectedSubVenue)[0]
-                            ?.subVenueServices.map((row, index) => {
-                              return (
-                                <Grid.Col lg={12} key={index}>
-                                  <Group>
-                                    <Checkbox
-                                      key={row.serviceTitle}
-                                      value={row.serviceTitle}
-                                      label={
-                                        <Paper
-                                          style={{
-                                            display: "flex",
-
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          <Avatar
-                                            src={row.coverImage}
-                                            alt="it's me"
-                                          />
-                                          <div
-                                            style={{
-                                              paddingLeft: "1rem",
-                                            }}
-                                          >
-                                            <Text align="justify">
-                                              {row.serviceTitle}{" "}
-                                              <b>
-                                                (Rs.{" "}
-                                                {row.servicePrice === 0
-                                                  ? "Complimentary"
-                                                  : row.servicePrice}
-                                                )
-                                              </b>
-                                            </Text>
-
-                                            <Text
-                                              align="justify"
-                                              size="xs"
-                                              color="dimmed"
-                                            >
-                                              {row.serviceDescription}
-                                            </Text>
-                                          </div>
-                                        </Paper>
-                                      }
-                                      pr="md"
-                                    />
-                                  </Group>
-                                </Grid.Col>
-                              );
-                            })}
-                        </Grid>
-                      </Checkbox.Group>
-                    </Grid.Col>
-                    {!hidden && matches1200 && (
-                      <Grid.Col lg={6}>
-                        <Paper withBorder radius="xl" p="xl">
-                          <Grid justify="flex-end">
-                            <Grid.Col lg={5}>
-                              <Text weight="bold">Service Name</Text>
-                            </Grid.Col>
-                            <Grid.Col lg={2}>
-                              <Text weight="bold"> Cost</Text>
-                            </Grid.Col>
-                            <Grid.Col lg={2}>
-                              <Text weight="bold">Multiple</Text>
-                            </Grid.Col>
-                            <Grid.Col lg={3}>
-                              <Text weight="bold">Total Cost</Text>
-                            </Grid.Col>
-                          </Grid>
-                          <Divider p="sm" />
-
-                          <Grid>
-                            {selectedVenueServiceObject?.map(
-                              (service, index) => (
-                                <>
-                                  <Grid.Col lg={5} key={index}>
-                                    <Text weight="bold">
-                                      <Text>{service.serviceTitle}</Text>
-                                    </Text>
-                                  </Grid.Col>
-
-                                  <Grid.Col lg={2}>
-                                    <Text>Rs. {service.servicePrice}</Text>
-                                  </Grid.Col>
-                                  <Grid.Col lg={2}>
-                                    {service.duration === "Per Hour" ? (
-                                      <Text>3 Hours</Text>
-                                    ) : (
-                                      <Text>1 Event</Text>
-                                    )}
-                                  </Grid.Col>
-                                  <Grid.Col lg={3}>
-                                    {service.duration === "Per Hour" ? (
-                                      <Text>
-                                        Rs. {service.servicePrice * 3}
-                                      </Text>
-                                    ) : (
-                                      <Text>Rs. {service.servicePrice}</Text>
-                                    )}
-                                  </Grid.Col>
-                                </>
-                              )
-                            )}
-                          </Grid>
-                          <Divider p="sm" />
-
-                          <Grid>
-                            <Grid.Col lg={9}>
-                              <Text weight="bold">Total Price Of Services</Text>
-                            </Grid.Col>
-                            <Grid.Col lg={3}>
-                              <Text weight="bold">Rs. {totalPrice}</Text>
-                            </Grid.Col>
-                          </Grid>
-                        </Paper>
-                      </Grid.Col>
-                    )}
-                  </Grid>
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        // disabled={loading}
-                        leftIcon={<IconArrowLeft />}
-                        onClick={prevStep}
-                      >
-                        BACK
+                        Skip
                       </Button>
                     </Grid.Col>
+                  ) : (
                     <Grid.Col xs={6} sm={3} md={3} lg={3}>
                       <Button
                         size="md"
@@ -1720,256 +1649,294 @@ const NewBookingFile = () => {
                         variant="filled"
                         color="dark"
                         rightIcon={<IconArrowRight />}
-                        onClick={nextStep}
+                        onClick={handleMenuSelect}
                       >
                         NEXT
                       </Button>
                     </Grid.Col>
-                  </Grid>
-                </Paper>
+                  )}
+                </Grid>
               </Stepper.Step>
-              {venueDetails?.menus?.length !== 0 && (
-                <Stepper.Step
-                  color={!stepperDisabled ? "grape" : "gray"}
-                  label="Menu Selection"
-                  description="Select A Menu"
-                  allowStepSelect={active > 2}
-                  disabled={stepperDisabled}
-                >
-                  <Paper pb="xl">
-                    <Group position="apart">
-                      <Text weight="bold" size="xl" py="md">
-                        Menu Selection
-                      </Text>
-                      <Text weight="bold" size="xl" py="md" color="red">
-                        Total{" "}
-                        <b>
-                          Rs.{" "}
-                          {hallCharges +
-                            totalPrice +
-                            stagePrice +
-                            menuPrice * noOfGuests}
-                        </b>
-                      </Text>
-                    </Group>
-                    {idOfSelectedMenu === "" && (
-                      <Text size="xl" color="red" weight="bold">
-                        Please Select A Menu{" "}
-                      </Text>
-                    )}
-                  </Paper>
-
-                  <MenusOfSpecificVenueForBooking
-                    menus={venueDetails?.menus}
-                    setIdOfSelectedMenu={setIdOfSelectedMenu}
-                    idOfSelectedMenu={idOfSelectedMenu}
-                    setMenuPrice={setMenuPrice}
-                    setSelectedMenu={setSelectedMenu}
-                    noOfGuests={noOfGuests}
-                  />
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        // disabled={loading}
-                        leftIcon={<IconArrowLeft />}
-                        onClick={prevStep}
-                      >
-                        BACK
-                      </Button>
-                    </Grid.Col>
-
-                    {idOfSelectedMenu === "" ? (
-                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                        <Button
-                          size="md"
-                          fullWidth
-                          variant="filled"
-                          color="dark"
-                          rightIcon={<IconArrowRight />}
-                          onClick={() => {
-                            setMenuPrice(0);
-                            setIdOfSelectedMenu("");
-                            setSelectedMenu("");
-                            nextStep();
-                          }}
-                        >
-                          Skip
-                        </Button>
-                      </Grid.Col>
-                    ) : (
-                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                        <Button
-                          size="md"
-                          fullWidth
-                          variant="filled"
-                          color="dark"
-                          rightIcon={<IconArrowRight />}
-                          onClick={handleMenuSelect}
-                        >
-                          NEXT
-                        </Button>
-                      </Grid.Col>
-                    )}
-                  </Grid>
-                </Stepper.Step>
-              )}
-              {venueDetails?.themes?.length !== 0 && (
-                <Stepper.Step
-                  color={!stepperDisabled ? "grape" : "gray"}
-                  label="Theme Selection"
-                  description="Select A Theme"
-                  allowStepSelect={active > 2}
-                  disabled={stepperDisabled}
-                >
-                  <Paper pb="xl">
-                    <Group position="apart">
-                      <Text weight="bold" size="xl" py="md">
-                        Theme Selection
-                      </Text>
-                      <Text weight="bold" size="xl" py="md" color="red">
-                        Total{" "}
-                        <b>
-                          Rs.{" "}
-                          {hallCharges +
-                            totalPrice +
-                            stagePrice +
-                            menuPrice * noOfGuests}{" "}
-                        </b>
-                      </Text>
-                    </Group>
-                    {idOfSelectedTheme === "" && (
-                      <Text size="xl" color="red" weight="bold">
-                        Please Select A Theme{" "}
-                      </Text>
-                    )}
-                  </Paper>
-
-                  <ThemesOfSpecificVenueForBooking
-                    themes={venueDetails?.themes}
-                    setIdOfSelectedTheme={setIdOfSelectedTheme}
-                    idOfSelectedTheme={idOfSelectedTheme}
-                    setSelectedTheme={setSelectedTheme}
-                    selectedTheme={selectedTheme}
-                  />
-
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        // disabled={loading}
-                        leftIcon={<IconArrowLeft />}
-                        onClick={prevStep}
-                      >
-                        BACK
-                      </Button>
-                    </Grid.Col>
-
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        rightIcon={<IconArrowRight />}
-                        onClick={nextStep}
-                      >
-                        NEXT
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
-                </Stepper.Step>
-              )}
-              {venueDetails?.stages?.length !== 0 && (
-                <Stepper.Step
-                  color={!stepperDisabled ? "grape" : "gray"}
-                  label="Stage Selection"
-                  description="Select A Stage"
-                  allowStepSelect={active > 2}
-                  disabled={stepperDisabled}
-                >
-                  <Paper pb="xl">
-                    <Group position="apart">
-                      <Text weight="bold" size="xl" py="md">
-                        Stage Selection
-                      </Text>
-                      <Text weight="bold" size="xl" py="md" color="red">
-                        Total{" "}
-                        <b>
-                          Rs.{" "}
-                          {hallCharges +
-                            totalPrice +
-                            stagePrice +
-                            menuPrice * noOfGuests}
-                        </b>
-                      </Text>
-                    </Group>
-                    {idOfSelectedTheme === "" && (
-                      <Text size="xl" color="red" weight="bold">
-                        Please Select A Stage{" "}
-                      </Text>
-                    )}
-                  </Paper>
-
-                  <StagesOfSpecificVenueForBooking
-                    setStagePrice={setStagePrice}
-                    stages={venueDetails?.stages}
-                    setIdOfSelectedStage={setIdOfSelectedStage}
-                    idOfSelectedStage={idOfSelectedStage}
-                    setSelectedStage={setSelectedStage}
-                    selectedStage={selectedStage}
-                  />
-
-                  <Grid justify="flex-end" py="md">
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="red"
-                        // disabled={loading}
-                        leftIcon={<IconArrowLeft />}
-                        onClick={prevStep}
-                      >
-                        BACK
-                      </Button>
-                    </Grid.Col>
-
-                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                      <Button
-                        size="md"
-                        fullWidth
-                        variant="filled"
-                        color="dark"
-                        rightIcon={<IconArrowRight />}
-                        onClick={nextStep}
-                      >
-                        NEXT
-                      </Button>
-                    </Grid.Col>
-                  </Grid>
-                </Stepper.Step>
-              )}
-
+            )}
+            {venueDetails?.themes?.length !== 0 && (
               <Stepper.Step
                 color={!stepperDisabled ? "grape" : "gray"}
-                label="Contact Information"
-                description="Contact Information"
-                allowStepSelect={active > 3}
+                label="Theme Selection"
+                description="Select A Theme"
+                allowStepSelect={active > 2}
                 disabled={stepperDisabled}
               >
+                <Paper pb="xl">
+                  <Group position="apart">
+                    <Text weight="bold" size="xl" py="md">
+                      Theme Selection
+                    </Text>
+                    <Text weight="bold" size="xl" py="md" color="red">
+                      Total without Tax and Discount:{" "}
+                      <b>
+                        Rs.{" "}
+                        {hallCharges +
+                          totalPrice +
+                          stagePrice +
+                          menuPrice * noOfGuests}{" "}
+                      </b>
+                    </Text>
+                  </Group>
+                  {idOfSelectedTheme === "" && (
+                    <Text size="xl" color="red" weight="bold">
+                      Please Select A Theme{" "}
+                    </Text>
+                  )}
+                </Paper>
+
+                <ThemesOfSpecificVenueForBooking
+                  themes={venueDetails?.themes}
+                  setIdOfSelectedTheme={setIdOfSelectedTheme}
+                  idOfSelectedTheme={idOfSelectedTheme}
+                  setSelectedTheme={setSelectedTheme}
+                  selectedTheme={selectedTheme}
+                />
+
+                <Grid justify="flex-end" py="md">
+                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                    <Button
+                      size="md"
+                      fullWidth
+                      variant="filled"
+                      color="red"
+                      // disabled={loading}
+                      leftIcon={<IconArrowLeft />}
+                      onClick={prevStep}
+                    >
+                      BACK
+                    </Button>
+                  </Grid.Col>
+
+                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                    <Button
+                      size="md"
+                      fullWidth
+                      variant="filled"
+                      color="dark"
+                      rightIcon={<IconArrowRight />}
+                      onClick={nextStep}
+                    >
+                      NEXT
+                    </Button>
+                  </Grid.Col>
+                </Grid>
+              </Stepper.Step>
+            )}
+            {venueDetails?.stages?.length !== 0 && (
+              <Stepper.Step
+                color={!stepperDisabled ? "grape" : "gray"}
+                label="Stage Selection"
+                description="Select A Stage"
+                allowStepSelect={active > 2}
+                disabled={stepperDisabled}
+              >
+                <Paper pb="xl">
+                  <Group position="apart">
+                    <Text weight="bold" size="xl" py="md">
+                      Stage Selection
+                    </Text>
+                    <Text weight="bold" size="xl" py="md" color="red">
+                      Total without Tax and Discount:{" "}
+                      <b>
+                        Rs.{" "}
+                        {hallCharges +
+                          totalPrice +
+                          stagePrice +
+                          menuPrice * noOfGuests}
+                      </b>
+                    </Text>
+                  </Group>
+                  {idOfSelectedTheme === "" && (
+                    <Text size="xl" color="red" weight="bold">
+                      Please Select A Stage{" "}
+                    </Text>
+                  )}
+                </Paper>
+
+                <StagesOfSpecificVenueForBooking
+                  setStagePrice={setStagePrice}
+                  stages={venueDetails?.stages}
+                  setIdOfSelectedStage={setIdOfSelectedStage}
+                  idOfSelectedStage={idOfSelectedStage}
+                  setSelectedStage={setSelectedStage}
+                  selectedStage={selectedStage}
+                />
+
+                <Grid justify="flex-end" py="md">
+                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                    <Button
+                      size="md"
+                      fullWidth
+                      variant="filled"
+                      color="red"
+                      // disabled={loading}
+                      leftIcon={<IconArrowLeft />}
+                      onClick={prevStep}
+                    >
+                      BACK
+                    </Button>
+                  </Grid.Col>
+
+                  <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                    <Button
+                      size="md"
+                      fullWidth
+                      variant="filled"
+                      color="dark"
+                      rightIcon={<IconArrowRight />}
+                      onClick={nextStep}
+                    >
+                      NEXT
+                    </Button>
+                  </Grid.Col>
+                </Grid>
+              </Stepper.Step>
+            )}
+
+            <Stepper.Step
+              color={!stepperDisabled ? "grape" : "gray"}
+              label="Contact Information"
+              description="Contact Information"
+              allowStepSelect={active > 3}
+              disabled={stepperDisabled}
+            >
+              <Group position="apart">
+                <Text weight="bold" size="xl" py="md">
+                  Contact Details and Booking Description
+                </Text>
+                <Text weight="bold" size="xl" py="md" color="red">
+                  Total without Tax and Discount :{" "}
+                  <b>
+                    Rs.{" "}
+                    {hallCharges +
+                      totalPrice +
+                      stagePrice +
+                      menuPrice * noOfGuests}
+                  </b>
+                </Text>
+              </Group>
+              <Paper py="xl">
+                <form
+                  onSubmit={form.onSubmit((values) => handleSubmit1(values))}
+                >
+                  <Grid>
+                    <Grid.Col md={12} lg={6}>
+                      <TextInput
+                        size="md"
+                        required
+                        type="number"
+                        label="Contact Number"
+                        placeholder="03XXXXXXXX"
+                        // disabled={disabled}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        {...form.getInputProps("phone")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col md={12} lg={6}>
+                      <TextInput
+                        size="md"
+                        placeholder="abc@gmail.com"
+                        value={email}
+                        required
+                        // disabled={disabled}
+                        label="Email Address"
+                        onChange={(e) => setEmail(e.target.value)}
+                        {...form.getInputProps("email")}
+                      />
+                    </Grid.Col>
+                    <Grid.Col md={12} lg={12}>
+                      <Textarea
+                        size="md"
+                        placeholder="Describe Your Event"
+                        value={description}
+                        required
+                        minRows={10}
+                        maxLength={1000}
+                        // disabled={disabled}
+                        label="Booking Description"
+                        onChange={(e) => setDescription(e.target.value)}
+                        {...form.getInputProps("description")}
+                      />
+                    </Grid.Col>
+                  </Grid>
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        // disabled={loading}
+                        leftIcon={<IconArrowLeft />}
+                        onClick={prevStep}
+                      >
+                        BACK
+                      </Button>
+                    </Grid.Col>
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        type="submit"
+                        // disabled={disabled}
+                        // loading={loading}
+                        rightIcon={<IconArrowRight />}
+                        // onClick={nextStep}
+                      >
+                        NEXT
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </form>
+              </Paper>
+            </Stepper.Step>
+
+            <Stepper.Step
+              color={!stepperDisabled ? "grape" : "gray"}
+              label="Payment Details"
+              description="Please proceed with the minimum"
+              allowStepSelect={active > 4}
+              disabled={stepperDisabled}
+            >
+              <Paper style={{ width: "100%" }} py="xl">
                 <Group position="apart">
-                  <Text weight="bold" size="xl" py="md">
-                    Contact Details and Booking Description
-                  </Text>
+                  {!params.bookingId ? (
+                    <Group>
+                      <Text weight="bold" size="xl" py="md">
+                        Review And
+                      </Text>
+
+                      <Button
+                        rightIcon={
+                          <div className="xyz">
+                            <IconArrowDown />
+                          </div>
+                        }
+                        onClick={() => scrollIntoView({ alignment: "center" })}
+                        style={{
+                          backgroundImage:
+                            "url(https://media.istockphoto.com/photos/violet-color-velvet-texture-background-picture-id587219358?k=20&m=587219358&s=612x612&w=0&h=PtwQq0Cx7AllJLpAqQkO315w8NxwwAJIrquHjaTym3Y=)",
+                        }}
+                      >
+                        Pay
+                      </Button>
+                    </Group>
+                  ) : (
+                    <Text weight="bold" size="xl" py="md">
+                      Review and Update
+                    </Text>
+                  )}
+
                   <Text weight="bold" size="xl" py="md" color="red">
-                    Total{" "}
+                    Total without Tax and Discount :{" "}
                     <b>
                       Rs.{" "}
                       {hallCharges +
@@ -1979,256 +1946,109 @@ const NewBookingFile = () => {
                     </b>
                   </Text>
                 </Group>
-                <Paper py="xl">
-                  <form
-                    onSubmit={form.onSubmit((values) => handleSubmit1(values))}
-                  >
+
+                <BookingViewAllBookings singleInvoice={body} />
+
+                {!params.bookingId ? (
+                  <>
+                    {" "}
+                    <Text weight="bold" size="xl" py="lg">
+                      Pay With Stripe
+                    </Text>
                     <Grid>
                       <Grid.Col md={12} lg={6}>
-                        <TextInput
-                          size="md"
-                          required
-                          type="number"
-                          label="Contact Number"
-                          placeholder="03XXXXXXXX"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          {...form.getInputProps("phone")}
-                        />
+                        <Paper
+                          p="sm"
+                          withBorder
+                          shadow="md"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        >
+                          <Title className={classes.title} order={2} pt="sm">
+                            Payment Breakdown
+                          </Title>
+
+                          <SimpleGrid
+                            cols={1}
+                            spacing={20}
+                            breakpoints={[
+                              { maxWidth: 550, cols: 1, spacing: 40 },
+                            ]}
+                            style={{ marginTop: 30 }}
+                          >
+                            {items}
+                          </SimpleGrid>
+                        </Paper>
                       </Grid.Col>
-                      <Grid.Col md={12} lg={6}>
-                        <TextInput
-                          size="md"
-                          placeholder="abc@gmail.com"
-                          value={email}
-                          required
-                          label="Email Address"
-                          onChange={(e) => setEmail(e.target.value)}
-                          {...form.getInputProps("email")}
+                      <Grid.Col md={12} lg={6} ref={targetRef}>
+                        {/* <Center> */}
+                        <StripePromise
+                          paidSuccessfully={paidSuccessfully}
+                          setPaidSuccessfully={setPaidSuccessfully}
+                          onClickBack={prevStep}
+                          setConfirmBooking={setConfirmBooking}
+                          // start={start}
+                          amountPayable={
+                            (hallCharges +
+                              totalPrice +
+                              stagePrice +
+                              menuPrice * noOfGuests +
+                              (hallCharges +
+                                totalPrice +
+                                stagePrice +
+                                menuPrice * noOfGuests) *
+                                taxPercentage -
+                              (hallCharges +
+                                totalPrice +
+                                stagePrice +
+                                menuPrice * noOfGuests) *
+                                discountPercentage) *
+                            bookingPercentage
+                          }
                         />
-                      </Grid.Col>
-                      <Grid.Col md={12} lg={12}>
-                        <Textarea
-                          size="md"
-                          placeholder="Describe Your Event"
-                          value={description}
-                          required
-                          minRows={3}
-                          maxRows={10}
-                          maxLength={1000}
-                          autosize
-                          label="Booking Description"
-                          onChange={(e) => setDescription(e.target.value)}
-                          {...form.getInputProps("description")}
-                        />
+                        {/* </Center> */}
                       </Grid.Col>
                     </Grid>
-                    <Grid justify="flex-end" py="md">
-                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                        <Button
-                          size="md"
-                          fullWidth
-                          variant="filled"
-                          color="red"
-                          // disabled={loading}
-                          leftIcon={<IconArrowLeft />}
-                          onClick={prevStep}
-                        >
-                          BACK
-                        </Button>
-                      </Grid.Col>
-                      <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                        <Button
-                          size="md"
-                          fullWidth
-                          variant="filled"
-                          color="dark"
-                          type="submit"
-                          rightIcon={<IconArrowRight />}
-                        >
-                          NEXT
-                        </Button>
-                      </Grid.Col>
-                    </Grid>
-                  </form>
-                </Paper>
-              </Stepper.Step>
-
-              <Stepper.Step
-                color={!stepperDisabled ? "grape" : "gray"}
-                label="Payment Details"
-                description="Please proceed with the minimum"
-                allowStepSelect={active > 4}
-                disabled={stepperDisabled}
-              >
-                <Paper py="xl">
-                  <form
-                    onSubmit={form.onSubmit((values) => handleSubmit1(values))}
-                  >
-                    <Group position="apart">
-                      {params.bookingId ? (
-                        <Text weight="bold" size="xl" py="md">
-                          Review And Confirm
-                        </Text>
-                      ) : (
-                        <Group>
-                          <Text weight="bold" size="xl" py="md">
-                            Review And
-                          </Text>
-
-                          <Button
-                            rightIcon={
-                              <div className="xyz">
-                                <IconArrowDown />
-                              </div>
-                            }
-                            onClick={() =>
-                              scrollIntoView({ alignment: "center" })
-                            }
-                            style={{
-                              background: "#E60084",
-                            }}
-                          >
-                            Pay
-                          </Button>
-                        </Group>
-                      )}
-
-                      <Text weight="bold" color="red" size="xl" py="md">
-                        Total Cost Rs.{" "}
-                        {totalPrice +
-                          stagePrice +
-                          hallCharges +
-                          menuPrice * noOfGuests}
-                      </Text>
-                    </Group>
-                    {/* <BookingReviewInvoice
-                      // allVenues={allVenues}
-                      // allSubVenues={allSubVenues}
-                      // allCustomers={allCustomers}
-                      selectedVenueServiceObject={selectedVenueServiceObject}
-                      venue={venue}
-                      idOfSelectedSubVenue={idOfSelectedSubVenue}
-                      value1={value1}
-                      time={time}
-                      eventType={eventType}
-                      noOfGuests={noOfGuests}
-                      hallCharges={hallCharges}
-                      selectedMenu={selectedMenu}
-                      menuPrice={menuPrice}
-                      totalPrice={totalPrice}
-                      customer={customer}
-                      phone={phone}
-                      email={email}
-                      description={description}
-                      step={6}
-                    /> */}
-                    <BookingViewAllBookings singleInvoice={singleInvioce} />
-                    {params.bookingId ? (
-                      <Grid justify="flex-end" py="md">
-                        <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                          <Button
-                            size="md"
-                            fullWidth
-                            variant="filled"
-                            color="red"
-                            // disabled={loading}
-                            leftIcon={<IconArrowLeft />}
-                            onClick={prevStep}
-                          >
-                            BACK
-                          </Button>
-                        </Grid.Col>
-                        <Grid.Col xs={6} sm={3} md={3} lg={3}>
-                          <Button
-                            size="md"
-                            fullWidth
-                            variant="filled"
-                            color="dark"
-                            onClick={() => {
-                              updateSubVenueBooking();
-                            }}
-                            rightIcon={<IconArrowRight />}
-                          >
-                            UPDATE
-                          </Button>
-                        </Grid.Col>
-                      </Grid>
-                    ) : (
-                      <>
-                        <Text weight="bold" size="xl" py="lg">
-                          Pay With Stripe
-                        </Text>
-                        <Grid>
-                          <Grid.Col md={12} lg={6}>
-                            <Paper
-                              p="sm"
-                              withBorder
-                              shadow="md"
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                              }}
-                            >
-                              <Title
-                                className={classes.title}
-                                order={2}
-                                pt="sm"
-                              >
-                                Payment Breakdown
-                              </Title>
-
-                              <SimpleGrid
-                                cols={1}
-                                spacing={20}
-                                breakpoints={[
-                                  { maxWidth: 550, cols: 1, spacing: 40 },
-                                ]}
-                                style={{ marginTop: 30 }}
-                              >
-                                {items}
-                              </SimpleGrid>
-                            </Paper>
-                          </Grid.Col>
-                          <Grid.Col md={12} lg={6} ref={targetRef}>
-                            <StripePromise
-                              paidSuccessfully={paidSuccessfully}
-                              setPaidSuccessfully={setPaidSuccessfully}
-                              onClickBack={prevStep}
-                              // setConfirmBooking={setConfirmBooking}
-                              // start={start}
-                              amountPayable={
-                                (hallCharges +
-                                  stagePrice +
-                                  totalPrice +
-                                  menuPrice * noOfGuests +
-                                  (hallCharges +
-                                    stagePrice +
-                                    totalPrice +
-                                    menuPrice * noOfGuests) *
-                                    taxPercentage -
-                                  (hallCharges +
-                                    stagePrice +
-                                    totalPrice +
-                                    menuPrice * noOfGuests) *
-                                    discountPercentage) *
-                                bookingPercentage
-                              }
-                            />
-                          </Grid.Col>
-                        </Grid>
-                      </>
-                    )}
-                  </form>
-                </Paper>
-              </Stepper.Step>
-            </Stepper>
-          </Paper>
+                  </>
+                ) : (
+                  <Grid justify="flex-end" py="md">
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="red"
+                        // disabled={loading}
+                        leftIcon={<IconArrowLeft />}
+                        onClick={prevStep}
+                      >
+                        BACK
+                      </Button>
+                    </Grid.Col>
+                    <Grid.Col xs={6} sm={3} md={3} lg={3}>
+                      <Button
+                        size="md"
+                        fullWidth
+                        variant="filled"
+                        color="dark"
+                        // disabled={disabled}
+                        // loading={loading}
+                        rightIcon={<IconArrowRight />}
+                        onClick={makeVenueBooking}
+                      >
+                        Update
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                )}
+              </Paper>
+            </Stepper.Step>
+          </Stepper>
         </Paper>
-      ) : (
-        <></>
-      )}
-    </Container>
+      </Center>
+    </Paper>
   );
 };
 

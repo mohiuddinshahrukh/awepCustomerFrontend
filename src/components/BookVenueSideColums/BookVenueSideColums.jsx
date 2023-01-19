@@ -116,11 +116,26 @@ const BookVenueSideColums = ({
           setEventType(event);
         }}
         data={[
-          { label: "Mehendi", value: "MEHNDI" },
-          { label: "Walima", value: "WALIMA" },
-          { label: "Barat", value: "BARAT" },
-          { label: "Seminar", value: "SEMINAR" },
-          { label: "Other", value: "OTHER" },
+          {
+            value: "MEHNDI",
+            label: "MEHNDI",
+          },
+          {
+            value: "BARAT",
+            label: "BARAT",
+          },
+          {
+            value: "WALIMA",
+            label: "WALIMA",
+          },
+          {
+            value: "SEMINAR",
+            label: "SEMINAR",
+          },
+          {
+            value: "OTHER",
+            label: "OTHER",
+          },
         ]}
         // {...form.getInputProps("eventType")}
       />

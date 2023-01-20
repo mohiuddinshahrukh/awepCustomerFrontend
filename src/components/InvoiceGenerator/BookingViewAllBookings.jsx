@@ -18,19 +18,18 @@ import moment from "moment";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import WaterMark from "./AWEP_WATERMARK.svg";
-
+import {
+  BrandWhatsapp,
+  DeviceMobile,
+  Mail,
+  MapPin,
+  Phone,
+  Printer,
+} from "tabler-icons-react";
 import InvoiceHeaders from "./InvoiceHeaders";
 import AdvanceStamp from "./AWEP_ADVANCE_PAID_STAMP.svg";
 import CompleteStamp from "./AWEP_COMPLETE_PAID_STAMP.svg";
 import { useMediaQuery } from "@mantine/hooks";
-import {
-  IconBrandWhatsapp,
-  IconDeviceMobile,
-  IconMail,
-  IconMapPin,
-  IconPhone,
-  IconPrinter,
-} from "@tabler/icons";
 
 const subvenueHeadCells = [
   { title: "ID", align: "center" },
@@ -65,39 +64,71 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   const matches500 = useMediaQuery("(min-width: 500px)");
   //
 
-  const hallCharges = singleInvoice?.hallCharges;
+  const hallCharges =
+    typeof singleInvoice?.hallCharges === "number"
+      ? singleInvoice?.hallCharges
+      : 0;
 
-  const venueServiceCharges = singleInvoice?.selectedVenueServices
-    ?.map((service) => {
-      return service?.duration === "Per Event"
-        ? service?.servicePrice
-        : service?.servicePrice * 3;
-    })
-    ?.reduce((a, b) => a + b, 0);
-
-  const subvenueServiceCharges = Object.values(
-    singleInvoice?.subVenueAndDataObject
-  )
-    ?.map((services) => {
-      if (services?.selectedSubVenueServices?.length > 0) {
-        return services?.selectedSubVenueServices
+  const venueServiceCharges =
+    singleInvoice?.selectedVenueServices?.length > 0
+      ? singleInvoice?.selectedVenueServices
           ?.map((service) => {
             return service?.duration === "Per Event"
               ? service?.servicePrice
               : service?.servicePrice * 3;
           })
-          ?.reduce((a, b) => a + b, 0);
-      }
-    })
-    ?.reduce((a, b) => a + b, 0);
-  const menuCharges =
-    singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests;
+          ?.reduce((a, b) => a + b, 0)
+      : 0;
+
+  const subvenueServiceCharges =
+    typeof Object.values(singleInvoice?.subVenueAndDataObject)
+      ?.map((services) => {
+        if (services?.selectedSubVenueServices?.length > 0) {
+          return services?.selectedSubVenueServices
+            ?.map((service) => {
+              return service?.duration === "Per Event"
+                ? service?.servicePrice
+                : service?.servicePrice * 3;
+            })
+            ?.reduce((a, b) => a + b, 0);
+        } else return 0;
+      })
+      ?.reduce((a, b) => a + b, 0) === "number"
+      ? Object.values(singleInvoice?.subVenueAndDataObject)
+          ?.map((services) => {
+            if (services?.selectedSubVenueServices?.length > 0) {
+              return services?.selectedSubVenueServices
+                ?.map((service) => {
+                  return service?.duration === "Per Event"
+                    ? service?.servicePrice
+                    : service?.servicePrice * 3;
+                })
+                ?.reduce((a, b) => a + b, 0);
+            } else return 0;
+          })
+          ?.reduce((a, b) => a + b, 0)
+      : 0;
+
+  const menuCharges = singleInvoice.selectedMenu
+    ? typeof (
+        singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+      ) === "number"
+      ? singleInvoice?.selectedMenu?.price * singleInvoice?.numberOfGuests
+      : 0
+    : 0;
 
   const stageCharges = singleInvoice?.selectedStage?.design?.price
     ? singleInvoice?.selectedStage?.design?.price
     : 0;
   const subtotalCharges =
-    hallCharges + menuCharges + venueServiceCharges + subvenueServiceCharges;
+    typeof (
+      hallCharges +
+      menuCharges +
+      venueServiceCharges +
+      subvenueServiceCharges
+    ) === "number"
+      ? hallCharges + menuCharges + venueServiceCharges + subvenueServiceCharges
+      : 0;
 
   const discountCharges = (subtotalCharges * 0) / 100;
   const taxCharges = subtotalCharges * 0.17;
@@ -111,8 +142,6 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   let invoiceTextBG = "#1ABD9C";
   let invoiceTextColor = "white";
   let invoiceTextSize = 26;
-  let randomInvoiceNumber = "23456789asbd";
-  //   let randomAccountNumber = "173281sdba12d";
 
   const subvenueHeaders = (
     <tr>
@@ -311,7 +340,7 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
   return (
     <Paper style={{ width: "100%" }}>
       <Button
-        rightIcon={<IconPrinter />}
+        rightIcon={<Printer />}
         uppercase
         color="dark"
         size="md"
@@ -323,7 +352,6 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
         Print Invoice
       </Button>
       <Container
-        fluid
         ref={componentRef}
         p="md"
         m="md"
@@ -349,31 +377,31 @@ const BookingViewAllBookings = ({ singleInvoice }) => {
           {singleInvoice?.venueName}
         </Text>
         <Group spacing={3} align="center" position="center">
-          <IconMapPin size={iconSize} />
+          <MapPin size={iconSize} />
           <Text size="md">{singleInvoice?.venueId?.venueAddress}</Text>
         </Group>
 
         <Group spacing={3} align="center" position="center">
-          <IconMail size={iconSize} />
+          <Mail size={iconSize} />
           <Text size="md" align="center">
             {singleInvoice?.venueId?.infoEmail}
           </Text>
         </Group>
         <Group spacing="xs" align="center" position="center">
           <Group spacing={3} align="center" position="center">
-            <IconPhone size={iconSize} />
+            <Phone size={iconSize} />
             <Text size="md" align="center">
               {singleInvoice?.venueId?.contactLandline}
             </Text>
           </Group>
           <Group spacing={3} align="center" position="center">
-            <IconDeviceMobile size={iconSize} />
+            <DeviceMobile size={iconSize} />
             <Text size="md" align="center">
               {singleInvoice?.venueId?.contactPhone}
             </Text>
           </Group>
           <Group spacing={3} align="center" position="center">
-            <IconBrandWhatsapp size={iconSize} />
+            <BrandWhatsapp size={iconSize} />
             <Text size="md" align="center">
               {singleInvoice?.venueId?.contactWhatsApp}
             </Text>

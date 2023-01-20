@@ -60,8 +60,13 @@ const CustomerVendorBookings = () => {
               .diff(Date.now(), "days")
               .toString();
             if (daysTillBookings < 0) {
-              Booking.BOOKING_STATUS = "PAST";
-              Booking.BOOKING_STATUS_COLOR = "red";
+              if (Booking.paymentStatus === "FULLY PAID") {
+                Booking.BOOKING_STATUS = "COMPLETED";
+                Booking.BOOKING_STATUS_COLOR = "green";
+              } else {
+                Booking.BOOKING_STATUS = "PAST DUE";
+                Booking.BOOKING_STATUS_COLOR = "red";
+              }
             } else if (daysTillBookings > 7) {
               Booking.BOOKING_STATUS = "PENDING";
               Booking.BOOKING_STATUS_COLOR = "orange";
@@ -69,9 +74,15 @@ const CustomerVendorBookings = () => {
               Booking.BOOKING_STATUS = "UPCOMING";
               Booking.BOOKING_STATUS_COLOR = "yellow";
             } else {
-              Booking.BOOKING_STATUS = "IN PROGRESS";
+              Booking.BOOKING_STATUS = "TODAY";
               Booking.BOOKING_STATUS_COLOR = "blue";
             }
+          } else if (Booking.bookingStatus === "CANCELLED") {
+            Booking.BOOKING_STATUS = "CANCELLED";
+            Booking.BOOKING_STATUS_COLOR = "red";
+          } else if (Booking.bookingStatus === "COMPLETED") {
+            Booking.BOOKING_STATUS = "COMPLETED";
+            Booking.BOOKING_STATUS_COLOR = "green";
           }
         });
         setVisible(false);
@@ -373,7 +384,7 @@ const CustomerVendorBookings = () => {
             <IconBrandStripe />
           </ActionIcon>
           <ActionIcon
-            disabled={row.bookingStatus !== "COMPLETED"}
+            disabled={row.bookingStatus !== "COMPLETED" || (row.bookingStatus !== "PAST DUE" && row.paymentStatus !== "FULLY PAID")}
             onClick={() => {
               navigate(`/addComplaint/${"vendor"}/${row._id}`);
             }}

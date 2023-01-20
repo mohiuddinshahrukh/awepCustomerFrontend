@@ -227,16 +227,15 @@ const NewBookingFile = () => {
           stagePrice +
           menuPrice * noOfGuests +
           (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
-            taxPercentage -
+          taxPercentage -
           (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
-            discountPercentage) *
+          discountPercentage) *
         bookingPercentage
       ).toLocaleString(),
       color: "red",
       title: `${bookingPercentage * 100} % Advance Payment`,
-      description: `To Book A Date ${
-        bookingPercentage * 100
-      } % Advance Payment is Required `,
+      description: `To Book A Date ${bookingPercentage * 100
+        } % Advance Payment is Required `,
     },
     {
       percent: (1 - bookingPercentage) * 100,
@@ -245,23 +244,22 @@ const NewBookingFile = () => {
         totalPrice +
         menuPrice * noOfGuests -
         (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
-          discountPercentage +
+        discountPercentage +
         (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
-          taxPercentage -
+        taxPercentage -
         (hallCharges +
           totalPrice +
           menuPrice * noOfGuests -
           (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
-            discountPercentage +
+          discountPercentage +
           (hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests) *
-            taxPercentage) *
-          bookingPercentage
+          taxPercentage) *
+        bookingPercentage
       ).toLocaleString(),
       color: "green",
       title: `${(1 - bookingPercentage) * 100} % Remaining Payment`,
-      description: `Remaining ${
-        (1 - bookingPercentage) * 100
-      } % Payment is Required 7 Days Before The Event Date`,
+      description: `Remaining ${(1 - bookingPercentage) * 100
+        } % Payment is Required 7 Days Before The Event Date`,
     },
   ];
   const items = data.map((item, index) => (
@@ -354,12 +352,12 @@ const NewBookingFile = () => {
       email: (value) =>
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value.trim())
           ? // /^\S+@[a-zA-Z]+\.[a-zA-Z]+$/.test(value.trim())
-            null
+          null
           : "Invalid Email",
       description: (value) =>
         value.trim().length > 20
           ? // && /^[a-zA-Z0-9\s]*$/.test(value.trim())
-            null
+          null
           : "Describe in At least 20 Characters",
     },
   });
@@ -458,8 +456,9 @@ const NewBookingFile = () => {
     let customer = JSON.parse(localStorage.getItem("customerData"));
     console.log("hiii", customer);
     setCustomer(customer?.id);
+
     let totalAmountWithoutTaxAndDiscount =
-      hallCharges + totalPrice + stagePrice + menuPrice * noOfGuests;
+      (hallCharges || 0) + (totalPrice || 0) + (stagePrice || 0) + (menuPrice || 0) * noOfGuests;
     let totalAmount =
       totalAmountWithoutTaxAndDiscount +
       totalAmountWithoutTaxAndDiscount * taxPercentage -
@@ -485,7 +484,7 @@ const NewBookingFile = () => {
       subVenues: idOfSelectedSubVenue,
 
       customerId: customer,
-      customerName: customerName[0],
+      customerName: customerName,
       bookingDate: moment(eventDate).format(),
       bookingTime: time,
 
@@ -783,7 +782,7 @@ const NewBookingFile = () => {
         nextStep();
         setVisible(false);
       }
-    } catch (err) {}
+    } catch (err) { }
     setVisible(false);
   };
 
@@ -1006,9 +1005,9 @@ const NewBookingFile = () => {
         //   ?
         setChargesError(
           "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
-            minCapacity +
-            " or Extra charges will be applied of Rs. " +
-            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+          minCapacity +
+          " or Extra charges will be applied of Rs. " +
+          averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
         );
         // : setChargesError(
         //     "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
@@ -1025,14 +1024,14 @@ const NewBookingFile = () => {
         console.log(
           "@@@T-DEBUG",
           averagePerHeadWithMenu * noOfGuests +
-            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+          averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
         );
         idOfSelectedMenu === "" || idOfSelectedMenu === undefined
           ? setHallCharges(averagePerHeadWithoutMenu * minCapacity)
           : setHallCharges(
-              averagePerHeadWithMenu * noOfGuests +
-                averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
-            );
+            averagePerHeadWithMenu * noOfGuests +
+            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+          );
       } else {
         console.log("@@@menuPolicy3 else", menuPolicy);
 
@@ -1052,9 +1051,9 @@ const NewBookingFile = () => {
         //   (idOfSelectedMenu === undefined &&
         setChargesError(
           "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
-            minCapacity +
-            " or Extra charges will be applied of Rs. " +
-            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+          minCapacity +
+          " or Extra charges will be applied of Rs. " +
+          averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
         );
         // : setChargesError(
         //     "Minimum Booking Charges Will Be Applied. Either Increase the number of guests to at least " +
@@ -1065,9 +1064,9 @@ const NewBookingFile = () => {
         idOfSelectedMenu === "" || idOfSelectedMenu === undefined
           ? setHallCharges(averagePerHeadWithoutMenu * minCapacity)
           : setHallCharges(
-              averagePerHeadWithoutMenu * noOfGuests +
-                averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
-            );
+            averagePerHeadWithoutMenu * noOfGuests +
+            averagePerHeadWithoutMenu * (minCapacity - noOfGuests)
+          );
       } else {
         console.log("@@@menuPolicy6 else else esle", menuPolicy);
 
@@ -1250,7 +1249,7 @@ const NewBookingFile = () => {
             active={active}
             onStepClick={setActive}
             breakpoint="lg"
-            // pt="xl"
+          // pt="xl"
           >
             <Stepper.Step
               color={!stepperDisabled ? "grape" : "gray"}
@@ -1951,7 +1950,7 @@ const NewBookingFile = () => {
                         // disabled={disabled}
                         // loading={loading}
                         rightIcon={<IconArrowRight />}
-                        // onClick={nextStep}
+                      // onClick={nextStep}
                       >
                         NEXT
                       </Button>
@@ -2009,8 +2008,8 @@ const NewBookingFile = () => {
                   </Text>
                 </Group>
 
-                <BookingViewAllBookings singleInvoice={body} />
-
+                <Center>                <BookingViewAllBookings singleInvoice={body} />
+                </Center>
                 {!params.bookingId ? (
                   <>
                     {" "}
@@ -2061,12 +2060,12 @@ const NewBookingFile = () => {
                                 totalPrice +
                                 stagePrice +
                                 menuPrice * noOfGuests) *
-                                taxPercentage -
+                              taxPercentage -
                               (hallCharges +
                                 totalPrice +
                                 stagePrice +
                                 menuPrice * noOfGuests) *
-                                discountPercentage) *
+                              discountPercentage) *
                             bookingPercentage
                           }
                         />
